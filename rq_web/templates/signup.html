@@ -1,0 +1,42 @@
+{{ define "title"}}
+
+<title>ORE Signup</title>
+
+{{ end }}
+
+{{define "content"}}
+
+<div class="container">
+  <h1>Register</h1>
+  <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6">
+  <form method="POST" action="">
+
+      <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" for="usernname">User name</span>
+          </div>
+          <input type="text" id="username" name="username">
+        </div>
+    
+        <div class="input-group">
+        <div class="input-group-prepend">
+        <span class="input-group-text" for="password">Password</span>
+        </div>
+        <input type="password" id="password" name="password">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+            <span class="input-group-text" for="email">Email</span>
+            </div>
+            <input type="text" id="email" name="email">
+        </div>
+        <br><br>
+      <button class="btn btn-primary" type="submit">Register</button>
+  </form>
+</div>
+</div>
+</div>
+
+{{ end }}

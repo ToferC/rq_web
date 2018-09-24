@@ -1,0 +1,153 @@
+{{ define "title"}}
+
+<title>ORE Die Roller</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $cm := index .Actor 0 }}
+{{ $character := $cm.Character }}
+{{ $skills := $character.Skills }}
+{{ $statistics := $character.Statistics }}
+{{ $powers := $character.Powers }}
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <p>Build your die pool below and then click "Roll Dice".</p>
+        <form action="" method="POST">
+
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value ="{{ $character.Name }}">
+          <div class="input-group-append">
+            <span class="input-group-text" id="name-addon">Name</span>
+          </div>
+          </div>
+
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="nd-addon" name="nd" value="{{ index .Normal 0}}">
+          <div class="input-group-append">
+          <label class="input-group-text" id="nd-addon">Normal</label>
+        </div>
+      </div>
+
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="ed-addon" name="ed" value="{{ index .Expert 0}}">
+          <div class="input-group-append">
+            <span class="input-group-text" id="ed-addon">Expert set to</span>
+        </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="hd-addon" name="hd" value="{{ index .Hard 0}}">
+          <div class="input-group-append">
+            <span class="input-group-text" id="hd-addon">Hard</span>
+        </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ index .Wiggle 0}}">
+          <div class="input-group-append">
+            <span class="input-group-text" id="wd-addon">Wiggle</span>
+        </div>
+        </div>
+
+          <hr>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="gf-addon" name="gofirst" value="{{ index .GoFirst 0}}">
+            <div class="input-group-append">
+              <span class="input-group-text" id="gf-addon">Go First</span>
+          </div>
+          </div>
+
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="sp-addon" name="spray" value="{{ index .Spray 0}}">
+            <div class="input-group-append">
+              <span class="input-group-text" id="sp-addon">Spray</span>
+          </div>
+          </div>
+
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{ index .Actions 0}}">
+            <div class="input-group-append">
+              <span class="input-group-text" id="ac-addon">Actions</span>
+          </div>
+          </div>
+
+          <hr>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ index .NumRolls 0}}">
+            <div class="input-group-append">
+              <span class="input-group-text" id="nr-addon">Rolls</span>
+          </div>
+          </div>
+
+          <hr>
+        <input class="btn btn-primary" type="submit" value="Roll Dice">
+      </form>
+      <br>
+        {{ if (index .Actor 0).ID }}
+        <a class="btn btn-primary" href="/view_character/{{ $cm.ID }}">Return to Character</a>
+        {{ end }}
+    </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Results</h3>
+        <h4>{{  $character.Name }}</h4>
+        <p>Actions: {{ index .Actions 0}},
+        {{ range .Rolls }}
+            Results: {{ range .Results }}
+            {{ . }}
+          {{ end }}
+        </p>
+          <h5>Matches</h5>
+          {{ range .Matches }}
+            <p>Width {{.Initiative}} - <strong>{{ .Width }}x{{ .Height }}</strong></p>
+          {{ end}}
+          {{ if .Wiggles }}
+          <h5><strong>+{{ .Wiggles }} Wiggle Dice</strong></h5>
+          {{else}}{{ end }}
+          <p>Loose Dice: {{ range .Loose }}
+            {{.}}
+            {{ end }}</p>
+          <hr>
+        {{ end }}
+
+      </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
+        {{ range $stat := $statistics }}
+        {{ . }} <a href={{ statRoll $cm.ID $stat 1 }}>Roll</a>
+        <ul>
+        {{ range $skill := $skills }}
+        {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
+        {{ if eq $skill.LinkStat.Name $stat.Name}}
+          <li>{{ . }} <a href={{ skillRoll $cm.ID $skill $stat 1 }}>Roll</a>
+          </li>
+          {{ end }}
+        {{ end }}
+        {{end}}
+      </ul>
+      {{ end }}
+      </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Powers</h3>
+        {{ range $power := $powers }}
+        <div class="card-body">
+          <strong>{{ $power }}</strong></p>
+          {{ range $quality := $power.Qualities }}
+            <p>{{ $quality }} <a href={{ qualityRoll $cm.ID $power $quality 1 }}>Roll</a></p>
+        {{ end }}
+        <i>Effect: {{ $power.Effect }}</i>
+          <hr>
+        </div>
+        {{ end }}
+      </div>
+
+      </div>
+    </div>
+      </div>
+{{end}}

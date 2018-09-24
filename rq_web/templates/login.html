@@ -1,0 +1,35 @@
+{{ define "title"}}
+
+<title>Login</title>
+
+{{ end }}
+
+{{define "content"}}
+
+<div class="container">
+  <h1>Login</h1><br>
+  <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+<form method="POST" action="">
+  <br>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" for="usernname">User name</span>
+      </div>
+      <input type="text" id="username" name="username">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+    <span class="input-group-text" for="password">Password</span>
+    </div>
+    <input type="password" id="password" name="password">
+    </div>
+    <br><br>
+    <button class="btn btn-primary" type="submit">Login</button>
+</form>
+</div>
+</div>
+</div>
+
+{{ end }}

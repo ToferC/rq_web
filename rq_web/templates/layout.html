@@ -1,0 +1,122 @@
+{{define "base"}}
+
+{{ $user := .SessionUser }}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="One Roll Engine Game System">
+    <meta name="author" content="ToferC">
+    <link rel="icon" href="../../favicon.ico">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  {{template "title" .}}
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      {{ if ne $user ""}}
+        <a class="navbar-brand" href="/">ORE Engine</a>
+      {{ else }}
+        <a class="navbar-brand" href="/user_roster/">ORE Engine</a>
+      {{ end }}
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Open Roster <span class="sr-only">(current)</span></a>
+      </li>
+      {{ if ne $user "" }}
+      <li class="nav-item active">
+        <a class="nav-link" href="/user_roster/">Personal Roster<span class="sr-only"></span></a>
+      </li>
+      {{ end }}
+      <li class="nav-item active">
+        <a class="nav-link" href="/index_powers/">Power Archive <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/roll/0">Roll</a>
+      </li>
+      {{ if ne $user ""}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Add Content
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/new/WT">New Wild Talents Character</a>
+          <a class="dropdown-item" href="/new/RE">New Reign Character</a>
+          <a class="dropdown-item" href="/new/SR">New Shadowrun Character</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/add_standalone_power/" role="button">Add Power</a>
+        </div>
+      </li>
+      {{ end }}
+      {{ if eq .IsAdmin "true" }}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Admin
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/user_index/" role="button">User Index</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/beta_roster/">Legacy Roster</a>
+          <a class="dropdown-item" href="/beta_index_powers/">Legacy Powers</a>
+        </div>
+      </li>
+      {{ end }}
+      <li class="nav-item">
+        <a class="nav-link" href="/about/">About<span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ if ne $user ""}}
+            User: {{$user}}
+          {{ else }}
+            Login
+          {{ end }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          {{ if ne $user ""}}
+          <a class="dropdown-item" href="/logout/" role="button">Log Out</a>
+          {{ else }}
+          <a class="dropdown-item" href="/login/" role="button">Login</a>
+          <a class="dropdown-item" href="/signup/" role="button">Register</a>
+          {{ end }}
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Under Construction" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+    <div class="container">
+
+      {{template "content" .}}
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified CSS -->
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script type='text/javascript' src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+{{end}}

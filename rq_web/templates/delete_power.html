@@ -1,0 +1,36 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Delete Power {{ $character.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $power := .Power }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <h1>DELETE POWER</h1>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>{{$power}}</h3>
+            {{ range $quality := $power.Qualities }}
+              <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}>Roll</a></p>
+              {{ end }}
+              <i>Effect: {{ $power.Effect }}</i>
+            <hr>
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+              <a href="/view_character/{{ $character.ID }}" class="btn btn-primary">Return to Character</a>
+            </form>
+          </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <h4>{{ $character }}
+      </div>
+    </div>
+      </div>
+
+{{end}}

@@ -1,0 +1,24 @@
+{{ define "title"}}
+
+<title>Users</title>
+
+{{ end }}
+
+{{define "content"}}
+
+      <div class="container">
+        <div class="row">
+
+      <div class="col-sm-9 col-md-9 col-lg-9">
+        <h3>User Admin</h3>
+        <ul>
+          {{ range .Users }}
+            <li>User: {{ .UserName }}, {{if .IsAdmin }}Admin{{end}}, Email: {{ .Email }}, </li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+{{end}}

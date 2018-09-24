@@ -1,0 +1,12 @@
+
+{
+  "name": "ORE Die Roller: Go",
+  "description": "Simple Die rolling app in go",
+  "keywords": [
+    "One Roll Engine",
+    "RPG",
+    "Go",
+    "example"
+  ],
+  "website": "http://github.com/toferc/ore-roller",
+  "repository": "http://github.com/toferc/ore_web_roller"

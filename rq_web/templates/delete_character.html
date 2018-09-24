@@ -1,0 +1,75 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Delete {{ $character.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $statistics := $character.Statistics }}
+{{ $skills := $character.Skills }}
+
+      <div class="container">
+        <h1>DELETE {{ $character.Name }}</h1>
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
+            <img class ="card-img-top" data-src="" alt="Thumbnail"
+            style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+            data-holder-rendered="true">
+            <hr>
+            <h4>{{ $character.Archetype }}</h4>
+            <h4>Description</h4>
+              <h4>Base Will: {{ $character.BaseWill }}</h4>
+              <h4>Willpower: {{ $character.Willpower }}</h4>
+              <hr>
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/view_character/{{ .CharacterModel.ID }}" class="btn btn-primary">Return to Character</a>
+          </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Skills</h3>
+        {{ range $stat := $statistics }}
+        <h4>{{ . }}</h4>
+        {{ range $skill := $skills }}
+        {{ if eq $skill.LinkStat.Name $stat.Name}}
+          <ul>{{ . }}</ul>
+        {{ end }}
+        {{end}}
+      {{ end }}
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Powers</h3>
+        {{ range $character.Skills }}
+          {{ if .HyperSkill }}
+            <p>{{ .HyperSkill }}</p>
+          {{ end }}
+        {{ end }}
+
+        {{ range $character.Statistics }}
+          {{ if .HyperStat }}
+            <p>{{ .HyperStat }}</p>
+          {{ end }}
+        {{ end }}
+
+        {{ range $character.Powers }}
+          <strong>{{ . }}</strong>
+          {{ range .Qualities }}
+            <p>{{ . }} </p>
+        {{ end }}
+        <i>Effect: {{ .Effect }}<i>
+        {{ end }}
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Hit Locations</h3>
+          {{ range $character.HitLocations }}
+            <p>{{ . }}</p>
+          {{ end }}
+      </div>
+    </div>
+      </div>
+{{end}}

@@ -1,0 +1,34 @@
+{{ define "title"}}
+{{ $power := .PowerModel.Power }}
+
+<title>ORE Power {{ $power.Name }}</title>
+
+{{ end }}
+
+{{ define "content" }}
+
+{{ $power := .PowerModel.Power }}
+{{ $ID := .PowerModel.ID }}
+
+<div class="container">
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+<br>
+<div class="card-body">
+  <strong>{{ $power }}</strong> (Author: {{ .PowerModel.Author.UserName }})
+  {{ range $quality := $power.Qualities }}
+  <p>{{ $quality }}</p>
+  {{ end }}
+  {{ if $power.Effect }}
+  <i>Effect: {{ $power.Effect }}</i>
+  {{end}}
+  <hr>
+  <a class="btn btn-primary" href="/modify_standalone_power/{{ $ID }}">Modify</a>
+  <a class="btn btn-danger" href="/delete_standalone_power/{{ $ID }}">Delete</a>
+</div>
+
+</div>
+</div>
+</div>
+
+{{ end }}

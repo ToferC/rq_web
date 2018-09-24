@@ -1,0 +1,14 @@
+{
+  "mass": {
+    "base": 25,
+    "measure": "kg",
+  },
+  "range": {
+    "base": 10,
+    "measure": "m",
+  },
+  "speed": {
+    "base": 2,
+    "measure": "m",
+  }
+}

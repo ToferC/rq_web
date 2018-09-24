@@ -1,0 +1,33 @@
+{{ define "title"}}
+
+<title>Delete Standalone Power</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $power := .PowerModel.Power }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <h1>DELETE POWER</h1>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>{{$power}}</h3>
+            {{ range $quality := $power.Qualities }}
+              <p>{{ $quality }}</p>
+              {{ end }}
+              <i>Effect: {{ $power.Effect }}</i>
+            <hr>
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/view_power/{{ $power.ID }}" class="btn btn-primary">Return to Power</a>
+          </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <h4></h4>
+      </div>
+    </div>
+      </div>
+
+{{end}}
