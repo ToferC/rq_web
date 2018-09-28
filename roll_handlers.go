@@ -9,8 +9,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web_roller/database"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/database"
+	"github.com/toferc/rq_web/models"
 )
 
 const baseDieString string = "1ac+4d+0hd+0wd+0gf+0sp+1nr+0ed"

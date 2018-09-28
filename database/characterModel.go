@@ -4,14 +4,13 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
-	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/models"
 )
 
 // SaveCharacterModel saves a Character to the DB
 func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
-	oneroll.UpdateCost(cm.Character)
+	cm.Character.UpdateCharacter()
 
 	// Save character in Database
 	_, err := db.Model(cm).
@@ -26,7 +25,7 @@ func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
 func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
-	oneroll.UpdateCost(cm.Character)
+	cm.Character.UpdateCharacter()
 
 	err := db.Update(cm)
 	if err != nil {

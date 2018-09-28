@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web_roller/database"
+	"github.com/toferc/rq_web/database"
 )
 
 // AddSkillHandler renders a character in a Web page

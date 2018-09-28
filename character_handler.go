@@ -11,9 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
-	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web_roller/database"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/database"
+	"github.com/toferc/rq_web/models"
+	"github.com/toferc/runequest"
 )
 
 // CharacterIndexHandler renders the basic character roster page
@@ -133,30 +133,16 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		if c.Setting != "RE" {
-			wp, err := strconv.Atoi(req.FormValue("Willpower"))
-			if err != nil {
-				wp = c.Willpower
-			}
-			c.Willpower = wp
-		}
-
 		for k, v := range c.HitLocations {
-			for i := range v.Shock {
-				v.Shock[i] = false
+			for i := range v.Value {
+				v.Value[i] = false
 				if req.FormValue(fmt.Sprintf("%s-Shock-%d", k, i)) != "" {
-					v.Shock[i] = true
-				}
-			}
-			for i := range v.Kill {
-				v.Kill[i] = false
-				if req.FormValue(fmt.Sprintf("%s-Kill-%d", k, i)) != "" {
-					v.Kill[i] = true
+					v.Value[i] = true
 				}
 			}
 		}
 
-		c.Gear = req.FormValue("Gear")
+		c.Gear[0] = req.FormValue("Gear")
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -197,59 +183,18 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	cm := models.CharacterModel{}
 
-	c := &oneroll.Character{Setting: "WT"}
+	c := runequest.NewCharacter("Default")
 
 	vars := mux.Vars(req)
 	setting := vars["setting"]
 
-	switch setting {
-	case "SR":
-		c = oneroll.NewSRCharacter("")
-	case "WT":
-		c = oneroll.NewWTCharacter("")
-	case "RE":
-		c = oneroll.NewReignCharacter("")
-	}
+	// Assign additional empty HitLocations to populate form
 
-	if c.Setting != "RE" {
-		a := c.Archetype
-
-		// Assign additional empty Sources to populate form
-
-		for i := 0; i < 4; i++ {
-			tempS := oneroll.Source{
-				Type: "",
-			}
-			a.Sources = append(a.Sources, &tempS)
+	for i := 0; i < 10; i++ {
+		t := runequest.HitLocation{
+			Name: "",
 		}
-
-		// Assign additional empty Permissions to populate form
-
-		for i := 0; i < 4; i++ {
-			tempP := oneroll.Permission{
-				Type: "",
-			}
-			a.Permissions = append(a.Permissions, &tempP)
-		}
-
-		// Assign additional empty Sources to populate form
-
-		for i := 0; i < 5; i++ {
-			tempI := oneroll.Intrinsic{
-				Name: "",
-			}
-			a.Intrinsics = append(a.Intrinsics, &tempI)
-		}
-
-		// Assign additional empty HitLocations to populate form
-
-		for i := 0; i < 10; i++ {
-			t := oneroll.Location{
-				Name: "",
-			}
-			c.HitLocations["z"+string(i)] = &t
-		}
-
+		c.HitLocations["z"+string(i)] = &t
 	}
 
 	author := database.LoadUser(db, username)

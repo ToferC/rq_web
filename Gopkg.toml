@@ -25,7 +25,7 @@
 #   unused-packages = true
 
 [metadata.heroku]
-  root-package = "github.com/toferc/ore_web_roller"
+  root-package = "github.com/toferc/rq_web"
 
 
 

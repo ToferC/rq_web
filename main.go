@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/go-pg/pg"
-	"github.com/toferc/ore_web_roller/database"
+	"github.com/toferc/rq_web/database"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/models"
 )
 
 // SaveUser saves a User to the DB

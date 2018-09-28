@@ -7,8 +7,8 @@ import (
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web_roller/database"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/database"
+	"github.com/toferc/rq_web/models"
 )
 
 var db *pg.DB

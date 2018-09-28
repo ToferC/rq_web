@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/thewhitetulip/Tasks/sessions"
-	"github.com/toferc/ore_web_roller/database"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/database"
+	"github.com/toferc/rq_web/models"
 )
 
 // UserIndexHandler handles the basic roster rendering for the app

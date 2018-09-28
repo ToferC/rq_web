@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gorilla/sessions"
-	"github.com/toferc/ore_web_roller/models"
+	"github.com/toferc/rq_web/models"
 )
 
 //Store the cookie store which is going to store session data in the ChooseHyperSkillDice

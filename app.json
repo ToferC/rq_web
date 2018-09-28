@@ -1,12 +1,12 @@
 
 {
-  "name": "ORE Die Roller: Go",
-  "description": "Simple Die rolling app in go",
+  "name": "Runequest App: Go",
+  "description": "Runequest Character manager",
   "keywords": [
-    "One Roll Engine",
+    "Runequest",
     "RPG",
     "Go",
     "example"
   ],
-  "website": "http://github.com/toferc/ore-roller",
-  "repository": "http://github.com/toferc/ore_web_roller"
+  "website": "http://github.com/toferc/rq_web",
+  "repository": "http://github.com/toferc/rq_web"}
