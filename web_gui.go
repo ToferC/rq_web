@@ -32,15 +32,18 @@ type WebUser struct {
 
 // WebChar is a framework to send objects & data to a Web view
 type WebChar struct {
-	User            model.User
-	Character       *oneroll.Character
-	CharacterModel  *models.CharacterModel
-	IsAuthor        bool
-	SessionUser     string
-	IsLoggedIn      string
-	IsAdmin         string
-	Wounds          map[string][]int
+	User           model.User
+	Character      *oneroll.Character
+	CharacterModel *models.CharacterModel
+	HomelandModel  *models.HomelandModel
+	IsAuthor       bool
+	SessionUser    string
+	IsLoggedIn     string
+	IsAdmin        string
+	Wounds         map[string][]int
+	// IndexModels
 	CharacterModels []*models.CharacterModel
+	HomeLandModels  []*models.HomelandModel
 	Counter         []int
 }
 

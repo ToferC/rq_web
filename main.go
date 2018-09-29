@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -92,96 +91,78 @@ func main() {
 
 	uploader = s3manager.NewUploader(sess)
 
-	// Check for terminal flag
-	t := flag.Bool("t", false, "Activate the local terminal")
+	port := os.Getenv("PORT")
 
-	flag.Parse()
-
-	if *t == true {
-		Terminal(db)
-	} else {
-
-		port := os.Getenv("PORT")
-
-		if port == "" {
-			port = "8080"
-		}
-
-		r := mux.NewRouter()
-
-		fmt.Println("Starting Webserver at port " + port)
-		r.HandleFunc("/", CharacterIndexHandler)
-		r.HandleFunc("/about/", AboutHandler)
-		r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
-		r.HandleFunc("/add_to_user_roster/{id}", AddToUserRosterHandler)
-
-		r.HandleFunc("/signup/", SignUpFunc)
-		r.HandleFunc("/login/", LoginFunc)
-		r.HandleFunc("/logout/", LogoutFunc)
-
-		r.HandleFunc("/users/", UserIndexHandler)
-
-		r.Path("/roll/{id}").HandlerFunc(RollHandler)
-		r.Path("/roll/{id}").Queries(
-			"ac", "",
-			"d", "",
-			"hd", "",
-			"wd", "",
-			"gf", "",
-			"sp", "",
-			"nr", "",
-			"ed", "").HandlerFunc(RollHandler).Name("RollHandler")
-		r.HandleFunc("/opposed/", OpposeHandler)
-		r.Path("/opposed/").Queries(
-			"name1", "",
-			"ac", "",
-			"nd", "",
-			"hd", "",
-			"wd", "",
-			"gf", "",
-			"sp", "",
-			"name2", "",
-			"ac2", "",
-			"nd2", "",
-			"hd2", "",
-			"wd2", "",
-			"gf2", "",
-			"sp2", "",
-		).HandlerFunc(OpposeHandler).Name("OpposeHandler")
-
-		r.HandleFunc("/view_character/{id}", CharacterHandler)
-		r.HandleFunc("/new/{setting}", NewCharacterHandler)
-		r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
-		r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
-
-		r.HandleFunc("/index_powers/", PowerIndexHandler)
-		r.HandleFunc("/view_power/{id}", PowerHandler)
-
-		r.HandleFunc("/add_power/{id}", AddPowerHandler)
-		r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
-		r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
-
-		r.HandleFunc("/add_standalone_power/", AddStandalonePowerHandler)
-		r.HandleFunc("/modify_standalone_power/{id}", ModifyStandalonePowerHandler)
-		r.HandleFunc("/delete_power/{id}/{power}", DeletePowerHandler)
-		r.HandleFunc("/delete_standalone_power/{id}", DeleteStandalonePowerHandler)
-
-		r.HandleFunc("/add_hyperstat/{id}/{stat}", AddHyperStatHandler)
-		r.HandleFunc("/modify_hyperstat/{id}/{stat}", ModifyHyperStatHandler)
-		r.HandleFunc("/delete_hyperstat/{id}/{stat}", DeleteHyperStatHandler)
-
-		r.HandleFunc("/add_hyperskill/{id}/{skill}", AddHyperSkillHandler)
-		r.HandleFunc("/modify_hyperskill/{id}/{skill}", ModifyHyperSkillHandler)
-		r.HandleFunc("/delete_hyperskill/{id}/{skill}", DeleteHyperSkillHandler)
-
-		r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
-		r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
-
-		r.HandleFunc("/user_index/", UserIndexHandler)
-
-		http.Handle("/", r)
-
-		log.Fatal(http.ListenAndServe(":"+port, r))
+	if port == "" {
+		port = "8080"
 	}
+
+	r := mux.NewRouter()
+
+	fmt.Println("Starting Webserver at port " + port)
+	r.HandleFunc("/", CharacterIndexHandler)
+	r.HandleFunc("/about/", AboutHandler)
+	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
+	r.HandleFunc("/add_to_user_roster/{id}", AddToUserRosterHandler)
+
+	r.HandleFunc("/signup/", SignUpFunc)
+	r.HandleFunc("/login/", LoginFunc)
+	r.HandleFunc("/logout/", LogoutFunc)
+
+	r.HandleFunc("/users/", UserIndexHandler)
+
+	r.Path("/roll/{id}").HandlerFunc(RollHandler)
+	r.Path("/roll/{id}").Queries(
+		"ac", "",
+		"d", "",
+		"hd", "",
+		"wd", "",
+		"gf", "",
+		"sp", "",
+		"nr", "",
+		"ed", "").HandlerFunc(RollHandler).Name("RollHandler")
+	r.HandleFunc("/opposed/", OpposeHandler)
+	r.Path("/opposed/").Queries(
+		"name1", "",
+		"ac", "",
+		"nd", "",
+		"hd", "",
+		"wd", "",
+		"gf", "",
+		"sp", "",
+		"name2", "",
+		"ac2", "",
+		"nd2", "",
+		"hd2", "",
+		"wd2", "",
+		"gf2", "",
+		"sp2", "",
+	).HandlerFunc(OpposeHandler).Name("OpposeHandler")
+
+	r.HandleFunc("/view_character/{id}", CharacterHandler)
+	r.HandleFunc("/new/{setting}", NewCharacterHandler)
+	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
+	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
+
+	//r.HandleFunc("/index_powers/", PowerIndexHandler)
+	//r.HandleFunc("/view_power/{id}", PowerHandler)
+
+	//r.HandleFunc("/add_power/{id}", AddPowerHandler)
+	//r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
+	//r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
+
+	//r.HandleFunc("/add_standalone_power/", AddStandalonePowerHandler)
+	//r.HandleFunc("/modify_standalone_power/{id}", ModifyStandalonePowerHandler)
+	//r.HandleFunc("/delete_power/{id}/{power}", DeletePowerHandler)
+	//r.HandleFunc("/delete_standalone_power/{id}", DeleteStandalonePowerHandler)
+
+	r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
+	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
+
+	r.HandleFunc("/user_index/", UserIndexHandler)
+
+	http.Handle("/", r)
+
+	log.Fatal(http.ListenAndServe(":"+port, r))
 
 }
