@@ -6,6 +6,7 @@ import (
 	"github.com/toferc/runequest"
 )
 
+// CharacterModel represents the Web struct for a runequest.Character
 type CharacterModel struct {
 	ID        int64
 	Author    *User
@@ -18,7 +19,8 @@ type CharacterModel struct {
 	UpdatedAt time.Time
 }
 
+// Image  is the image and path for an Image
 type Image struct {
-	Id   int
+	ID   int
 	Path string
 }

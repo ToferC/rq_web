@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/toferc/onegc/model"
-	"github.com/toferc/oneroll"
 	"github.com/toferc/rq_web/models"
+	"github.com/toferc/runequest"
 )
 
 // WebView is a container for Web_gui data
@@ -33,7 +33,6 @@ type WebUser struct {
 // WebChar is a framework to send objects & data to a Web view
 type WebChar struct {
 	User           model.User
-	Character      *oneroll.Character
 	CharacterModel *models.CharacterModel
 	HomelandModel  *models.HomelandModel
 	IsAuthor       bool
@@ -43,7 +42,7 @@ type WebChar struct {
 	Wounds         map[string][]int
 	// IndexModels
 	CharacterModels []*models.CharacterModel
-	HomeLandModels  []*models.HomelandModel
+	HomelandModels  map[string]*models.HomelandModel
 	Counter         []int
 }
 

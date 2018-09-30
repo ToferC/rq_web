@@ -185,8 +185,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := runequest.NewCharacter("Default")
 
-	vars := mux.Vars(req)
-	setting := vars["setting"]
+	//vars := mux.Vars(req)
 
 	// Assign additional empty HitLocations to populate form
 

@@ -104,8 +104,6 @@ func HomelandListHandler(w http.ResponseWriter, req *http.Request) {
 			c.UpdateCharacter()
 		}
 
-		cm.Character.Homeland = 
-
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
@@ -181,9 +179,8 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		homelandName := req.FormValue("Name")
 
-		homeland := runequest.Homeland{
-			Name: homelandName,
-		}
+		hl.Homeland.Name = homelandName
+		// Add other
 
 		// Skill loop based on runequest skills + 10 empty values
 
@@ -192,11 +189,6 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		hl.Author = author
 
-		// Insert Homeland into App archive
-		p.DetermineHomelandCapacities()
-		p.CalculateCost()
-
-		hl.Homeland = &p
 		database.SaveHomelandModel(db, &hl)
 
 		url := fmt.Sprintf("/view_Homeland/%d", hl.ID)
@@ -253,8 +245,6 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	h := hl.Homeland
-
 	// Assign additional empty skills & passions to populate form
 
 	wc := WebChar{
@@ -282,52 +272,19 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		hlName := req.FormValue("Name")
 
-		hl.Name = hlName
-
-		for _, qLoop := range wc.Counter[:qCount] { // Quality Loop
-
-			qType := req.FormValue(fmt.Sprintf("Q%d-Type", qLoop))
-
-			if qType != "" {
-				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-Level", qLoop)))
-				if err != nil {
-					l = 0
-				}
-				q := &runequest.Quality{
-					Type:  req.FormValue(fmt.Sprintf("Q%d-Type", qLoop)),
-					Level: l,
-					Name:  req.FormValue(fmt.Sprintf("Q%d-Name", qLoop)),
-				}
-
-				for _, cLoop := range wc.Counter[:3] {
-					cType := req.FormValue(fmt.Sprintf("Q%d-C%d-Type", qLoop, cLoop))
-					if cType != "" {
-						cap := &runequest.Capacity{
-							Type: cType,
-						}
-						q.Capacities = append(q.Capacities, cap)
-					}
-				}
-
-				// Append Quality to Homeland Qualities
-				p.Qualities = append(p.Qualities, q)
-			}
-		}
+		hl.Homeland.Name = hlName
 
 		// Insert Homeland into App archive
-
-		hlModel.Homeland = hl
-
-		err = database.UpdateHomelandModel(db, hlModel)
+		err = database.UpdateHomelandModel(db, hl)
 		if err != nil {
 			panic(err)
 		} else {
 			fmt.Println("Saved")
 		}
 
-		fmt.Println(p)
+		fmt.Println(hl)
 
-		url := fmt.Sprintf("/view_Homeland/%d", hlModel.ID)
+		url := fmt.Sprintf("/view_Homeland/%d", hl.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

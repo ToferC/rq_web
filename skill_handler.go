@@ -8,8 +8,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
-	"github.com/toferc/oneroll"
 	"github.com/toferc/rq_web/database"
+	"github.com/toferc/runequest"
 )
 
 // AddSkillHandler renders a character in a Web page
@@ -35,7 +35,6 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 	// Get variables from URL
 	vars := mux.Vars(req)
 	pk := vars["id"]
-	s := vars["stat"]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -63,25 +62,7 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
-	// Assign basic HyperSkill
-	stat := c.Statistics[s]
-
-	skill := &oneroll.Skill{
-		Quality: &oneroll.Quality{
-			Type: "",
-		},
-		LinkStat: stat,
-		Dice: &oneroll.DiePool{
-			Normal: 0,
-			Hard:   0,
-			Wiggle: 0,
-		},
-		Narrow:         false,
-		Flexible:       false,
-		Influence:      false,
-		ReqSpec:        false,
-		Specialization: "",
-	}
+	skill := &runequest.Skill{}
 
 	wc := WebChar{
 		CharacterModel: cm,
@@ -89,7 +70,6 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:    username,
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
-		Skill:          skill,
 	}
 
 	if req.Method == "GET" {
@@ -108,43 +88,16 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 
 		sName := req.FormValue("Name")
 
-		sQuality := req.FormValue("Quality")
+		base, _ := strconv.Atoi(req.FormValue("Base"))
 
-		nd, _ := strconv.Atoi(req.FormValue("Normal"))
-
-		skill = new(oneroll.Skill)
-
-		skill.Quality = &oneroll.Quality{
-			Type: sQuality,
-		}
+		skill = new(runequest.Skill)
 
 		skill.Name = sName
+		skill.Base = base
 
-		skill.LinkStat = stat
-
-		skill.Dice = &oneroll.DiePool{
-			Normal: nd,
-		}
-
-		if req.FormValue("Free") != "" {
-			skill.Free = true
-		}
-
-		if req.FormValue("Narrow") != "" {
-			skill.Narrow = true
-		}
-
-		if req.FormValue("Flexible") != "" {
-			skill.Flexible = true
-		}
-
-		if req.FormValue("Influence") != "" {
-			skill.Influence = true
-		}
-
-		if req.FormValue("ReqSpec") == "Yes" {
-			skill.ReqSpec = true
-			skill.Specialization = req.FormValue("Specialization")
+		if req.FormValue("UserChoice") == "Yes" {
+			skill.UserChoice = true
+			skill.UserString = req.FormValue("UserString")
 		}
 
 		c.Skills[sName] = skill
