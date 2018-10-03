@@ -43,6 +43,8 @@ type WebChar struct {
 	// IndexModels
 	CharacterModels []*models.CharacterModel
 	HomelandModels  map[string]*models.HomelandModel
+	Passions        []string
+	CategoryOrder   []string
 	Counter         []int
 }
 

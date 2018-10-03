@@ -154,13 +154,21 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		Homeland: defaultHomeland,
 	}
 
+	c := runequest.NewCharacter("name")
+	cm := models.CharacterModel{
+		Character: c,
+	}
+
 	wc := WebChar{
-		HomelandModel: &hl,
-		IsAuthor:      true,
-		SessionUser:   username,
-		IsLoggedIn:    loggedIn,
-		IsAdmin:       isAdmin,
-		Counter:       []int{1, 2, 3, 4, 5, 6, 7, 8},
+		HomelandModel:  &hl,
+		CharacterModel: &cm,
+		IsAuthor:       true,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
+		Passions:       runequest.PassionTypes,
+		CategoryOrder:  runequest.CategoryOrder,
 	}
 
 	if req.Method == "GET" {
@@ -183,6 +191,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		// Add other
 
 		// Skill loop based on runequest skills + 10 empty values
+		// Create character, show skills, then pull skills in based on changes in base or additions to value
 
 		author := database.LoadUser(db, username)
 		fmt.Println(author)

@@ -31,7 +31,7 @@ const DefaultCharacterPortrait = "/media/shadow.jpeg"
 func init() {
 	os.Setenv("DBUser", "chris")
 	os.Setenv("DBPass", "12345")
-	os.Setenv("DBName", "ore_engine")
+	os.Setenv("DBName", "runequest")
 }
 
 func main() {
@@ -140,14 +140,14 @@ func main() {
 	).HandlerFunc(OpposeHandler).Name("OpposeHandler")
 
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
-	r.HandleFunc("/new/{setting}", NewCharacterHandler)
+	r.HandleFunc("/new/", NewCharacterHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
 	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 
 	//r.HandleFunc("/index_powers/", PowerIndexHandler)
 	//r.HandleFunc("/view_power/{id}", PowerHandler)
 
-	//r.HandleFunc("/add_power/{id}", AddPowerHandler)
+	r.HandleFunc("/add_homeland/", AddHomelandHandler)
 	//r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
 	//r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
 

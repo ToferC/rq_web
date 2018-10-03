@@ -1,0 +1,116 @@
+{{ define "title"}}
+
+<title>Add Homeland</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $IsAuthor := .IsAuthor }}
+{{ $homeland := .HomelandModel.Homeland }}
+
+{{ $counter := .Counter }}
+{{ $passions := .Passions }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <form action="" method="POST">
+              <h3>Create Homeland</h3>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $homeland.Name }}">
+              </div>
+
+              
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                <span class="input-group-text" for="Description">Description</span>
+                </div>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description"></textarea>
+              </div>
+
+              <br><strong>Archive homeland?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
+              <hr>
+              <input class="button" type="submit" value="Save">
+          </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+
+                {{ range $co := .CategoryOrder }}
+
+                {{ range $k, $v := $character.Skills }}
+                {{ if eq $co $v.Category }}
+
+                <p>{{ $v.Name }} ({{ $v.Category }})</p>
+                
+                {{ if $v.UserChoice }}
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="{{ $v.CoreString }}-UserString-addon">Input</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="{{ $v.CoreString }}-UserString-addon" name="{{ $v.CoreString }}-UserString" value ="{{ $v.UserString }}">
+                </div>
+                {{ end }}
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="{{ $v.CoreString }}-Base-addon">Skill Base</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="{{ $v.CoreString }}-Base-addon" name="{{ $v.CoreString }}-Base" value ="{{ $v.Base }}">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="{{ $v.CoreString }}-Value-addon">Skill Bonus</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="{{ $v.CoreString }}-Value-addon" name="{{ $v.CoreString }}-Value" value ="{{ $v.HomelandValue }}">
+                </div>
+
+                <hr>
+                
+                {{ end }} <!-- End Skill Loop -->
+                {{ end }} <!-- End IF -->
+                {{ end }} <!-- End CategoryOrder -->
+
+              </div> <!-- End Skills Column -->
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <h4>Passions</h4>
+
+                    {{ range $m := $counter }} <!-- Passions loop -->
+
+                    <label for="Passion-{{$m}}-CoreString">Passion {{ $m }}</label>
+                    <select type="text" class="form-control" id="Passion-{{$m}}-CoreString" name="Passion-{{$m}}-CoreString">
+                      <option></option>
+                      {{ range $passions }}
+                          <option>{{ . }}</option>
+                        {{ end }}
+                    </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{$m}}-UserString-addon">Input</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Passion-{{$m}}-UserString-addon" name="Passion-{{$m}}-UserString" value ="">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{$m}}-Base-addon">Passion Base</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Passion-{{$m}}-Base-addon" name="Passion-{{$m}}-Base" value ="60">
+                </div>
+
+                {{ end }}
+                </div> <!-- End Passions COL 1 -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->
