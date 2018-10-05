@@ -379,17 +379,15 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					Category:   s1baseSkill.Category,
 				}
 
-				str := fmt.Sprintf("Skill-%d-1-Base", i)
-				base, err := strconv.Atoi(req.FormValue(str))
+				str := fmt.Sprintf("Skill-%d-1-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
-					base = 0
+					v = 0
 				}
-				s1.Base = base
+				s1.HomelandValue = v
 
-				userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-
-				if userString != "" {
-					s1.UserChoice = true
+				if s1.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
 					s1.UserString = req.FormValue(userString)
 				}
 
@@ -404,17 +402,15 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					Category:   s2baseSkill.Category,
 				}
 
-				str = fmt.Sprintf("Skill-%d-2-Base", i)
-				base, err = strconv.Atoi(req.FormValue(str))
+				str = fmt.Sprintf("Skill-%d-2-Value", i)
+				v, err = strconv.Atoi(req.FormValue(str))
 				if err != nil {
-					base = 0
+					v = 0
 				}
-				s2.Base = base
+				s2.HomelandValue = v
 
-				userString = fmt.Sprintf("Skill-%d-2-UserString", i)
-
-				if userString != "" {
-					s2.UserChoice = true
+				if s2.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
 					s2.UserString = userString
 				}
 
@@ -424,9 +420,8 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					s2,
 				}
 			}
-
+			// Append skillchoice
 			hl.Homeland.SkillChoices = append(hl.Homeland.SkillChoices, sc)
-
 		}
 		// Add other
 
