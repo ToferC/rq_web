@@ -8,22 +8,22 @@
 
 {{ $character := .CharacterModel.Character }}
 {{ $IsAuthor := .IsAuthor }}
-{{ $homeland := .HomelandModel.Homeland }}
 
 {{ $counter := .Counter }}
 {{ $passions := .Passions }}
+{{ $skills := .Skills }}
 
       <div class="container">
         <hr>
         <div class="row">
           <div class="col-sm-4 col-md-4 col-lg-4">
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
               <h3>Create Homeland</h3>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="name-addon">Name</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $homeland.Name }}">
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="">
               </div>
 
               
@@ -34,7 +34,14 @@
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description"></textarea>
               </div>
 
-              <br><strong>Archive homeland?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
+              <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+                    <label class="custom-file-label" for="inputGroupFile">Choose file</label>
+                  </div>
+                </div>
+
+              <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
               <hr>
               <input class="button" type="submit" value="Save">
           </div>
@@ -42,16 +49,17 @@
             <div class="col-sm-4 col-md-4 col-lg-4">
 
                 {{ range $co := .CategoryOrder }}
+                <h5>{{ $co }} Skills</h5>
 
                 {{ range $k, $v := $character.Skills }}
                 {{ if eq $co $v.Category }}
 
-                <p>{{ $v.Name }} ({{ $v.Category }})</p>
+                <p>{{ $v.CoreString }}</p>
                 
                 {{ if $v.UserChoice }}
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $v.CoreString }}-UserString-addon">Input</span>
+                    <span class="input-group-text" id="{{ $v.CoreString }}-UserString-addon">Specialization</span>
                   </div>
                   <input type="text" class="form-control" aria-describedby="{{ $v.CoreString }}-UserString-addon" name="{{ $v.CoreString }}-UserString" value ="{{ $v.UserString }}">
                 </div>
@@ -75,6 +83,7 @@
                 
                 {{ end }} <!-- End Skill Loop -->
                 {{ end }} <!-- End IF -->
+                <hr>
                 {{ end }} <!-- End CategoryOrder -->
 
               </div> <!-- End Skills Column -->
@@ -107,7 +116,64 @@
                 </div>
 
                 {{ end }}
-                </div> <!-- End Passions COL 1 -->
+
+                <hr>
+
+                <h4>Skill Choices</h4>
+
+                {{ range $m := $counter }} <!-- SkillChoice loop -->
+
+                <h5>Choice {{$m}}</h5>
+
+                <!-- Skill 1 -->
+                <label for="Skill-{{$m}}-1-CoreString">Skill 1</label>
+                <select type="text" class="form-control" id="Skill-{{$m}}-1-CoreString" name="Skill-{{$m}}-1-CoreString">
+                  <option></option>
+                  {{ range $s := $skills }}
+                  <option>{{ $s.CoreString }}</option>
+                    {{ end }}
+                </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-1-UserString-addon">Specialization</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-1-UserString-addon" name="Skill-{{$m}}-1-UserString" value ="">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Skill-{{$m}}-1-Value-addon">Skill Bonus</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-1-Value-addon" name="Skill-{{$m}}-1-Value" value ="0">
+                  </div>
+
+                <!-- Skill 2 -->
+                <label for="Skill-{{$m}}-2-CoreString">Skill 2</label>
+                    <select type="text" class="form-control" id="Skill-{{$m}}-2-CoreString" name="Skill-{{$m}}-2-CoreString">
+                      <option></option>
+                      {{ range $s := $skills }}
+                          <option>{{ $s.CoreString }}</option>
+                        {{ end }}
+                    </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-2-UserString-addon">Specialization</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-2-UserString-addon" name="Skill-{{$m}}-2-UserString" value ="">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Skill-{{$m}}-2-Value-addon">Skill Bonus</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-2-Value-addon" name="Skill-{{$m}}-2-Value" value ="0">
+                  </div>
+
+                <hr>
+                {{ end }}
+                </div> <!-- End Passions & SkillChoices COL 1 -->
 
             </form>
           </div> <!-- END outer ROW -->

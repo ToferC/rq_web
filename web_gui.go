@@ -45,6 +45,7 @@ type WebChar struct {
 	HomelandModels  map[string]*models.HomelandModel
 	Passions        []string
 	CategoryOrder   []string
+	Skills          map[string]*runequest.Skill
 	Counter         []int
 }
 

@@ -14,7 +14,7 @@ func SaveHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 	// Save character in Database
 	_, err := db.Model(hl).
 		OnConflict("(id) DO UPDATE").
-		Set("name = ?name").
+		Set("homeland = ?homeland").
 		Insert(hl)
 	if err != nil {
 		panic(err)

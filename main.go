@@ -60,7 +60,7 @@ func main() {
 			Database: os.Getenv("DBName"),
 		})
 		os.Setenv("CookieSecret", "kimchee-typhoon")
-		os.Setenv("BUCKET", "rqweb")
+		os.Setenv("BUCKET", "runequeset")
 		os.Setenv("AWS_REGION", "us-east-1")
 	}
 
@@ -148,6 +148,7 @@ func main() {
 	//r.HandleFunc("/view_power/{id}", PowerHandler)
 
 	r.HandleFunc("/add_homeland/", AddHomelandHandler)
+	r.HandleFunc("/view_homeland/{id}", HomelandHandler)
 	//r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
 	//r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
 

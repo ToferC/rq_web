@@ -1,0 +1,72 @@
+{{ define "title"}}
+{{ $homeland := .HomelandModel.Homeland }}
+
+<title>{{ $homeland.Name }}</title>
+
+{{ end }}
+
+{{ define "content" }}
+
+{{ $homeland := .HomelandModel.Homeland }}
+{{ $ID := .HomelandModel.ID }}
+{{ $skills := .Skills }}
+
+<div class="container">
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-4">
+<br>
+<div class="card-body">
+  <h4>{{ $homeland.Name }}</h4> 
+  <strong>Author: {{ .HomelandModel.Author.UserName }}</strong>
+
+  <img class ="card-img-top" data-src="" alt="Thumbnail"
+  style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
+  data-holder-rendered="true">
+
+  {{ $homeland.Description }}
+  <hr>
+  <a class="btn btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
+  <a class="btn btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
+</div>
+</div>
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+
+<h4>Skills</h4>
+{{ range $co := .CategoryOrder }}
+  {{ range $skill := $homeland.Skills }}
+  {{ if eq $co $skill.Category }}
+  {{ if gt $skill.HomelandValue 0 }}
+  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} Skill Bonus: {{ $skill.HomelandValue }}%</p>
+  {{ end }}
+  {{ end }}
+  {{end}}
+  <hr>
+  {{ end }}
+</div>
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+
+    <h4>Passions</h4>
+    {{ range $passion := $homeland.PassionList }}
+    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base: {{ $passion.Base }}%</p>    
+    {{end}}
+    <hr>
+
+    <h4>Skill Choices</h4>
+    {{ range $schoice := $homeland.SkillChoices }}
+        {{ range $sc := $schoice }}
+        {{ range $skill := $sc }}
+        <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} Skill Bonus: {{ $skill.HomelandValue }}%</p>
+        {{end}}
+        {{ end }}
+    {{ end }}
+    <hr>
+
+</div>  
+
+</div>
+
+</div>
+
+{{ end }}
