@@ -345,6 +345,39 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Error getting file ", err)
 		}
 
+		// Read New Skills
+
+		for i := 1; i < 4; i++ {
+
+			sk := runequest.Skill{}
+
+			sk.CoreString = req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+
+			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+
+			if userString != "" {
+				sk.UserChoice = true
+				sk.UserString = userString
+			}
+
+			str := fmt.Sprintf("Skill-%d-Base", i)
+			base, err := strconv.Atoi(req.FormValue(str))
+			if err != nil {
+				base = 0
+			}
+			sk.Base = base
+
+			str = fmt.Sprintf("Skill-%d-Value", i)
+			v, err := strconv.Atoi(req.FormValue(str))
+			if err != nil {
+				v = 0
+			}
+			sk.HomelandValue = v
+
+			hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
+		}
+
 		// Read Skills
 		for _, s := range c.Skills {
 
@@ -362,11 +395,11 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			sk.Base = base
 
 			str = fmt.Sprintf("%s-Value", s.CoreString)
-			base, err = strconv.Atoi(req.FormValue(str))
+			v, err := strconv.Atoi(req.FormValue(str))
 			if err != nil {
-				base = 0
+				v = 0
 			}
-			sk.HomelandValue = base
+			sk.HomelandValue = v
 
 			if s.UserChoice {
 				sk.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
@@ -390,11 +423,11 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			}
 			p.Base = base
 
-			userString := fmt.Sprintf("Passion-%d-UserString", i)
+			userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
 			if userString != "" {
 				p.UserChoice = true
-				p.UserString = req.FormValue(userString)
+				p.UserString = userString
 			}
 
 			hl.Homeland.PassionList = append(hl.Homeland.PassionList, p)

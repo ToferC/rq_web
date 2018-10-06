@@ -12,6 +12,7 @@
 {{ $counter := .Counter }}
 {{ $passions := .Passions }}
 {{ $skills := .Skills }}
+{{ $category := .CategoryOrder }}
 
       <div class="container">
         <hr>
@@ -47,6 +48,8 @@
           </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
+              <h4>Regular Skills</h4>
+              <p>Add points to regular or change base of regular Runequest skills.</p>
 
                 {{ range $co := .CategoryOrder }}
                 <h5>{{ $co }} Skills</h5>
@@ -90,6 +93,7 @@
 
                 <div class="col-sm-4 col-md-4 col-lg-4">
                   <h4>Passions</h4>
+                  <p>Set the starting passions for the homeland.</p>
 
                     {{ range $m := $counter }} <!-- Passions loop -->
 
@@ -120,6 +124,8 @@
                 <hr>
 
                 <h4>Skill Choices</h4>
+                <p>Give users a choice of two skills to improve.</p>
+
 
                 {{ range $m := $counter }} <!-- SkillChoice loop -->
 
@@ -173,7 +179,52 @@
 
                 <hr>
                 {{ end }}
-                </div> <!-- End Passions & SkillChoices COL 1 -->
+
+                <h4>Add New Skills</h4>
+
+                {{ range $m := $counter }}
+                <h5>Skill {{$m}}</h5>
+
+                  <!-- Skill 1 -->
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="Skill-{{$m}}-CoreString-addon">Name</span>
+                      </div>
+                      <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-CoreString-addon" name="Skill-{{$m}}-CoreString" value ="">
+                  </div>
+
+                <label for="Skill-{{$m}}-Category">Category</label>
+                <select type="text" class="form-control" id="Skill-{{$m}}-Category" name="Skill-{{$m}}-Category">
+                  {{ range $category }}
+                  <option>{{ . }}</option>
+                    {{ end }}
+                </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-UserString-addon">Specialization (if req'd)</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-UserString-addon" name="Skill-{{$m}}-UserString" value ="">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Skill-{{$m}}-Base-addon">Base %</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-Base-addon" name="Skill-{{$m}}-Base" value ="0">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Skill-{{$m}}-Value-addon">Skill Bonus</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-Value-addon" name="Skill-{{$m}}-Value" value ="0">
+                </div>
+                <hr>
+
+                {{ end }}
+
+            </div> <!-- End Passions & SkillChoices COL 1 -->
 
             </form>
           </div> <!-- END outer ROW -->
