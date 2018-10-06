@@ -41,12 +41,18 @@
         <a class="nav-link" href="/user_roster/">Personal Roster<span class="sr-only"></span></a>
       </li>
       {{ end }}
-      <li class="nav-item active">
-        <a class="nav-link" href="/index_powers/">Power Archive <span class="sr-only"></span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/roll/0">Roll</a>
-      </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Templates
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/homeland_index/">Homeland Index</a>
+            <a class="dropdown-item" href="/occupation_index/">Occupation Index</a>
+            <a class="dropdown-item" href="/cult_index/">Cults Index</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/add_standalone_power/" role="button">Add Power</a>
+          </div>
+        </li>
       {{ if ne $user ""}}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

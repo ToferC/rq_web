@@ -16,6 +16,47 @@ import (
 	"github.com/toferc/rq_web/models"
 )
 
+// HomelandIndexHandler renders the basic character roster page
+func HomelandIndexHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	homelands, err := database.ListHomelandModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, hl := range homelands {
+		if hl.Image == nil {
+			hl.Image = new(models.Image)
+			hl.Image.Path = DefaultCharacterPortrait
+		}
+	}
+
+	wc := WebChar{
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		HomelandModels: homelands,
+	}
+
+	Render(w, "templates/homeland_index.html", wc)
+}
+
 // HomelandListHandler applies a Homeland template to a character
 func HomelandListHandler(w http.ResponseWriter, req *http.Request) {
 

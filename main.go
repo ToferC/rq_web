@@ -147,6 +147,7 @@ func main() {
 	//r.HandleFunc("/index_powers/", PowerIndexHandler)
 	//r.HandleFunc("/view_power/{id}", PowerHandler)
 
+	r.HandleFunc("/homeland_index/", HomelandIndexHandler)
 	r.HandleFunc("/add_homeland/", AddHomelandHandler)
 	r.HandleFunc("/view_homeland/{id}", HomelandHandler)
 	//r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)

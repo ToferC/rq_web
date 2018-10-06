@@ -36,7 +36,7 @@ func UpdateHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 func ListHomelandModels(db *pg.DB) (map[string]*models.HomelandModel, error) {
 	var homelands []*models.HomelandModel
 
-	_, err := db.Query(&homelands, `SELECT * FROM Homelands`)
+	_, err := db.Query(&homelands, `SELECT * FROM homeland_models`)
 
 	if err != nil {
 		panic(err)

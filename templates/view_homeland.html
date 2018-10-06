@@ -14,8 +14,7 @@
 <div class="container">
 <div class="row">
   <div class="col-sm-4 col-md-4 col-lg-4">
-<br>
-<div class="card-body">
+
   <h4>{{ $homeland.Name }}</h4> 
   <strong>Author: {{ .HomelandModel.Author.UserName }}</strong>
 
@@ -28,21 +27,30 @@
   <a class="btn btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
   <a class="btn btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
 </div>
-</div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">
 
 <h4>Skills</h4>
+<h5>Skill Bonuses</h5>
 {{ range $co := .CategoryOrder }}
   {{ range $skill := $homeland.Skills }}
   {{ if eq $co $skill.Category }}
   {{ if gt $skill.HomelandValue 0 }}
-  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} Skill Bonus: {{ $skill.HomelandValue }}%</p>
+  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
   {{ end }}
   {{ end }}
   {{end}}
-  <hr>
   {{ end }}
+
+<h5>Skill Base Adjustments</h5>
+    {{ range $sk := $skills }}
+    {{ range $skill := $homeland.Skills }}
+        {{ if and (eq $skill.CoreString $sk.CoreString)  (gt $skill.Base $sk.Base) }}
+        <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%)</p>
+        {{ end }}
+    {{ end }}
+    {{ end }}
+
 </div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">
@@ -55,10 +63,8 @@
 
     <h4>Skill Choices</h4>
     {{ range $schoice := $homeland.SkillChoices }}
-        {{ range $sc := $schoice }}
-        {{ range $skill := $sc }}
-        <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} Skill Bonus: {{ $skill.HomelandValue }}%</p>
-        {{end}}
+        {{ range $skill := $schoice.Skills }}
+        <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%</p>
         {{ end }}
     {{ end }}
     <hr>
