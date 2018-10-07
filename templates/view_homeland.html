@@ -45,7 +45,7 @@
 <h5>Skill Base Adjustments</h5>
     {{ range $sk := $skills }}
     {{ range $skill := $homeland.Skills }}
-        {{ if and (eq $skill.CoreString $sk.CoreString)  (gt $skill.Base $sk.Base) }}
+        {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
         <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%)</p>
         {{ end }}
     {{ end }}
@@ -63,8 +63,12 @@
 
     <h4>Skill Choices</h4>
     {{ range $schoice := $homeland.SkillChoices }}
+    {{ if gt (len $schoice.Skills) 0}}
+    <h5>Choose between</h5>
         {{ range $skill := $schoice.Skills }}
         <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%</p>
+        {{ end }}
+        <hr>
         {{ end }}
     {{ end }}
     <hr>
