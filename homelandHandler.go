@@ -349,38 +349,44 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		for i := 1; i < 4; i++ {
 
-			sk := runequest.Skill{}
+			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
-			sk.CoreString = req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
-			sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+			if coreString != "" {
 
-			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				sk := runequest.Skill{}
 
-			if userString != "" {
-				sk.UserChoice = true
-				sk.UserString = userString
+				sk.CoreString = coreString
+				sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+
+				if userString != "" {
+					sk.UserChoice = true
+					sk.UserString = userString
+				}
+
+				str := fmt.Sprintf("Skill-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+				sk.Base = base
+
+				str = fmt.Sprintf("Skill-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				sk.HomelandValue = v
+
+				hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
 			}
-
-			str := fmt.Sprintf("Skill-%d-Base", i)
-			base, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				base = 0
-			}
-			sk.Base = base
-
-			str = fmt.Sprintf("Skill-%d-Value", i)
-			v, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				v = 0
-			}
-			sk.HomelandValue = v
-
-			hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
 		}
 
-		// Read Skills
+		// Read Base Skills
 		for _, s := range c.Skills {
 
+			// Build skill based on user input vs. base Skills
 			sk := runequest.Skill{
 				CoreString: s.CoreString,
 				UserChoice: s.UserChoice,
@@ -405,32 +411,41 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				sk.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
 			}
 
-			hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
+			if sk.Base > s.Base || sk.HomelandValue > 0 || sk.UserString != s.UserString {
+				// If we changed something, add to the Homeland skill list
+				hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
+			}
+
 		}
 
 		// Read passions
 		for i := 1; i < 4; i++ {
 
-			p := runequest.Ability{
-				Type:       "Passion",
-				CoreString: req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i)),
+			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
+
+			if coreString != "" {
+
+				p := runequest.Ability{
+					Type:       "Passion",
+					CoreString: coreString,
+				}
+
+				str := fmt.Sprintf("Passion-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+				p.Base = base
+
+				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+
+				if userString != "" {
+					p.UserChoice = true
+					p.UserString = userString
+				}
+
+				hl.Homeland.PassionList = append(hl.Homeland.PassionList, p)
 			}
-
-			str := fmt.Sprintf("Passion-%d-Base", i)
-			base, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				base = 0
-			}
-			p.Base = base
-
-			userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-
-			if userString != "" {
-				p.UserChoice = true
-				p.UserString = userString
-			}
-
-			hl.Homeland.PassionList = append(hl.Homeland.PassionList, p)
 		}
 
 		// Read SkillChoices
@@ -497,10 +512,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			// Append skillchoice
 			hl.Homeland.SkillChoices = append(hl.Homeland.SkillChoices, sc)
 		}
-		// Add other
-
-		// Skill loop based on runequest skills + 10 empty values
-		// Create character, show skills, then pull skills in based on changes in base or additions to value
+		// Add other HomelandModel fields
 
 		author := database.LoadUser(db, username)
 
@@ -567,15 +579,13 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	// Assign additional empty skills & passions to populate form
-
 	wc := WebChar{
 		HomelandModel: hl,
 		IsAuthor:      IsAuthor,
 		SessionUser:   username,
 		IsLoggedIn:    loggedIn,
 		IsAdmin:       isAdmin,
-		Counter:       []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		Counter:       []int{1, 2, 3},
 	}
 
 	if req.Method == "GET" {
@@ -595,6 +605,14 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hlName := req.FormValue("Name")
 
 		hl.Homeland.Name = hlName
+
+		// Update Homeland here
+
+		// Core info
+		// Image
+		// Skills
+		// Passions
+		// Skill Choices
 
 		// Insert Homeland into App archive
 		err = database.UpdateHomelandModel(db, hl)

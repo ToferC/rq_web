@@ -150,6 +150,7 @@ func main() {
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)
 	r.HandleFunc("/add_homeland/", AddHomelandHandler)
 	r.HandleFunc("/view_homeland/{id}", HomelandHandler)
+	r.HandleFunc("/modify_homeland/{id}", ModifyHomelandHandler)
 	//r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
 	//r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
 
