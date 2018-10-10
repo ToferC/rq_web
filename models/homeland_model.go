@@ -11,6 +11,7 @@ type HomelandModel struct {
 	ID        int64
 	Author    *User
 	Homeland  *runequest.Homeland
+	Official  bool
 	Open      bool
 	Likes     int
 	Image     *Image

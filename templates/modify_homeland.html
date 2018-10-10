@@ -1,12 +1,12 @@
 {{ define "title"}}
 
-<title>Add Homeland</title>
+<title>Modify Homeland</title>
 
 {{ end }}
 
 {{define "content"}}
 
-{{ $homeland := HomelandModel.Homeland }}
+{{ $homeland := .HomelandModel.Homeland }}
 {{ $IsAuthor := .IsAuthor }}
 
 {{ $counter := .Counter }}
@@ -35,16 +35,20 @@
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description">{{ $homeland.Description }}</textarea>
               </div>
 
+              <hr>
               <img class ="card-img-top" data-src="" alt="Thumbnail"
                 style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
                 data-holder-rendered="true">
 
+                <hr>
               <div class="input-group">
                   <div class="custom-file">
                     <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
                     <label class="custom-file-label" for="inputGroupFile">Choose file</label>
                   </div>
                 </div>
+                <hr>
+                <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
 
               <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
               <hr>
@@ -99,10 +103,10 @@
                   <h4>Passions</h4>
                   <p>Update starting passions for the homeland.</p>
 
-                    {{ range $passion := $homeland.PassionList }} <!-- Passions loop -->
+                    {{ range $c, $passion := $homeland.PassionList }} <!-- Passions loop -->
 
-                    <label for="{{ $passion.CoreString}}-CoreString">Passion {{ $m }}</label>
-                    <select type="text" class="form-control" id="{{ $passion.CoreString}}-CoreString" name="{{ $passion.CoreString}}-CoreString">
+                    <label for="Passion-{{ add $c 1 }}-CoreString">Passion</label>
+                    <select type="text" class="form-control" id="Passion-{{ add $c 1}}-CoreString" name="Passion-{{ add $c 1}}-CoreString">
                       <option>{{ $passion.CoreString }}</option>
                       {{ range $passions }}
                           <option>{{ . }}</option>
@@ -111,16 +115,16 @@
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $passion.CoreString}}-UserString-addon">Input</span>
+                    <span class="input-group-text" id="Passion-{{ add $c 1}}-UserString-addon">Input</span>
                   </div>
-                  <input type="text" class="form-control" aria-describedby="{{ $passion.CoreString}}-UserString-addon" name="{{ $passion.CoreString}}-UserString" value ="{{ $passion.UserString }}">
+                  <input type="text" class="form-control" aria-describedby="Passion-{{ add $c 1}}-UserString-addon" name="Passion-{{ add $c 1}}-UserString" value ="{{ $passion.UserString }}">
                 </div>
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $passion.CoreString}}-Base-addon">Passion Base</span>
+                    <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">Passion Base</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $passion.CoreString}}-Base-addon" name="{{ $passion.CoreString}}-Base" value ="{{ $passion.Base }}">
+                  <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Base-addon" name="Passion-{{ add $c 1}}-Base" value ="{{ $passion.Base }}">
                 </div>
 
                 {{ end }}
@@ -128,17 +132,17 @@
                 <hr>
 
                 <h4>Skill Choices</h4>
-                <p>Give users a choice of two skills to improve.</p>
+                <p>Updates Skill choice options.</p>
 
+                {{ range $m, $schoice := $homeland.SkillChoices }} <!-- SkillChoice loop -->
 
-                {{ range $m := $counter }} <!-- SkillChoice loop -->
+                <h5>Choice {{add $m 1}}</h5>
 
-                <h5>Choice {{$m}}</h5>
-
+                {{ range $c, $skill := $schoice.Skills }} <!-- Skill loop -->
                 <!-- Skill 1 -->
-                <label for="Skill-{{$m}}-1-CoreString">Skill 1</label>
-                <select type="text" class="form-control" id="Skill-{{$m}}-1-CoreString" name="Skill-{{$m}}-1-CoreString">
-                  <option></option>
+                <label for="Skill-{{add $m 1}}-{{add $c 1}}-CoreString">Skill {{add $c 1}}</label>
+                <select type="text" class="form-control" id="Skill-{{add $m 1}}-{{add $c 1}}-CoreString" name="Skill-{{add $m 1}}-{{add $c 1}}-CoreString">
+                  <option>{{$skill.CoreString}}</option>
                   {{ range $s := $skills }}
                   <option>{{ $s.CoreString }}</option>
                     {{ end }}
@@ -146,43 +150,24 @@
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="Skill-{{$m}}-1-UserString-addon">Specialization</span>
+                    <span class="input-group-text" id="Skill-{{add $m 1}}-{{add $c 1}}-UserString-addon">Specialization</span>
                   </div>
-                  <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-1-UserString-addon" name="Skill-{{$m}}-1-UserString" value ="">
+                  <input type="text" class="form-control" aria-describedby="Skill-{{add $m 1}}-{{add $c 1}}-UserString-addon" name="Skill-{{add $m 1}}-{{add $c 1}}-UserString" value ="{{$skill.UserString}}">
                 </div>
 
                 <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="Skill-{{$m}}-1-Value-addon">Skill Bonus</span>
+                      <span class="input-group-text" id="Skill-{{add $m 1}}-{{add $c 1}}-Value-addon">Skill Bonus</span>
                     </div>
-                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-1-Value-addon" name="Skill-{{$m}}-1-Value" value ="0">
+                    <input type="number" class="form-control" aria-describedby="Skill-{{add $m 1}}-{{add $c 1}}-Value-addon" name="Skill-{{add $m 1}}-{{add $c 1}}-Value" value ="{{$skill.HomelandValue}}">
                   </div>
 
-                <!-- Skill 2 -->
-                <label for="Skill-{{$m}}-2-CoreString">Skill 2</label>
-                    <select type="text" class="form-control" id="Skill-{{$m}}-2-CoreString" name="Skill-{{$m}}-2-CoreString">
-                      <option></option>
-                      {{ range $s := $skills }}
-                          <option>{{ $s.CoreString }}</option>
-                        {{ end }}
-                    </select>
+                  {{ if eq $c 0 }}<br><p><strong>--- OR ----</strong></p>{{ end }}
 
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="Skill-{{$m}}-2-UserString-addon">Specialization</span>
-                  </div>
-                  <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-2-UserString-addon" name="Skill-{{$m}}-2-UserString" value ="">
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="Skill-{{$m}}-2-Value-addon">Skill Bonus</span>
-                    </div>
-                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-2-Value-addon" name="Skill-{{$m}}-2-Value" value ="0">
-                  </div>
+                 {{ end }} <!-- End Skill loop -->
 
                 <hr>
-                {{ end }}
+                {{ end }} <!-- End SkillChoice loop -->
 
                 <h4>Add New Skills</h4>
 

@@ -65,13 +65,14 @@
     {{ range $schoice := $homeland.SkillChoices }}
     {{ if gt (len $schoice.Skills) 0}}
     <h5>Choose between</h5>
-        {{ range $skill := $schoice.Skills }}
-        <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%</p>
+    <p>
+        {{ range $c, $skill := $schoice.Skills }}
+        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%
+        {{ if eq $c 0 }}<strong>--- OR ----</strong>{{else}}</p>{{ end }}
         {{ end }}
         <hr>
         {{ end }}
     {{ end }}
-    <hr>
 
 </div>  
 
