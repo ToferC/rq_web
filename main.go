@@ -121,43 +121,18 @@ func main() {
 		"sp", "",
 		"nr", "",
 		"ed", "").HandlerFunc(RollHandler).Name("RollHandler")
-	r.HandleFunc("/opposed/", OpposeHandler)
-	r.Path("/opposed/").Queries(
-		"name1", "",
-		"ac", "",
-		"nd", "",
-		"hd", "",
-		"wd", "",
-		"gf", "",
-		"sp", "",
-		"name2", "",
-		"ac2", "",
-		"nd2", "",
-		"hd2", "",
-		"wd2", "",
-		"gf2", "",
-		"sp2", "",
-	).HandlerFunc(OpposeHandler).Name("OpposeHandler")
 
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
 	r.HandleFunc("/new/", NewCharacterHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
 	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 
-	//r.HandleFunc("/index_powers/", PowerIndexHandler)
-	//r.HandleFunc("/view_power/{id}", PowerHandler)
-
+	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)
 	r.HandleFunc("/add_homeland/", AddHomelandHandler)
 	r.HandleFunc("/view_homeland/{id}", HomelandHandler)
 	r.HandleFunc("/modify_homeland/{id}", ModifyHomelandHandler)
-	//r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
-	//r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
-
-	//r.HandleFunc("/add_standalone_power/", AddStandalonePowerHandler)
-	//r.HandleFunc("/modify_standalone_power/{id}", ModifyStandalonePowerHandler)
-	//r.HandleFunc("/delete_power/{id}/{power}", DeletePowerHandler)
-	//r.HandleFunc("/delete_standalone_power/{id}", DeleteStandalonePowerHandler)
+	r.HandleFunc("/delete_homeland/{id}", DeleteHomelandHandler)
 
 	r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
 	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)

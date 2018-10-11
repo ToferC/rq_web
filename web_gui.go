@@ -32,21 +32,23 @@ type WebUser struct {
 
 // WebChar is a framework to send objects & data to a Web view
 type WebChar struct {
-	User           model.User
-	CharacterModel *models.CharacterModel
-	HomelandModel  *models.HomelandModel
-	IsAuthor       bool
-	SessionUser    string
-	IsLoggedIn     string
-	IsAdmin        string
-	Wounds         map[string][]int
+	User            model.User
+	CharacterModel  *models.CharacterModel
+	HomelandModel   *models.HomelandModel
+	OccupationModel *models.OccupationModel
+	IsAuthor        bool
+	SessionUser     string
+	IsLoggedIn      string
+	IsAdmin         string
+	Wounds          map[string][]int
 	// IndexModels
-	CharacterModels []*models.CharacterModel
-	HomelandModels  map[string]*models.HomelandModel
-	Passions        []string
-	CategoryOrder   []string
-	Skills          map[string]*runequest.Skill
-	Counter         []int
+	CharacterModels  []*models.CharacterModel
+	HomelandModels   map[string]*models.HomelandModel
+	OccupationModels map[string]*models.OccupationModel
+	Passions         []string
+	CategoryOrder    []string
+	Skills           map[string]*runequest.Skill
+	Counter          []int
 }
 
 // SplitLines transfomrs results text string into slice

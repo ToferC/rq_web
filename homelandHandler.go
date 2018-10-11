@@ -899,8 +899,8 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// DeleteStandaloneHomelandHandler renders a character in a Web page
-func DeleteStandaloneHomelandHandler(w http.ResponseWriter, req *http.Request) {
+// DeleteHomelandHandler renders a character in a Web page
+func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Get session values or redirect to Login
 	session, err := sessions.Store.Get(req, "session")
@@ -935,7 +935,7 @@ func DeleteStandaloneHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	// Validate that User == Author
 	IsAuthor := false
 
-	if username == hl.Author.UserName {
+	if username == hl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
@@ -952,7 +952,7 @@ func DeleteStandaloneHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/delete_standalone_Homeland.html", wc)
+		Render(w, "templates/delete_homeland.html", wc)
 
 	}
 
@@ -965,7 +965,7 @@ func DeleteStandaloneHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Deleted Homeland")
 		}
 
-		url := fmt.Sprint("/index_Homelands/")
+		url := fmt.Sprint("/homeland_index/")
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

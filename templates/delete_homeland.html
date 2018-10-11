@@ -1,0 +1,32 @@
+{{ define "title"}}
+
+{{ $homeland := .HomelandModel.Homeland }}
+
+<title>Delete {{ $homeland.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $homeland := .HomelandModel.Homeland }}
+
+      <div class="container">
+        <h1>DELETE {{ $homeland.Name }}</h1>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <h3>{{ $homeland.Name }}</h3>
+            <img class ="card-img-top" data-src="" alt="Thumbnail"
+            style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
+            data-holder-rendered="true">
+            <hr>
+            <h4>Description</h4>
+              <p>{{ $homeland.Description }}</p>
+              <hr>
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/view_homeland/{{ .HomelandModel.ID }}" class="btn btn-primary">Return to Homeland</a>
+          </div>
+    </div>
+      </div>
+{{end}}

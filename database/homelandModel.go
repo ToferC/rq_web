@@ -52,7 +52,7 @@ func ListHomelandModels(db *pg.DB) (map[string]*models.HomelandModel, error) {
 	return hlMap, nil
 }
 
-// LoadHomeland loads a single Homeland from the DB by name
+// LoadHomelandModel loads a single Homeland from the DB by name
 func LoadHomelandModel(db *pg.DB, name string) (*models.HomelandModel, error) {
 	// Select user by Primary Key
 	homeland := new(models.HomelandModel)
