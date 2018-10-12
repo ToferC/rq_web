@@ -47,6 +47,7 @@ type WebChar struct {
 	OccupationModels map[string]*models.OccupationModel
 	Passions         []string
 	CategoryOrder    []string
+	WeaponCategories []string
 	Skills           map[string]*runequest.Skill
 	Counter          []int
 }

@@ -19,6 +19,7 @@ func createSchema(db *pg.DB) error {
 	for _, model := range []interface{}{
 		(*models.CharacterModel)(nil),
 		(*models.HomelandModel)(nil),
+		(*models.OccupationModel)(nil),
 		(*models.Image)(nil),
 		(*models.User)(nil)} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{

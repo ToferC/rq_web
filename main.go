@@ -134,6 +134,13 @@ func main() {
 	r.HandleFunc("/modify_homeland/{id}", ModifyHomelandHandler)
 	r.HandleFunc("/delete_homeland/{id}", DeleteHomelandHandler)
 
+	// Occupation Handlers
+	r.HandleFunc("/occupation_index/", OccupationIndexHandler)
+	r.HandleFunc("/add_occupation/", AddOccupationHandler)
+	r.HandleFunc("/view_occupation/{id}", OccupationHandler)
+	r.HandleFunc("/modify_occupation/{id}", ModifyOccupationHandler)
+	r.HandleFunc("/delete_occupation/{id}", DeleteOccupationHandler)
+
 	r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
 	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 

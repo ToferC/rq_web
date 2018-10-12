@@ -263,15 +263,16 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	c.Statistics["SIZ"].Value = 10
 
 	wc := WebChar{
-		CharacterModel: &cm,
-		IsAuthor:       true,
-		SessionUser:    username,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		Counter:        []int{1, 2, 3},
-		Passions:       runequest.PassionTypes,
-		CategoryOrder:  runequest.CategoryOrder,
-		Skills:         runequest.Skills,
+		CharacterModel:   &cm,
+		IsAuthor:         true,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		Counter:          []int{1, 2, 3},
+		Passions:         runequest.PassionTypes,
+		WeaponCategories: runequest.WeaponCategories,
+		CategoryOrder:    runequest.CategoryOrder,
+		Skills:           runequest.Skills,
 	}
 
 	if req.Method == "GET" {
@@ -376,14 +377,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				Category:   s.Category,
 			}
 
-			str := fmt.Sprintf("%s-Base", s.CoreString)
-			base, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				base = 0
-			}
-			sk.Base = base
-
-			str = fmt.Sprintf("%s-Value", s.CoreString)
+			str := fmt.Sprintf("%s-Value", s.CoreString)
 			v, err := strconv.Atoi(req.FormValue(str))
 			if err != nil {
 				v = 0
@@ -400,31 +394,25 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		// Reset Weapons
+		oc.Occupation.Weapons = []runequest.WeaponSelection{}
+
 		// Read Weapons
 		for i := 1; i < 4; i++ {
 
 			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
-			coreString := req.FormValue(fmt.Sprintf("Weapon-%d-CoreString", i))
 
-			if coreString != "" {
-
-				weap := runequest.Skills[coreString]
-
-				sk := runequest.Skill{
-					CoreString: weap.CoreString,
-					Category:   weap.Category,
-					Base:       weap.Base,
-				}
-
+			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-
-				sk.OccupationValue = v
-
-				oc.Occupation.Weapons[desc] = sk
+				ws := runequest.WeaponSelection{
+					Description: desc,
+					Value:       v,
+				}
+				oc.Occupation.Weapons = append(oc.Occupation.Weapons, ws)
 			}
 		}
 
@@ -440,12 +428,12 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: coreString,
 				}
 
-				str := fmt.Sprintf("Passion-%d-Base", i)
-				base, err := strconv.Atoi(req.FormValue(str))
+				str := fmt.Sprintf("Passion-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
-					base = 0
+					v = 0
 				}
-				p.Base = base
+				p.OccupationValue = v
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
