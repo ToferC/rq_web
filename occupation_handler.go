@@ -263,16 +263,18 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	c.Statistics["SIZ"].Value = 10
 
 	wc := WebChar{
-		CharacterModel:   &cm,
-		IsAuthor:         true,
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		Counter:          []int{1, 2, 3},
-		Passions:         runequest.PassionTypes,
-		WeaponCategories: runequest.WeaponCategories,
-		CategoryOrder:    runequest.CategoryOrder,
-		Skills:           runequest.Skills,
+		CharacterModel:    &cm,
+		IsAuthor:          true,
+		SessionUser:       username,
+		IsLoggedIn:        loggedIn,
+		IsAdmin:           isAdmin,
+		Counter:           []int{1, 2, 3},
+		BigCounter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+		Passions:          runequest.PassionTypes,
+		WeaponCategories:  runequest.WeaponCategories,
+		CategoryOrder:     runequest.CategoryOrder,
+		StandardsOfLiving: runequest.Standards,
+		Skills:            runequest.Skills,
 	}
 
 	if req.Method == "GET" {
@@ -313,15 +315,6 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			ransom = 0
 		}
 		oc.Occupation.Ransom = ransom
-
-		var equipment = []string{}
-
-		for i := 1; i < 15; i++ {
-			str := fmt.Sprintf("Equipment-%d", i)
-			if str != "" {
-				equipment = append(equipment, str)
-			}
-		}
 
 		if req.FormValue("Official") != "" {
 			oc.Official = true
@@ -367,35 +360,48 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Error getting file ", err)
 		}
 
-		// Read Base Skills
-		for _, s := range c.Skills {
+		var equipment = []string{}
 
-			// Build skill based on user input vs. base Skills
-			sk := runequest.Skill{
-				CoreString: s.CoreString,
-				UserChoice: s.UserChoice,
-				Category:   s.Category,
-			}
-
-			str := fmt.Sprintf("%s-Value", s.CoreString)
-			v, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				v = 0
-			}
-			sk.OccupationValue = v
-
-			if s.UserChoice {
-				sk.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
-			}
-
-			if sk.Base > s.Base || sk.OccupationValue > 0 || sk.UserString != s.UserString {
-				// If we changed something, add to the Occupation skill list
-				oc.Occupation.Skills = append(oc.Occupation.Skills, sk)
+		for i := 1; i < 16; i++ {
+			str := req.FormValue(fmt.Sprintf("Equipment-%d", i))
+			if str != "" {
+				equipment = append(equipment, str)
 			}
 		}
 
-		// Reset Weapons
-		oc.Occupation.Weapons = []runequest.WeaponSelection{}
+		oc.Occupation.Equipment = equipment
+
+		// Read Base Skills
+		for i := 1; i < 16; i++ {
+
+			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+
+			if sk != "" {
+
+				skbaseSkill := runequest.Skills[sk]
+				fmt.Println(skbaseSkill)
+
+				// Skill
+				s1 := runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Category:   skbaseSkill.Category,
+				}
+
+				str := fmt.Sprintf("Skill-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				s1.OccupationValue = v
+
+				if s1.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-UserString", i)
+					s1.UserString = req.FormValue(userString)
+				}
+				oc.Occupation.Skills = append(oc.Occupation.Skills, s1)
+			}
+		}
 
 		// Read Weapons
 		for i := 1; i < 4; i++ {
@@ -413,6 +419,71 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					Value:       v,
 				}
 				oc.Occupation.Weapons = append(oc.Occupation.Weapons, ws)
+			}
+		}
+
+		// Read SkillChoices
+		for i := 1; i < 4; i++ {
+
+			sc := runequest.SkillChoice{}
+
+			s1coreString := req.FormValue(fmt.Sprintf("Skill-%d-1-CoreString", i))
+			s2coreString := req.FormValue(fmt.Sprintf("Skill-%d-2-CoreString", i))
+
+			if s1coreString != "" && s2coreString != "" {
+
+				s1baseSkill := runequest.Skills[s1coreString]
+				fmt.Println(s1baseSkill)
+
+				// First Skill option
+				s1 := runequest.Skill{
+					CoreString: s1baseSkill.CoreString,
+					UserChoice: s1baseSkill.UserChoice,
+					Category:   s1baseSkill.Category,
+				}
+
+				str := fmt.Sprintf("Skill-%d-1-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				s1.HomelandValue = v
+
+				if s1.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
+					s1.UserString = req.FormValue(userString)
+				}
+
+				// Second Skill option
+				s2baseSkill := runequest.Skills[s2coreString]
+				fmt.Println(s2baseSkill)
+
+				// First Skill option
+				s2 := runequest.Skill{
+					CoreString: s2baseSkill.CoreString,
+					UserChoice: s2baseSkill.UserChoice,
+					Category:   s2baseSkill.Category,
+				}
+
+				str = fmt.Sprintf("Skill-%d-2-Value", i)
+				v, err = strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				s2.HomelandValue = v
+
+				if s2.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
+					s2.UserString = userString
+				}
+
+				// Form SkillChoice
+				sc.Skills = []runequest.Skill{
+					s1,
+					s2,
+				}
+				// Append skillchoice
+				oc.Occupation.SkillChoices = append(oc.Occupation.SkillChoices, sc)
 			}
 		}
 

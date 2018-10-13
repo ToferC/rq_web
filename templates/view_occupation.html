@@ -1,0 +1,84 @@
+{{ define "title"}}
+{{ $occupation := .OccupationModel.Occupation }}
+
+<title>{{ $occupation.Name }}</title>
+
+{{ end }}
+{{ define "content" }}
+
+{{ $occupation := .OccupationModel.Occupation }}
+{{ $ID := .OccupationModel.ID }}
+{{ $skills := .Skills }}
+
+<div class="container">
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-4">
+
+  <h4>{{ $occupation.Name }}</h4> 
+  <strong>Author: {{ .OccupationModel.Author.UserName }}</strong>
+
+  <img class ="card-img-top" data-src="" alt="Thumbnail"
+  style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .OccupationModel.Image.Path }}"
+  data-holder-rendered="true">
+
+  {{ $occupation.Description }}
+  <hr>
+  <p>Standard of Living: {{ $occupation.StandardOfLiving }}</p>
+  <p>Income: {{ $occupation.Income }} L</p>
+  <p>Ransom: {{ $occupation.Ransom }} L</p>
+  <hr>
+  <a class="btn btn-primary" href="/modify_occupation/{{ $ID }}">Modify</a>
+  <a class="btn btn-danger" href="/delete_occupation/{{ $ID }}">Delete</a>
+</div>
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+
+<h4>Skills</h4>
+<h5>Skill Bonuses</h5>
+{{ $occupation.Skills }}
+  {{ range $skill := $occupation.Skills }}
+  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%</p>
+  {{end}}
+
+  <h4>Skill Choices</h4>
+    {{ range $schoice := $occupation.SkillChoices }}
+    {{ if gt (len $schoice.Skills) 0}}
+    <h5>Choose between</h5>
+    <p>
+        {{ range $c, $skill := $schoice.Skills }}
+        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%
+        {{ if eq $c 0 }}<strong>--- OR ----</strong>{{else}}</p>{{ end }}
+        {{ end }}
+        <hr>
+        {{ end }}
+    {{ end }}
+
+  <h4>Weapons & Combat</h4>
+        {{ range $wp := $occupation.Weapons }}
+            <p>{{ $wp.Description }} +{{ $wp.Value }}%</p>
+        {{ end }}
+
+</div>
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+
+    <h4>Passions</h4>
+    {{ range $passion := $occupation.PassionList }}
+    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) +{{ $passion.OccupationValue }}%</p>    
+    {{end}}
+    <hr>
+
+    <h4>Equipment</h4>
+    <ul>
+        {{ range $occupation.Equipment}}
+            <li>{{ . }}</li>
+        {{ end }}
+    </ul>
+
+</div>  
+
+</div>
+
+</div>
+
+{{ end }}

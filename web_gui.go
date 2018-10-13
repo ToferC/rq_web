@@ -42,14 +42,17 @@ type WebChar struct {
 	IsAdmin         string
 	Wounds          map[string][]int
 	// IndexModels
-	CharacterModels  []*models.CharacterModel
-	HomelandModels   map[string]*models.HomelandModel
-	OccupationModels map[string]*models.OccupationModel
-	Passions         []string
-	CategoryOrder    []string
-	WeaponCategories []string
-	Skills           map[string]*runequest.Skill
-	Counter          []int
+	CharacterModels   []*models.CharacterModel
+	HomelandModels    map[string]*models.HomelandModel
+	OccupationModels  map[string]*models.OccupationModel
+	Passions          []string
+	CategoryOrder     []string
+	WeaponCategories  []string
+	StandardsOfLiving []string
+	Skills            map[string]*runequest.Skill
+	Counter           []int
+	MidCounter        []int
+	BigCounter        []int
 }
 
 // SplitLines transfomrs results text string into slice
