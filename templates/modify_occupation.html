@@ -14,6 +14,8 @@
 {{ $skills := .Skills }}
 {{ $category := .CategoryOrder }}
 {{ $standards := .StandardsOfLiving }}
+{{ $weaponCategories := .WeaponCategories }}
+
 
       <div class="container">
         <hr>
@@ -86,7 +88,7 @@
 
               {{ range $ec, $eq := $occupation.Equipment }}
               <div class="input-group">
-                    <input type="text" class="form-control" aria-describedby="Equipment-{{$ec}}-addon" name="Equipment-{{$ec}}" value ="{{ $eq }}">
+                    <input type="text" class="form-control" aria-describedby="Equipment-{{add $ec 1}}-addon" name="Equipment-{{add $ec 1}}" value ="{{ $eq }}">
                   </div>
               {{ end }}
                 <hr>
@@ -105,6 +107,7 @@
                         </div>
                     <select type="text" class="form-control" id="Skill-{{ add $k 1 }}-CoreString" name="Skill-{{ add $k 1 }}-CoreString">
                       <option>{{ $v.CoreString }}</option>
+                      <option></option>
                       {{ range $skills }}
                           <option>{{ .CoreString }}</option>
                     {{ end }}
@@ -136,6 +139,37 @@
               </div> <!-- End Skills Column -->
 
                 <div class="col-sm-4 col-md-4 col-lg-4">
+
+                        <h4>Update Variable Weapons Skills</h4>
+                        <p>Update broad weapon categories from which players can choose their occupation weapon skills.</p>
+        
+                        {{ range $m, $weapon := $occupation.Weapons }} <!-- Weapons loop -->
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+
+                            <span class="input-group-text" id="Weapon-{{ add $m 1}}-Description">Weapon {{ add $m 1 }}</span>
+                            </div>
+                            <select type="text" class="form-control" id="Weapon-{{ add $m 1}}-Description" name="Weapon-{{ add $m 1}}-Description">
+                              <option>{{ $weapon.Description }}</option>
+                              {{ range $wc := $weaponCategories }}
+                                  <option>{{ $wc }}</option>
+                                {{ end }}
+                            </select>
+                        </div>
+        
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="Weapon-{{add $m 1 }}-Value-addon">+</span>
+                          </div>
+                          <input type="number" class="form-control" aria-describedby="Weapon-{{add $m 1 }}-Value-addon" name="Weapon-{{add $m 1 }}-Value" value ="{{ $weapon.Value }}">
+                          <div class="input-group-append">
+                                <span class="input-group-text" id="Weapon-{{add $m 1 }}-Value-addon">%</span>
+                              </div>
+                        </div>
+                        <hr>
+        
+                        {{ end }} <!-- End Weapons loop -->
+
                   <h4>Passions</h4>
                   <p>Update starting passions for the occupation.</p>
 
@@ -158,13 +192,23 @@
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">+</span>
+                    <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">Base</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Base-addon" name="Passion-{{ add $c 1}}-Base" value ="{{ $passion.OccupationValue }}">
+                  <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Base-addon" name="Passion-{{ add $c 1}}-Base" value ="{{ $passion.Base }}">
                   <div class="input-group-append">
                         <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">%</span>
                       </div>
                 </div>
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Passion-{{ add $c 1}}-Value-addon">Value</span>
+                        </div>
+                        <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Value-addon" name="Passion-{{ add $c 1}}-Value" value ="{{ $passion.OccupationValue }}">
+                        <div class="input-group-append">
+                              <span class="input-group-text" id="Passion-{{ add $c 1}}-Value-addon">%</span>
+                            </div>
+                      </div>
 
                 {{ end }}
 

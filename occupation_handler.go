@@ -504,7 +504,14 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: coreString,
 				}
 
-				str := fmt.Sprintf("Passion-%d-Value", i)
+				str := fmt.Sprintf("Passion-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+				p.Base = base
+
+				str = fmt.Sprintf("Passion-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
@@ -862,6 +869,13 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					base = 0
 				}
 				p.Base = base
+
+				str = fmt.Sprintf("Passion-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				p.OccupationValue = v
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 

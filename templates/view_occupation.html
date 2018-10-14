@@ -34,10 +34,11 @@
 <div class="col-sm-4 col-md-4 col-lg-4">
 
 <h4>Skills</h4>
-<h5>Skill Bonuses</h5>
   {{ range $skill := $occupation.Skills }}
-  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%</p>
+  <p>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%</p>
   {{end}}
+
+  <hr>
 
   <h4>Skill Choices</h4>
     {{ range $schoice := $occupation.SkillChoices }}
@@ -45,25 +46,31 @@
     <h5>Choose between</h5>
     <p>
         {{ range $c, $skill := $schoice.Skills }}
-        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%
+        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.OccupationValue }}%
         {{ if eq $c 0 }}<strong>--- OR ----</strong>{{else}}</p>{{ end }}
         {{ end }}
         <hr>
         {{ end }}
     {{ end }}
 
-  <h4>Weapons & Combat</h4>
-        {{ range $wp := $occupation.Weapons }}
-            <p>{{ $wp.Description }} +{{ $wp.Value }}%</p>
-        {{ end }}
-
 </div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">
 
+        <h4>Weapons & Combat</h4>
+        {{ range $wp := $occupation.Weapons }}
+            {{ if eq $wp.Description "Shield" }}
+            <p>{{ $wp.Description }} +{{ $wp.Value }}%</p>
+            {{ else }}
+            <p>{{ $wp.Description }} Weapon +{{ $wp.Value }}%</p>
+            {{ end }}
+        {{ end }}
+
+        <hr>
+
     <h4>Passions</h4>
     {{ range $passion := $occupation.PassionList }}
-    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) +{{ $passion.Base }}%</p>    
+    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base ({{ $passion.Base }}%) or +{{ $passion.OccupationValue }}%</p>    
     {{end}}
     <hr>
 
