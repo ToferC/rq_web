@@ -372,6 +372,9 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		oc.Occupation.Equipment = equipment
 
 		// Read Base Skills
+
+		skillArray := []runequest.Skill{}
+
 		for i := 1; i < 16; i++ {
 
 			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
@@ -399,9 +402,11 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
 					s1.UserString = req.FormValue(userString)
 				}
-				oc.Occupation.Skills = append(oc.Occupation.Skills, s1)
+				skillArray = append(skillArray, s1)
 			}
 		}
+
+		oc.Occupation.Skills = skillArray
 
 		// Read Weapons
 		for i := 1; i < 4; i++ {
@@ -470,7 +475,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				if err != nil {
 					v = 0
 				}
-				s2.HomelandValue = v
+				s2.OccupationValue = v
 
 				if s2.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
@@ -520,30 +525,30 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		// Read New Skills
 		for i := 1; i < 4; i++ {
 
-			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
 
 			if coreString != "" {
 
 				sk := runequest.Skill{}
 
 				sk.CoreString = coreString
-				sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
 
 				if userString != "" {
 					sk.UserChoice = true
 					sk.UserString = userString
 				}
 
-				str := fmt.Sprintf("Skill-%d-Base", i)
+				str := fmt.Sprintf("NewSkill-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
 				}
 				sk.Base = base
 
-				str = fmt.Sprintf("Skill-%d-Value", i)
+				str = fmt.Sprintf("NewSkill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
@@ -621,7 +626,12 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	// Create empty skills for adding to the Occupation
+	// Create empty equipment slots if < 16
+	if len(oc.Occupation.Equipment) < 16 {
+		for i := len(oc.Occupation.Equipment); i < 16; i++ {
+			oc.Occupation.Equipment = append(oc.Occupation.Equipment, "")
+		}
+	}
 
 	// Add extra empty skills if < 20
 	if len(oc.Occupation.Skills) < 20 {
@@ -632,7 +642,6 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Add extra empty skillchoices if < 3
-	// Something here isn't working
 	if len(oc.Occupation.SkillChoices) < 4 {
 		for i := len(oc.Occupation.SkillChoices); i < 4; i++ {
 			tempSkillChoice := runequest.SkillChoice{
@@ -649,16 +658,30 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// Add empty Weapon options if < 5
+	if len(oc.Occupation.Weapons) < 5 {
+		for i := len(oc.Occupation.Weapons); i < 5; i++ {
+			tempWeapon := runequest.WeaponSelection{
+				Description: "",
+				Value:       0,
+			}
+			oc.Occupation.Weapons = append(oc.Occupation.Weapons, tempWeapon)
+		}
+	}
+
 	wc := WebChar{
-		OccupationModel: oc,
-		IsAuthor:        IsAuthor,
-		SessionUser:     username,
-		IsLoggedIn:      loggedIn,
-		IsAdmin:         isAdmin,
-		Counter:         []int{1, 2, 3},
-		CategoryOrder:   runequest.CategoryOrder,
-		Skills:          runequest.Skills,
-		Passions:        runequest.PassionTypes,
+		OccupationModel:   oc,
+		IsAuthor:          IsAuthor,
+		SessionUser:       username,
+		IsLoggedIn:        loggedIn,
+		IsAdmin:           isAdmin,
+		Counter:           []int{1, 2, 3},
+		BigCounter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+		Passions:          runequest.PassionTypes,
+		WeaponCategories:  runequest.WeaponCategories,
+		CategoryOrder:     runequest.CategoryOrder,
+		StandardsOfLiving: runequest.Standards,
+		Skills:            runequest.Skills,
 	}
 
 	if req.Method == "GET" {
@@ -675,11 +698,30 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Update Occupation here
 		ocName := req.FormValue("Name")
+		description := req.FormValue("Description")
 
 		oc.Occupation.Name = ocName
+		oc.Occupation.Description = description
 
-		// Update Occupation here
+		income, err := strconv.Atoi(req.FormValue("Income"))
+		if err != nil {
+			income = 0
+		}
+		oc.Occupation.Income = income
+
+		ransom, err := strconv.Atoi(req.FormValue("Ransom"))
+		if err != nil {
+			ransom = 0
+		}
+		oc.Occupation.Ransom = ransom
+
+		if req.FormValue("Official") != "" {
+			oc.Official = true
+		} else {
+			oc.Official = false
+		}
 
 		// Insert Occupation into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -733,40 +775,43 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Error getting file ", err)
 		}
 
-		// Skills
+		// Read Equipment
+		var equipment = []string{}
 
+		for i := 1; i < 16; i++ {
+			str := req.FormValue(fmt.Sprintf("Equipment-%d", i))
+			if str != "" {
+				equipment = append(equipment, str)
+			}
+		}
+
+		oc.Occupation.Equipment = equipment
+
+		// Read Skills
 		tempSkills := []runequest.Skill{}
 
-		// Read Base Skills from Occupation
-		for _, s := range oc.Occupation.Skills {
+		// Read Base Skills from Form
+		for i := 1; i < 20; i++ {
 
-			// Build skill based on user input vs. base Skills
-			sk := runequest.Skill{
-				CoreString: s.CoreString,
-				UserChoice: s.UserChoice,
-				Category:   s.Category,
-			}
+			core := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
-			str := fmt.Sprintf("%s-Base", s.CoreString)
-			base, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				base = 0
-			}
-			sk.Base = base
-
-			str = fmt.Sprintf("%s-Value", s.CoreString)
+			str := fmt.Sprintf("Skill-%d-Value", i)
 			v, err := strconv.Atoi(req.FormValue(str))
 			if err != nil {
 				v = 0
 			}
-			sk.OccupationValue = v
 
-			if s.UserChoice {
-				sk.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
-			}
+			if core != "" && v > 0 {
 
-			if sk.Base > s.Base || sk.OccupationValue > 0 || sk.UserString != s.UserString {
-				// If we changed something, add to the Occupation skill list
+				sk := runequest.Skill{
+					CoreString:      core,
+					OccupationValue: v,
+				}
+
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				if userString != "" {
+					sk.UserString = userString
+				}
 				tempSkills = append(tempSkills, sk)
 			}
 		}
@@ -774,11 +819,32 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		// Set Occupation.Skills to new array
 		oc.Occupation.Skills = tempSkills
 
-		// Passions
+		// Read Weapons
+		weapons := []runequest.WeaponSelection{}
 
-		tempPassions := []runequest.Ability{}
+		for i := 1; i < 5; i++ {
+
+			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+
+			if desc != "" {
+				str := fmt.Sprintf("Weapon-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				ws := runequest.WeaponSelection{
+					Description: desc,
+					Value:       v,
+				}
+				weapons = append(weapons, ws)
+			}
+		}
+
+		oc.Occupation.Weapons = weapons
 
 		// Read passions
+		tempPassions := []runequest.Ability{}
+
 		for i := 1; i < 4; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
@@ -884,30 +950,30 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		for i := 1; i < 4; i++ {
 
-			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
 
 			if coreString != "" {
 
 				sk := runequest.Skill{}
 
 				sk.CoreString = coreString
-				sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
 
 				if userString != "" {
 					sk.UserChoice = true
 					sk.UserString = userString
 				}
 
-				str := fmt.Sprintf("Skill-%d-Base", i)
+				str := fmt.Sprintf("NewSkill-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
 				}
 				sk.Base = base
 
-				str = fmt.Sprintf("Skill-%d-Value", i)
+				str = fmt.Sprintf("NewSkill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0

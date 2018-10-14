@@ -35,7 +35,6 @@
 
 <h4>Skills</h4>
 <h5>Skill Bonuses</h5>
-{{ $occupation.Skills }}
   {{ range $skill := $occupation.Skills }}
   <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%</p>
   {{end}}
@@ -64,7 +63,7 @@
 
     <h4>Passions</h4>
     {{ range $passion := $occupation.PassionList }}
-    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) +{{ $passion.OccupationValue }}%</p>    
+    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) +{{ $passion.Base }}%</p>    
     {{end}}
     <hr>
 
