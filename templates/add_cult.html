@@ -49,7 +49,7 @@
                     <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
                     <label class="custom-file-label" for="inputGroupFile">Choose file</label>
                   </div>
-                </div>
+            </div>
 
               <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
               <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox">
@@ -58,7 +58,7 @@
 
               <h4>Cult Runes</h4>
                 <p>Choose the runes associated to your cult.</p>
-              {{ range $m := .Counter }} <!-- Skill loop - normally 3 to 4 -->
+              {{ range $m := .Counter }} <!-- Rune loop - normally 3 to 4 -->
               
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -76,6 +76,7 @@
                   </select>
               </div>
 
+              <hr>
               {{ end }}
 
 
@@ -129,8 +130,8 @@
             <!-- Choose from list of Cults ($cults) -->
 
             {{ range $c := $cults }}
-            {{ if not $c.SubCult }}
-              <br><strong>{{ $c.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Name}}-Name" value="true" id="checkbox">
+            {{ if not $c.Cult.SubCult }}
+              <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Cult.Name}}-Name" value="true" id="checkbox">
               {{ end }}
               {{ end }}
 
@@ -140,8 +141,8 @@
               <!-- Choose from list of Cults ($cults) -->
   
               {{ range $sc := $subcults }}
-              {{ if $sc.SubCult }}
-                <br><strong>{{ $sc.Name }}</strong> <input type="checkbox" name="SubCult-{{$sc.Name}}-Name" value="true" id="checkbox">
+              {{ if $sc.Cult.SubCult }}
+                <br><strong>{{ $sc.Cult.Name }}</strong> <input type="checkbox" name="SubCult-{{$sc.Cult.Name}}-Name" value="true" id="checkbox">
             {{ end }}
             {{ end }}
   
