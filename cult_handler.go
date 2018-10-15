@@ -284,6 +284,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		Passions:         runequest.PassionTypes,
 		WeaponCategories: runequest.WeaponCategories,
 		CategoryOrder:    runequest.CategoryOrder,
+		PowerRunes:       runequest.PowerRuneOrder,
+		ElementalRunes:   runequest.ElementalRuneOrder,
 		Skills:           runequest.Skills,
 		CultModels:       cults,
 		SubCults:         []runequest.Cult{},
@@ -359,6 +361,17 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+		}
+
+		// Runes
+
+		for i := 1; i < 4; i++ {
+
+			r := req.FormValue(fmt.Sprintf("Rune-%d", i))
+
+			if r != "" {
+				cl.Cult.Runes = append(cl.Cult.Runes, r)
+			}
 		}
 
 		// Rune Spells

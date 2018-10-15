@@ -18,6 +18,8 @@
 {{ $spiritmagic := .SpiritMagic }}
 {{ $cults := .CultModels }}
 {{ $subcults := .SubCults }}
+{{ $elementalrunes := .ElementalRunes }}
+{{ $powerrunes := .PowerRunes }}
 
       <div class="container">
         <hr>
@@ -50,9 +52,32 @@
                 </div>
 
               <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
-              <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox" checked>
+              <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox">
 
               <hr>
+
+              <h4>Cult Runes</h4>
+                <p>Choose the runes associated to your cult.</p>
+              {{ range $m := .Counter }} <!-- Skill loop - normally 3 to 4 -->
+              
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Rune-{{$m}}-addon">Rune</span>
+                </div>
+                  <select type="text" class="form-control" id="Rune-{{$m}}" name="Rune-{{$m}}">
+                    <option></option>
+                    {{ range $r := $elementalrunes }}
+                    <option>{{ $r }}</option>
+                      {{ end }}
+                      <option>-----------</option>
+                      {{ range $pr := $powerrunes}}
+                    <option>{{ $pr }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+
+              {{ end }}
+
 
               <h4>Rune Spells</h4>
               <!-- Choose 3 -->

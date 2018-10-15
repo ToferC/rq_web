@@ -51,6 +51,8 @@ type WebChar struct {
 	CategoryOrder     []string
 	WeaponCategories  []string
 	StandardsOfLiving []string
+	PowerRunes        []string
+	ElementalRunes    []string
 	Skills            map[string]*runequest.Skill
 	SpiritMagic       []runequest.Spell
 	RuneSpells        []runequest.Spell
