@@ -70,7 +70,7 @@
 
     <h4>Passions</h4>
     {{ range $passion := $occupation.PassionList }}
-    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base ({{ $passion.Base }}%) or +{{ $passion.OccupationValue }}%</p>    
+    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base {{ $passion.Base }}% or +{{ $passion.OccupationValue }}%</p>    
     {{end}}
     <hr>
 

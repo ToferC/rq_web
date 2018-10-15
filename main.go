@@ -141,6 +141,13 @@ func main() {
 	r.HandleFunc("/modify_occupation/{id}", ModifyOccupationHandler)
 	r.HandleFunc("/delete_occupation/{id}", DeleteOccupationHandler)
 
+	// Cult Handlers
+	r.HandleFunc("/cult_index/", CultIndexHandler)
+	r.HandleFunc("/add_cult/", AddCultHandler)
+	r.HandleFunc("/view_cult/{id}", CultHandler)
+	r.HandleFunc("/modify_cult/{id}", ModifyCultHandler)
+	r.HandleFunc("/delete_cult/{id}", DeleteCultHandler)
+
 	r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
 	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 

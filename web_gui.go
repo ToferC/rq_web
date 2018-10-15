@@ -36,6 +36,7 @@ type WebChar struct {
 	CharacterModel  *models.CharacterModel
 	HomelandModel   *models.HomelandModel
 	OccupationModel *models.OccupationModel
+	CultModel       *models.CultModel
 	IsAuthor        bool
 	SessionUser     string
 	IsLoggedIn      string
@@ -45,11 +46,16 @@ type WebChar struct {
 	CharacterModels   []*models.CharacterModel
 	HomelandModels    map[string]*models.HomelandModel
 	OccupationModels  map[string]*models.OccupationModel
+	CultModels        map[string]*models.CultModel
 	Passions          []string
 	CategoryOrder     []string
 	WeaponCategories  []string
 	StandardsOfLiving []string
 	Skills            map[string]*runequest.Skill
+	SpiritMagic       []runequest.Spell
+	RuneSpells        []runequest.Spell
+	Cults             []runequest.Cult
+	SubCults          []runequest.Cult
 	Counter           []int
 	MidCounter        []int
 	BigCounter        []int

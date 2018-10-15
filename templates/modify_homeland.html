@@ -69,20 +69,21 @@
                     {{ end }}
                     </select>
 
-                {{ if $v.UserChoice }}
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="{{ $v.CoreString }}-UserString-addon">Specialization</span>
                   </div>
                   <input type="text" class="form-control" aria-describedby="{{ $v.CoreString }}-UserString-addon" name="{{ $v.CoreString }}-UserString" value ="{{ $v.UserString }}">
                 </div>
-                {{ end }}
 
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="{{ $v.CoreString }}-Base-addon">Skill Base</span>
                   </div>
                   <input type="number" class="form-control" aria-describedby="{{ $v.CoreString }}-Base-addon" name="{{ $v.CoreString }}-Base" value ="{{ $v.Base }}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="{{ $v.CoreString }}-Base-addon">%</span>
+                    </div>
                 </div>
 
                 <div class="input-group">
@@ -90,6 +91,9 @@
                     <span class="input-group-text" id="{{ $v.CoreString }}-Value-addon">Skill Bonus</span>
                   </div>
                   <input type="number" class="form-control" aria-describedby="{{ $v.CoreString }}-Value-addon" name="{{ $v.CoreString }}-Value" value ="{{ $v.HomelandValue }}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="{{ $v.CoreString }}-Value-addon">%</span>
+                    </div>
                 </div>
 
                 <hr>
@@ -125,6 +129,9 @@
                     <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">Passion Base</span>
                   </div>
                   <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Base-addon" name="Passion-{{ add $c 1}}-Base" value ="{{ $passion.Base }}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">%</span>
+                    </div>
                 </div>
 
                 {{ end }}

@@ -9,13 +9,13 @@ import (
 )
 
 // SaveOccupationModel saves a Occupation to the DB
-func SaveOccupationModel(db *pg.DB, hl *models.OccupationModel) error {
+func SaveOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 
 	// Save character in Database
-	_, err := db.Model(hl).
+	_, err := db.Model(oc).
 		OnConflict("(id) DO UPDATE").
 		Set("occupation = ?occupation").
-		Insert(hl)
+		Insert(oc)
 	if err != nil {
 		panic(err)
 	}
@@ -23,9 +23,9 @@ func SaveOccupationModel(db *pg.DB, hl *models.OccupationModel) error {
 }
 
 // UpdateOccupationModel updates a Occupation in the database
-func UpdateOccupationModel(db *pg.DB, hl *models.OccupationModel) error {
+func UpdateOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 
-	err := db.Update(hl)
+	err := db.Update(oc)
 	if err != nil {
 		panic(err)
 	}
@@ -42,14 +42,14 @@ func ListOccupationModels(db *pg.DB) (map[string]*models.OccupationModel, error)
 		panic(err)
 	}
 
-	hlMap := map[string]*models.OccupationModel{}
+	ocMap := map[string]*models.OccupationModel{}
 
 	// Create Map
-	for i, hl := range occupations {
-		hlMap[runequest.ToSnakeCase(hl.Occupation.Name)] = hl
-		fmt.Println(i, hl.Occupation.Name)
+	for i, oc := range occupations {
+		ocMap[runequest.ToSnakeCase(oc.Occupation.Name)] = oc
+		fmt.Println(i, oc.Occupation.Name)
 	}
-	return hlMap, nil
+	return ocMap, nil
 }
 
 // LoadOccupationModel loads a single Occupation from the DB by name
