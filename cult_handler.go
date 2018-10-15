@@ -390,7 +390,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Spirit Magic
 
-		for _, sm := range runequest.RuneSpells {
+		for _, sm := range runequest.SpiritMagicSpells {
 			str := req.FormValue(fmt.Sprintf("%s-CoreString", sm.CoreString))
 			if str != "" {
 
@@ -398,7 +398,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					sm.UserString = req.FormValue(fmt.Sprintf("%s-UserString", sm.CoreString))
 				}
 
-				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, sm)
+				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, sm)
 			}
 		}
 
@@ -523,7 +523,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				if err != nil {
 					v = 0
 				}
-				s1.HomelandValue = v
+				s1.CultValue = v
 
 				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
