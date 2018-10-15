@@ -1,0 +1,46 @@
+{{ define "title"}}
+
+<title>Cult Index</title>
+
+{{ end }}
+
+{{define "content"}}
+{{ $user := .SessionUser }}
+
+<h3>Cult Index</h3>
+
+      <div class="container">
+        <div class="row">
+          {{ range .CultModels }}
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <a href="/view_cult/{{ .ID }}">
+              <img class ="card-img-top" data-src="" alt="Thumbnail"
+              style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .Image.Path }}"
+              data-holder-rendered="true">
+              <div class="card-body"></a>
+                <h5 class="card-title">{{ .Cult.Name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Author.UserName }}</h6>
+                <p class="card-text">
+                  {{ sliceString .Cult.Description 144 }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a type="button" class="btn btn-sm btn-primary"
+                    href="/view_cult/{{ .ID }}">View</a>
+                    {{ if eq $user .Author.UserName }}
+                    <a type="button" class="btn btn-sm btn-secondary"
+                    href="/modify_cult/{{ .ID }}">Modify</a>
+                    {{ end }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{ end }}
+      </div>
+    </div>
+
+
+
+{{end}}

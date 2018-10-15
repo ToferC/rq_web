@@ -16,7 +16,7 @@
 {{ $weaponCategories := .WeaponCategories }}
 {{ $runespells := .RuneSpells }}
 {{ $spiritmagic := .SpiritMagic }}
-{{ $cults := .Cults }}
+{{ $cults := .CultModels }}
 {{ $subcults := .SubCults }}
 
       <div class="container">
@@ -104,7 +104,9 @@
             <!-- Choose from list of Cults ($cults) -->
 
             {{ range $c := $cults }}
-              <br><strong>{{ $c.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Name}}" value="true" id="checkbox">
+            {{ if not $c.SubCult }}
+              <br><strong>{{ $c.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Name}}-Name" value="true" id="checkbox">
+              {{ end }}
               {{ end }}
 
               <hr>
@@ -113,7 +115,9 @@
               <!-- Choose from list of Cults ($cults) -->
   
               {{ range $sc := $subcults }}
-                <br><strong>{{ $sc.Name }}</strong> <input type="checkbox" name="Cult-{{$sc.Name}}" value="true" id="checkbox">
+              {{ if $sc.SubCult }}
+                <br><strong>{{ $sc.Name }}</strong> <input type="checkbox" name="SubCult-{{$sc.Name}}-Name" value="true" id="checkbox">
+            {{ end }}
             {{ end }}
   
                 <hr>

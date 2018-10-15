@@ -20,6 +20,7 @@ func createSchema(db *pg.DB) error {
 		(*models.CharacterModel)(nil),
 		(*models.HomelandModel)(nil),
 		(*models.OccupationModel)(nil),
+		(*models.CultModel)(nil),
 		(*models.Image)(nil),
 		(*models.User)(nil)} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{

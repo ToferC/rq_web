@@ -54,7 +54,6 @@ type WebChar struct {
 	Skills            map[string]*runequest.Skill
 	SpiritMagic       []runequest.Spell
 	RuneSpells        []runequest.Spell
-	Cults             []runequest.Cult
 	SubCults          []runequest.Cult
 	Counter           []int
 	MidCounter        []int
