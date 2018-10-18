@@ -1,0 +1,32 @@
+{{ define "title"}}
+
+{{ $cult := .CultModel.Cult }}
+
+<title>Delete {{ $cult.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $cult := .CultModel.Cult }}
+
+      <div class="container">
+        <h1>DELETE {{ $cult.Name }}</h1>
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>{{ $cult.Name }}</h3>
+            <img class ="card-img-top" data-src="" alt="Thumbnail"
+            style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CultModel.Image.Path }}"
+            data-holder-rendered="true">
+            <hr>
+            <h4>Description</h4>
+              <p>{{ $cult.Description }}</p>
+              <hr>
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/view_cult/{{ .CultModel.ID }}" class="btn btn-primary">Return to Cult</a>
+          </div>
+    </div>
+      </div>
+{{end}}

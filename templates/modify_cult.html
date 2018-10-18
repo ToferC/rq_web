@@ -1,0 +1,406 @@
+{{ define "title"}}
+
+<title>Modify Cult: {{ .CultModel.Cult.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $cult := .CultModel.Cult }}
+{{ $IsAuthor := .IsAuthor }}
+
+{{ $counter := .Counter }}
+{{ $passions := .Passions }}
+{{ $skills := .Skills }}
+{{ $category := .CategoryOrder }}
+{{ $weaponCategories := .WeaponCategories }}
+{{ $runespells := .RuneSpells }}
+{{ $spiritmagic := .SpiritMagic }}
+{{ $cults := .CultModels }}
+{{ $subcults := .SubCults }}
+{{ $elementalrunes := .ElementalRunes }}
+{{ $powerrunes := .PowerRunes }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <form action="" method="POST" enctype="multipart/form-data">
+              <h3>Create Cult</h3>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $cult.Name }}">
+              </div>
+
+              
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                <span class="input-group-text" for="Description">Description</span>
+                </div>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description">{{ $cult.Description }}</textarea>
+              </div>
+              <hr>
+            
+                <label for="Image">Image</label>
+              <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+                    <label class="custom-file-label" for="inputGroupFile">Choose file</label>
+                  </div>
+            </div>
+
+              <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" {{ if .CultModel.Official }}checked{{ end }}>
+              <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox" {{ if $cult.SubCult }}checked{{ end }}>
+
+              <hr>
+
+              <h4>Cult Runes</h4>
+                <p>Choose the runes associated to your cult.</p>
+              {{ range $m, $rune := $cult.Runes }} <!-- Rune loop - normally 3 to 4 -->
+              
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Rune-{{add $m 1}}-addon">Rune</span>
+                </div>
+                  <select type="text" class="form-control" id="Rune-{{add $m 1}}" name="Rune-{{add $m 1}}">
+                    <option>{{ $rune }}</option>
+                    {{ range $r := $elementalrunes }}
+                    <option>{{ $r }}</option>
+                      {{ end }}
+                      <option>-----------</option>
+                      {{ range $pr := $powerrunes}}
+                    <option>{{ $pr }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+
+              <hr>
+              {{ end }}
+
+
+              <h4>Rune Spells</h4>
+              <!-- Choose -->
+
+              {{ range $cr := $cult.RuneSpells }}
+                <strong>{{ $cr.CoreString }} {{ if $cr.Variable }}(varies){{else}}
+                  {{ if eq $cr.Cost 1 }}
+                  ({{$cr.Cost}} pt)
+                  {{ else }}
+                  ({{$cr.Cost}} pts)
+                  {{ end }}
+                  {{end}}</strong> <input type="checkbox" name="RS-{{$cr.CoreString}}-CoreString" value="true" id="checkbox" checked>
+              {{ if $cr.UserChoice }}
+              <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="RS-{{$cr.CoreString}}-UserString-addon">Specialization</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="RS-{{$cr.CoreString}}-UserString-addon" name="RS-{{$cr.Name}}-UserString" value ="{{ $cr.UserString }}">
+                  </div>
+                {{ end }}
+                {{ end }}
+
+              {{ range $rs := $runespells }}
+              <br><strong>{{ $rs.CoreString }} {{ if $rs.Variable }}(varies){{else}}
+                  {{ if eq $rs.Cost 1 }}
+                  ({{$rs.Cost}} pt)
+                  {{ else }}
+                  ({{$rs.Cost}} pts)
+                  {{ end }}
+                  {{end}}</strong> <input type="checkbox" name="RS-{{$rs.CoreString}}-CoreString" value="true" id="checkbox">
+              {{ if $rs.UserChoice }}
+              <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="RS-{{$rs.CoreString}}-UserString-addon">Specialization</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="RS-{{$rs.CoreString}}-UserString-addon" name="RS-{{$rs.Name}}-UserString" value ="">
+                  </div>
+                {{ end }}
+              {{ end }}
+
+              <hr>
+
+              <h4>Spirit Magic</h4>
+              <!-- Choose 5 pts -->
+
+              {{ range $cr := $cult.SpiritMagic }}
+                <strong>{{ $cr.CoreString }} {{ if $cr.Variable }}(varies){{else}}
+                  {{ if eq $cr.Cost 1 }}
+                  ({{$cr.Cost}} pt)
+                  {{ else }}
+                  ({{$cr.Cost}} pts)
+                  {{ end }}
+                  {{end}}</strong> <input type="checkbox" name="SM-{{$cr.CoreString}}-CoreString" value="true" id="checkbox" checked>
+              {{ if $cr.UserChoice }}
+              <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="SM-{{$cr.CoreString}}-UserString-addon">Specialization</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="SM-{{$cr.CoreString}}-UserString-addon" name="SM-{{$cr.Name}}-UserString" value ="{{ $cr.UserString }}">
+                  </div>
+                {{ end }}
+                {{ end }}
+
+              {{ range $sm := $spiritmagic }}
+              <br><strong>{{ $sm.CoreString }} {{ if $sm.Variable }}(varies){{else}}
+                  {{ if eq $sm.Cost 1 }}
+                  ({{$sm.Cost}} pt)
+                  {{ else }}
+                  ({{$sm.Cost}} pts)
+                  {{ end }}
+                  {{end}}</strong> <input type="checkbox" name="SM-{{$sm.CoreString}}-CoreString" value="true" id="checkbox">
+              {{ if $sm.UserChoice }}
+              <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="SM-{{$sm.CoreString}}-UserString-addon">Specialization</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="SM-{{$sm.CoreString}}-UserString-addon" name="SM-{{$sm.Name}}-UserString" value ="">
+                  </div>
+                {{ end }}
+              {{ end }}
+
+              <hr>
+
+            <h4>Associated Cults</h4>
+            <!-- Choose from list of Cults ($cults) -->
+
+            {{ range $c := $cults }}
+            {{ if not $c.Cult.SubCult }}
+              <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $ac := $cult.AssociatedCults }}{{ if eq $c.Cult.Name $ac.Name }}checked{{end}}{{ end }}>
+              {{ end }}
+              {{ end }}
+
+              <hr>
+
+              <h4>SubCults</h4>
+              <!-- Choose from list of Cults ($cults) -->
+  
+              {{ range $c := $cults }}
+              {{ if $c.Cult.SubCult }}
+                <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="SubCult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $sc := $cult.SubCults }}{{ if eq $c.Cult.Name $sc.Name }}checked{{end}}{{ end }}>
+            {{ end }}
+            {{ end }}
+  
+                <hr>
+            
+              <input class="button" type="submit" value="Save">
+          </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <h4>Regular Skills</h4>
+              <p>Update Cult skills.</p>
+
+              {{ range $k, $v := $cult.Skills }}
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Skill-{{ add $k 1 }}-CoreString-addon">Skill</span>
+                        </div>
+                    <select type="text" class="form-control" id="Skill-{{ add $k 1 }}-CoreString" name="Skill-{{ add $k 1 }}-CoreString">
+                      <option>{{ $v.CoreString }}</option>
+                      <option></option>
+                      {{ range $skills }}
+                          <option>{{ .CoreString }}</option>
+                    {{ end }}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{ add $k 1 }}-UserString-addon">Specialization</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-UserString-addon" name="Skill-{{ add $k 1 }}-UserString" value ="{{ $v.UserString }}">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{ add $k 1 }}-Value-addon">Skill Bonus</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-Value-addon" name="Skill-{{ add $k 1 }}-Value" value ="{{ $v.CultValue }}">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="Skill-{{ add $k 1 }}-Value-addon">%</span>
+                      </div>
+                </div>
+
+                <hr>
+                
+                {{ end }} <!-- End Skill Loop -->
+                
+                <h4>Skill Choices</h4>
+                <p>Updates Skill choice options.</p>
+
+                {{ range $m, $schoice := $cult.SkillChoices }} <!-- SkillChoice loop -->
+
+                <h5>Choice {{add $m 1}}</h5>
+
+                {{ range $c, $skill := $schoice.Skills }} <!-- Skill loop -->
+                <!-- Skill 1 -->
+                <label for="Skill-{{add $m 1}}-{{add $c 1}}-CoreString">Skill {{add $c 1}}</label>
+                <select type="text" class="form-control" id="Skill-{{add $m 1}}-{{add $c 1}}-CoreString" name="Skill-{{add $m 1}}-{{add $c 1}}-CoreString">
+                  <option>{{$skill.CoreString}}</option>
+                  {{ range $s := $skills }}
+                  <option>{{ $s.CoreString }}</option>
+                    {{ end }}
+                </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{add $m 1}}-{{add $c 1}}-UserString-addon">Specialization</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Skill-{{add $m 1}}-{{add $c 1}}-UserString-addon" name="Skill-{{add $m 1}}-{{add $c 1}}-UserString" value ="{{$skill.UserString}}">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Skill-{{add $m 1}}-{{add $c 1}}-Value-addon">Skill Bonus</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="Skill-{{add $m 1}}-{{add $c 1}}-Value-addon" name="Skill-{{add $m 1}}-{{add $c 1}}-Value" value ="{{ $skill.CultValue }}">
+                    <div class="input-group-append">
+                            <span class="input-group-text" id="Skill-{{add $m 1}}-{{add $c 1}}-Value-addon">%</span>
+                          </div>  
+                </div>
+
+                  {{ if eq $c 0 }}<br><p><strong>--- OR ----</strong></p>{{ end }}
+
+                 {{ end }} <!-- End Skill loop -->
+
+                <hr>
+                {{ end }} <!-- End SkillChoice loop -->
+
+                
+
+              </div> <!-- End Skills Column -->
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+
+                  <h4>Update Variable Weapons Skills</h4>
+                        <p>Update broad weapon categories from which players can choose their cult weapon skills.</p>
+        
+                        {{ range $m, $weapon := $cult.Weapons }} <!-- Weapons loop -->
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+
+                            <span class="input-group-text" id="Weapon-{{ add $m 1}}-Description">Weapon {{ add $m 1 }}</span>
+                            </div>
+                            <select type="text" class="form-control" id="Weapon-{{ add $m 1}}-Description" name="Weapon-{{ add $m 1}}-Description">
+                              <option>{{ $weapon.Description }}</option>
+                              {{ range $wc := $weaponCategories }}
+                                  <option>{{ $wc }}</option>
+                                {{ end }}
+                            </select>
+                        </div>
+        
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="Weapon-{{add $m 1 }}-Value-addon">+</span>
+                          </div>
+                          <input type="number" class="form-control" aria-describedby="Weapon-{{add $m 1 }}-Value-addon" name="Weapon-{{add $m 1 }}-Value" value ="{{ $weapon.Value }}">
+                          <div class="input-group-append">
+                                <span class="input-group-text" id="Weapon-{{add $m 1 }}-Value-addon">%</span>
+                              </div>
+                        </div>
+                        <hr>
+        
+                        {{ end }} <!-- End Weapons loop -->
+
+                  <h4>Passions</h4>
+                  <p>Update starting passions for the cult.</p>
+
+                    {{ range $c, $passion := $cult.PassionList }} <!-- Passions loop -->
+
+                    <label for="Passion-{{ add $c 1 }}-CoreString">Passion</label>
+                    <select type="text" class="form-control" id="Passion-{{ add $c 1}}-CoreString" name="Passion-{{ add $c 1}}-CoreString">
+                      <option>{{ $passion.CoreString }}</option>
+                      {{ range $passions }}
+                          <option>{{ . }}</option>
+                        {{ end }}
+                    </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{ add $c 1}}-UserString-addon">Input</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Passion-{{ add $c 1}}-UserString-addon" name="Passion-{{ add $c 1}}-UserString" value ="{{ $passion.UserString }}">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">Base</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Base-addon" name="Passion-{{ add $c 1}}-Base" value ="{{ $passion.Base }}">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="Passion-{{ add $c 1}}-Base-addon">%</span>
+                      </div>
+                </div>
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Passion-{{ add $c 1}}-Value-addon">Value</span>
+                        </div>
+                        <input type="number" class="form-control" aria-describedby="Passion-{{ add $c 1}}-Value-addon" name="Passion-{{ add $c 1}}-Value" value ="{{ $passion.CultValue }}">
+                        <div class="input-group-append">
+                              <span class="input-group-text" id="Passion-{{ add $c 1}}-Value-addon">%</span>
+                            </div>
+                      </div>
+
+                {{ end }}
+
+                <hr>
+
+                <h4>Add New Skills</h4>
+
+                {{ range $m := $counter }}
+                <h5>Skill {{$m}}</h5>
+
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="NewSkill-{{$m}}-CoreString-addon">Name</span>
+                      </div>
+                      <input type="text" class="form-control" aria-describedby="NewSkill-{{$m}}-CoreString-addon" name="NewSkill-{{$m}}-CoreString" value ="">
+                  </div>
+
+                <label for="NewSkill-{{$m}}-Category">Category</label>
+                <select type="text" class="form-control" id="NewSkill-{{$m}}-Category" name="NewSkill-{{$m}}-Category">
+                  {{ range $category }}
+                  <option>{{ . }}</option>
+                    {{ end }}
+                </select>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="NewSkill-{{$m}}-UserString-addon">Specialization (if req'd)</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="NewSkill-{{$m}}-UserString-addon" name="NewSkill-{{$m}}-UserString" value ="">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="NewSkill-{{$m}}-Base-addon">Base %</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="NewSkill-{{$m}}-Base-addon" name="NewSkill-{{$m}}-Base" value ="0">
+                    <div class="input-group-append">
+                            <span class="input-group-text" id="NewSkill-{{$m}}-Base-addon">%</span>
+                          </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="NewSkill-{{$m}}-Value-addon">Skill Bonus</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="NewSkill-{{$m}}-Value-addon" name="NewSkill-{{$m}}-Value" value ="0">
+                    <div class="input-group-append">
+                            <span class="input-group-text" id="NewSkill-{{$m}}-Value-addon">Skill Bonus</span>
+                          </div>
+                </div>
+                <hr>
+
+                {{ end }}
+
+            </div> <!-- End Passions & SkillChoices COL 1 -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

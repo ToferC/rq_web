@@ -377,11 +377,11 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		// Rune Spells
 
 		for _, rs := range runequest.RuneSpells {
-			str := req.FormValue(fmt.Sprintf("%s-CoreString", rs.CoreString))
+			str := req.FormValue(fmt.Sprintf("RS-%s-CoreString", rs.CoreString))
 			if str != "" {
 
 				if rs.UserChoice {
-					rs.UserString = req.FormValue(fmt.Sprintf("%s-UserString", rs.CoreString))
+					rs.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
 				}
 
 				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, rs)
@@ -391,11 +391,11 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		// Spirit Magic
 
 		for _, sm := range runequest.SpiritMagicSpells {
-			str := req.FormValue(fmt.Sprintf("%s-CoreString", sm.CoreString))
+			str := req.FormValue(fmt.Sprintf("SM-%s-CoreString", sm.CoreString))
 			if str != "" {
 
 				if sm.UserChoice {
-					sm.UserString = req.FormValue(fmt.Sprintf("%s-UserString", sm.CoreString))
+					sm.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
 				}
 
 				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, sm)
@@ -704,9 +704,20 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	// Create Rune Spell List
+	// Add extra runes
+	if len(cl.Cult.Runes) < 4 {
+		for i := len(cl.Cult.Runes); i < 4; i++ {
+			cl.Cult.Runes = append(cl.Cult.Runes, "")
+		}
+	}
 
-	// Add Spirit Magic List
+	// Add extra empty skills if < 6
+	if len(cl.Cult.Skills) < 6 {
+		for i := len(cl.Cult.Skills); i < 6; i++ {
+			tempSkill := runequest.Skill{}
+			cl.Cult.Skills = append(cl.Cult.Skills, tempSkill)
+		}
+	}
 
 	// Add extra empty skillchoices if < 3
 	if len(cl.Cult.SkillChoices) < 4 {
@@ -752,6 +763,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		Passions:         runequest.PassionTypes,
 		WeaponCategories: runequest.WeaponCategories,
 		CategoryOrder:    runequest.CategoryOrder,
+		PowerRunes:       runequest.PowerRuneOrder,
+		ElementalRunes:   runequest.ElementalRuneOrder,
 		Skills:           runequest.Skills,
 		CultModels:       cults,
 		SubCults:         []runequest.Cult{},
@@ -787,10 +800,10 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Open or Official
-		if req.FormValue("Official") != "" {
-			cl.Official = true
+		if req.FormValue("SubCult") != "" {
+			cl.Cult.SubCult = true
 		} else {
-			cl.Official = false
+			cl.Cult.SubCult = false
 		}
 
 		// Upload image to s3
@@ -830,6 +843,97 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
 		}
+
+		// Runes
+
+		tempRunes := []string{}
+
+		for i := 1; i < 4; i++ {
+
+			r := req.FormValue(fmt.Sprintf("Rune-%d", i))
+
+			if r != "" {
+				tempRunes = append(tempRunes, r)
+			}
+		}
+		cl.Cult.Runes = tempRunes
+
+		// Rune Spells
+
+		tempRuneSpells := []runequest.Spell{}
+
+		for _, rs := range runequest.RuneSpells {
+			str := req.FormValue(fmt.Sprintf("RS-%s-CoreString", rs.CoreString))
+			if str != "" {
+
+				if rs.UserChoice {
+					rs.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				}
+
+				tempRuneSpells = append(tempRuneSpells, rs)
+			}
+		}
+		cl.Cult.RuneSpells = tempRuneSpells
+
+		// Spirit Magic
+		tempSpiritMagic := []runequest.Spell{}
+
+		for _, sm := range runequest.SpiritMagicSpells {
+			str := req.FormValue(fmt.Sprintf("SM-%s-CoreString", sm.CoreString))
+			if str != "" {
+
+				if sm.UserChoice {
+					sm.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				}
+
+				tempSpiritMagic = append(tempSpiritMagic, sm)
+			}
+		}
+		cl.Cult.SpiritMagic = tempSpiritMagic
+
+		// Associated Cults
+		tempAssociatedCults := []runequest.Cult{}
+
+		for _, ac := range cults {
+			c := ac.Cult
+
+			if !c.SubCult {
+
+				str := req.FormValue(fmt.Sprintf("Cult-%s-Name", c.Name))
+
+				if str != "" {
+					tempCult := runequest.Cult{
+						Name:       c.Name,
+						RuneSpells: c.RuneSpells,
+						SubCult:    false,
+					}
+					tempAssociatedCults = append(tempAssociatedCults, tempCult)
+				}
+			}
+		}
+		cl.Cult.AssociatedCults = tempAssociatedCults
+
+		// SubCult
+		tempSubCults := []runequest.Cult{}
+
+		for _, ac := range cults {
+			c := ac.Cult
+
+			if c.SubCult {
+
+				str := req.FormValue(fmt.Sprintf("SubCult-%s-Name", c.Name))
+
+				if str != "" {
+					tempCult := runequest.Cult{
+						Name:       c.Name,
+						RuneSpells: c.RuneSpells,
+						SubCult:    true,
+					}
+					tempSubCults = append(tempSubCults, tempCult)
+				}
+			}
+		}
+		cl.Cult.SubCults = tempSubCults
 
 		// Read Skills
 		tempSkills := []runequest.Skill{}

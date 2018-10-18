@@ -90,13 +90,13 @@
                   {{ else }}
                   ({{$rs.Cost}} pts)
                   {{ end }}
-                  {{end}}</strong> <input type="checkbox" name="{{$rs.CoreString}}-CoreString" value="true" id="checkbox">
+                  {{end}}</strong> <input type="checkbox" name="RS-{{$rs.CoreString}}-CoreString" value="true" id="checkbox">
               {{ if $rs.UserChoice }}
               <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="{{$rs.CoreString}}-UserString-addon">Specialization</span>
+                      <span class="input-group-text" id="RS-{{$rs.CoreString}}-UserString-addon">Specialization</span>
                     </div>
-                    <input type="text" class="form-control" aria-describedby="{{$rs.CoreString}}-UserString-addon" name="{{$rs.Name}}-UserString" value ="">
+                    <input type="text" class="form-control" aria-describedby="RS-{{$rs.CoreString}}-UserString-addon" name="{{$rs.Name}}-UserString" value ="">
                   </div>
                 {{ end }}
               {{ end }}
@@ -113,13 +113,13 @@
                   {{ else }}
                   ({{$sm.Cost}} pts)
                   {{ end }}
-                  {{end}}</strong> <input type="checkbox" name="{{$sm.CoreString}}-CoreString" value="true" id="checkbox">
+                  {{end}}</strong> <input type="checkbox" name="SM-{{$sm.CoreString}}-CoreString" value="true" id="checkbox">
               {{ if $sm.UserChoice }}
               <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="{{$sm.CoreString}}-UserString-addon">Specialization</span>
+                      <span class="input-group-text" id="SM-{{$sm.CoreString}}-UserString-addon">Specialization</span>
                     </div>
-                    <input type="text" class="form-control" aria-describedby="{{$sm.CoreString}}-UserString-addon" name="{{$sm.Name}}-UserString" value ="">
+                    <input type="text" class="form-control" aria-describedby="SM-{{$sm.CoreString}}-UserString-addon" name="{{$sm.Name}}-UserString" value ="">
                   </div>
                 {{ end }}
               {{ end }}
