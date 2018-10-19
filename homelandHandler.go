@@ -273,6 +273,8 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		Passions:       runequest.PassionTypes,
 		CategoryOrder:  runequest.CategoryOrder,
 		Skills:         runequest.Skills,
+		PowerRunes:     runequest.PowerRuneOrder,
+		ElementalRunes: runequest.ElementalRuneOrder,
 	}
 
 	if req.Method == "GET" {
@@ -350,6 +352,10 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
 		}
+
+		// Read Rune
+
+		hl.Homeland.RuneBonus = req.FormValue("Rune")
 
 		// Read Base Skills
 		for _, s := range c.Skills {
@@ -615,15 +621,17 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		HomelandModel: hl,
-		IsAuthor:      IsAuthor,
-		SessionUser:   username,
-		IsLoggedIn:    loggedIn,
-		IsAdmin:       isAdmin,
-		Counter:       []int{1, 2, 3},
-		CategoryOrder: runequest.CategoryOrder,
-		Skills:        runequest.Skills,
-		Passions:      runequest.PassionTypes,
+		HomelandModel:  hl,
+		IsAuthor:       IsAuthor,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		Counter:        []int{1, 2, 3},
+		CategoryOrder:  runequest.CategoryOrder,
+		Skills:         runequest.Skills,
+		Passions:       runequest.PassionTypes,
+		PowerRunes:     runequest.PowerRuneOrder,
+		ElementalRunes: runequest.ElementalRuneOrder,
 	}
 
 	if req.Method == "GET" {
@@ -697,6 +705,8 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
 		}
+
+		hl.Homeland.RuneBonus = req.FormValue("Rune")
 
 		// Skills
 

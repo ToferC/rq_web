@@ -15,8 +15,8 @@ import (
 	"github.com/toferc/runequest"
 )
 
-// NewCharHomelandHandler allows users to name and select a homeland
-func NewCharHomelandHandler(w http.ResponseWriter, req *http.Request) {
+// ChooseHomelandHandler allows users to name and select a homeland
+func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
 
@@ -40,7 +40,7 @@ func NewCharHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	cm := models.CharacterModel{}
 
-	c := runequest.NewCharacter("Default")
+	c := runequest.NewCharacter("")
 
 	author := database.LoadUser(db, username)
 	fmt.Println(author)
@@ -66,7 +66,7 @@ func NewCharHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/create_1.html", wc)
+		Render(w, "templates/cc1_choose_homeland.html", wc)
 
 	}
 
@@ -80,9 +80,60 @@ func NewCharHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		c := &runequest.Character{}
 
 		c.Name = req.FormValue("Name")
-		c.Description = req.FormValue("Homeland")
+		c.Description = req.FormValue("Description")
+		hlStr := req.FormValue("Homeland")
+
+		hlID, err := strconv.Atoi(req.FormValue(hlStr))
+		if err != nil {
+			hlID = 0
+		}
+
+		hl, err := database.PKLoadHomelandModel(db, int64(hlID))
+		if err != nil {
+			fmt.Println("No Homeland Found")
+		}
+
+		c.Homeland = hl.Homeland
 
 		cm.Character = c
+
+		// Upload image to s3
+		file, h, err := req.FormFile("image")
+		switch err {
+		case nil:
+			// Prcless image
+			defer file.Close()
+			// example path media/Major/TestImage/Jason_White.jpg
+			path := fmt.Sprintf("/media/%s/%s/%s",
+				cm.Author.UserName,
+				runequest.ToSnakeCase(cm.Character.Name),
+				h.Filename,
+			)
+
+			_, err = uploader.Upload(&s3manager.UploadInput{
+				Bucket: aws.String(os.Getenv("BUCKET")),
+				Key:    aws.String(path),
+				Body:   file,
+			})
+			if err != nil {
+				log.Panic(err)
+				fmt.Println("Error uploading file ", err)
+			}
+			fmt.Printf("successfully uploaded %q to %q\n",
+				h.Filename, os.Getenv("BUCKET"))
+
+			cm.Image = new(models.Image)
+			cm.Image.Path = path
+
+			fmt.Println(path)
+
+		case http.ErrMissingFile:
+			log.Println("no file")
+
+		default:
+			log.Panic(err)
+			fmt.Println("Error getting file ", err)
+		}
 
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
@@ -91,9 +142,7 @@ func NewCharHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/create_2/%d", cm.ID)
-
-		http.Redirect(w, req, url, http.StatusSeeOther)
+		http.Redirect(w, req, "templates/cc2_choose_runes.html", http.StatusSeeOther)
 	}
 
 }

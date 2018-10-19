@@ -13,6 +13,8 @@
 {{ $passions := .Passions }}
 {{ $skills := .Skills }}
 {{ $category := .CategoryOrder }}
+{{ $elementalrunes := .ElementalRunes }}
+{{ $powerrunes := .PowerRunes }}
 
       <div class="container">
         <hr>
@@ -34,6 +36,27 @@
                 </div>
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description"></textarea>
               </div>
+
+              <h4>Cult Runes</h4>
+                <p>Choose a rune to receive a 10% bonus.</p>
+              
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Rune-addon">Rune</span>
+                </div>
+                  <select type="text" class="form-control" id="Rune" name="Rune">
+                    <option></option>
+                    {{ range $r := $elementalrunes }}
+                    <option>{{ $r }}</option>
+                      {{ end }}
+                      <option>-----------</option>
+                      {{ range $pr := $powerrunes}}
+                    <option>{{ $pr }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+
+              <hr>
 
               <div class="input-group">
                   <div class="custom-file">

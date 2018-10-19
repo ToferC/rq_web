@@ -13,6 +13,8 @@
 {{ $passions := .Passions }}
 {{ $skills := .Skills }}
 {{ $category := .CategoryOrder }}
+{{ $elementalrunes := .ElementalRunes }}
+{{ $powerrunes := .PowerRunes }}
 
       <div class="container">
         <hr>
@@ -48,6 +50,28 @@
                   </div>
                 </div>
                 <hr>
+
+                <h4>Cult Runes</h4>
+                <p>Choose a rune to receive a 10% bonus.</p>
+              
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Rune-addon">Rune</span>
+                </div>
+                  <select type="text" class="form-control" id="Rune" name="Rune">
+                    <option>{{ $homeland.RuneBonus }}</option>
+                    {{ range $r := $elementalrunes }}
+                    <option>{{ $r }}</option>
+                      {{ end }}
+                      <option>-----------</option>
+                      {{ range $pr := $powerrunes}}
+                    <option>{{ $pr }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+
+              <hr>
+
                 <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
 
               <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>

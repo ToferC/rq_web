@@ -22,6 +22,8 @@
   style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
   data-holder-rendered="true">
 
+  <h5>Rune: {{ $homeland.RuneBonus }}</h5>
+
   {{ $homeland.Description }}
   <hr>
   <a class="btn btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
