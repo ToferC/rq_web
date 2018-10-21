@@ -127,9 +127,15 @@ func main() {
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
 	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 
+	// Character Creation Handlers
 	r.HandleFunc("/cc1_choose_homeland/", ChooseHomelandHandler)
+	r.HandleFunc("/cc12_personal_history/{id}", PersonalHistoryHandler)
 	r.HandleFunc("/cc2_choose_runes/{id}", ChooseRunesHandler)
 	r.HandleFunc("/cc3_roll_stats/{id}", RollStatisticsHandler)
+	r.HandleFunc("/cc4_apply_homeland/{id}", ApplyHomelandHandler)
+	r.HandleFunc("/cc5_apply_occupation/{id}", ApplyOccupationHandler)
+	r.HandleFunc("/cc6_apply_cult/{id}", ApplyCultHandler)
+	r.HandleFunc("/cc7_personal_skills/{id}", PersonalSkillsHandler)
 
 	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)

@@ -152,6 +152,97 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// PersonalHistoryHandler renders a character in a Web page
+func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		CharacterModel:   cm,
+		OccupationModels: occupations,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+		Skills:           runequest.Skills,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc12_personal_history.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		// Do Stuff
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/cc2_choose_runes/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
 // ChooseRunesHandler renders a character in a Web page
 func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 
@@ -223,34 +314,41 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		for k, v := range c.ElementalRunes {
-			n, err := strconv.Atoi(req.FormValue(k))
+		for k := range c.ElementalRunes {
+			b, err := strconv.Atoi(req.FormValue(k))
 			if err != nil {
 				fmt.Println(err)
-				n = 0
+				b = 0
 			}
-			v.Base = n
 
-			n, err = strconv.Atoi(req.FormValue("Bonus-" + k))
+			cbv, err := strconv.Atoi(req.FormValue("Bonus-" + k))
 			if err != nil {
 				fmt.Println(err)
-				n = 0
+				cbv = 0
 			}
-			v.CreationBonusValue = n
+
+			c.ModifyElementalRune(runequest.Ability{
+				CoreString:         k,
+				Base:               b,
+				CreationBonusValue: cbv,
+			})
 		}
 
-		for k, v := range c.PowerRunes {
-			n, _ := strconv.Atoi(req.FormValue(k))
+		for k := range c.PowerRunes {
+			b, _ := strconv.Atoi(req.FormValue(k))
 			if err != nil {
-				n = 0
+				b = 0
 			}
-			v.Base = n
 
-			n, _ = strconv.Atoi(req.FormValue("Bonus-" + k))
+			cbv, _ := strconv.Atoi(req.FormValue("Bonus-" + k))
 			if err != nil {
-				n = 0
+				cbv = 0
 			}
-			v.CreationBonusValue = n
+			c.ModifyPowerRune(runequest.Ability{
+				CoreString:         k,
+				Base:               b,
+				CreationBonusValue: cbv,
+			})
 		}
 
 		fmt.Println(c)
@@ -386,6 +484,397 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		url := fmt.Sprintf("/cc4_apply_homeland/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// ApplyHomelandHandler renders a character in a Web page
+func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	c := cm.Character
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		CharacterModel:   cm,
+		OccupationModels: occupations,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+		Skills:           runequest.Skills,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc4_apply_homeland.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		// Do Stuff
+		for _, s := range c.Homeland.Skills {
+			c.ModifySkill(s)
+		}
+
+		passions := c.Homeland.PassionList
+
+		// Homelands grant 3 base passions
+		// Find number of abilities
+
+		for _, selected := range passions {
+			c.Homeland.Passions = append(c.Homeland.Passions, selected)
+			c.ModifyAbility(selected)
+		}
+
+		// Homeland grants a bonus to a rune affinity
+		c.ElementalRunes[c.Homeland.RuneBonus].HomelandValue += 10
+
+		for i, sc := range c.Homeland.SkillChoices {
+			for m := range sc.Skills {
+				str := fmt.Sprintf("SC-%d-%d", i, m)
+				if req.FormValue(str) != "" {
+					c.ApplySkillChoice(sc, m)
+				}
+			}
+		}
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/cc5_apply_occupation/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// ApplyOccupationHandler renders a character in a Web page
+func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		CharacterModel:   cm,
+		OccupationModels: occupations,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+		Skills:           runequest.Skills,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc5_apply_occupation.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		// Do Stuff
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/cc6_apply_cult/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// ApplyCultHandler renders a character in a Web page
+func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		CharacterModel:   cm,
+		OccupationModels: occupations,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+		Skills:           runequest.Skills,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc6_apply_cult.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		// Do Stuff
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/cc7_personal_skills/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// PersonalSkillsHandler renders a character in a Web page
+func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		CharacterModel:   cm,
+		OccupationModels: occupations,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+		Skills:           runequest.Skills,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc7_personal_skills.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		// Do Stuff
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
