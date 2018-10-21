@@ -9,9 +9,6 @@
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
-{{ $homelands := .HomelandModels }}
-{{ $powerrunes := .PowerRunes }}
-{{ $elementalrunes := .ElementalRunes }}
 
       <div class="container">
         <hr>
@@ -22,14 +19,14 @@
 
             <p>Choose your character's Runes</p>
 
-        <h3>{{ $character.Name }}</h3>
-        <h3>{{ $character.Homeland.Name }}</h3>
+        <h5>{{ $character.Name }}</h5>
+        <h5>{{ $character.Homeland.Name }}</h5>
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
-          style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
           data-holder-rendered="true">
 
-            <p>{{ $homeland.Description }}</p>
+            <p>{{ $character.Description }}</p>
             <hr>
 
         </div> <!-- END outer column 3 -->
@@ -39,37 +36,70 @@
 
             <form action="" method="POST" enctype="multipart/form-data">
 
+            <h4>Instructions</h4>
+            <p>Follow the instructions for both Elemental and Power runes and then spread 50% of bonus points as desired.</p>
+
             <h4>Elemental Runes</h4>
             <p>Choose one rune at 60%, one at 40% and one at 20%.</p>
-            <p>Your chosen homeland will provide a bonus of 10% to {{ $character.Homeland.Rune }}.
-            
-                {{ range $er := $character.ElementalRunes }}
+            <p>Your chosen homeland will provide a bonus of 10% to $character.Homeland.Rune.
+
+                {{ range $k, $er := $character.ElementalRunes }}
                     <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $er.Name }}-addon">{{ $er.Name }}</span>
+                    <span class="input-group-text" id="{{ $er.CoreString }}-addon">{{ $er.CoreString }} Rune</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $er.Name }}-addon" name="{{ $er.Name }}" value ="{{ $er.HomelandValue }}">
-                  <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $er.Name }}-addon">%</span>
+              <select type="text" class="form-control" id="{{ $er.CoreString }}" name="{{ $er.CoreString }}">
+                <option>0</option>
+                <option>60</option>
+                <option>40</option>
+                <option>20</option>
+              </select>                  <div class="input-group-append">
+                      <span class="input-group-text" id="{{ $er.CoreString }}-addon">%</span>
                     </div>
                 </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Bonus-{{ $er.CoreString }}-addon">Bonus</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Bonus-{{ $er.CoreString }}-addon" name="Bonus-{{ $er.CoreString }}" value ="{{$er.CreationBonusValue}}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="Bonus-{{ $er.CoreString }}-addon">%</span>
+                    </div>
+                </div>
+
+                <hr>
                 {{ end }}
 
 
             <h4>Power Runes</h4>
             <p>Choose two runes at 75%. The Runes opposing Rune will start at 25%.</p>
-            <p>Your chosen homeland will provide a bonus of 10% to {{ $character.Homeland.Rune }}.
+            <p>Your chosen homeland will provide a bonus of 10% to $character.Homeland.Rune .
 
-                {{ range $pr := $character.PowerRunes }}
+                {{ range $k, $pr := $character.PowerRunes }}
                     <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $pr.Name }}-addon">{{ $pr.Name }}</span>
+                    <span class="input-group-text" id="{{ $pr.CoreString }}-addon">{{ $pr.CoreString }} Rune</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $pr.Name }}-addon" name="{{ $pr.Name }}" value ="0">
-                  <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $pr.Name }}-addon">%</span>
+ <select type="text" class="form-control" id="{{ $pr.CoreString }}" name="{{ $pr.CoreString }}">
+                <option>50</option>
+                <option>75</option>
+              </select>                  <div class="input-group-append">
+                      <span class="input-group-text" id="{{ $pr.CoreString }}-addon">%</span>
                     </div>
                 </div>
+
+                 <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Bonus-{{ $pr.CoreString }}-addon">Bonus</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Bonus-{{ $pr.CoreString }}-addon" name="Bonus-{{ $pr.CoreString }}" value ="{{$pr.CreationBonusValue}}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="Bonus-{{ $pr.CoreString }}-addon">%</span>
+                    </div>
+                </div>
+
+                <hr> 
                 {{ end }}
 
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>

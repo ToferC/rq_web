@@ -128,6 +128,8 @@ func main() {
 	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 
 	r.HandleFunc("/cc1_choose_homeland/", ChooseHomelandHandler)
+	r.HandleFunc("/cc2_choose_runes/{id}", ChooseRunesHandler)
+	r.HandleFunc("/cc3_roll_stats/{id}", RollStatisticsHandler)
 
 	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)

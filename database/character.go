@@ -23,6 +23,7 @@ func SaveCharacter(db *pg.DB, c *oneroll.Character) error {
 	return err
 }
 
+// UpdateCharacter updates a RQ character
 func UpdateCharacter(db *pg.DB, c *oneroll.Character) error {
 
 	oneroll.UpdateCost(c)

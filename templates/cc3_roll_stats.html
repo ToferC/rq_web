@@ -1,0 +1,79 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Create Character: Roll Attributes</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $occupations := .OccupationModels }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <h4>Create Character</h4>
+
+            <p>Roll your Characteristics</p>
+
+        <h3>{{ $character.Name }}</h3>
+        <h3>{{ $character.Homeland.Name }}</h3>
+
+          <img class ="card-img-top" data-src="" alt="Thumbnail"
+          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
+          data-holder-rendered="true">
+
+            <p>{{ $character.Description }}</p>
+            <hr>
+
+        </div> <!-- END outer column 3 -->
+
+
+          <div class="col-sm-9 col-md-9 col-lg-9">
+
+            <form action="" method="POST" enctype="multipart/form-data">
+
+            <h4>Enter or choose your Statistics.</h4>
+            
+            
+                {{ range $k, $st := $character.Statistics }}
+                    <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="{{ $k }}-addon">{{ $st.Name }}</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value ="{{ $st.Base }}">
+                </div>
+
+                <hr>
+                {{ end }}
+
+                <h3>Choose Occupation</h3>    
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Occupation">Occupation</span>
+                </div>
+              <select type="text" class="form-control" id="Occupation" name="Occupation">
+                
+                <option></option>
+                {{ range $k, $v := $occupations }}
+                    <option value={{ $v.ID }}>{{ $v.Occupation.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+
+                <button class="btn btn-primary" type="submit" value="Save">Save</button>
+              </form>
+
+          </div> <!-- END 9 Col -->
+
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

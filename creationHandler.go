@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
 	"github.com/toferc/rq_web/models"
@@ -77,25 +78,26 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		c := &runequest.Character{}
-
 		c.Name = req.FormValue("Name")
 		c.Description = req.FormValue("Description")
+
+		// Set Homeland
 		hlStr := req.FormValue("Homeland")
 
-		hlID, err := strconv.Atoi(req.FormValue(hlStr))
+		fmt.Println("Results: " + hlStr)
+
+		hlID, err := strconv.Atoi(hlStr)
 		if err != nil {
 			hlID = 0
+			fmt.Println(err)
 		}
 
 		hl, err := database.PKLoadHomelandModel(db, int64(hlID))
 		if err != nil {
-			fmt.Println("No Homeland Found")
+			fmt.Println(err)
 		}
 
 		c.Homeland = hl.Homeland
-
-		cm.Character = c
 
 		// Upload image to s3
 		file, h, err := req.FormFile("image")
@@ -135,6 +137,8 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Error getting file ", err)
 		}
 
+		//fmt.Println(c)
+
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			log.Panic(err)
@@ -142,13 +146,14 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
-		http.Redirect(w, req, "templates/cc2_choose_runes.html", http.StatusSeeOther)
-	}
+		url := fmt.Sprintf("/cc2_choose_runes/%d", cm.ID)
 
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
 }
 
-// NewCharAffinityHandler renders a character in a Web page
-func NewCharAffinityHandler(w http.ResponseWriter, req *http.Request) {
+// ChooseRunesHandler renders a character in a Web page
+func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
 
@@ -170,38 +175,44 @@ func NewCharAffinityHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cm := models.CharacterModel{}
+	vars := mux.Vars(req)
+	pk := vars["id"]
 
-	c := runequest.NewCharacter("Default")
-
-	/*
-		for i := 0; i < 10; i++ {
-			t := runequest.HitLocation{
-				Name: "",
-			}
-			c.HitLocations["z"+string(i)] = &t
-		}
-	*/
-
-	author := database.LoadUser(db, username)
-	fmt.Println(author)
-
-	cm = models.CharacterModel{
-		Character: c,
-		Author:    author,
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	c := cm.Character
+
 	wc := WebChar{
-		CharacterModel: &cm,
+		CharacterModel: cm,
 		SessionUser:    username,
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
 	}
 
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/add_character.html", wc)
+		Render(w, "templates/cc2_choose_runes.html", wc)
 
 	}
 
@@ -212,129 +223,169 @@ func NewCharAffinityHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		c := &runequest.Character{}
-
-		c.Name = req.FormValue("Name")
-		c.Description = req.FormValue("Description")
-
-		for _, st := range runequest.ElementalRuneOrder {
-			c.Statistics[st].Value, _ = strconv.Atoi(req.FormValue(st))
-		}
-
-		for _, st := range runequest.PowerRuneOrder {
-			c.Statistics[st].Value, _ = strconv.Atoi(req.FormValue(st))
-		}
-
-		/*
-			Put this in Step 4
-
-			for _, sk := range c.Skills {
-				sk.Value, _ = strconv.Atoi(req.FormValue(sk.Name))
-				if sk.UserChoice {
-					sk.UserString = req.FormValue(fmt.Sprintf("%s-Spec", sk.Name))
-				}
-			}
-		*/
-
-		// Hit locations - need to add new map or amend old one
-
-		newHL := map[string]*runequest.HitLocation{}
-
-		for i := range c.HitLocations {
-
-			name := req.FormValue(fmt.Sprintf("%s-Name", i))
-
-			if name != "" {
-
-				max, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Max", i)))
-				armor, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Armor", i)))
-
-				fmt.Println(name, max, armor)
-
-				newHL[name] = &runequest.HitLocation{
-					Name:   name,
-					Max:    max,
-					Armor:  armor,
-					HitLoc: []int{},
-				}
-
-				newHL[name].FillWounds()
-
-				for j := 1; j < 11; j++ {
-					if req.FormValue(fmt.Sprintf("%s-%d-loc", i, j)) != "" {
-						newHL[name].HitLoc = append(newHL[name].HitLoc, j)
-					}
-				}
-			}
-		}
-
-		fmt.Println(newHL)
-		c.HitLocations = newHL
-
-		cm.Character = c
-
-		// Insert power into App archive if user authorizes
-		if req.FormValue("Archive") != "" {
-			cm.Open = true
-		} else {
-			cm.Open = false
-		}
-
-		// Upload image to s3
-		file, h, err := req.FormFile("image")
-		switch err {
-		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				cm.Author.UserName,
-				runequest.ToSnakeCase(c.Name),
-				h.Filename,
-			)
-
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
+		for k, v := range c.ElementalRunes {
+			n, err := strconv.Atoi(req.FormValue(k))
 			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				fmt.Println(err)
+				n = 0
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
+			v.Base = n
 
-			cm.Image = new(models.Image)
-			cm.Image.Path = path
-
-			fmt.Println(path)
-
-		case http.ErrMissingFile:
-			log.Println("no file")
-
-		default:
-			log.Panic(err)
-			fmt.Println("Error getting file ", err)
+			n, err = strconv.Atoi(req.FormValue("Bonus-" + k))
+			if err != nil {
+				fmt.Println(err)
+				n = 0
+			}
+			v.CreationBonusValue = n
 		}
 
-		// Finalize base Character Cost for play
-		if req.FormValue("InPlay") != "" {
-			c.InPlay = true
-		} else {
-			c.InPlay = false
+		for k, v := range c.PowerRunes {
+			n, _ := strconv.Atoi(req.FormValue(k))
+			if err != nil {
+				n = 0
+			}
+			v.Base = n
+
+			n, _ = strconv.Atoi(req.FormValue("Bonus-" + k))
+			if err != nil {
+				n = 0
+			}
+			v.CreationBonusValue = n
 		}
 
 		fmt.Println(c)
 
-		err = database.SaveCharacterModel(db, &cm)
+		c.AddRuneModifiers()
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/cc3_roll_stats/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// RollStatisticsHandler renders a character in a Web page
+func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	c := cm.Character
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		CharacterModel:   cm,
+		OccupationModels: occupations,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc3_roll_stats.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, st := range runequest.StatMap {
+			n, _ := strconv.Atoi(req.FormValue(st))
+			if err != nil {
+				n = 0
+			}
+			c.Statistics[st].Base = n
+
+			n, _ = strconv.Atoi(req.FormValue("Rune-Bonus-" + st))
+			if err != nil {
+				n = 0
+			}
+			c.Statistics[st].RuneBonus = n
+		}
+
+		// Set Occupation
+		ocStr := req.FormValue("Occupation")
+
+		ocID, err := strconv.Atoi(ocStr)
+		if err != nil {
+			ocID = 0
+		}
+
+		oc, err := database.PKLoadOccupationModel(db, int64(ocID))
+		if err != nil {
+			fmt.Println("No Occupation Found")
+		}
+
+		c.Occupation = oc.Occupation
+
+		fmt.Println(c)
+
+		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)
 		} else {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/view_character/%d", cm.ID)
+		url := fmt.Sprintf("/cc4_apply_homeland/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

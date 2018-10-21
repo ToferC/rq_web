@@ -15,83 +15,29 @@
 {{ $IsAuthor := .IsAuthor }}
 {{ $IsAdmin := .IsAdmin }}
 {{ $author := .CharacterModel.Author }}
-{{ $shock := .Shock }}
-{{ $kill := .Kill }}
-{{ $statistics := $character.Statistics }}
-{{ $skills := $character.Skills }}
 
       <div class="container">
         <hr>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h3>{{ $character.Name }}</h3>
-            <h5> Cost: {{ $character.PointCost }}pts <span title="Detailed Costs
-            {{ range $k, $v := $character.DetailedCost }}
-              {{ $k }}: {{ $v }}
-            {{ end }}
-          ">(details)</span></h5>
+            <h5>{{ $character.Homeland.Name }}</h5>
+            
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
-          style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
           data-holder-rendered="true">
 
             <p>Author: {{ $author.UserName }}</p>
             <hr>
 
-            {{ if $character.Archetype }}
-            {{ if $character.Archetype.Sources }}
-            <h5>Archetype: {{ $character.Archetype.Type }} ({{ $character.Archetype.Cost }}pts)</h5>
-            <h5>Sources</h5>
-            <ul>
-            {{ range $source := $character.Archetype.Sources }}
-              <li>{{ $source }}</li>
-            {{ end }}
-            </ul>
-
-            <h5>Permissions</h5>
-            <ul>
-            {{ range $permission := $character.Archetype.Permissions }}
-              <li>{{ $permission }}</li>
-            {{ end }}
-            </ul>
-
-            {{ if $character.Archetype.Intrinsics }}
-            <h5>Intrinsics</h5>
-            {{ range $intrinsic := $character.Archetype.Intrinsics }}
-              <ul><p>{{ $intrinsic.Name }}
-                {{ if $intrinsic.RequiresInfo }}
-                - {{ $intrinsic.Info }}
-                {{ end }}
-                {{ if $intrinsic.RequiresLevel }}
-                   ({{ multiply $intrinsic.Cost $intrinsic.Level }}pts)
-                {{ else }}
-                  ({{ $intrinsic.Cost }}pts)
-                {{ end }}
-            </p></ul>
-            {{ end }}
-            {{ end }}
-            <hr>
-            {{ end }}
-
-            {{ end }} <!-- End Archetype IF -->
 
             <form action="" method="POST">
             <h5>Description</h5>
             {{ $character.Description }}
             <hr>
 
-            {{ if ne $character.Setting "RE" }}
-              <p>Base Will: {{ $character.BaseWill }}</p>
-            {{ if $IsAuthor }}
-              <div class="input-group">
-                <span class="input-group-addon" id="Willpower">Willpower: </span>
-                <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
-              </div>
-            {{ else }}
-            <p>Willpower: {{ $character.Willpower }}</p>
-            {{ end }}
-              <hr>
-            {{ end }}
+            
             {{ if $IsAuthor }}
             <button class="btn btn-primary" type="submit" value="Update Character State">Update State</button>
             {{ end }}
@@ -105,138 +51,70 @@
               {{ end }}
             {{ end }}
             <hr>
-            <h4>Detailed Costs</h4>
-            <ul>
-            {{ range $k, $v := $character.DetailedCost }}
-              <li>{{ $k }}: {{ $v }}</li>
-            {{ end }}
-          </ul>
+            
           </div>
+
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Skills</h3>
-        {{ range $stat := $statistics }}
-        <strong>{{ . }}</strong>
-          <a href={{ statRoll $ID $stat 1 }}>Roll</a>
-          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-            [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}">+Skill</a>
-            {{ if not $stat.HyperStat }}
-            <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}">+Hyper</a>{{ end }}]
-          {{ end }}
-          <ul>
-        {{ range $skill := $skills }}
-        {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
-        {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <li>{{ . }}
-            <a href={{ skillRoll $ID $skill $stat 1 }}>Roll</a>
-            {{ if not $skill.HyperSkill }}
-              {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-            [<a href="/add_hyperskill/{{ $ID }}/{{ $skill.Name }}">+Hyper</a>]
-              {{ end }}
-          {{ end }}
-        </li>
-          {{ end }}
+        <h3>Statistics</h3>
+        {{ range $stat := $character.Statistics }}
+          <strong>{{ $stat }}</strong> ({{$stat.RuneBonus}})
         {{ end }}
-        {{end}}
-      </ul>
-      {{ end }}
+
+        <hr>
+
+        <h3>Attributes</h3>
+        {{ range $stat := $character.Attributes }}
+          <strong>{{ $stat }}</strong>
+        {{ end }}
+
+        <hr>
+
+        <h3>Elemental Runes</h3>
+        {{ range $r := $character.ElementalRunes }}
+          <strong>{{ $r }}</strong>
+        {{ end }}
+
+        <hr>
+
+      <h3>Power Runes</h3>
+        {{ range $r := $character.PowerRunes }}
+          <strong>{{ $r }}</strong>
+        {{ end }}
+
+        <hr>
+        
+        <h3>Abilities</h3>
+        {{ range $ab := $character.Abilities }}
+          <strong>{{ $ab }}</strong>
+        {{ end }}
+
+        <hr>
+
+        <h3>Skill Categories</h3>
+        {{ range $sc := $character.SkillCategories }}
+          <strong>{{ $sc }}</strong>
+        {{ end }}
+
+        <hr>
+
+      
+
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-        {{ if eq $character.Setting "RE" }}
-        <h4>Advantages</h4>
-        <ul>
-        {{ range $advantage := $character.Advantages }}
-        <li><strong>{{ $advantage }}</strong></li>
-        {{ end }}
-      </ul>
-      <hr>
-        {{ else }}
-        <h4>Powers</h4>
-        {{ end }}
-
-        {{ range $power := $character.Powers }}
-        <div>
-          <strong>{{ $power }}</strong>
-          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-            <a href="/modify_power/{{ $ID}}/{{ $power.Slug}}">Modify</a>
-            <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}">Delete</a>
-          {{ end }}
-          {{ range $quality := $power.Qualities }}
-          <p>{{ $quality }} <a href={{ qualityRoll $ID $power $quality 1 }}>Roll</a></p>
-          {{ end }}
-          {{ if $power.Effect }}
-          <i>Effect: {{ $power.Effect }}</i>
-          {{end}}<hr>
-        </div>
-        {{ end }}
-
-        {{ range $stat := $statistics }}
-          {{ if $stat.HyperStat }}
-          <div>
-            <strong>{{ $stat.HyperStat }}</strong>
-            {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-              <a href="/modify_hyperstat/{{ $ID }}/{{ $stat.Name }}">Modify</a>
-              <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}">Delete</a></p>
-            {{ end }}
-            {{ range $quality := $stat.HyperStat.Qualities }}
-            {{ if or (ne $quality.Name "") ($quality.Modifiers) }}
-              <p>{{ $quality }}</p>
-            {{ end }}
-          {{ end }}
-          {{ if $stat.HyperStat.Effect }}
-          <i>Effect: {{ $stat.HyperStat.Effect }}</i>
-            {{end}}<hr>
-          </div>
-          {{ end }}
-        {{ end }}
-
+        <h3>Skills</h3>
         {{ range $skill := $character.Skills }}
-        {{ if $skill.HyperSkill }}
-        <div>
-          <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $ID }}/{{ $skill.Name }}">Modify</a>
-          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-            <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}">Delete</a>
-          {{ end }}
-          {{ range $quality := $skill.HyperSkill.Qualities }}
-          <p>{{ $quality }}</p>
-          {{ end }}
-          {{ if $skill.HyperSkill.Effect }}
-          <i>Effect: {{ $skill.HyperSkill.Effect }}</i>
-          {{end}}<hr>
-        </div>
-        {{ end }}
-        {{ end }}
-
-        {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-        {{ if eq $character.Setting "RE" }}
-        <a class="btn btn-primary" href="/add_advantages/{{ $ID }}">Add Advantages</a></p>
-        {{ else }}
-        <a class="btn btn-primary" href="/add_power/{{$ID }}">Add Power</a></p>
-        <a class="btn btn-primary" href="/add_power_from_list/{{ $ID }}">Add Power from List</a></p>
-        {{ end }}
+        <ul>
+        <strong>{{ $skill }}</strong>
+        </ul>
         {{ end }}
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h4>Hit Locations</h4>
-        {{ range $loc := $character.HitLocations }}
-            <p>{{ $loc }}
-              <br>Shock: {{ range $i, $v := .Shock }}  <input type="checkbox" name="{{ $loc.Name }}-Shock-{{ $i }}" value="true" id="checkbox" {{if eq $v true }} checked {{ end }}>{{ end }}
-              <br>Kill: {{ range $j, $q := .Kill }}  <input type="checkbox" name="{{ $loc.Name }}-Kill-{{ $j }}" value="true" id="checkbox" {{if eq $q true }} checked {{ end }}>{{ end }}
-          {{ end }}
-          <hr>
-          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-          <div class="form-group">
-            <label for="Gear"><h4>Gear</h4></label>
-            <textarea class="form-control" aria-describedby="gear-addon" name="Gear" rows="10" value ="{{ $character.Gear }}">{{ $character.Gear }}</textarea>
+        
           </div>
-          {{ else }}
-          <h4>Gear</h4>
-          {{ $character.Gear }}
-          {{ end }}
-      </form>
       </div>
-    </div>
       </div>
 
 {{end}}

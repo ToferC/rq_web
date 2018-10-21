@@ -109,6 +109,8 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		cm.Image.Path = DefaultCharacterPortrait
 	}
 
+	//c.DetermineSkillCategoryValues()
+
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,

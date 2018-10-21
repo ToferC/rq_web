@@ -23,6 +23,7 @@ func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 	return err
 }
 
+// UpdateCharacterModel updates a runequest character
 func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
 	cm.Character.UpdateCharacter()
