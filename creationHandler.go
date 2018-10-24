@@ -577,8 +577,11 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Do Stuff
 		for _, s := range c.Homeland.Skills {
-			// Or do we just manually modify the skills here
-
+			// Or do we just manually modify the skills here?
+			str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+			if str != "" {
+				s.UserString = str
+			}
 			c.ModifySkill(s)
 		}
 
