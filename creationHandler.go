@@ -314,6 +314,7 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Update Elemental Runes
 		for k := range c.ElementalRunes {
 			b, err := strconv.Atoi(req.FormValue(k))
 			if err != nil {
@@ -327,14 +328,12 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 				cbv = 0
 			}
 
-			c.ModifyElementalRune(runequest.Ability{
-				CoreString:         k,
-				Base:               b,
-				CreationBonusValue: cbv,
-			})
+			// Modify Ability
+			c.ElementalRunes[k].Base = b
+			c.ElementalRunes[k].CreationBonusValue = cbv
 		}
 
-		for k := range c.PowerRunes {
+		for k, v := range c.PowerRunes {
 			b, _ := strconv.Atoi(req.FormValue(k))
 			if err != nil {
 				b = 0
@@ -344,11 +343,17 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 			if err != nil {
 				cbv = 0
 			}
-			c.ModifyPowerRune(runequest.Ability{
-				CoreString:         k,
-				Base:               b,
-				CreationBonusValue: cbv,
-			})
+			// Modify Ability
+			v.Base = b
+			v.CreationBonusValue = cbv
+			v.UpdateAbility()
+		}
+
+		// Determine opposing Power Rune values
+		for k, v := range c.PowerRunes {
+			if v.Total > 50 {
+				c.UpdateOpposedRune(c.PowerRunes[k])
+			}
 		}
 
 		fmt.Println(c)
@@ -567,17 +572,20 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Remove original homeland
+		c.RemoveHomeland()
+
 		// Do Stuff
 		for _, s := range c.Homeland.Skills {
+			// Or do we just manually modify the skills here
+
 			c.ModifySkill(s)
 		}
-
-		passions := c.Homeland.PassionList
 
 		// Homelands grant 3 base passions
 		// Find number of abilities
 
-		for _, selected := range passions {
+		for _, selected := range c.Homeland.PassionList {
 			c.Homeland.Passions = append(c.Homeland.Passions, selected)
 			c.ModifyAbility(selected)
 		}

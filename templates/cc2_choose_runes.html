@@ -49,6 +49,10 @@
                     <span class="input-group-text" id="{{ $er.CoreString }}-addon">{{ $er.CoreString }} Rune</span>
                   </div>
               <select type="text" class="form-control" id="{{ $er.CoreString }}" name="{{ $er.CoreString }}">
+                {{ if gt $er.Base 0 }}
+                  <option>{{ $er.Base }}</option>
+                  <option>--------------</option>
+                {{ end }}
                 <option>0</option>
                 <option>60</option>
                 <option>40</option>
