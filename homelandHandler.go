@@ -270,6 +270,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
 		Counter:        []int{1, 2, 3},
+		BigCounter:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
 		Passions:       runequest.PassionTypes,
 		CategoryOrder:  runequest.CategoryOrder,
 		Skills:         runequest.Skills,
@@ -358,39 +359,51 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Homeland.RuneBonus = req.FormValue("Rune")
 
 		// Read Base Skills
-		for _, s := range c.Skills {
 
-			// Build skill based on user input vs. base Skills
-			sk := runequest.Skill{
-				CoreString: s.CoreString,
-				UserChoice: s.UserChoice,
-				Category:   s.Category,
+		skillArray := []runequest.Skill{}
+
+		for i := 1; i < 20; i++ {
+
+			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+
+			if sk != "" {
+
+				skbaseSkill := runequest.Skills[sk]
+				fmt.Println(skbaseSkill)
+
+				// Skill
+				s1 := runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Base:       skbaseSkill.Base,
+					Category:   skbaseSkill.Category,
+				}
+
+				str := fmt.Sprintf("Skill-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				s1.HomelandValue = v
+
+				str = fmt.Sprintf("Skill-%d-Base", i)
+				b, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					b = 0
+				}
+				if b > s1.Base {
+					s1.Base = v
+				}
+
+				if s1.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-UserString", i)
+					s1.UserString = req.FormValue(userString)
+				}
+				skillArray = append(skillArray, s1)
 			}
-
-			str := fmt.Sprintf("%s-Base", s.CoreString)
-			base, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				base = 0
-			}
-			sk.Base = base
-
-			str = fmt.Sprintf("%s-Value", s.CoreString)
-			v, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				v = 0
-			}
-			sk.HomelandValue = v
-
-			if s.UserChoice {
-				sk.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
-			}
-
-			if sk.Base > s.Base || sk.HomelandValue > 0 || sk.UserString != s.UserString {
-				// If we changed something, add to the Homeland skill list
-				hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
-			}
-
 		}
+
+		hl.Homeland.Skills = skillArray
 
 		// Read passions
 		for i := 1; i < 4; i++ {
@@ -491,23 +504,23 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		for i := 1; i < 4; i++ {
 
-			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
 
 			if coreString != "" {
 
 				sk := runequest.Skill{}
 
 				sk.CoreString = coreString
-				sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
 
 				if userString != "" {
 					sk.UserChoice = true
 					sk.UserString = userString
 				}
 
-				str := fmt.Sprintf("Skill-%d-Base", i)
+				str := fmt.Sprintf("NewSkill-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
@@ -708,46 +721,52 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		hl.Homeland.RuneBonus = req.FormValue("Rune")
 
-		// Skills
+		// Read Base Skills
 
-		tempSkills := []runequest.Skill{}
+		skillArray := []runequest.Skill{}
 
-		// Read Base Skills from Homeland
-		for _, s := range hl.Homeland.Skills {
+		for i := 1; i < 20; i++ {
 
-			// Build skill based on user input vs. base Skills
-			sk := runequest.Skill{
-				CoreString: s.CoreString,
-				UserChoice: s.UserChoice,
-				Category:   s.Category,
-			}
+			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
-			str := fmt.Sprintf("%s-Base", s.CoreString)
-			base, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				base = 0
-			}
-			sk.Base = base
+			if sk != "" {
 
-			str = fmt.Sprintf("%s-Value", s.CoreString)
-			v, err := strconv.Atoi(req.FormValue(str))
-			if err != nil {
-				v = 0
-			}
-			sk.HomelandValue = v
+				skbaseSkill := runequest.Skills[sk]
+				fmt.Println(skbaseSkill)
 
-			if s.UserChoice {
-				sk.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
-			}
+				// Skill
+				s1 := runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Base:       skbaseSkill.Base,
+					Category:   skbaseSkill.Category,
+				}
 
-			if sk.Base > s.Base || sk.HomelandValue > 0 || sk.UserString != s.UserString {
-				// If we changed something, add to the Homeland skill list
-				tempSkills = append(tempSkills, sk)
+				str := fmt.Sprintf("Skill-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				s1.HomelandValue = v
+
+				str = fmt.Sprintf("Skill-%d-Base", i)
+				b, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					b = 0
+				}
+				if b > s1.Base {
+					s1.Base = v
+				}
+
+				if s1.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-UserString", i)
+					s1.UserString = req.FormValue(userString)
+				}
+				skillArray = append(skillArray, s1)
 			}
 		}
 
-		// Set Homeland.Skills to new array
-		hl.Homeland.Skills = tempSkills
+		hl.Homeland.Skills = skillArray
 
 		// Passions
 
@@ -859,30 +878,30 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		for i := 1; i < 4; i++ {
 
-			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
 
 			if coreString != "" {
 
 				sk := runequest.Skill{}
 
 				sk.CoreString = coreString
-				sk.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
 
 				if userString != "" {
 					sk.UserChoice = true
 					sk.UserString = userString
 				}
 
-				str := fmt.Sprintf("Skill-%d-Base", i)
+				str := fmt.Sprintf("NewSkill-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
 				}
 				sk.Base = base
 
-				str = fmt.Sprintf("Skill-%d-Value", i)
+				str = fmt.Sprintf("NewSkill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0

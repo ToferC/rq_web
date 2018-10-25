@@ -85,39 +85,44 @@
 
                 {{ range $k, $v := $homeland.Skills }}
 
-                <label for="{{ $v.CoreString }}-CoreString">Skill</label>
-                    <select type="text" class="form-control" id="{{ $v.CoreString }}-CoreString" name="{{ $v.CoreString }}-CoreString">
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Skill-{{ add $k 1 }}-CoreString-addon">Skill</span>
+                        </div>
+                    <select type="text" class="form-control" id="Skill-{{ add $k 1 }}-CoreString" name="Skill-{{ add $k 1 }}-CoreString">
                       <option>{{ $v.CoreString }}</option>
+                      <option></option>
                       {{ range $skills }}
                           <option>{{ .CoreString }}</option>
                     {{ end }}
                     </select>
-
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $v.CoreString }}-UserString-addon">Specialization</span>
-                  </div>
-                  <input type="text" class="form-control" aria-describedby="{{ $v.CoreString }}-UserString-addon" name="{{ $v.CoreString }}-UserString" value ="{{ $v.UserString }}">
                 </div>
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $v.CoreString }}-Base-addon">Skill Base</span>
+                    <span class="input-group-text" id="Skill-{{ add $k 1 }}-UserString-addon">Specialization</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $v.CoreString }}-Base-addon" name="{{ $v.CoreString }}-Base" value ="{{ $v.Base }}">
-                  <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $v.CoreString }}-Base-addon">%</span>
-                    </div>
+                  <input type="text" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-UserString-addon" name="Skill-{{ add $k 1 }}-UserString" value ="{{ $v.UserString }}">
                 </div>
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $v.CoreString }}-Value-addon">Skill Bonus</span>
+                    <span class="input-group-text" id="Skill-{{ add $k 1 }}-Base-addon">Base</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $v.CoreString }}-Value-addon" name="{{ $v.CoreString }}-Value" value ="{{ $v.HomelandValue }}">
+                  <input type="number" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-Base-addon" name="Skill-{{ add $k 1 }}-Base" value ="{{ $v.Base }}">
                   <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $v.CoreString }}-Value-addon">%</span>
-                    </div>
+                        <span class="input-group-text" id="Skill-{{ add $k 1 }}-Base-addon">%</span>
+                      </div>
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{ add $k 1 }}-Value-addon">Skill Bonus</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-Value-addon" name="Skill-{{ add $k 1 }}-Value" value ="{{ $v.HomelandValue }}">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="Skill-{{ add $k 1 }}-Value-addon">%</span>
+                      </div>
                 </div>
 
                 <hr>
@@ -208,13 +213,13 @@
                   <!-- Skill 1 -->
                   <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="Skill-{{$m}}-CoreString-addon">Name</span>
+                        <span class="input-group-text" id="NewSkill-{{$m}}-CoreString-addon">Name</span>
                       </div>
-                      <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-CoreString-addon" name="Skill-{{$m}}-CoreString" value ="">
+                      <input type="text" class="form-control" aria-describedby="NewSkill-{{$m}}-CoreString-addon" name="NewSkill-{{$m}}-CoreString" value ="">
                   </div>
 
-                <label for="Skill-{{$m}}-Category">Category</label>
-                <select type="text" class="form-control" id="Skill-{{$m}}-Category" name="Skill-{{$m}}-Category">
+                <label for="NewSkill-{{$m}}-Category">Category</label>
+                <select type="text" class="form-control" id="NewSkill-{{$m}}-Category" name="NewSkill-{{$m}}-Category">
                   {{ range $category }}
                   <option>{{ . }}</option>
                     {{ end }}
@@ -222,29 +227,29 @@
 
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="Skill-{{$m}}-UserString-addon">Specialization (if req'd)</span>
+                    <span class="input-group-text" id="NewSkill-{{$m}}-UserString-addon">Specialization (if req'd)</span>
                   </div>
-                  <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-UserString-addon" name="Skill-{{$m}}-UserString" value ="">
+                  <input type="text" class="form-control" aria-describedby="NewSkill-{{$m}}-UserString-addon" name="NewSkill-{{$m}}-UserString" value ="">
                 </div>
 
                 <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="Skill-{{$m}}-Base-addon">Base %</span>
+                      <span class="input-group-text" id="NewSkill-{{$m}}-Base-addon">Base %</span>
                     </div>
-                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-Base-addon" name="Skill-{{$m}}-Base" value ="0">
+                    <input type="number" class="form-control" aria-describedby="NewSkill-{{$m}}-Base-addon" name="NewSkill-{{$m}}-Base" value ="0">
                 </div>
 
                 <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="Skill-{{$m}}-Value-addon">Skill Bonus</span>
+                      <span class="input-group-text" id="NewSkill-{{$m}}-Value-addon">NewSkill Bonus</span>
                     </div>
-                    <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-Value-addon" name="Skill-{{$m}}-Value" value ="0">
+                    <input type="number" class="form-control" aria-describedby="NewSkill-{{$m}}-Value-addon" name="NewSkill-{{$m}}-Value" value ="0">
                 </div>
                 <hr>
 
                 {{ end }}
 
-            </div> <!-- End Passions & SkillChoices COL 1 -->
+            </div> <!-- End Passions & NewSkillChoices COL 1 -->
 
             </form>
           </div> <!-- END outer ROW -->

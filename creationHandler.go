@@ -572,17 +572,39 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		// Remove original homeland
-		c.RemoveHomeland()
-
 		// Do Stuff
 		for _, s := range c.Homeland.Skills {
-			// Or do we just manually modify the skills here?
-			str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
-			if str != "" {
-				s.UserString = str
+			// Modify Skill
+			if s.UserString == "any" {
+				// User Chooses a new specialization
+				str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+				if str != "" {
+					s.UserString = str
+				}
 			}
-			c.ModifySkill(s)
+
+			// We need to find the base skill from the Master list
+			baseSkill := runequest.Skills[s.CoreString]
+
+			baseSkill.HomelandValue = s.HomelandValue
+
+			if s.Base > baseSkill.Base {
+				baseSkill.Base = s.Base
+			}
+
+			if s.UserString != "" {
+				baseSkill.UserString = s.UserString
+			}
+
+			// Update our new skill
+			sc := c.SkillCategories[baseSkill.Category]
+
+			baseSkill.CategoryValue = sc.Value
+
+			baseSkill.UpdateSkill()
+
+			// Add Skill to Character
+			c.Skills[baseSkill.Name] = baseSkill
 		}
 
 		// Homelands grant 3 base passions
