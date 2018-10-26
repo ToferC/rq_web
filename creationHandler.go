@@ -479,8 +479,6 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Occupation = oc.Occupation
 
-		fmt.Println(c)
-
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)
@@ -583,28 +581,61 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 
-			// We need to find the base skill from the Master list
-			baseSkill := runequest.Skills[s.CoreString]
+			var targetString string
 
-			baseSkill.HomelandValue = s.HomelandValue
-
-			if s.Base > baseSkill.Base {
-				baseSkill.Base = s.Base
-			}
-
+			// Find target string for Skill
 			if s.UserString != "" {
-				baseSkill.UserString = s.UserString
+				targetString = fmt.Sprintf("%s (%s)", s.CoreString, s.UserString)
+			} else {
+				targetString = fmt.Sprintf("%s", s.CoreString)
 			}
 
-			// Update our new skill
-			sc := c.SkillCategories[baseSkill.Category]
+			if c.Skills[targetString] != nil {
+				// Skill exists in Character, modify it via pointer
+				c.Skills[targetString].HomelandValue = s.HomelandValue
 
-			baseSkill.CategoryValue = sc.Value
+				if s.Base > c.Skills[targetString].Base {
+					c.Skills[targetString].Base = s.Base
+				}
 
-			baseSkill.UpdateSkill()
+				fmt.Println(c.Skills[targetString])
 
-			// Add Skill to Character
-			c.Skills[baseSkill.Name] = baseSkill
+			} else {
+				// We need to find the base skill from the Master list or create it
+				if runequest.Skills[s.CoreString] == nil {
+					fmt.Println("Skill is new: " + targetString)
+
+					// New Skill
+					baseSkill := &s
+					// Update our new skill
+					sc := c.SkillCategories[baseSkill.Category]
+
+					baseSkill.CategoryValue = sc.Value
+
+					baseSkill.UpdateSkill()
+
+					fmt.Println("Add Skill to character: " + baseSkill.Name)
+					c.Skills[baseSkill.Name] = baseSkill
+				} else {
+					// Skill exists in master list
+					fmt.Println("Skill in master list: " + targetString)
+
+					baseSkill := runequest.Skills[s.CoreString]
+					fmt.Println(baseSkill)
+					baseSkill.HomelandValue = s.HomelandValue
+
+					if s.Base > baseSkill.Base {
+						baseSkill.Base = s.Base
+					}
+					if s.UserString != "" {
+						baseSkill.UserString = s.UserString
+					}
+					// Add Skill to Character
+					fmt.Println("Add Skill to character: " + baseSkill.Name)
+					c.Skills[baseSkill.Name] = baseSkill
+					c.Skills[baseSkill.Name].UpdateSkill()
+				}
+			}
 		}
 
 		// Homelands grant 3 base passions
@@ -681,25 +712,27 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Unable to load CharacterModel")
 	}
 
+	c := cm.Character
+
 	IsAuthor := false
 
 	if username == cm.Author.UserName {
 		IsAuthor = true
 	}
 
-	occupations, err := database.ListOccupationModels(db)
+	cults, err := database.ListCultModels(db)
 	if err != nil {
 		panic(err)
 	}
 
 	wc := WebChar{
-		CharacterModel:   cm,
-		OccupationModels: occupations,
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		IsAuthor:         IsAuthor,
-		Skills:           runequest.Skills,
+		CharacterModel: cm,
+		CultModels:     cults,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Skills:         runequest.Skills,
 	}
 
 	if req.Method == "GET" {
@@ -717,6 +750,73 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Do Stuff
+		for _, s := range c.Occupation.Skills {
+			// Modify Skill
+			if s.UserString == "any" {
+				// User Chooses a new specialization
+				str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+				if str != "" {
+					s.UserString = str
+				}
+			}
+
+			var baseSkill = &runequest.Skill{}
+
+			// Find target string for Skill
+			targetString := fmt.Sprintf("%s (%s)", s.CoreString, s.UserString)
+
+			if c.Skills[targetString] != nil {
+				// Skill exists in Character, modify it
+				baseSkill = c.Skills[targetString]
+			} else {
+				// We need to find the base skill from the Master list
+				baseSkill = runequest.Skills[s.CoreString]
+			}
+
+			baseSkill.OccupationValue = s.OccupationValue
+
+			if s.Base > baseSkill.Base {
+				baseSkill.Base = s.Base
+			}
+
+			if s.UserString != "" {
+				baseSkill.UserString = s.UserString
+			}
+
+			// Update our new skill
+			sc := c.SkillCategories[baseSkill.Category]
+
+			baseSkill.CategoryValue = sc.Value
+
+			baseSkill.UpdateSkill()
+
+			// Add Skill to Character
+			c.Skills[baseSkill.Name] = baseSkill
+		}
+
+		// Occupations grant 3 base passions
+		// Find number of abilities
+
+		for i, selected := range c.Occupation.PassionList {
+			str := fmt.Sprintf("Passion-%d", i)
+			if req.FormValue(str) != "" {
+				c.ModifyAbility(selected)
+				c.Occupation.Passions = append(c.Occupation.Passions, selected)
+			}
+		}
+
+		// Weapons
+
+		// Equipment
+
+		for i, sc := range c.Occupation.SkillChoices {
+			for m := range sc.Skills {
+				str := fmt.Sprintf("SC-%d-%d", i, m)
+				if req.FormValue(str) != "" {
+					c.ApplySkillChoice(sc, m)
+				}
+			}
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
