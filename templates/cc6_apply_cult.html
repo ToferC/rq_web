@@ -2,14 +2,14 @@
 
 {{ $character := .CharacterModel.Character }}
 
-<title>Apply Character Occupation</title>
+<title>Apply Character Cult</title>
 
 {{ end }}
 
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
-{{ $occupation := $character.Occupation }}
+{{ $cult := $character.Cult }}
 {{ $skills := .Skills }}
 {{ $wepCategory := .WeaponCategories }}
 
@@ -18,12 +18,12 @@
         <div class="row">
 
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <h4>Apply Occupation template</h4>
+            <h4>Apply Cult template</h4>
 
             <p>Make choices based on your occupation.</p>
 
         <h3>{{ $character.Name }}</h3>
-        <h3>{{ $character.Occupation.Name }}</h3>
+        <h3>{{ $character.Cult.Name }}</h3>
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
           style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
@@ -31,21 +31,61 @@
 
             <p>{{ $character.Description }}</p>
             <hr>
+            <form action="" method="POST" enctype="multipart/form-data">
+
+            <!-- Cults give 3 Rune Spells and 5 pts of Spirit Magic -->
+
+            <h4>Rune Spells</h4>
+
+            {{ range $n := $cult.NumRunePoints }}
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="RuneSpell-{{ $n }}-addon">Rune Spell</span>
+                </div>
+                  <select type="text" class="form-control" id="RuneSpell-{{ $n }}" name="RuneSpell-{{ $n }}">
+                {{ range $m, $rs := $cult.RuneSpells }}
+                    {{ if eq $rs.UserString "" }}
+                    <option value="{{ $m }}">{{ $rs.CoreString }}</option>
+                    {{ else }}
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.UserString }})</option>
+                    {{ end }}
+                {{ end }}
+                  </select>
+              </div>
+
+              <hr>
+              {{ end }}
+
+
+
+            <h4>Spirit Magic Spells</h4>
 
         </div> <!-- END outer column 3 -->
 
 
           <div class="col-sm-4 col-md-4 col-lg-4">
 
-            <form action="" method="POST" enctype="multipart/form-data">
 
             <h4>Choose Skills</h4>.
             <p>You automatically receive the following skills from your occupation:</p>
 
             <h5>Skill Bonuses</h5>
             {{ range $skill := $occupation.Skills }}
-            {{ if gt $skill.OccupationValue 0 }}
-            <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%, 
+            {{ if gt $skill.CultValue 0 }}
+            <p>{{ if eq $skill.UserString "any" }}
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CoreString}}</span>
+                      </div>
+                      <input type="text" class="form-control" aria-describedby="{{ $skill.CoreString }}-UserString-addon" name="{{ $skill.CoreString }}-UserString" value ="{{ $skill.UserString }}">
+                      <div class="input-group-append">
+                          <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CultValue}}%</span>
+                        </div>
+                    </div>
+                    {{ else }}
+                    {{ $skill.CoreString }} +{{ $skill.CultValue }}%
+                    {{ end }} 
             {{ end }}</p>
             {{end}}
 
@@ -68,7 +108,7 @@
                 {{ range $c, $skill := $schoice.Skills }}
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox-SC-{{ $m }}-{{ $c }}" value-SC-="{{ $m }}-{{ $c }}" name-SC-="{{ $m }}-{{ $c }}">
-                        <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.OccupationValue }}%</label>
+                        <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.CultValue }}%</label>
                     </div>
                 {{ end }} <!-- END skill loop-->
 

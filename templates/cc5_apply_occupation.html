@@ -55,10 +55,21 @@
                 {{ range $sk := $skills }}
                 {{ range $skill := $occupation.Skills }}
                     {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
-                    <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%), 
-                    {{ end }}
-                {{ end }}</p>
-                {{ end }}
+                    <p>{{ if eq $skill.UserString "any" }}
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CoreString}}</span>
+                      </div>
+                      <input type="text" class="form-control" aria-describedby="{{ $skill.CoreString }}-UserString-addon" name="{{ $skill.CoreString }}-UserString" value ="{{ $skill.UserString }}">
+                      <div class="input-group-append">
+                          <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.OccupationValue}}%</span>
+                        </div>
+                    </div>
+                    {{ else }}
+                    {{ $skill.CoreString }} +{{ $skill.OccupationValue }}%
+                    {{ end }} 
+            {{ end }}</p>
+            {{end}}
 
             <hr>
             <p>Additionally, you can choose between the following skill choices.</p>
