@@ -105,7 +105,8 @@
         <h3>Skills</h3>
         {{ range $skill := $character.Skills }}
         <ul>
-        <strong>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%</strong>
+        <strong title="B: {{ $skill.Base }}, HL: {{ $skill.HomelandValue }}, OC: {{ $skill.OccupationValue }}, CU: {{ $skill.CultValue }}, CV: {{ $skill.CategoryValue }}"
+        >{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%</strong>
         </ul>
         {{ end }}
       </div>

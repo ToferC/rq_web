@@ -144,7 +144,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		c.Gear[0] = req.FormValue("Gear")
+		c.Equipment[0] = req.FormValue("Equipment")
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {

@@ -1,0 +1,144 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Apply Character Occupation</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $occupation := $character.Occupation }}
+{{ $skills := .Skills }}
+{{ $wepCategory := .WeaponCategories }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <h4>Apply Occupation template</h4>
+
+            <p>Make choices based on your occupation.</p>
+
+        <h3>{{ $character.Name }}</h3>
+        <h3>{{ $character.Occupation.Name }}</h3>
+
+          <img class ="card-img-top" data-src="" alt="Thumbnail"
+          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
+          data-holder-rendered="true">
+
+            <p>{{ $character.Description }}</p>
+            <hr>
+
+        </div> <!-- END outer column 3 -->
+
+
+          <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <form action="" method="POST" enctype="multipart/form-data">
+
+            <h4>Choose Skills</h4>.
+            <p>You automatically receive the following skills from your occupation:</p>
+
+            <h5>Skill Bonuses</h5>
+            {{ range $skill := $occupation.Skills }}
+            {{ if gt $skill.OccupationValue 0 }}
+            <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%, 
+            {{ end }}</p>
+            {{end}}
+
+            <hr>
+
+            <h5>Skill Base Adjustments</h5>
+                {{ range $sk := $skills }}
+                {{ range $skill := $occupation.Skills }}
+                    {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
+                    <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%), 
+                    {{ end }}
+                {{ end }}</p>
+                {{ end }}
+
+            <hr>
+            <p>Additionally, you can choose between the following skill choices.</p>
+
+            {{ range $m, $schoice := $occupation.SkillChoices }}
+                {{ if gt (len $schoice.Skills) 0}}
+                {{ range $c, $skill := $schoice.Skills }}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox-SC-{{ $m }}-{{ $c }}" value-SC-="{{ $m }}-{{ $c }}" name-SC-="{{ $m }}-{{ $c }}">
+                        <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.OccupationValue }}%</label>
+                    </div>
+                {{ end }} <!-- END skill loop-->
+
+              <hr>
+
+              {{ end }} <!-- End IF loop-->
+              {{ end }} <!-- END schoice Loop-->
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+
+                <h4>Choose Passion Bonus</h4>
+                <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-addon">Passion</span>
+                </div>
+                  <select type="text" class="form-control" id="Passion" name="Passion">
+                {{ range $m, $p := $occupation.PassionList }}
+                    {{ if eq $p.UserString "" }}
+                    <option>{{ $p.CoreString }}</option>
+                    {{ else }}
+                    <option>{{ $p.CoreString }} ({{ $p.UserString }})</option>
+                    {{ end }}
+                {{ end }}
+                  </select>
+              </div>
+
+              <hr>
+
+                <h4>Choose Weapon Skills</h4>
+
+                    {{ range $m, $w := $occupation.Weapons }}
+                        <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Weapon-{{$m}}-CoreString-addon">{{ $w.Description }}</span>
+                </div>
+                  <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
+                    <option></option>
+                    {{ range $s := $skills }}
+                        {{ if eq $w.Description "Any" }}
+                            {{ if isInString $wepCategory $s.Category}}
+                                <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
+                            {{ end }}
+                        {{ else }}
+                        {{ if eq $s.Category $w.Description }}
+                    <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
+                        {{ end }}
+                      {{ end }}
+                      {{ end }}
+                  </select>
+              </div>
+
+                <hr>
+                    {{ end }}
+
+
+                <hr>
+
+                <h4>Equipment</h4>
+                {{ range $e := $occupation.Equipment }}
+                    <p>{{ $e }}</p>
+                {{ end }}
+            </div>
+                    
+                <button class="btn btn-primary" type="submit" value="Save">Save</button>
+              </form>
+
+          </div> <!-- END 9 Col -->
+
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

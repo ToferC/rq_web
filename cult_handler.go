@@ -516,6 +516,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s1baseSkill.CoreString,
 					UserChoice: s1baseSkill.UserChoice,
 					Category:   s1baseSkill.Category,
+					Base:       s1baseSkill.Base,
 				}
 
 				str := fmt.Sprintf("Skill-%d-1-Value", i)
@@ -539,6 +540,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s2baseSkill.CoreString,
 					UserChoice: s2baseSkill.UserChoice,
 					Category:   s2baseSkill.Category,
+					Base:       s2baseSkill.Base,
 				}
 
 				str = fmt.Sprintf("Skill-%d-2-Value", i)
@@ -1052,6 +1054,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s1baseSkill.CoreString,
 					UserChoice: s1baseSkill.UserChoice,
 					Category:   s1baseSkill.Category,
+					Base:       s1baseSkill.Base,
 				}
 
 				str := fmt.Sprintf("Skill-%d-1-Value", i)
@@ -1075,6 +1078,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s2baseSkill.CoreString,
 					UserChoice: s2baseSkill.UserChoice,
 					Category:   s2baseSkill.Category,
+					Base:       s2baseSkill.Base,
 				}
 
 				str = fmt.Sprintf("Skill-%d-2-Value", i)

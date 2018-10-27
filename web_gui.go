@@ -113,6 +113,15 @@ func isIn(s []int, t int) bool {
 	return false
 }
 
+func isInString(s []string, t string) bool {
+	for _, n := range s {
+		if n == t {
+			return true
+		}
+	}
+	return false
+}
+
 // Render combines templates, funcs and renders all Web pages in the app
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
@@ -127,6 +136,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"multiply":    multiply,
 		"isIn":        isIn,
 		"sliceString": sliceString,
+		"isInString":  isInString,
 	}
 
 	baseTemplate := "templates/layout.html"

@@ -389,6 +389,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: skbaseSkill.CoreString,
 					UserChoice: skbaseSkill.UserChoice,
 					Category:   skbaseSkill.Category,
+					Base:       skbaseSkill.Base,
 				}
 
 				str := fmt.Sprintf("Skill-%d-Value", i)
@@ -445,6 +446,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s1baseSkill.CoreString,
 					UserChoice: s1baseSkill.UserChoice,
 					Category:   s1baseSkill.Category,
+					Base:       s1baseSkill.Base,
 				}
 
 				str := fmt.Sprintf("Skill-%d-1-Value", i)
@@ -452,7 +454,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				if err != nil {
 					v = 0
 				}
-				s1.HomelandValue = v
+				s1.OccupationValue = v
 
 				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
@@ -468,6 +470,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s2baseSkill.CoreString,
 					UserChoice: s2baseSkill.UserChoice,
 					Category:   s2baseSkill.Category,
+					Base:       s2baseSkill.Base,
 				}
 
 				str = fmt.Sprintf("Skill-%d-2-Value", i)
@@ -645,6 +648,17 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		for i := len(oc.Occupation.Skills); i < 20; i++ {
 			tempSkill := runequest.Skill{}
 			oc.Occupation.Skills = append(oc.Occupation.Skills, tempSkill)
+		}
+	}
+
+	// Add extra empty skills if < 20
+	if len(oc.Occupation.PassionList) < 4 {
+		for i := len(oc.Occupation.PassionList); i < 4; i++ {
+			p := runequest.Ability{
+				Base:            60,
+				OccupationValue: 10,
+			}
+			oc.Occupation.PassionList = append(oc.Occupation.PassionList, p)
 		}
 	}
 
@@ -911,6 +925,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s1baseSkill.CoreString,
 					UserChoice: s1baseSkill.UserChoice,
 					Category:   s1baseSkill.Category,
+					Base:       s1baseSkill.Base,
 				}
 
 				str := fmt.Sprintf("Skill-%d-1-Value", i)
@@ -934,6 +949,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: s2baseSkill.CoreString,
 					UserChoice: s2baseSkill.UserChoice,
 					Category:   s2baseSkill.Category,
+					Base:       s2baseSkill.Base,
 				}
 
 				str = fmt.Sprintf("Skill-%d-2-Value", i)
