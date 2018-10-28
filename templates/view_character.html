@@ -105,18 +105,29 @@
         <h3>Skills</h3>
         {{ range $skill := $character.Skills }}
         <ul>
-        <strong title="B: {{ $skill.Base }}, HL: {{ $skill.HomelandValue }}, OC: {{ $skill.OccupationValue }}, CU: {{ $skill.CultValue }}, CV: {{ $skill.CategoryValue }}"
-        >{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%</strong>
+        <strong title="B: {{ $skill.Base }}, HL: {{ $skill.HomelandValue }}, OC: {{ $skill.OccupationValue }}, CU: {{ $skill.CultValue }}, CV: {{ $skill.CategoryValue }} 
+        {{ range $u := $skill.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}
+        {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%</strong>
         </ul>
         {{ end }}
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
 
-      <h4>Passions</h4>
-    {{ range $passion := $character.Abilities }}
-    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base: {{ $passion.Base }}%</p>    
+      <h4>Rune Spells</h4>
+    
+    {{ range $spell := $character.RuneSpells }}
+    <p>{{ $spell }}</p>    
     {{end}}
+    <hr>
+
+    <h4>Rune Spells</h4>
+    
+    {{ range $spell := $character.SpiritMagic }}
+    <p>{{ $spell }}</p>    
+    {{end}}
+
     <hr>
 
         <h4>Hit Locations</h4>

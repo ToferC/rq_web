@@ -21,6 +21,8 @@
     "aws/request",
     "aws/session",
     "aws/signer/v4",
+    "internal/ini",
+    "internal/s3err",
     "internal/sdkio",
     "internal/sdkrand",
     "internal/sdkuri",
@@ -38,20 +40,8 @@
     "service/s3/s3manager",
     "service/sts"
   ]
-  revision = "8b15f938ed215522a37275106e847f6f0be85fe8"
-  version = "v1.15.23"
-
-[[projects]]
-  name = "github.com/fatih/structs"
-  packages = ["."]
-  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
-  version = "v1.0"
-
-[[projects]]
-  name = "github.com/go-ini/ini"
-  packages = ["."]
-  revision = "5cf292cae48347c2490ac1a58fe36735fb78df7e"
-  version = "v1.38.2"
+  revision = "34ab03ee1a2b90b3baf97ff666397c8fb9b8714b"
+  version = "v1.15.64"
 
 [[projects]]
   name = "github.com/go-pg/pg"
@@ -63,8 +53,8 @@
     "orm",
     "types"
   ]
-  revision = "c0368cd6ee62269f0a5c3d6c9c02c6d192760bc6"
-  version = "v6.14.3"
+  revision = "ae5d5e7df4b2e598390e10b66b849c6af94f092b"
+  version = "v6.15.1"
 
 [[projects]]
   name = "github.com/gorilla/context"
@@ -87,8 +77,8 @@
 [[projects]]
   name = "github.com/gorilla/sessions"
   packages = ["."]
-  revision = "03b6f63cc43ef9c7240a635a5e22b13180e822b8"
-  version = "v1.1.1"
+  revision = "f57b7e2d29c6211d16ffa52a0998272f75799030"
+  version = "v1.1.3"
 
 [[projects]]
   branch = "master"
@@ -121,16 +111,29 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/toferc/runequest"
+  packages = ["."]
+  revision = "94735b68a466da4a0aaeb55ffcf65e1fb5491653"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
-    "blowfish"
+    "blowfish",
+    "pbkdf2"
   ]
-  revision = "614d502a4dac94afa3a6ce146bd1736da82514c6"
+  revision = "e84da0312774c21d64ee2317962ef669b27ffb41"
+
+[[projects]]
+  name = "mellium.im/sasl"
+  packages = ["."]
+  revision = "e58e780e1378aa4df5dc705364ff5ae9a4dd1e04"
+  version = "v0.2.1"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9d1c8bd681aa2f43e8543030451ef78ac8a85e240196c10f94993e84af9f7923"
+  inputs-digest = "6d13585371faf038397f75e048e3a094c1bdfdb5faf1796dc0de1bef9b6e9a1d"
   solver-name = "gps-cdcl"
   solver-version = 1

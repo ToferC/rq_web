@@ -82,6 +82,7 @@
 
               <h4>Rune Spells</h4>
               <!-- Choose -->
+              <h5>Current</h5>
 
               {{ range $cr := $cult.RuneSpells }}
                 <strong>{{ $cr.CoreString }} {{ if $cr.Variable }}(varies){{else}}
@@ -100,6 +101,9 @@
                   </div>
                 {{ end }}
                 {{ end }}
+
+                <hr>
+                <h5>Full List</h5>
 
               {{ range $rs := $runespells }}
               <br><strong>{{ $rs.CoreString }} {{ if $rs.Variable }}(varies){{else}}
@@ -123,6 +127,7 @@
 
               <h4>Spirit Magic</h4>
               <!-- Choose 5 pts -->
+              <h5>Current</h5>
 
               {{ range $cr := $cult.SpiritMagic }}
                 <strong>{{ $cr.CoreString }} {{ if $cr.Variable }}(varies){{else}}
@@ -142,6 +147,8 @@
                 {{ end }}
                 {{ end }}
 
+                <hr>
+          <h5>Full List</h5>
               {{ range $sm := $spiritmagic }}
               <br><strong>{{ $sm.CoreString }} {{ if $sm.Variable }}(varies){{else}}
                   {{ if eq $sm.Cost 1 }}

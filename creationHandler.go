@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -460,6 +461,8 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 			c.Statistics[st].RuneBonus = n
 		}
 
+		c.SetAttributes()
+
 		// Set Occupation
 		ocStr := req.FormValue("Occupation")
 
@@ -857,6 +860,21 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			c.Equipment = append(c.Equipment, e)
 		}
 
+		// Set Cult
+		cStr := req.FormValue("Cult")
+
+		cID, err := strconv.Atoi(cStr)
+		if err != nil {
+			cID = 0
+		}
+
+		cultModel, err := database.PKLoadCultModel(db, int64(cID))
+		if err != nil {
+			fmt.Println("No Cult Found")
+		}
+
+		c.Cult = cultModel.Cult
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)
@@ -911,27 +929,28 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Unable to load CharacterModel")
 	}
 
+	c := cm.Character
+
 	IsAuthor := false
 
 	if username == cm.Author.UserName {
 		IsAuthor = true
 	}
 
-	occupations, err := database.ListOccupationModels(db)
-	if err != nil {
-		panic(err)
-	}
+	numRunePoints := numToArray(3)
+	numSpiritMagic := numToArray(5)
 
 	wc := WebChar{
-		CharacterModel:   cm,
-		OccupationModels: occupations,
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		IsAuthor:         IsAuthor,
-		Skills:           runequest.Skills,
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Skills:         runequest.Skills,
+		NumRunePoints:  numRunePoints,
+		NumSpiritMagic: numSpiritMagic,
 	}
-
+	// Test
 	if req.Method == "GET" {
 
 		// Render page
@@ -947,6 +966,167 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Do Stuff
+
+		c.RuneSpells = map[string]*runequest.Spell{}
+		c.SpiritMagic = map[string]*runequest.Spell{}
+
+		// Rune Magic
+		for i := 1; i < 4; i++ {
+			str := req.FormValue(fmt.Sprintf("RuneSpell-%d", i))
+			spec := req.FormValue(fmt.Sprintf("RuneSpell-%d-UserString", i))
+			if str != "" {
+				index, err := strconv.Atoi(str)
+				if err != nil {
+					index = 0
+					fmt.Println("Spell Not found")
+				}
+				baseSpell := runequest.RuneSpells[index]
+
+				s := &baseSpell
+				if spec != "" {
+					s.UserString = spec
+				}
+				s.GenerateName()
+				c.RuneSpells[s.Name] = s
+			}
+		}
+
+		// Spirit Magic
+		for i := 1; i < 4; i++ {
+			str := req.FormValue(fmt.Sprintf("SpiritMagic-%d", i))
+			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%d-UserString", i))
+			pString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Points", i))
+
+			if str != "" {
+
+				index, err := strconv.Atoi(str)
+				if err != nil {
+					index = 0
+					fmt.Println("Spell Not found")
+				}
+
+				pts, err := strconv.Atoi(pString)
+				if err != nil {
+					pts = 1
+					fmt.Println("Non-number entered")
+				}
+
+				baseSpell := runequest.RuneSpells[index]
+
+				s := &baseSpell
+				s.Points = pts
+
+				if spec != "" {
+					s.UserString = spec
+				}
+
+				s.GenerateName()
+				c.SpiritMagic[s.Name] = s
+			}
+		}
+
+		// Add choices to c.Cult.Skills
+		for i, sc := range c.Cult.SkillChoices {
+			for m := range sc.Skills {
+				str := fmt.Sprintf("SC-%d-%d", i, m)
+				if req.FormValue(str) != "" {
+					c.Cult.Skills = append(c.Cult.Skills, sc.Skills[m])
+				}
+			}
+		}
+
+		// Add choices for Weapon skills
+		for i, w := range c.Cult.Weapons {
+			str := fmt.Sprintf("Weapon-%d-CoreString", i)
+			fv := req.FormValue(str)
+			bs := runequest.Skills[fv]
+
+			ws := runequest.Skill{
+				CoreString: bs.CoreString,
+				Category:   bs.Category,
+				Base:       bs.Base,
+				CultValue:  w.Value,
+			}
+			c.Cult.Skills = append(c.Cult.Skills, ws)
+		}
+
+		// Add Skills to Character
+		for _, s := range c.Cult.Skills {
+			// Modify Skill
+			if s.UserString == "any" {
+				// User Chooses a new specialization
+				str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+				if str != "" {
+					s.UserString = str
+				}
+			}
+
+			var targetString string
+
+			// Find target string for Skill
+			if s.UserString != "" {
+				targetString = fmt.Sprintf("%s (%s)", s.CoreString, s.UserString)
+			} else {
+				targetString = fmt.Sprintf("%s", s.CoreString)
+			}
+
+			if c.Skills[targetString] != nil {
+				// Skill exists in Character, modify it via pointer
+				c.Skills[targetString].CultValue = s.CultValue
+
+				if s.Base > c.Skills[targetString].Base {
+					c.Skills[targetString].Base = s.Base
+				}
+
+				fmt.Println("Updated Character Skill: " + c.Skills[targetString].Name)
+
+			} else {
+				// We need to find the base skill from the Master list or create it
+				if runequest.Skills[s.CoreString] == nil {
+					fmt.Println("Skill is new: " + targetString)
+
+					// New Skill
+					baseSkill := &s
+					// Update our new skill
+					sc := c.SkillCategories[baseSkill.Category]
+
+					baseSkill.CategoryValue = sc.Value
+
+					baseSkill.UpdateSkill()
+
+					fmt.Println("Add Skill to character: " + baseSkill.Name)
+					c.Skills[baseSkill.Name] = baseSkill
+				} else {
+					// Skill exists in master list
+					fmt.Println("Skill in master list: " + targetString)
+
+					baseSkill := runequest.Skills[s.CoreString]
+					fmt.Println(baseSkill)
+					baseSkill.CultValue = s.CultValue
+					fmt.Println(s.CultValue, baseSkill.CultValue)
+
+					if s.Base > baseSkill.Base {
+						baseSkill.Base = s.Base
+					}
+					if s.UserString != "" {
+						baseSkill.UserString = s.UserString
+					}
+					// Add Skill to Character
+					fmt.Println("Add Skill to character: " + baseSkill.Name)
+					c.Skills[baseSkill.Name] = baseSkill
+					c.Skills[baseSkill.Name].UpdateSkill()
+				}
+			}
+		}
+
+		// Cults grant a bonus to one Passion
+		str := req.FormValue("Passion")
+		n, err := strconv.Atoi(str)
+		if err != nil {
+			n = 0
+		}
+
+		c.ModifyAbility(c.Cult.PassionList[n])
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -1002,6 +1182,8 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Unable to load CharacterModel")
 	}
 
+	c := cm.Character
+
 	IsAuthor := false
 
 	if username == cm.Author.UserName {
@@ -1020,6 +1202,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
 		IsAuthor:         IsAuthor,
+		Counter:          numToArray(4),
 		Skills:           runequest.Skills,
 	}
 
@@ -1038,6 +1221,56 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Do Stuff
+		// 25% additions
+		for i := 1; i < 5; i++ {
+			targetString := req.FormValue(fmt.Sprintf("Skill-25-%d", i))
+			fmt.Println(targetString)
+
+			// Skill exists in Character, modify it via pointer
+
+			t := time.Now()
+			tString := t.Format("2006-01-02 15:04:05")
+
+			update := &runequest.Update{
+				Date:  tString,
+				Event: "Personal Skills 25%",
+				Value: 25,
+			}
+
+			s := c.Skills[targetString]
+
+			s.Updates = []*runequest.Update{}
+
+			s.Updates = append(s.Updates, update)
+
+			s.UpdateSkill()
+
+			fmt.Println("Updated Character Skill 25%: " + s.Name)
+		}
+
+		// 10% additions
+		for i := 1; i < 5; i++ {
+			targetString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
+
+			// Skill exists in Character, modify it via pointer
+
+			t := time.Now()
+			tString := t.Format("2006-01-02 15:04:05")
+
+			update := &runequest.Update{
+				Date:  tString,
+				Event: "Personal Skills 10%",
+				Value: 10,
+			}
+
+			s := c.Skills[targetString]
+
+			s.Updates = append(s.Updates, update)
+
+			s.UpdateSkill()
+
+			fmt.Println("Updated Character Skill 10%: " + s.Name)
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {

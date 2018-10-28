@@ -42,3 +42,15 @@ func getUserSessionValues(s *sessions.Session) map[string]string {
 	}
 	return sessionMap
 }
+
+// numToArray takes and int and returns an array of [1:int]
+func numToArray(m int) []int {
+
+	a := []int{}
+
+	for i := 1; i < m+1; i++ {
+		a = append(a, i)
+	}
+
+	return a
+}

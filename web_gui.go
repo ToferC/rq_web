@@ -57,6 +57,8 @@ type WebChar struct {
 	SpiritMagic       []runequest.Spell
 	RuneSpells        []runequest.Spell
 	SubCults          []runequest.Cult
+	NumRunePoints     []int
+	NumSpiritMagic    []int
 	Counter           []int
 	MidCounter        []int
 	BigCounter        []int

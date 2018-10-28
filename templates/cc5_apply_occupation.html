@@ -10,6 +10,7 @@
 
 {{ $character := .CharacterModel.Character }}
 {{ $occupation := $character.Occupation }}
+{{ $cults := .CultModels }}
 {{ $skills := .Skills }}
 {{ $wepCategory := .WeaponCategories }}
 
@@ -46,8 +47,8 @@
             {{ range $skill := $occupation.Skills }}
             {{ if gt $skill.OccupationValue 0 }}
             <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%, 
-            {{ end }}</p>
-            {{end}}
+            {{ end }}<!-- END if --></p>
+            {{end}}<!-- END range $skill -->
 
             <hr>
 
@@ -67,9 +68,10 @@
                     </div>
                     {{ else }}
                     {{ $skill.CoreString }} +{{ $skill.OccupationValue }}%
-                    {{ end }} 
-            {{ end }}</p>
-            {{end}}
+                    {{ end }} <!-- END if "any" -->
+            {{ end }}<!-- END looking for difference IF -->
+            {{ end }}<!-- END range $occupations skills --></p>
+            {{end}}<!-- END range $skills -->
 
             <hr>
             <p>Additionally, you can choose between the following skill choices.</p>
@@ -102,8 +104,8 @@
                     <option value="{{ $m }}">{{ $p.CoreString }}</option>
                     {{ else }}
                     <option value="{{ $m }}">{{ $p.CoreString }} ({{ $p.UserString }})</option>
-                    {{ end }}
-                {{ end }}
+                    {{ end }}<!-- END if loop -->
+                {{ end }}<!-- END range $passionlist -->
                   </select>
               </div>
 
@@ -111,9 +113,9 @@
 
                 <h4>Choose Weapon Skills</h4>
 
-                    {{ range $m, $w := $occupation.Weapons }}
-                        <div class="input-group">
-                <div class="input-group-prepend">
+                {{ range $m, $w := $occupation.Weapons }}
+                <div class="input-group">
+                    <div class="input-group-prepend">
                     <span class="input-group-text" id="Weapon-{{$m}}-CoreString-addon">{{ $w.Description }}</span>
                 </div>
                   <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
@@ -122,18 +124,18 @@
                         {{ if or (eq $w.Description "Any") (eq $w.Description "Cultural") }}
                             {{ if isInString $wepCategory $s.Category}}
                                 <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
-                            {{ end }}
+                            {{ end }} <!-- END isInString -->
                         {{ else }}
                         {{ if eq $s.Category $w.Description }}
                     <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
-                        {{ end }}
-                      {{ end }}
-                      {{ end }}
+                        {{ end }} <!-- END eq s.Category -->
+                      {{ end }} <!-- END if or -->
+                      {{ end }} <!-- END range $skills -->
                   </select>
               </div>
 
                 <hr>
-                    {{ end }}
+                {{ end }} <!-- end range $occupation.Weapons -->
 
 
                 <hr>
@@ -142,10 +144,31 @@
                 {{ range $e := $occupation.Equipment }}
                     <p>{{ $e }}</p>
                 {{ end }}
-            </div>
-                    
+
+            <hr>
+
+                <h3>Choose Cult</h3>    
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Cult">Cult</span>
+                </div>
+              <select type="text" class="form-control" id="Cult" name="Cult">
+                
+                <option></option>
+                {{ range $k, $v := $cults }}
+                    <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+
+
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>
+            </div>
+                    
 
           </div> <!-- END 9 Col -->
 

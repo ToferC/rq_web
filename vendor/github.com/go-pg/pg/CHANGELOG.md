@@ -1,5 +1,15 @@
 # Changelog
 
+## v6.15
+
+- Added Options.MinIdleConns.
+- Options.MaxAge renamed to Options.MaxConnAge.
+- PoolStats.FreeConns is renamed to PoolStats.IdleConns.
+- New hook BeforeSelectQuery.
+- `,override` is renamed to `,inherit`.
+- Dialer.KeepAlive is set to 5 minutes by default.
+- Added support "scram-sha-256" authentication.
+
 ## v6.14
 
 - Fields ignored with `sql:"-"` tag are no longer considered by ORM relation detector.

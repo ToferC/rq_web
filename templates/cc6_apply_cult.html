@@ -20,10 +20,10 @@
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Apply Cult template</h4>
 
-            <p>Make choices based on your occupation.</p>
+            <p>Make choices based on your cult.</p>
 
         <h3>{{ $character.Name }}</h3>
-        <h3>{{ $character.Cult.Name }}</h3>
+        <h3>{{ $cult.Name }}</h3>
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
           style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
@@ -33,25 +33,37 @@
             <hr>
             <form action="" method="POST" enctype="multipart/form-data">
 
+        </div>
             <!-- Cults give 3 Rune Spells and 5 pts of Spirit Magic -->
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
 
             <h4>Rune Spells</h4>
 
-            {{ range $n := $cult.NumRunePoints }}
+            {{ range $n := .NumRunePoints }}
 
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="RuneSpell-{{ $n }}-addon">Rune Spell</span>
                 </div>
                   <select type="text" class="form-control" id="RuneSpell-{{ $n }}" name="RuneSpell-{{ $n }}">
+                    <option></option>
                 {{ range $m, $rs := $cult.RuneSpells }}
                     {{ if eq $rs.UserString "" }}
-                    <option value="{{ $m }}">{{ $rs.CoreString }}</option>
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Points }}pts)</option>
                     {{ else }}
-                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.UserString }})</option>
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Points }}pts) ({{ $rs.UserString }})</option>
                     {{ end }}
                 {{ end }}
                   </select>
+              </div>
+            
+            
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="RuneSpell-{{$n}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="RuneSpell-{{$n}}-UserString-addon" name="RuneSpell-{{$n}}-UserString" value ="">
               </div>
 
               <hr>
@@ -61,6 +73,45 @@
 
             <h4>Spirit Magic Spells</h4>
 
+            {{ range $n := .NumSpiritMagic }}
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="SpiritMagic-{{ $n }}-addon">Spirit Magic</span>
+                </div>
+                  <select type="text" class="form-control" id="SpiritMagic-{{ $n }}" name="SpiritMagic-{{ $n }}">
+                  <option></option>
+                {{ range $m, $sm := $cult.SpiritMagic }}
+                    {{ if eq $sm.UserString "" }}
+                    <option value="{{ $m }}">{{ $sm.CoreString }} ({{ $sm.Points }}pts)</option>
+                    {{ else }}
+                    <option value="{{ $m }}">{{ $sm.CoreString }} ({{ $sm.Points }}pts) ({{ $sm.UserString }})</option>
+                    {{ end }}
+                {{ end }}
+                  </select>
+              </div>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Points-addon">Level</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="SpiritMagic-{{$n}}-Points-addon" name="SpiritMagic-{{$n}}-Points" value ="0">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="SpiritMagic-{{$n}}-Points-addon">pts</span>
+                      </div>
+                </div>
+            
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="SpiritMagic-{{$n}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="SpiritMagic-{{$n}}-UserString-addon" name="SpiritMagic-{{$n}}-UserString" value ="">
+              </div>
+
+
+              <hr>
+              {{ end }}
+
         </div> <!-- END outer column 3 -->
 
 
@@ -68,10 +119,10 @@
 
 
             <h4>Choose Skills</h4>.
-            <p>You automatically receive the following skills from your occupation:</p>
+            <p>You automatically receive the following skills from your cult:</p>
 
             <h5>Skill Bonuses</h5>
-            {{ range $skill := $occupation.Skills }}
+            {{ range $skill := $cult.Skills }}
             {{ if gt $skill.CultValue 0 }}
             <p>{{ if eq $skill.UserString "any" }}
                     <div class="input-group">
@@ -93,7 +144,7 @@
 
             <h5>Skill Base Adjustments</h5>
                 {{ range $sk := $skills }}
-                {{ range $skill := $occupation.Skills }}
+                {{ range $skill := $cult.Skills }}
                     {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
                     <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%), 
                     {{ end }}
@@ -103,7 +154,7 @@
             <hr>
             <p>Additionally, you can choose between the following skill choices.</p>
 
-            {{ range $m, $schoice := $occupation.SkillChoices }}
+            {{ range $m, $schoice := $cult.SkillChoices }}
                 {{ if gt (len $schoice.Skills) 0}}
                 {{ range $c, $skill := $schoice.Skills }}
                     <div class="form-check form-check-inline">
@@ -116,9 +167,8 @@
 
               {{ end }} <!-- End IF loop-->
               {{ end }} <!-- END schoice Loop-->
-            </div>
-
-            <div class="col-sm-4 col-md-4 col-lg-4">
+            
+            <hr>
 
                 <h4>Choose Passion Bonus</h4>
                 <div class="input-group">
@@ -126,7 +176,7 @@
                     <span class="input-group-text" id="Passion-addon">Passion</span>
                 </div>
                   <select type="text" class="form-control" id="Passion" name="Passion">
-                {{ range $m, $p := $occupation.PassionList }}
+                {{ range $m, $p := $cult.PassionList }}
                     {{ if eq $p.UserString "" }}
                     <option>{{ $p.CoreString }}</option>
                     {{ else }}
@@ -140,7 +190,7 @@
 
                 <h4>Choose Weapon Skills</h4>
 
-                    {{ range $m, $w := $occupation.Weapons }}
+                    {{ range $m, $w := $cult.Weapons }}
                         <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Weapon-{{$m}}-CoreString-addon">{{ $w.Description }}</span>
@@ -164,13 +214,6 @@
                 <hr>
                     {{ end }}
 
-
-                <hr>
-
-                <h4>Equipment</h4>
-                {{ range $e := $occupation.Equipment }}
-                    <p>{{ $e }}</p>
-                {{ end }}
             </div>
                     
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>

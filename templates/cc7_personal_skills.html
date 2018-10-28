@@ -1,0 +1,88 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Create Character: Personal Skills</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $counter := .Counter }}
+{{ $skills := .Skills }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <h4>Create Character</h4>
+
+            <p>Choose your character's Personal Skills</p>
+
+        <h5>{{ $character.Name }}</h5>
+        <h5>{{ $character.Homeland.Name }}</h5>
+
+          <img class ="card-img-top" data-src="" alt="Thumbnail"
+          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
+          data-holder-rendered="true">
+
+            <p>{{ $character.Description }}</p>
+            <hr>
+
+        </div> <!-- END outer column 3 -->
+
+
+          <div class="col-sm-9 col-md-9 col-lg-9">
+
+            <form action="" method="POST" enctype="multipart/form-data">
+
+            <h4>Instructions</h4>
+            <p>Choose 4 skills to add +25% to and 4 skills to add +10% to.</p>
+
+            <h4>Add +25% to Skills</h4>
+            {{ range $m := $counter }}
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-25-{{$m}}-addon">Skill {{$m}}</span>
+                </div>
+                  <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}">
+                    <option></option>
+                    {{ range $s := $character.Skills }}
+                                <option value="{{ $s.Name }}">{{ $s }}</option>
+                      {{ end }} <!-- END range $skills -->
+                  </select>
+              </div>
+                <hr>
+                {{ end }} <!-- end range $occupation.Skills -->
+
+            <hr>
+
+            <h4>Add +10% to Skills</h4>
+            {{ range $m := $counter }}
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-10-{{$m}}-addon">Skill {{ $m }}</span>
+                </div>
+                  <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}">
+                    <option></option>
+                    {{ range $s := $character.Skills }}
+                                <option value="{{ $s.Name }}">{{ $s }}</option>
+                      {{ end }} <!-- END range $skills -->
+                  </select>
+              </div>
+                <hr>
+                {{ end }} <!-- end range $occupation.Skills -->
+
+
+
+                <button class="btn btn-primary" type="submit" value="Save">Save</button>
+              </form>
+
+          </div> <!-- END 9 Col -->
+
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

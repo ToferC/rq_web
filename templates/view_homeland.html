@@ -34,15 +34,11 @@
 
 <h4>Skills</h4>
 <h5>Skill Bonuses</h5>
-{{ range $co := .CategoryOrder }}
   {{ range $skill := $homeland.Skills }}
-  {{ if eq $co $skill.Category }}
   {{ if gt $skill.HomelandValue 0 }}
   <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
   {{ end }}
-  {{ end }}
   {{end}}
-  {{ end }}
 
 <h5>Skill Base Adjustments</h5>
     {{ range $sk := $skills }}
