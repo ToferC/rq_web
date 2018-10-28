@@ -461,6 +461,8 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 			c.Statistics[st].RuneBonus = n
 		}
 
+		c.AddRuneModifiers()
+
 		c.SetAttributes()
 
 		// Set Occupation
@@ -1227,25 +1229,27 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println(targetString)
 
 			// Skill exists in Character, modify it via pointer
+			if targetString != "" {
 
-			t := time.Now()
-			tString := t.Format("2006-01-02 15:04:05")
+				t := time.Now()
+				tString := t.Format("2006-01-02 15:04:05")
 
-			update := &runequest.Update{
-				Date:  tString,
-				Event: "Personal Skills 25%",
-				Value: 25,
+				update := &runequest.Update{
+					Date:  tString,
+					Event: "Personal Skills 25%",
+					Value: 25,
+				}
+
+				s := c.Skills[targetString]
+
+				s.Updates = []*runequest.Update{}
+
+				s.Updates = append(s.Updates, update)
+
+				s.UpdateSkill()
+
+				fmt.Println("Updated Character Skill (25): " + s.Name)
 			}
-
-			s := c.Skills[targetString]
-
-			s.Updates = []*runequest.Update{}
-
-			s.Updates = append(s.Updates, update)
-
-			s.UpdateSkill()
-
-			fmt.Println("Updated Character Skill 25%: " + s.Name)
 		}
 
 		// 10% additions
@@ -1253,23 +1257,25 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 			targetString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
 
 			// Skill exists in Character, modify it via pointer
+			if targetString != "" {
 
-			t := time.Now()
-			tString := t.Format("2006-01-02 15:04:05")
+				t := time.Now()
+				tString := t.Format("2006-01-02 15:04:05")
 
-			update := &runequest.Update{
-				Date:  tString,
-				Event: "Personal Skills 10%",
-				Value: 10,
+				update := &runequest.Update{
+					Date:  tString,
+					Event: "Personal Skills (10)",
+					Value: 10,
+				}
+
+				s := c.Skills[targetString]
+
+				s.Updates = append(s.Updates, update)
+
+				s.UpdateSkill()
+
+				fmt.Println("Updated Character Skill 10%: " + s.Name)
 			}
-
-			s := c.Skills[targetString]
-
-			s.Updates = append(s.Updates, update)
-
-			s.UpdateSkill()
-
-			fmt.Println("Updated Character Skill 10%: " + s.Name)
 		}
 
 		err = database.UpdateCharacterModel(db, cm)
