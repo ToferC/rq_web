@@ -50,9 +50,9 @@
                     <option></option>
                 {{ range $m, $rs := $cult.RuneSpells }}
                     {{ if eq $rs.UserString "" }}
-                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Points }}pts)</option>
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts)</option>
                     {{ else }}
-                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Points }}pts) ({{ $rs.UserString }})</option>
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts) ({{ $rs.UserString }})</option>
                     {{ end }}
                 {{ end }}
                   </select>
