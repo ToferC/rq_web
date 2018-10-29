@@ -790,8 +790,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Add empty Weapon options if < 3
-	if len(cl.Cult.Weapons) < 3 {
-		for i := len(cl.Cult.Weapons); i < 3; i++ {
+	if len(cl.Cult.Weapons) < 4 {
+		for i := len(cl.Cult.Weapons); i < 4; i++ {
 			tempWeapon := runequest.WeaponSelection{
 				Description: "",
 				Value:       0,
@@ -1012,7 +1012,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		tempSkills := []runequest.Skill{}
 
 		// Read Base Skills from Form
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 8; i++ {
 
 			core := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
