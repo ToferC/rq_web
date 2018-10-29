@@ -138,6 +138,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Error getting file ", err)
 		}
 
+		cm.Open = true
 		//fmt.Println(c)
 
 		err = database.SaveCharacterModel(db, &cm)
