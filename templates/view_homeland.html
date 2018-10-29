@@ -35,19 +35,8 @@
 <h4>Skills</h4>
 <h5>Skill Bonuses</h5>
   {{ range $skill := $homeland.Skills }}
-  {{ if gt $skill.HomelandValue 0 }}
-  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
-  {{ end }}
+  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }} ({{$skill.Base}}) ({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
   {{end}}
-
-<h5>Skill Base Adjustments</h5>
-    {{ range $sk := $skills }}
-    {{ range $skill := $homeland.Skills }}
-        {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
-        <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%)</p>
-        {{ end }}
-    {{ end }}
-    {{ end }}
 
 </div>
 
@@ -65,7 +54,7 @@
     <h5>Choose between</h5>
     <p>
         {{ range $c, $skill := $schoice.Skills }}
-        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.HomelandValue }}%
+        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%
         {{ if eq $c 0 }}<strong>--- OR ----</strong>{{else}}</p>{{ end }}
         {{ end }}
         <hr>

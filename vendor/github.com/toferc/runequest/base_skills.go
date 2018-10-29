@@ -143,7 +143,7 @@ var Skills = map[string]*Skill{
 		CoreString: "Customs",
 		UserChoice: true,
 		UserString: "Heortling",
-		Base:       25,
+		Base:       0,
 		Category:   "Knowledge",
 	},
 	"Elder Race Lore": &Skill{

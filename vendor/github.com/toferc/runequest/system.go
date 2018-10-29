@@ -55,32 +55,32 @@ func (c *Character) AddRuneModifiers() {
 
 	switch {
 	case primary == "Air":
-		c.Statistics["STR"].RuneBonus += 2
+		c.Statistics["STR"].RuneBonus = 2
 	case primary == "Earth":
-		c.Statistics["CON"].RuneBonus += 2
+		c.Statistics["CON"].RuneBonus = 2
 	case primary == "Darkness":
-		c.Statistics["SIZ"].RuneBonus += 2
+		c.Statistics["SIZ"].RuneBonus = 2
 	case primary == "Fire/Sky":
-		c.Statistics["INT"].RuneBonus += 2
+		c.Statistics["INT"].RuneBonus = 2
 	case primary == "Water":
-		c.Statistics["DEX"].RuneBonus += 2
+		c.Statistics["DEX"].RuneBonus = 2
 	case primary == "Moon":
-		c.Statistics["POW"].RuneBonus += 2
+		c.Statistics["POW"].RuneBonus = 2
 	}
 
 	switch {
 	case secondary == "Air":
-		c.Statistics["STR"].RuneBonus++
+		c.Statistics["STR"].RuneBonus = 1
 	case secondary == "Earth":
-		c.Statistics["CON"].RuneBonus++
+		c.Statistics["CON"].RuneBonus = 1
 	case secondary == "Darkness":
-		c.Statistics["SIZ"].RuneBonus++
+		c.Statistics["SIZ"].RuneBonus = 1
 	case secondary == "Fire/Sky":
-		c.Statistics["INT"].RuneBonus++
+		c.Statistics["INT"].RuneBonus = 1
 	case secondary == "Water":
-		c.Statistics["DEX"].RuneBonus++
+		c.Statistics["DEX"].RuneBonus = 1
 	case secondary == "Moon":
-		c.Statistics["POW"].RuneBonus++
+		c.Statistics["POW"].RuneBonus = 1
 	}
 
 }

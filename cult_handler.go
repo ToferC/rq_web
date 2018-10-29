@@ -279,8 +279,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:      username,
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
-		Counter:          []int{1, 2, 3},
-		BigCounter:       []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+		Counter:          numToArray(3),
+		BigCounter:       numToArray(15),
 		Passions:         runequest.PassionTypes,
 		WeaponCategories: runequest.WeaponCategories,
 		CategoryOrder:    runequest.CategoryOrder,
@@ -380,11 +380,21 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			str := req.FormValue(fmt.Sprintf("RS-%s-CoreString", rs.CoreString))
 			if str != "" {
 
-				if rs.UserChoice {
-					rs.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				t := runequest.Spell{
+					CoreString: rs.CoreString,
+					Points:     rs.Points,
+					UserChoice: rs.UserChoice,
+					Domain:     rs.Domain,
+					Source:     rs.Source,
+					Variable:   rs.Variable,
+					Cost:       rs.Cost,
 				}
 
-				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, rs)
+				if t.UserChoice {
+					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				}
+
+				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, t)
 			}
 		}
 
@@ -394,11 +404,21 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			str := req.FormValue(fmt.Sprintf("SM-%s-CoreString", sm.CoreString))
 			if str != "" {
 
-				if sm.UserChoice {
-					sm.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				t := runequest.Spell{
+					CoreString: sm.CoreString,
+					Points:     sm.Points,
+					UserChoice: sm.UserChoice,
+					Domain:     sm.Domain,
+					Source:     sm.Source,
+					Variable:   sm.Variable,
+					Cost:       sm.Cost,
 				}
 
-				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, sm)
+				if t.UserChoice {
+					t.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				}
+
+				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, t)
 			}
 		}
 
@@ -446,7 +466,38 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		skillArray := []runequest.Skill{}
 
-		for i := 1; i < 3; i++ {
+		// Add common skills
+
+		worship := runequest.Skill{
+			CoreString: "Worship",
+			UserChoice: true,
+			UserString: cl.Cult.Name,
+			Category:   "Magic",
+			Base:       5,
+			CultValue:  20,
+		}
+
+		meditate := runequest.Skill{
+			CoreString: "Meditate",
+			Category:   "Magic",
+			Base:       0,
+			CultValue:  5,
+		}
+
+		lore := runequest.Skill{
+			CoreString: "Cult Lore",
+			UserChoice: true,
+			UserString: cl.Cult.Name,
+			Category:   "Knowledge",
+			Base:       5,
+			CultValue:  15,
+		}
+
+		skillArray = append(skillArray, worship)
+		skillArray = append(skillArray, meditate)
+		skillArray = append(skillArray, lore)
+
+		for i := 1; i < 4; i++ {
 
 			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
@@ -714,8 +765,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Add extra empty skills if < 6
-	if len(cl.Cult.Skills) < 6 {
-		for i := len(cl.Cult.Skills); i < 6; i++ {
+	if len(cl.Cult.Skills) < 8 {
+		for i := len(cl.Cult.Skills); i < 8; i++ {
 			tempSkill := runequest.Skill{}
 			cl.Cult.Skills = append(cl.Cult.Skills, tempSkill)
 		}
@@ -868,11 +919,21 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			str := req.FormValue(fmt.Sprintf("RS-%s-CoreString", rs.CoreString))
 			if str != "" {
 
-				if rs.UserChoice {
-					rs.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				t := runequest.Spell{
+					CoreString: rs.CoreString,
+					Points:     rs.Points,
+					UserChoice: rs.UserChoice,
+					Domain:     rs.Domain,
+					Source:     rs.Source,
+					Variable:   rs.Variable,
+					Cost:       rs.Cost,
 				}
 
-				tempRuneSpells = append(tempRuneSpells, rs)
+				if t.UserChoice {
+					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				}
+
+				tempRuneSpells = append(tempRuneSpells, t)
 			}
 		}
 		cl.Cult.RuneSpells = tempRuneSpells
@@ -884,11 +945,21 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			str := req.FormValue(fmt.Sprintf("SM-%s-CoreString", sm.CoreString))
 			if str != "" {
 
-				if sm.UserChoice {
-					sm.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				t := runequest.Spell{
+					CoreString: sm.CoreString,
+					Points:     sm.Points,
+					UserChoice: sm.UserChoice,
+					Domain:     sm.Domain,
+					Source:     sm.Source,
+					Variable:   sm.Variable,
+					Cost:       sm.Cost,
 				}
 
-				tempSpiritMagic = append(tempSpiritMagic, sm)
+				if t.UserChoice {
+					t.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				}
+
+				tempSpiritMagic = append(tempSpiritMagic, t)
 			}
 		}
 		cl.Cult.SpiritMagic = tempSpiritMagic

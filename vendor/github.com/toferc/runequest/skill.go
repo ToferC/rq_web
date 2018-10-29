@@ -32,7 +32,7 @@ type SkillChoice struct {
 // UpdateSkill totals skill values based on input
 func (s *Skill) UpdateSkill() {
 
-	s.generateName()
+	s.GenerateName()
 
 	updates := 0
 
@@ -43,8 +43,8 @@ func (s *Skill) UpdateSkill() {
 	s.Total = s.Base + s.CategoryValue + s.HomelandValue + s.OccupationValue + s.CultValue + s.CreationBonusValue + s.InPlayXPValue + s.Value + updates
 }
 
-// generateName sets the skill map name
-func (s *Skill) generateName() {
+// GenerateName sets the skill map name
+func (s *Skill) GenerateName() {
 
 	var n string
 
@@ -89,7 +89,7 @@ func (c *Character) ModifySkill(s Skill) {
 		}
 	*/
 
-	s.generateName()
+	s.GenerateName()
 
 	if c.Skills[s.Name] == nil {
 		// Create new Skill in map

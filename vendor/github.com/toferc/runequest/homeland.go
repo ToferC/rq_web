@@ -35,7 +35,7 @@ func (c *Character) ChooseHomeland(hl *Homeland) {
 func (c *Character) ApplyHomeland() {
 
 	for _, s := range c.Homeland.Skills {
-		s.generateName()
+		s.GenerateName()
 		c.ModifySkill(s)
 	}
 
@@ -60,7 +60,6 @@ func (c *Character) ApplyHomeland() {
 	}
 
 	// Homeland grants a bonus to a rune affinity
-
 	c.ElementalRunes[c.Homeland.RuneBonus].HomelandValue += 10
 }
 

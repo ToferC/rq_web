@@ -729,10 +729,19 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 20; i++ {
 
 			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 
 			if sk != "" {
 
 				skbaseSkill := runequest.Skills[sk]
+				if skbaseSkill == nil {
+					for _, ns := range hl.Homeland.Skills {
+						if sk == ns.CoreString {
+							skbaseSkill = &ns
+						}
+					}
+				}
+
 				fmt.Println(skbaseSkill)
 
 				// Skill
@@ -755,14 +764,15 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				if err != nil {
 					b = 0
 				}
-				if b > s1.Base {
-					s1.Base = v
+
+				if s1.Base != 0 {
+					s1.Base = b
 				}
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				if s1.UserChoice && userString != "" {
+					s1.UserString = userString
 				}
+
 				skillArray = append(skillArray, s1)
 			}
 		}

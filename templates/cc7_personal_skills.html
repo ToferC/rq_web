@@ -52,10 +52,20 @@
                     {{ range $s := $character.Skills }}
                                 <option value="{{ $s.Name }}">{{ $s }}</option>
                       {{ end }} <!-- END range $skills -->
+                      <option>--------------</option>
+                      {{ range $s := $skills }}
+                        <option value="{{ $s.CoreString }}">{{ $s.CoreString }}</option>
+                      {{ end }}  <!-- END range all skills -->
                   </select>
               </div>
+              <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="Skill-25-{{$m}}-UserString-addon">Specialization (if req'd)</span>
+                      </div>
+                      <input type="text" class="form-control" aria-describedby="Skill-25-{{$m}}-UserString-addon" name="Skill-25-{{$m}}-UserString" value ="">
+                    </div>
                 <hr>
-                {{ end }} <!-- end range $occupation.Skills -->
+                {{ end }} <!-- end range counter -->
 
             <hr>
 
@@ -68,10 +78,20 @@
                   <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
-                                <option value="{{ $s.Name }}">{{ $s }}</option>
+                        <option value="{{ $s.Name }}">{{ $s }}</option>
                       {{ end }} <!-- END range $skills -->
+                      <option>--------------</option>
+                      {{ range $s := $skills }}
+                        <option value="{{ $s.CoreString }}">{{ $s.CoreString }}</option>
+                      {{ end }}  <!-- END range all skills -->
                   </select>
               </div>
+              <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="Skill-10-{{$m}}-UserString-addon">Specialization (if req'd)</span>
+                      </div>
+                      <input type="text" class="form-control" aria-describedby="Skill-10-{{$m}}-UserString-addon" name="Skill-10-{{$m}}-UserString" value ="">
+                    </div>
                 <hr>
                 {{ end }} <!-- end range $occupation.Skills -->
 

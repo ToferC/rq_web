@@ -17,7 +17,7 @@ type Statistic struct {
 
 func (s *Statistic) String() string {
 
-	s.Total = s.Base + s.Value
+	s.Total = s.Base + s.Value + s.RuneBonus
 
 	text := fmt.Sprintf("%s: %d", s.Name, s.Total)
 	return text

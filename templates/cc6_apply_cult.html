@@ -83,9 +83,9 @@
                   <option></option>
                 {{ range $m, $sm := $cult.SpiritMagic }}
                     {{ if eq $sm.UserString "" }}
-                    <option value="{{ $m }}">{{ $sm.CoreString }} ({{ $sm.Points }}pts)</option>
+                    <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}}</option>
                     {{ else }}
-                    <option value="{{ $m }}">{{ $sm.CoreString }} ({{ $sm.Points }}pts) ({{ $sm.UserString }})</option>
+                    <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}} ({{ $sm.UserString }})</option>
                     {{ end }}
                 {{ end }}
                   </select>
@@ -135,8 +135,12 @@
                         </div>
                     </div>
                     {{ else }}
+                    {{ if ne $skill.UserString "" }}
+                    {{ $skill.CoreString }} ({{ $skill.UserString }}) +{{ $skill.CultValue }}%
+                    {{ else }}
                     {{ $skill.CoreString }} +{{ $skill.CultValue }}%
                     {{ end }} 
+                    {{ end }}
             {{ end }}</p>
             {{end}}
 
@@ -152,10 +156,11 @@
                 {{ end }}
 
             <hr>
+            {{ if $cult.SkillChoices }}
             <p>Additionally, you can choose between the following skill choices.</p>
 
             {{ range $m, $schoice := $cult.SkillChoices }}
-                {{ if gt (len $schoice.Skills) 0}}
+                {{ if $schoice.Skills }}
                 {{ range $c, $skill := $schoice.Skills }}
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox-SC-{{ $m }}-{{ $c }}" value-SC-="{{ $m }}-{{ $c }}" name-SC-="{{ $m }}-{{ $c }}">
@@ -167,8 +172,37 @@
 
               {{ end }} <!-- End IF loop-->
               {{ end }} <!-- END schoice Loop-->
+              {{ end }} <!-- END show loop -->
             
             <hr>
+
+            <h4>Add +20% to one Cult skill</h4>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-20-addon">Add 20</span>
+                </div>
+                  <select type="text" class="form-control" id="Skill-20" name="Skill-20">
+                    <option></option>
+                    {{ range $n, $s := $cult.Skills }}
+                                <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
+                      {{ end }} <!-- END range $skills -->
+                  </select>
+              </div>
+                <hr>
+
+                <h4>Add +15% to one Cult skill</h4>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-15-addon">Add 15</span>
+                </div>
+                  <select type="text" class="form-control" id="Skill-15" name="Skill-15">
+                    <option></option>
+                    {{ range $n, $s := $cult.Skills }}
+                                <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
+                      {{ end }} <!-- END range $skills -->
+                  </select>
+              </div>
+                <hr>
 
                 <h4>Choose Passion Bonus</h4>
                 <div class="input-group">

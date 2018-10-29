@@ -92,8 +92,8 @@
                     <select type="text" class="form-control" id="Skill-{{ add $k 1 }}-CoreString" name="Skill-{{ add $k 1 }}-CoreString">
                       <option>{{ $v.CoreString }}</option>
                       <option></option>
-                      {{ range $skills }}
-                          <option>{{ .CoreString }}</option>
+                      {{ range $s := $skills }}
+                          <option>{{ $s.CoreString }}</option>
                     {{ end }}
                     </select>
                 </div>

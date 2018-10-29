@@ -23,7 +23,7 @@ var Domains = []string{"Rune", "Spirit", "Sorcery"}
 
 func (s *Spell) String() string {
 
-	text := fmt.Sprintf("\n%s (%dpts)", s.Name, s.Points)
+	text := fmt.Sprintf("\n%s (%dpts)", s.Name, s.Cost)
 
 	return text
 }

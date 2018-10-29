@@ -1016,7 +1016,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 				baseSpell := runequest.RuneSpells[index]
 
 				s := &baseSpell
-				s.Points = pts
+				s.Cost = pts
 
 				if spec != "" {
 					s.UserString = spec
@@ -1041,15 +1041,18 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i, w := range c.Cult.Weapons {
 			str := fmt.Sprintf("Weapon-%d-CoreString", i)
 			fv := req.FormValue(str)
-			bs := runequest.Skills[fv]
 
-			ws := runequest.Skill{
-				CoreString: bs.CoreString,
-				Category:   bs.Category,
-				Base:       bs.Base,
-				CultValue:  w.Value,
+			if fv != "" {
+				bs := runequest.Skills[fv]
+
+				ws := runequest.Skill{
+					CoreString: bs.CoreString,
+					Category:   bs.Category,
+					Base:       bs.Base,
+					CultValue:  w.Value,
+				}
+				c.Cult.Skills = append(c.Cult.Skills, ws)
 			}
-			c.Cult.Skills = append(c.Cult.Skills, ws)
 		}
 
 		// Add Skills to Character
@@ -1121,14 +1124,99 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Cults grant a bonus to one Passion
-		str := req.FormValue("Passion")
-		n, err := strconv.Atoi(str)
-		if err != nil {
-			n = 0
+		// Add 20 to one cult skill
+		targetString20 := req.FormValue("Skill-20")
+
+		// Skill exists in Character, modify it via pointer
+		if targetString20 != "" {
+
+			index, err := strconv.Atoi(targetString20)
+			if err != nil {
+				index = 0
+				fmt.Println("Skill Not found")
+			}
+
+			baseSkill := c.Cult.Skills[index]
+			targetSkill := &runequest.Skill{
+				CoreString: baseSkill.CoreString,
+				UserString: baseSkill.UserString,
+			}
+
+			targetSkill.GenerateName()
+
+			t := time.Now()
+			tString := t.Format("2006-01-02 15:04:05")
+
+			update := &runequest.Update{
+				Date:  tString,
+				Event: "Cult Skill (20)",
+				Value: 20,
+			}
+
+			s := c.Skills[targetSkill.Name]
+
+			if s.Updates == nil {
+				s.Updates = []*runequest.Update{}
+			}
+
+			s.Updates = append(s.Updates, update)
+
+			s.UpdateSkill()
+
+			fmt.Println("Updated Character Skill 20%: " + s.Name)
 		}
 
-		c.ModifyAbility(c.Cult.PassionList[n])
+		// Add 15 to one Cult Skill
+		targetString15 := req.FormValue("Skill-15")
+
+		// Skill exists in Character, modify it via pointer
+		if targetString15 != "" {
+
+			index, err := strconv.Atoi(targetString15)
+			if err != nil {
+				index = 0
+				fmt.Println("Skill Not found")
+			}
+
+			baseSkill := c.Cult.Skills[index]
+			targetSkill := &runequest.Skill{
+				CoreString: baseSkill.CoreString,
+				UserString: baseSkill.UserString,
+			}
+
+			targetSkill.GenerateName()
+
+			t := time.Now()
+			tString := t.Format("2006-01-02 15:04:05")
+
+			update := &runequest.Update{
+				Date:  tString,
+				Event: "Cult Skill (15)",
+				Value: 15,
+			}
+
+			s := c.Skills[targetSkill.Name]
+
+			if s.Updates == nil {
+				s.Updates = []*runequest.Update{}
+			}
+
+			s.Updates = append(s.Updates, update)
+
+			s.UpdateSkill()
+
+			fmt.Println("Updated Character Skill 10%: " + s.Name)
+		}
+
+		// Cults grant a bonus to one Passion
+		str := req.FormValue("Passion")
+		if str != "" {
+			n, err := strconv.Atoi(str)
+			if err != nil {
+				n = 0
+			}
+			c.ModifyAbility(c.Cult.PassionList[n])
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -1226,10 +1314,29 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		// 25% additions
 		for i := 1; i < 5; i++ {
 			targetString := req.FormValue(fmt.Sprintf("Skill-25-%d", i))
+			userString := req.FormValue(fmt.Sprintf("Skill-25-%d-UserString", i))
+
 			fmt.Println(targetString)
 
 			// Skill exists in Character, modify it via pointer
 			if targetString != "" {
+				// Determine if skill already exists in c.Skills
+
+				s := c.Skills[targetString]
+
+				if s == nil {
+					s = runequest.Skills[targetString]
+					if userString != "" {
+						s.UserString = userString
+					}
+
+					s.GenerateName()
+
+					// Add Skill to Character
+					fmt.Println("Add Skill to character: " + s.Name)
+					c.Skills[s.Name] = s
+					c.Skills[s.Name].UpdateSkill()
+				}
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")
@@ -1240,9 +1347,9 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 					Value: 25,
 				}
 
-				s := c.Skills[targetString]
-
-				s.Updates = []*runequest.Update{}
+				if s.Updates == nil {
+					s.Updates = []*runequest.Update{}
+				}
 
 				s.Updates = append(s.Updates, update)
 
@@ -1255,9 +1362,26 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		// 10% additions
 		for i := 1; i < 5; i++ {
 			targetString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
+			userString := req.FormValue(fmt.Sprintf("Skill-10-%d-UserString", i))
 
 			// Skill exists in Character, modify it via pointer
 			if targetString != "" {
+
+				s := c.Skills[targetString]
+
+				if s == nil {
+					s = runequest.Skills[targetString]
+					if userString != "" {
+						s.UserString = userString
+					}
+
+					s.GenerateName()
+
+					// Add Skill to Character
+					fmt.Println("Add Skill to character: " + s.Name)
+					c.Skills[s.Name] = s
+					c.Skills[s.Name].UpdateSkill()
+				}
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")
@@ -1267,8 +1391,6 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 					Event: "Personal Skills (10)",
 					Value: 10,
 				}
-
-				s := c.Skills[targetString]
 
 				s.Updates = append(s.Updates, update)
 

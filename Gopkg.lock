@@ -113,7 +113,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "94735b68a466da4a0aaeb55ffcf65e1fb5491653"
+  revision = "e5275ebcbbbb6da2da1a40bca0d1bf03b3a4af66"
 
 [[projects]]
   branch = "master"
@@ -123,7 +123,7 @@
     "blowfish",
     "pbkdf2"
   ]
-  revision = "e84da0312774c21d64ee2317962ef669b27ffb41"
+  revision = "45a5f77698d342a8c2ef8423abdf0ba6880b008a"
 
 [[projects]]
   name = "mellium.im/sasl"

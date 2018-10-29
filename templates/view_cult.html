@@ -92,7 +92,7 @@
       <h5>Choose between</h5>
       <p>
         {{ range $c, $skill := $schoice.Skills }}
-        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.CultValue }}%
+        {{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.CultValue }}%
         {{ if eq $c 0 }}<strong>--- OR ----</strong>{{else}}</p>{{ end }}
       {{ end }}
       <hr>

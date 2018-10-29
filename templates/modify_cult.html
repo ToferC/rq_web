@@ -173,7 +173,7 @@
             <!-- Choose from list of Cults ($cults) -->
 
             {{ range $c := $cults }}
-            {{ if not $c.Cult.SubCult }}
+            {{ if and (not $c.Cult.SubCult) (ne $c.Cult.Name $cult.Name) }}
               <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $ac := $cult.AssociatedCults }}{{ if eq $c.Cult.Name $ac.Name }}checked{{end}}{{ end }}>
               {{ end }}
               {{ end }}
@@ -184,7 +184,7 @@
               <!-- Choose from list of Cults ($cults) -->
   
               {{ range $c := $cults }}
-              {{ if $c.Cult.SubCult }}
+              {{ if and ($c.Cult.SubCult) (ne $c.Cult.Name $cult.Name) }}
                 <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="SubCult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $sc := $cult.SubCults }}{{ if eq $c.Cult.Name $sc.Name }}checked{{end}}{{ end }}>
             {{ end }}
             {{ end }}
