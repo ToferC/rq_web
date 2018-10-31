@@ -21,7 +21,7 @@
               data-holder-rendered="true"></a>
               <div class="card-body">
                 <h5 class="card-title">{{ .Character.Name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} | {{ .Character.Occupation.Name }} {{ if .Character.Cult }}| {{ .Character.Cult.Name }}{{ end }} 
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} {{if .Character.Occupation }}| {{ .Character.Occupation.Name }}{{end}} {{ if .Character.Cult }}| {{ .Character.Cult.Name }}{{ end }} 
                 <h6>{{ .Author.UserName }}</h6>
                 <p class="card-text">
                   {{ sliceString .Character.Description 77 }}
