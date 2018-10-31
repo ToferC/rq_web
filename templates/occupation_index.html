@@ -33,9 +33,10 @@
                     <a type="button" class="btn btn-sm btn-secondary"
                     href="/modify_occupation/{{ .ID }}">Modify</a>
                     {{ end }}
-                    {{ if $IsAdmin "true" }}
+                    {{ if eq $IsAdmin "true" }}
                     <a type="button" class="btn btn-sm btn-danger"
                     href="/delete_occupation/{{ .ID }}">Delete</a>
+                    {{ end }}
                   </div>
                 </div>
               </div>
