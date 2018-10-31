@@ -16,11 +16,13 @@
             <div class="card mb-4 box-shadow">
               <a href="/view_character/{{ .ID }}">
               <img class ="card-img-top" data-src="" alt="Thumbnail"
-              style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .Image.Path }}"
+              style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .Image.Path }}"
               data-holder-rendered="true">
               <div class="card-body"></a>
                 <h5 class="card-title">{{ .Character.Name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Setting }} | {{ .Character.PointCost }}pts | {{ .Author.UserName }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} | {{ .Character.Occupation.Name }} {{ if .Character.Cult }}| {{ .Character.Cult.Name }}{{ end }} 
+                <h6>{{ .Author.UserName }}</h6>
+
                 <p class="card-text">
                   {{ sliceString .Character.Description 144 }}
                 </p>

@@ -43,7 +43,6 @@
 
             <h5>Skill Bonuses</h5>
             {{ range $skill := $homeland.Skills }}
-            {{ if gt $skill.HomelandValue 0 }}
             <p>
                     {{ if eq $skill.UserString "any" }}
                     <div class="input-group">
@@ -56,21 +55,11 @@
                         </div>
                     </div>
                     {{ else }}
-                    {{ $skill.CoreString }} +{{ $skill.HomelandValue }}%
+                    {{ $skill.CoreString }} ({{ $skill.Base }}) {{ if $skill.UserString }}({{ $skill.UserString }}){{end}}
+                    {{ if $skill.HomelandValue }}+{{ $skill.HomelandValue }}%{{end}}
                     {{ end }} 
-            {{ end }}</p>
+            </p>
             {{end}}
-
-            <hr>
-
-            <h5>Skill Base Adjustments</h5>
-                {{ range $sk := $skills }}
-                {{ range $skill := $homeland.Skills }}
-                    {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
-                    <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%), 
-                    {{ end }}
-                {{ end }}</p>
-                {{ end }}
 
             <hr>
             <p>Additionally, you can choose between the following skill choices.</p>

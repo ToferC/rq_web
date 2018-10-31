@@ -43,20 +43,9 @@
             <h4>Choose Skills</h4>.
             <p>You automatically receive the following skills from your occupation:</p>
 
-            <h5>Skill Bonuses</h5>
-            {{ range $skill := $occupation.Skills }}
-            {{ if gt $skill.OccupationValue 0 }}
-            <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%, 
-            {{ end }}<!-- END if --></p>
-            {{end}}<!-- END range $skill -->
-
-            <hr>
-
-            <h5>Skill Base Adjustments</h5>
-                {{ range $sk := $skills }}
                 {{ range $skill := $occupation.Skills }}
-                    {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
-                    <p>{{ if eq $skill.UserString "any" }}
+                    <p>
+                    {{ if eq $skill.UserString "any" }}
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CoreString}}</span>
@@ -67,11 +56,10 @@
                         </div>
                     </div>
                     {{ else }}
-                    {{ $skill.CoreString }} +{{ $skill.OccupationValue }}%
-                    {{ end }} <!-- END if "any" -->
-            {{ end }}<!-- END looking for difference IF -->
+                    {{ $skill.CoreString }} {{ if $skill.UserString }}({{ $skill.UserString }}){{end}} +{{ $skill.OccupationValue }}%
+                    {{ end }} 
+            </p>
             {{ end }}<!-- END range $occupations skills --></p>
-            {{end}}<!-- END range $skills -->
 
             <hr>
             <p>Additionally, you can choose between the following skill choices.</p>

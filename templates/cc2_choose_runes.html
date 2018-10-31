@@ -14,7 +14,7 @@
         <hr>
         <div class="row">
 
-        <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Create Character</h4>
 
             <p>Choose your character's Runes</p>
@@ -28,16 +28,17 @@
 
             <p>{{ $character.Description }}</p>
             <hr>
+            <h4>Instructions</h4>
+            <p>Follow the instructions for both Elemental and Power runes and then spread 50% of bonus points as desired.</p>
+          <hr>
+            <form action="" method="POST" enctype="multipart/form-data">
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+
 
         </div> <!-- END outer column 3 -->
 
 
-          <div class="col-sm-9 col-md-9 col-lg-9">
-
-            <form action="" method="POST" enctype="multipart/form-data">
-
-            <h4>Instructions</h4>
-            <p>Follow the instructions for both Elemental and Power runes and then spread 50% of bonus points as desired.</p>
+          <div class="col-sm-4 col-md-4 col-lg-4">
 
             <h4>Elemental Runes</h4>
             <p>Choose one rune at 60%, one at 40% and one at 20%.</p>
@@ -74,7 +75,9 @@
 
                 <hr>
                 {{ end }}
+          </div>
 
+          <div class="col-sm-4 col-md-4 col-lg-4">
 
             <h4>Power Runes</h4>
             <p>Choose two runes at 75%. The Runes opposing Rune will start at 25%.</p>

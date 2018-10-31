@@ -103,7 +103,7 @@ var Skills = map[string]*Skill{
 		CoreString: "Speak",
 		UserChoice: true,
 		UserString: "Heortling",
-		Base:       50,
+		Base:       0,
 		Category:   "Communication",
 	},
 	// Knowledge

@@ -45,11 +45,14 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="{{ $k }}-addon">{{ $st.Name }}</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value ="{{ $st.Base }}">
+                  <input type="number" id="{{$k}}-roll" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value ="{{ $st.Base }}">
                 </div>
 
                 <hr>
                 {{ end }}
+
+                <input type="button" value="Re-roll" onclick="randomValue();" />
+                <hr>
 
                 <h3>Choose Occupation</h3>    
               <div class="input-group">
@@ -75,5 +78,42 @@
 
           </div> <!-- END outer ROW -->
         </div> <!-- END container -->
+
+
+<script type="text/javascript">
+
+  // Original JavaScript code by Chirp Internet: www.chirp.com.au
+  // Please acknowledge use of this code by including this header.
+
+  function rollDie(sides)
+  {
+    if(!sides) sides = 6;
+    with(Math) return 1 + floor(random() * sides);
+  }
+
+  function rollDice(number, sides)
+  {
+    var total = 0;
+    while(number-- > 0) total += rollDie(sides);
+    return total;
+  }
+
+  function randomValue() {
+      document.getElementById('STR-roll').value = rollDice(3,6);
+      
+      document.getElementById('CON-roll').value = rollDice(3,6);
+      
+      document.getElementById('SIZ-roll').value = rollDice(2,6)+6;
+      
+      document.getElementById('INT-roll').value = rollDice(2,6)+6;
+      
+      document.getElementById('POW-roll').value = rollDice(3,6);
+      
+      document.getElementById('CHA-roll').value = rollDice(3,6);
+      
+      document.getElementById('DEX-roll').value = rollDice(3,6);
+      }
+
+  </script>
 
 {{ end }} <!-- end content -->

@@ -50,7 +50,7 @@
                   <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
-                                <option value="{{ $s.Name }}">{{ $s }}</option>
+                        <option value="{{ $s.Name }}">{{ $s }}</option>
                       {{ end }} <!-- END range $skills -->
                       <option>--------------</option>
                       {{ range $s := $skills }}

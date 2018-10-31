@@ -123,8 +123,8 @@
 
             <h5>Skill Bonuses</h5>
             {{ range $skill := $cult.Skills }}
-            {{ if gt $skill.CultValue 0 }}
-            <p>{{ if eq $skill.UserString "any" }}
+            <p>
+                    {{ if eq $skill.UserString "any" }}
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CoreString}}</span>
@@ -135,27 +135,13 @@
                         </div>
                     </div>
                     {{ else }}
-                    {{ if ne $skill.UserString "" }}
-                    {{ $skill.CoreString }} ({{ $skill.UserString }}) +{{ $skill.CultValue }}%
-                    {{ else }}
-                    {{ $skill.CoreString }} +{{ $skill.CultValue }}%
+                    {{ $skill.CoreString }} {{ if $skill.UserString }}({{ $skill.UserString }}){{end}} +{{ $skill.CultValue }}%
                     {{ end }} 
-                    {{ end }}
-            {{ end }}</p>
+            </p>
             {{end}}
 
             <hr>
 
-            <h5>Skill Base Adjustments</h5>
-                {{ range $sk := $skills }}
-                {{ range $skill := $cult.Skills }}
-                    {{ if and (eq $skill.CoreString $sk.CoreString)  (or (gt $skill.Base $sk.Base) (ne $skill.UserString $sk.UserString)) }}
-                    <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} ({{ $skill.Base }}%), 
-                    {{ end }}
-                {{ end }}</p>
-                {{ end }}
-
-            <hr>
             {{ if $cult.SkillChoices }}
             <p>Additionally, you can choose between the following skill choices.</p>
 
@@ -164,7 +150,7 @@
                 {{ range $c, $skill := $schoice.Skills }}
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox-SC-{{ $m }}-{{ $c }}" value-SC-="{{ $m }}-{{ $c }}" name-SC-="{{ $m }}-{{ $c }}">
-                        <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}{{end}} +{{ $skill.CultValue }}%</label>
+                        <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.CultValue }}%</label>
                     </div>
                 {{ end }} <!-- END skill loop-->
 

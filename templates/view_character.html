@@ -105,7 +105,7 @@
         <h3>Skills</h3>
         {{ range $skill := $character.Skills }}
         <ul>
-        <strong title="B: {{ $skill.Base }}, HL: {{ $skill.HomelandValue }}, OC: {{ $skill.OccupationValue }}, CU: {{ $skill.CultValue }}, CV: {{ $skill.CategoryValue }} 
+        <strong title="{{ $skill.Name }}: B: {{ $skill.Base }}, HL: {{ $skill.HomelandValue }}, OC: {{ $skill.OccupationValue }}, CU: {{ $skill.CultValue }}, CV: {{ $skill.CategoryValue }} 
         {{ range $u := $skill.Updates }}
         {{ $u.Event }}: {{ $u.Value }}
         {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%</strong>
@@ -122,7 +122,7 @@
     {{end}}
     <hr>
 
-    <h4>Rune Spells</h4>
+    <h4>Spirit Magic</h4>
     
     {{ range $spell := $character.SpiritMagic }}
     <p>{{ $spell }}</p>    
