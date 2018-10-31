@@ -34,6 +34,10 @@
                     <a type="button" class="btn btn-sm btn-secondary"
                     href="/modify/{{ .ID }}">Modify</a>
                     {{ end }}
+                    {{ if (or .IsAuthor (eq .IsAdmin "true")) }}
+                    <a type="button" class="btn btn-sm btn-danger"
+                    href="/delete/{{ .ID }}">Delete</a>
+                    {{ end }}
                   </div>
                 </div>
               </div>
