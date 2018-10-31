@@ -961,7 +961,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 				if s2.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = userString
+					s2.UserString = req.FormValue(userString)
 				}
 
 				// Form SkillChoice
