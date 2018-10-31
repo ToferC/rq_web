@@ -16,7 +16,7 @@ var db *pg.DB
 func init() {
 	os.Setenv("DBUser", "chris")
 	os.Setenv("DBPass", "12345")
-	os.Setenv("DBName", "ore_engine")
+	os.Setenv("DBName", "runequest")
 }
 
 func main() {
@@ -55,7 +55,7 @@ func main() {
 	for {
 		var username, email, password, password2 string
 
-		fmt.Println("Create SuperUser for ORE Engine")
+		fmt.Println("Create SuperUser for Runequest")
 
 		username = oneroll.UserQuery("Enter user name (or hit Enter to quit): ")
 

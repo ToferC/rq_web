@@ -6,6 +6,7 @@
 
 {{define "content"}}
 {{ $user := .SessionUser }}
+{{ $IsAdmin := .IsAdmin }}
 
 <h3>Open Character Roster</h3>
 
@@ -34,7 +35,7 @@
                     <a type="button" class="btn btn-sm btn-secondary"
                     href="/modify/{{ .ID }}">Modify</a>
                     {{ end }}
-                    {{ if (or .IsAuthor (eq .IsAdmin "true")) }}
+                    {{ if eq $IsAdmin "true" }}
                     <a type="button" class="btn btn-sm btn-danger"
                     href="/delete/{{ .ID }}">Delete</a>
                     {{ end }}

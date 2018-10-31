@@ -6,6 +6,7 @@
 
 {{define "content"}}
 {{ $user := .SessionUser }}
+{{ $IsAdmin := .IsAdmin }}
 
 <h3>Homeland Index</h3>
 
@@ -32,7 +33,7 @@
                     <a type="button" class="btn btn-sm btn-secondary"
                     href="/modify_homeland/{{ .ID }}">Modify</a>
                     {{ end }}
-                    {{ if eq .IsAdmin "true" }}
+                    {{ if eq $IsAdmin "true" }}
                     <a type="button" class="btn btn-sm btn-danger"
                     href="/delete_homeland/{{ .ID }}">Delete</a>
                   </div>

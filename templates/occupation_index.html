@@ -6,6 +6,7 @@
 
 {{define "content"}}
 {{ $user := .SessionUser }}
+{{ $IsAdmin := .IsAdmin }}
 
 <h3>Occupation Index</h3>
 
@@ -32,7 +33,7 @@
                     <a type="button" class="btn btn-sm btn-secondary"
                     href="/modify_occupation/{{ .ID }}">Modify</a>
                     {{ end }}
-                    {{ if .IsAdmin "true" }}
+                    {{ if $IsAdmin "true" }}
                     <a type="button" class="btn btn-sm btn-danger"
                     href="/delete_occupation/{{ .ID }}">Delete</a>
                   </div>
