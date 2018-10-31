@@ -48,6 +48,7 @@ func (c *Character) DetermineSkillCategoryValues() {
 
 			// Identify the stat
 			stat := c.Statistics[sm.statistic]
+			stat.UpdateStatistic()
 
 			// Match to SkillCategory
 			s := c.SkillCategories[k]
@@ -66,9 +67,9 @@ func (c *Character) DetermineSkillCategoryValues() {
 				s.Value += sm.values[20]
 			case stat.Total > 20:
 				if sm.values[20] > 0 {
-					s.Value += sm.values[20] + ((stat.Value-20)/4)*5
+					s.Value += sm.values[20] + ((stat.Total-20)/4)*5
 				} else {
-					s.Value += sm.values[20] - ((stat.Value-20)/4)*5
+					s.Value += sm.values[20] - ((stat.Total-20)/4)*5
 				}
 			}
 		}

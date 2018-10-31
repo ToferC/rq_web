@@ -10,6 +10,9 @@ func NewCharacter(name string) *Character {
 		ElementalRunes: ElementalRunes,
 		RuneSpells:     map[string]*Spell{},
 		SpiritMagic:    map[string]*Spell{},
+		Homeland:       &Homeland{},
+		Occupation:     &Occupation{},
+		Cult:           &Cult{},
 
 		SkillCategories: map[string]*SkillCategory{},
 	}

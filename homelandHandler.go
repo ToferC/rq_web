@@ -256,12 +256,12 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		Character: c,
 	}
 
-	c.Statistics["STR"].Value = 10
-	c.Statistics["DEX"].Value = 10
-	c.Statistics["INT"].Value = 10
-	c.Statistics["POW"].Value = 10
-	c.Statistics["CHA"].Value = 10
-	c.Statistics["SIZ"].Value = 10
+	c.Statistics["STR"].Base = 10
+	c.Statistics["DEX"].Base = 10
+	c.Statistics["INT"].Base = 10
+	c.Statistics["POW"].Base = 10
+	c.Statistics["CHA"].Base = 10
+	c.Statistics["SIZ"].Base = 10
 
 	wc := WebChar{
 		CharacterModel: &cm,

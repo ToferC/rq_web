@@ -233,7 +233,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.Description = req.FormValue("Description")
 
 		for _, st := range runequest.StatMap {
-			c.Statistics[st].Value, _ = strconv.Atoi(req.FormValue(st))
+			c.Statistics[st].Base, _ = strconv.Atoi(req.FormValue(st))
 		}
 
 		for _, sk := range c.Skills {
@@ -440,7 +440,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.Description = req.FormValue("Description")
 
 		for _, st := range runequest.StatMap {
-			c.Statistics[st].Value, _ = strconv.Atoi(req.FormValue(st))
+			c.Statistics[st].Base, _ = strconv.Atoi(req.FormValue(st))
 		}
 
 		for _, sk := range c.Skills {

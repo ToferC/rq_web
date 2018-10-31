@@ -75,11 +75,9 @@ func (c *Character) DetermineMagicPoints() *Attribute {
 	}
 
 	p := c.Statistics["POW"]
-	p.Total = p.Base + p.Value
+	p.UpdateStatistic()
 
-	pow := p.Total
-
-	mp.Base = pow
+	mp.Base = p.Total
 
 	return mp
 }
@@ -93,12 +91,12 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	}
 
 	s := c.Statistics["SIZ"]
-	s.Total = s.Base + s.Value
+	s.UpdateStatistic()
 
 	siz := s.Total
 
 	p := c.Statistics["POW"]
-	p.Total = p.Base + p.Value
+	p.UpdateStatistic()
 
 	pow := p.Total
 
@@ -106,7 +104,7 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	fmt.Println("POW ", pow)
 
 	con := c.Statistics["CON"]
-	con.Total = con.Base + con.Value
+	con.UpdateStatistic()
 
 	fmt.Println("CON ", con.Total)
 
@@ -166,7 +164,7 @@ func (c *Character) DetermineHealingRate() *Attribute {
 
 	con := c.Statistics["CON"]
 
-	con.Total = con.Base + con.Value
+	con.UpdateStatistic()
 	tCon := con.Total
 
 	switch {
@@ -195,8 +193,8 @@ func (c *Character) DetermineDamageBonus() *Attribute {
 	str := c.Statistics["STR"]
 	siz := c.Statistics["SIZ"]
 
-	str.Total = str.Base + str.Value
-	siz.Total = siz.Base + siz.Value
+	str.UpdateStatistic()
+	siz.UpdateStatistic()
 
 	db := siz.Total + str.Total
 
@@ -241,8 +239,8 @@ func (c *Character) DetermineSpiritDamage() *Attribute {
 	pow := c.Statistics["POW"]
 	cha := c.Statistics["CHA"]
 
-	pow.Total = pow.Base + pow.Value
-	cha.Total = cha.Base + cha.Value
+	pow.UpdateStatistic()
+	cha.UpdateStatistic()
 
 	db := pow.Total + cha.Total
 
@@ -289,7 +287,7 @@ func (c *Character) DetermineDexStrikeRank() *Attribute {
 
 	dex := c.Statistics["DEX"]
 
-	dex.Total = dex.Base + dex.Value
+	dex.UpdateStatistic()
 
 	switch {
 	case dex.Total < 6:
@@ -318,7 +316,7 @@ func (c *Character) DetermineSizStrikeRank() *Attribute {
 
 	siz := c.Statistics["SIZ"]
 
-	siz.Total = siz.Base + siz.Value
+	siz.UpdateStatistic()
 
 	switch {
 	case siz.Total < 7:

@@ -5,7 +5,6 @@ import "fmt"
 // Statistic is a core element for all characters in an RPG system
 type Statistic struct {
 	Name            string
-	Value           int
 	Base            int
 	RuneBonus       int
 	Updates         []*Update
@@ -17,7 +16,7 @@ type Statistic struct {
 
 func (s *Statistic) String() string {
 
-	s.Total = s.Base + s.Value + s.RuneBonus
+	s.Total = s.Base + s.RuneBonus
 
 	text := fmt.Sprintf("%s: %d", s.Name, s.Total)
 	return text
@@ -38,8 +37,20 @@ func (c *Character) TotalStatistics() {
 			updates += u.Value
 		}
 
-		s.Total = s.Base + s.Value + s.RuneBonus + updates
+		s.Total = s.Base + s.RuneBonus + updates
 	}
+}
+
+// UpdateStatistic updates values for stats after being modified
+func (s *Statistic) UpdateStatistic() {
+
+	updates := 0
+
+	for _, u := range s.Updates {
+		updates += u.Value
+	}
+
+	s.Total = s.Base + s.RuneBonus + updates
 }
 
 // RuneQuestStats is the base stats for RuneQuest

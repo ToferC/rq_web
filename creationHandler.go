@@ -1007,7 +1007,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 			str := req.FormValue(fmt.Sprintf("SpiritMagic-%d", i))
 			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%d-UserString", i))
-			pString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Points", i))
+			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Cost", i))
 
 			if str != "" {
 
@@ -1017,16 +1017,21 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Spell Not found")
 				}
 
-				pts, err := strconv.Atoi(pString)
+				cost, err := strconv.Atoi(cString)
 				if err != nil {
-					pts = 1
+					cost = 1
 					fmt.Println("Non-number entered")
 				}
 
 				baseSpell := c.Cult.SpiritMagic[index]
 
-				s := &baseSpell
-				s.Cost = pts
+				s := &runequest.Spell{
+					Name:       baseSpell.Name,
+					CoreString: baseSpell.CoreString,
+					UserString: baseSpell.UserString,
+					Cost:       cost,
+					Domain:     baseSpell.Domain,
+				}
 
 				if spec != "" {
 					s.UserString = spec

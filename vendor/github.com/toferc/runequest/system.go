@@ -26,12 +26,12 @@ func RollDice(max, min, bonus, numDice int) int {
 
 // Sorting Functions
 
-// ByValue implements the sort interface for abilities
-type ByValue []*Ability
+// ByTotal implements the sort interface for abilities
+type ByTotal []*Ability
 
-func (a ByValue) Len() int           { return len(a) }
-func (a ByValue) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByValue) Less(i, j int) bool { return a[i].Value > a[j].Value }
+func (a ByTotal) Len() int           { return len(a) }
+func (a ByTotal) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByTotal) Less(i, j int) bool { return a[i].Total > a[j].Total }
 
 // AddRuneModifiers adds stat modifiers based on runes
 func (c *Character) AddRuneModifiers() {
@@ -39,6 +39,7 @@ func (c *Character) AddRuneModifiers() {
 	var runes []*Ability
 
 	for _, a := range c.ElementalRunes {
+		a.UpdateAbility()
 		runes = append(runes, a)
 	}
 
@@ -48,7 +49,7 @@ func (c *Character) AddRuneModifiers() {
 	}
 
 	// Sort Runes
-	sort.Sort(ByValue(runes))
+	sort.Sort(ByTotal(runes))
 	fmt.Println(runes)
 
 	primary, secondary := runes[0].Name, runes[1].Name
