@@ -617,10 +617,6 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				// Skill exists in Character, modify it via pointer
 				c.Skills[targetString].HomelandValue = s.HomelandValue
 
-				if s.Base > c.Skills[targetString].Base {
-					c.Skills[targetString].Base = s.Base
-				}
-
 				fmt.Println("Updated Character Skill: " + c.Skills[targetString].Name)
 
 			} else {
@@ -643,7 +639,16 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					// Skill exists in master list
 					fmt.Println("Skill in master list: " + targetString)
 
-					baseSkill := runequest.Skills[s.CoreString]
+					bs := runequest.Skills[s.CoreString]
+
+					baseSkill := &runequest.Skill{
+						CoreString: bs.CoreString,
+						UserString: bs.UserString,
+						Category:   bs.Category,
+						Base:       bs.Base,
+						UserChoice: bs.UserChoice,
+					}
+
 					fmt.Println(baseSkill)
 					baseSkill.HomelandValue = s.HomelandValue
 					fmt.Println(s.HomelandValue, baseSkill.HomelandValue)
@@ -846,7 +851,16 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					// Skill exists in master list
 					fmt.Println("Skill in master list: " + targetString)
 
-					baseSkill := runequest.Skills[s.CoreString]
+					bs := runequest.Skills[s.CoreString]
+
+					baseSkill := &runequest.Skill{
+						CoreString: bs.CoreString,
+						UserString: bs.UserString,
+						Category:   bs.Category,
+						Base:       bs.Base,
+						UserChoice: bs.UserChoice,
+					}
+
 					fmt.Println(baseSkill)
 					baseSkill.OccupationValue = s.OccupationValue
 					fmt.Println(s.OccupationValue, baseSkill.OccupationValue)
@@ -1140,7 +1154,16 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 					// Skill exists in master list
 					fmt.Println("Skill in master list: " + targetString)
 
-					baseSkill := runequest.Skills[s.CoreString]
+					bs := runequest.Skills[s.CoreString]
+
+					baseSkill := &runequest.Skill{
+						CoreString: bs.CoreString,
+						UserString: bs.UserString,
+						Category:   bs.Category,
+						Base:       bs.Base,
+						UserChoice: bs.UserChoice,
+					}
+
 					fmt.Println(baseSkill)
 					baseSkill.CultValue = s.CultValue
 					fmt.Println(s.CultValue, baseSkill.CultValue)
@@ -1351,8 +1374,17 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		// Do Stuff
 		// 25% additions
 		for i := 1; i < 5; i++ {
-			targetString := req.FormValue(fmt.Sprintf("Skill-25-%d", i))
+			coreString := req.FormValue(fmt.Sprintf("Skill-25-%d", i))
 			userString := req.FormValue(fmt.Sprintf("Skill-25-%d-UserString", i))
+
+			var targetString string
+
+			// Find target string for Skill
+			if userString != "" {
+				targetString = fmt.Sprintf("%s (%s)", coreString, userString)
+			} else {
+				targetString = fmt.Sprintf("%s", coreString)
+			}
 
 			fmt.Println(targetString)
 
@@ -1360,31 +1392,40 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 			if targetString != "" {
 				// Determine if skill already exists in c.Skills
 
-				s := c.Skills[targetString]
-
-				if s == nil {
+				if c.Skills[targetString] == nil {
 					// Skill isn't in c.Skills, so create new skill
 					fmt.Println("Unable to find skill: " + targetString)
 
-					s = runequest.Skills[targetString]
-					if userString != "" {
-						s.UserString = userString
+					bs := runequest.Skills[coreString]
+
+					sk := &runequest.Skill{
+						CoreString: bs.CoreString,
+						UserString: bs.UserString,
+						Category:   bs.Category,
+						Base:       bs.Base,
+						UserChoice: bs.UserChoice,
 					}
 
-					s.GenerateName()
+					if userString != "" {
+						sk.UserString = userString
+					}
+
+					sk.GenerateName()
 
 					// Add Skill to Character
-					fmt.Println("Add Skill to character: " + s.Name)
-					c.Skills[s.Name] = s
-					c.Skills[s.Name].UpdateSkill()
+					fmt.Println("Add Skill to character: " + sk.Name)
+					c.Skills[sk.Name] = sk
+					c.Skills[sk.Name].UpdateSkill()
 				}
+
+				s := c.Skills[targetString]
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")
 
 				update := &runequest.Update{
 					Date:  tString,
-					Event: "Personal Skills 25%",
+					Event: "Personal Skills (25)",
 					Value: 25,
 				}
 
@@ -1402,8 +1443,17 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 		// 10% additions
 		for i := 1; i < 5; i++ {
-			targetString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
+			coreString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
 			userString := req.FormValue(fmt.Sprintf("Skill-10-%d-UserString", i))
+
+			var targetString string
+
+			// Find target string for Skill
+			if userString != "" {
+				targetString = fmt.Sprintf("%s (%s)", coreString, userString)
+			} else {
+				targetString = fmt.Sprintf("%s", coreString)
+			}
 
 			// Skill exists in Character, modify it via pointer
 			if targetString != "" {
@@ -1412,19 +1462,33 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 				s := c.Skills[targetString]
 
-				if s == nil {
-					s = runequest.Skills[targetString]
-					if userString != "" {
-						s.UserString = userString
+				if c.Skills[targetString] == nil {
+					// Skill isn't in c.Skills, so create new skill
+					fmt.Println("Unable to find skill: " + targetString)
+
+					bs := runequest.Skills[coreString]
+
+					sk := &runequest.Skill{
+						CoreString: bs.CoreString,
+						UserString: bs.UserString,
+						Category:   bs.Category,
+						Base:       bs.Base,
+						UserChoice: bs.UserChoice,
 					}
 
-					s.GenerateName()
+					if userString != "" {
+						sk.UserString = userString
+					}
+
+					sk.GenerateName()
 
 					// Add Skill to Character
-					fmt.Println("Add Skill to character: " + s.Name)
-					c.Skills[s.Name] = s
-					c.Skills[s.Name].UpdateSkill()
+					fmt.Println("Add Skill to character: " + sk.Name)
+					c.Skills[sk.Name] = sk
+					c.Skills[sk.Name].UpdateSkill()
 				}
+
+				s = c.Skills[targetString]
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")

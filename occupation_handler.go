@@ -403,6 +403,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
 					s1.UserString = req.FormValue(userString)
 				}
+				s1.GenerateName()
 				skillArray = append(skillArray, s1)
 			}
 		}
@@ -485,6 +486,9 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					s2.UserString = req.FormValue(userString)
 				}
 
+				s1.GenerateName()
+				s2.GenerateName()
+
 				// Form SkillChoice
 				sc.Skills = []runequest.Skill{
 					s1,
@@ -564,6 +568,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					v = 0
 				}
 				sk.OccupationValue = v
+				sk.GenerateName()
 
 				oc.Occupation.Skills = append(oc.Occupation.Skills, sk)
 			}
@@ -833,6 +838,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				if userString != "" {
 					sk.UserString = userString
 				}
+				sk.GenerateName()
 				tempSkills = append(tempSkills, sk)
 			}
 		}
@@ -964,6 +970,9 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					s2.UserString = req.FormValue(userString)
 				}
 
+				s1.GenerateName()
+				s2.GenerateName()
+
 				// Form SkillChoice
 				sc.Skills = []runequest.Skill{
 					s1,
@@ -1009,6 +1018,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					v = 0
 				}
 				sk.OccupationValue = v
+
+				sk.GenerateName()
 
 				oc.Occupation.Skills = append(oc.Occupation.Skills, sk)
 			}

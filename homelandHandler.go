@@ -392,7 +392,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					b = 0
 				}
 				if b > s1.Base {
-					s1.Base = v
+					s1.Base = b
 				}
 
 				if s1.UserChoice {
@@ -765,13 +765,13 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					b = 0
 				}
 
-				if s1.Base != 0 {
-					s1.Base = b
-				}
+				s1.Base = b
 
 				if s1.UserChoice && userString != "" {
 					s1.UserString = userString
 				}
+
+				s1.GenerateName()
 
 				skillArray = append(skillArray, s1)
 			}
@@ -874,6 +874,9 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
 					s2.UserString = req.FormValue(userString)
 				}
+
+				s1.GenerateName()
+				s2.GenerateName()
 
 				// Form SkillChoice
 				sc.Skills = []runequest.Skill{
