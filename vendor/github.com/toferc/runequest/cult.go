@@ -6,6 +6,7 @@ type Cult struct {
 	Description     string
 	SubCult         bool
 	Runes           []string
+	Rank            string
 	Skills          []Skill
 	SkillChoices    []SkillChoice
 	Abilities       []Ability

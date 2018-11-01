@@ -21,7 +21,8 @@
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h3>{{ $character.Name }}</h3>
-            <h5>{{ $character.Homeland.Name }}</h5>
+            <br>
+            <h5>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</h5>
             
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
@@ -131,8 +132,14 @@
     <hr>
 
         <h4>Hit Locations</h4>
+        <hr>
+
+        <h4>Equipment</h4>
+                {{ range $e := $character.Equipment }}
+                    <p>{{ $e }}</p>
+                {{ end }}
         
-          </div>
+      </div>
       </div>
       </div>
 

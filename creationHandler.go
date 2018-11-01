@@ -89,7 +89,10 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		hlID, err := strconv.Atoi(hlStr)
 		if err != nil {
-			hlID = 0
+			for _, k := range homelands {
+				// Get first homeland
+				hlID = int(k.ID)
+			}
 			fmt.Println(err)
 		}
 
@@ -99,6 +102,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.Homeland = hl.Homeland
+		fmt.Println("HOMELAND: " + c.Homeland.Name)
 
 		// Upload image to s3
 		file, h, err := req.FormFile("image")
@@ -471,7 +475,11 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 		ocID, err := strconv.Atoi(ocStr)
 		if err != nil {
-			ocID = 0
+			for _, v := range occupations {
+				// Take first occupation in map
+				ocID = int(v.ID)
+				break
+			}
 		}
 
 		oc, err := database.PKLoadOccupationModel(db, int64(ocID))
@@ -480,6 +488,9 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.Occupation = oc.Occupation
+		fmt.Println("OCCUPATION: " + c.Occupation.Name)
+
+		// Update Character
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -877,7 +888,11 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		cID, err := strconv.Atoi(cStr)
 		if err != nil {
-			cID = 0
+			for _, v := range cults {
+				// Take first cult in map
+				cID = int(v.ID)
+				break
+			}
 		}
 
 		cultModel, err := database.PKLoadCultModel(db, int64(cID))
@@ -886,6 +901,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.Cult = cultModel.Cult
+		fmt.Println("CULT: " + c.Cult.Name)
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -978,6 +994,8 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Do Stuff
+
+		c.Cult.Rank = req.FormValue("Rank")
 
 		c.RuneSpells = map[string]*runequest.Spell{}
 		c.SpiritMagic = map[string]*runequest.Spell{}

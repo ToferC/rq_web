@@ -55,7 +55,6 @@
                 <span class="input-group-text" for="Homeland">Homeland</span>
                 </div>
               <select type="text" class="form-control" id="Homeland" name="Homeland">
-                <option></option>
                 {{ range $k, $v := $homelands }}
                 <option value={{ $v.ID }}>{{ $v.Homeland.Name }}</option>
                 {{ end }}

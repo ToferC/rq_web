@@ -61,7 +61,6 @@
                 </div>
               <select type="text" class="form-control" id="Occupation" name="Occupation">
                 
-                <option></option>
                 {{ range $k, $v := $occupations }}
                     <option value={{ $v.ID }}>{{ $v.Occupation.Name }}</option>
                 {{ end }}

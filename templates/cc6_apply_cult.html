@@ -23,7 +23,9 @@
             <p>Make choices based on your cult.</p>
 
         <h3>{{ $character.Name }}</h3>
-        <h3>{{ $cult.Name }}</h3>
+        <h5>Homeland: {{ $character.Homeland.Name }}</h5>
+        <h5>Occupation: {{ $character.Occupation.Name }}</h5>
+        <h5>Cult: {{ $character.Cult.Name }}</h5>
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
           style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
@@ -37,6 +39,23 @@
             <!-- Cults give 3 Rune Spells and 5 pts of Spirit Magic -->
 
             <div class="col-sm-4 col-md-4 col-lg-4">
+
+                <h3>Choose Rank</h3>    
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Rank">Rank</span>
+              </div>
+              <select type="text" class="form-control" id="Rank" name="Rank">
+                
+                <option>Initiate</option>
+                <option>Rune Priest</option>
+                <option>God Talker</option>
+                <option>Rune Lord</option>
+                
+              </select>
+              </div>
+
+              <hr>
 
             <h4>Rune Spells</h4>
 
@@ -93,11 +112,11 @@
 
               <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Points-addon">Level</span>
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">Level</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="SpiritMagic-{{$n}}-Points-addon" name="SpiritMagic-{{$n}}-Points" value ="0">
+                  <input type="number" class="form-control" aria-describedby="SpiritMagic-{{$n}}-Cost-addon" name="SpiritMagic-{{$n}}-Cost" value ="0">
                   <div class="input-group-append">
-                        <span class="input-group-text" id="SpiritMagic-{{$n}}-Points-addon">pts</span>
+                        <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">pts</span>
                       </div>
                 </div>
             
