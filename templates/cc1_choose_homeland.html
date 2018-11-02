@@ -2,7 +2,7 @@
 
 {{ $character := .CharacterModel.Character }}
 
-<title>Create Character: Choose Homeland</title>
+<title>Create Character: Initial Choices</title>
 
 {{ end }}
 
@@ -10,17 +10,20 @@
 
 {{ $character := .CharacterModel.Character }}
 {{ $homelands := .HomelandModels }}
+{{ $occupations := .OccupationModels }}
+{{ $cults := .CultModels }}
 
       <div class="container">
         <hr>
         <div class="row">
 
         <div class="col-sm-3 col-md-3 col-lg-3">
-            <h4>Choose Homeland (1 of 7)</h4>
+            <h4>Details & Roles (1 of 7)</h4>
 
-            <p>Create your character by choosing a name, entering a description, choosing an image and a homeland.</p>
             <strong>Note: As in Runequest, creating a character has seven steps.</strong>
             <strong>You need to complete all the steps to have a full character.</strong>
+            <br>
+            <p>Create your character by choosing a name, entering a description, choosing an image, a homeland, an occupation and a cult.</p>
 
 
           </div> <!-- END outer column 6 -->
@@ -52,7 +55,7 @@
 
               <hr>
 
-              <h3>Choose Homeland</h3>
+              <h3>Choose Homeland, Occupation & Cult</h3>
               <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" for="Homeland">Homeland</span>
@@ -60,6 +63,34 @@
               <select type="text" class="form-control" id="Homeland" name="Homeland">
                 {{ range $k, $v := $homelands }}
                 <option value={{ $v.ID }}>{{ $v.Homeland.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Occupation">Occupation</span>
+                </div>
+              <select type="text" class="form-control" id="Occupation" name="Occupation">
+                
+                {{ range $k, $v := $occupations }}
+                    <option value={{ $v.ID }}>{{ $v.Occupation.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Cult">Cult</span>
+              </div>
+              <select type="text" class="form-control" id="Cult" name="Cult">
+                
+                {{ range $k, $v := $cults }}
+                    <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>
                 {{ end }}
               </select>
               </div>

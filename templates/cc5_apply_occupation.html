@@ -10,7 +10,6 @@
 
 {{ $character := .CharacterModel.Character }}
 {{ $occupation := $character.Occupation }}
-{{ $cults := .CultModels }}
 {{ $skills := .Skills }}
 {{ $wepCategory := .WeaponCategories }}
 
@@ -135,23 +134,6 @@
                 {{ end }}
 
             <hr>
-
-                <h3>Choose Cult</h3>    
-              <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" for="Cult">Cult</span>
-              </div>
-              <select type="text" class="form-control" id="Cult" name="Cult">
-                
-                {{ range $k, $v := $cults }}
-                    <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>
-                {{ end }}
-              </select>
-              </div>
-
-              <hr>
-
-
 
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>

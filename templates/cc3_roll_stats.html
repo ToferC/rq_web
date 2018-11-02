@@ -9,7 +9,6 @@
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
-{{ $occupations := .OccupationModels }}
 
       <div class="container">
         <hr>
@@ -53,22 +52,6 @@
 
                 <input type="button" value="Re-roll" onclick="randomValue();" />
                 <hr>
-
-                <h3>Choose Occupation</h3>    
-              <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" for="Occupation">Occupation</span>
-                </div>
-              <select type="text" class="form-control" id="Occupation" name="Occupation">
-                
-                {{ range $k, $v := $occupations }}
-                    <option value={{ $v.ID }}>{{ $v.Occupation.Name }}</option>
-                {{ end }}
-              </select>
-              </div>
-
-              <hr>
-
 
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>

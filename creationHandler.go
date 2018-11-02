@@ -57,12 +57,24 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
+	}
+
 	wc := WebChar{
-		CharacterModel: &cm,
-		SessionUser:    username,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		HomelandModels: homelands,
+		CharacterModel:   &cm,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		HomelandModels:   homelands,
+		OccupationModels: occupations,
+		CultModels:       cults,
 	}
 
 	if req.Method == "GET" {
@@ -103,6 +115,46 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Homeland = hl.Homeland
 		fmt.Println("HOMELAND: " + c.Homeland.Name)
+
+		// Set Occupation
+		ocStr := req.FormValue("Occupation")
+
+		ocID, err := strconv.Atoi(ocStr)
+		if err != nil {
+			for _, v := range occupations {
+				// Take first occupation in map
+				ocID = int(v.ID)
+				break
+			}
+		}
+
+		oc, err := database.PKLoadOccupationModel(db, int64(ocID))
+		if err != nil {
+			fmt.Println("No Occupation Found")
+		}
+
+		c.Occupation = oc.Occupation
+		fmt.Println("OCCUPATION: " + c.Occupation.Name)
+
+		// Set Cult
+		cStr := req.FormValue("Cult")
+
+		cID, err := strconv.Atoi(cStr)
+		if err != nil {
+			for _, v := range cults {
+				// Take first cult in map
+				cID = int(v.ID)
+				break
+			}
+		}
+
+		cultModel, err := database.PKLoadCultModel(db, int64(cID))
+		if err != nil {
+			fmt.Println("No Cult Found")
+		}
+
+		c.Cult = cultModel.Cult
+		fmt.Println("CULT: " + c.Cult.Name)
 
 		// Upload image to s3
 		file, h, err := req.FormFile("image")
@@ -428,18 +480,12 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
-	occupations, err := database.ListOccupationModels(db)
-	if err != nil {
-		panic(err)
-	}
-
 	wc := WebChar{
-		CharacterModel:   cm,
-		OccupationModels: occupations,
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		IsAuthor:         IsAuthor,
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
 	}
 
 	if req.Method == "GET" {
@@ -473,26 +519,6 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		c.AddRuneModifiers()
 
 		c.SetAttributes()
-
-		// Set Occupation
-		ocStr := req.FormValue("Occupation")
-
-		ocID, err := strconv.Atoi(ocStr)
-		if err != nil {
-			for _, v := range occupations {
-				// Take first occupation in map
-				ocID = int(v.ID)
-				break
-			}
-		}
-
-		oc, err := database.PKLoadOccupationModel(db, int64(ocID))
-		if err != nil {
-			fmt.Println("No Occupation Found")
-		}
-
-		c.Occupation = oc.Occupation
-		fmt.Println("OCCUPATION: " + c.Occupation.Name)
 
 		// Update Character
 
@@ -747,14 +773,8 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
-	cults, err := database.ListCultModels(db)
-	if err != nil {
-		panic(err)
-	}
-
 	wc := WebChar{
 		CharacterModel:   cm,
-		CultModels:       cults,
 		SessionUser:      username,
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
@@ -900,26 +920,6 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		for _, e := range c.Occupation.Equipment {
 			c.Equipment = append(c.Equipment, e)
 		}
-
-		// Set Cult
-		cStr := req.FormValue("Cult")
-
-		cID, err := strconv.Atoi(cStr)
-		if err != nil {
-			for _, v := range cults {
-				// Take first cult in map
-				cID = int(v.ID)
-				break
-			}
-		}
-
-		cultModel, err := database.PKLoadCultModel(db, int64(cID))
-		if err != nil {
-			fmt.Println("No Cult Found")
-		}
-
-		c.Cult = cultModel.Cult
-		fmt.Println("CULT: " + c.Cult.Name)
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
