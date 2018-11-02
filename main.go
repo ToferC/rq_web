@@ -111,17 +111,6 @@ func main() {
 
 	r.HandleFunc("/users/", UserIndexHandler)
 
-	r.Path("/roll/{id}").HandlerFunc(RollHandler)
-	r.Path("/roll/{id}").Queries(
-		"ac", "",
-		"d", "",
-		"hd", "",
-		"wd", "",
-		"gf", "",
-		"sp", "",
-		"nr", "",
-		"ed", "").HandlerFunc(RollHandler).Name("RollHandler")
-
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
 	r.HandleFunc("/new/", NewCharacterHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)

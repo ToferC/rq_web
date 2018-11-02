@@ -136,10 +136,14 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
 		}
 
 		cm.Open = true
@@ -1015,7 +1019,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		c.SpiritMagic = map[string]*runequest.Spell{}
 
 		// Rune Magic
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 6; i++ {
 			str := req.FormValue(fmt.Sprintf("RuneSpell-%d", i))
 			spec := req.FormValue(fmt.Sprintf("RuneSpell-%d-UserString", i))
 			if str != "" {
@@ -1036,7 +1040,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Spirit Magic
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 6; i++ {
 			str := req.FormValue(fmt.Sprintf("SpiritMagic-%d", i))
 			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%d-UserString", i))
 			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Cost", i))

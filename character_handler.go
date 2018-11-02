@@ -398,14 +398,16 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	c := cm.Character
 
 	// Assign additional empty HitLocations to populate form
-	if len(c.HitLocations) < 10 {
-		for i := len(c.HitLocations); i < 10; i++ {
-			t := runequest.HitLocation{
-				Name: "",
+	/*
+		if len(c.HitLocations) < 10 {
+			for i := len(c.HitLocations); i < 10; i++ {
+				t := runequest.HitLocation{
+					Name: "",
+				}
+				c.HitLocations["z"+string(i)] = &t
 			}
-			c.HitLocations["z"+string(i)] = &t
 		}
-	}
+	*/
 
 	if cm.Image == nil {
 		cm.Image = new(models.Image)

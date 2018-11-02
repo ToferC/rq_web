@@ -9,9 +9,6 @@
 {{ $character := .CharacterModel.Character}}
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
-{{ $intrinsics := .Intrinsics }}
-{{ $sources := .Sources }}
-{{ $permissions := .Permissions }}
 {{ $counter := .Counter }}
 
       <div class="container">
@@ -26,7 +23,6 @@
                 </div>
                 <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $character.Name }}">
               </div>
-              <h4>Setting: {{ $character.Setting }}</h4>
               <hr>
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -37,7 +33,7 @@
               <hr>
               <p>Image</p>
               <img class ="card-img-top" data-src="" alt="Thumbnail"
-              style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+              style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
               data-holder-rendered="true">
               <br>
               <div class="input-group">
@@ -48,21 +44,6 @@
               </div>
               <hr>
 
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basewill-addon">Base Will</span>
-                </div>
-                <input type="number" class="form-control" aria-describedby="basewill-addon" name="BaseWill" value ="{{ $character.BaseWill }}">
-              </div>
-
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="willpower-addon">Willpower</span>
-                </div>
-                <input type="number" class="form-control" aria-describedby="willpower-addon" name="Willpower" value ="{{ $character.Willpower }}">
-              </div>
-              <br>
-              <strong>Finalize for Play?</strong> <input type="checkbox" name="InPlay" value="true" id="checkbox" {{if $character.InPlay }}checked{{ end }}><br>
               <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" {{if .CharacterModel.Open }}checked{{ end }}>
 
               <hr>
@@ -72,100 +53,40 @@
             </div>
 
               <div class="col-sm-3 col-md-3 col-lg-3">
-                {{ if $character.Archetype }}
-                <h3>Archetype</h3>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="archetype-addon">Archetype</span>
-                  </div>
-                  <input type="text" class="form-control" aria-describedby="archetype-addon" name="Archetype" value ="{{ $character.Archetype.Type }}">
-                </div>
-
-                <h4>Sources</h4>
-                {{ range $s, $v := $character.Archetype.Sources }} <!-- sources loop -->
-                <label for="Source-{{add $s 1}}">Source {{add $s 1}}</label>
-                <select type="text" class="form-control" id="Source-{{add $s 1}}" name="Source-{{add $s 1}}">
-                  <option></option>
-                  {{ range $sources }}
-                      <option {{if eq $v.Type .Type }} selected {{ end }} value={{.Type}}>{{ .Type }} ({{ .Cost }}pts)</option>
-                  {{ end }}
-                </select>
-
-                {{ end }} <!-- end Sources -->
-                <hr>
-                <h4>Permissions</h4>
-                {{ range $p, $v := $character.Archetype.Permissions }} <!-- permissions loop -->
-                <label for="Permission-{{add $p 1}}">Permission {{add $p 1}}</label>
-                <select type="text" class="form-control" id="Permission-{{add $p 1}}" name="Permission-{{add $p 1}}">
-                  <option></option>
-                  {{ range $permissions }}
-                      <option {{if eq $v.Type .Type }} selected {{ end }} value={{.Type}}>{{ .Type }} ({{ .Cost }}pts)</option>
-                  {{ end }}
-                </select>
-                {{ end }} <!-- end Permissions -->
-                <hr>
-
-                {{ if $character.Archetype.Intrinsics }}
-                <h4>Intrinsics</h4>
-                {{ range $i, $v := $character.Archetype.Intrinsics }} <!-- intrinsics loop -->
-                <label for="Intrinsic-{{$i}}">Intrinsic {{add $i 1}}</label>
-                <select type="text" class="form-control" id="Intrinsic-{{add $i 1}}" name="Intrinsic-{{add $i 1}}-Name">
-                  <option></option>
-                  {{ range $intrinsics }}
-                  <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} ({{ .Cost }}pts)</option>
-                  {{ end }}
-                </select>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="Intrinsic-{{add $i 1}}-Level">Level</span>
-                  </div>
-                  <input type="number" class="form-control" aria-describedby="Intrinsic-{{add $i 1}}-Level-addon" name="Intrinsic-{{add $i 1}}-Level" value ="{{ $v.Level }}">
-                </div>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="Intrinsic-{{add $i 1}}-Info-addon">Info</span>
-                  </div>
-                  <input type="text" class="form-control" aria-describedby="Intrinsic-{{add $i 1}}-Info-addon" name="Intrinsic-{{add $i 1}}-Info" value ="{{ $v.Info }}">
-                </div>
-                <hr>
-                {{ end }} <!-- End Intrinsics Loop -->
-                {{ end }} <!-- End Intrinsic IF -->
-                {{ end }} <!-- End Archetype IF -->
-                <hr>
+                <h4>Character Variables</h4>
             </div>
 
             <div class="col-sm-3 col-md-3 col-lg-3">
-              <h3>Stats & Skills</h3>
+              <h4>Stats</h4>
               {{ range $stat := $statistics }}
 
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="{{ $stat.Name }}-addon">{{ $stat.Name }}</span>
                 </div>
-                <input type="number" class="form-control" aria-describedby="{{ $stat.Name }}-addon" name="{{ $stat.Name }}" value ="{{ $stat.Dice.Normal }}">
+                <input type="number" class="form-control" aria-describedby="{{ $stat.Name }}-addon" name="{{ $stat.Name }}" value ="{{ $stat.Base }}">
               </div>
-              <br>
+              {{ end }}
+
+              <hr>
+              <h4>Skills</h4>
+
               {{ range $skill := $skills }}
-              {{ if eq $skill.LinkStat.Name $stat.Name}}
-              <ul>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
                 </div>
-                <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}" value ="{{ $skill.Dice.Normal }}">
+                <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}" value ="{{ $skill.Total }}">
               </div>
-              {{ if $skill.ReqSpec }}
+              {{ if $skill.UserString }}
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $skill.Name }}-Spec-addon">--Specialization</span>
+                  <span class="input-group-text" id="{{ $skill.Name }}-UserString-addon">--Specialization</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="{{ $skill.Name }}-Spec-addon" name="{{ $skill.Name }}-Spec" value ="{{ $skill.Specialization }}">
+                <input type="text" class="form-control" aria-describedby="{{ $skill.Name }}-UserString-addon" name="{{ $skill.Name }}-UserString" value ="{{ $skill.UserString }}">
               </div>
               {{ end }}
-            </ul>
-              {{ end }}
               {{end}}
-              {{ end }}
 
           </div>
 
