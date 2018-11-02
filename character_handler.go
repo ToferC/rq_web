@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -445,11 +446,33 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.Statistics[st].Base, _ = strconv.Atoi(req.FormValue(st))
 		}
 
-		for _, sk := range c.Skills {
-			sk.Value, _ = strconv.Atoi(req.FormValue(sk.Name))
-			if sk.UserChoice {
-				sk.UserString = req.FormValue(fmt.Sprintf("%s-Spec", sk.Name))
+		for _, s := range c.Skills {
+			mod, _ := strconv.Atoi(req.FormValue(s.Name))
+
+			if mod != s.Total {
+
+				modVal := mod - s.Total
+
+				t := time.Now()
+				tString := t.Format("2006-01-02 15:04:05")
+
+				update := &runequest.Update{
+					Date:  tString,
+					Event: fmt.Sprintf("Manual Update (%d)", modVal),
+					Value: modVal,
+				}
+
+				if s.Updates == nil {
+					s.Updates = []*runequest.Update{}
+				}
+
+				s.Updates = append(s.Updates, update)
+
 			}
+			if s.UserString != "" {
+				s.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.Name))
+			}
+			s.UpdateSkill()
 		}
 
 		// Hit locations - need to add new map or amend old one

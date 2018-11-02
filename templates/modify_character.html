@@ -50,25 +50,25 @@
 
               <button class="btn btn-primary" type="submit" value="Save">Update</button>
 
-            </div>
-
-              <div class="col-sm-3 col-md-3 col-lg-3">
-                <h4>Character Variables</h4>
-            </div>
+              </div>
 
             <div class="col-sm-3 col-md-3 col-lg-3">
               <h4>Stats</h4>
-              {{ range $stat := $statistics }}
+              {{ range $k, $stat := $statistics }}
 
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $stat.Name }}-addon">{{ $stat.Name }}</span>
+                  <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
                 </div>
-                <input type="number" class="form-control" aria-describedby="{{ $stat.Name }}-addon" name="{{ $stat.Name }}" value ="{{ $stat.Base }}">
+                <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value ="{{ $stat.Base }}">
               </div>
               {{ end }}
 
               <hr>
+
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
               <h4>Skills</h4>
 
               {{ range $skill := $skills }}
@@ -139,6 +139,13 @@
       </div>
       </div>
     </div>
+
+    </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <h4>Character Variables</h4>
+            </div>
+
       </div>
     </form>
 {{end}}

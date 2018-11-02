@@ -62,6 +62,7 @@
             {{end}}
 
             <hr>
+            {{ if $homeland.SkillChoices }}
             <p>Additionally, you can choose between the following skill choices.</p>
 
             {{ range $m, $schoice := $homeland.SkillChoices }}
@@ -77,6 +78,7 @@
 
               {{ end }} <!-- End IF loop-->
               {{ end }} <!-- END schoice Loop-->
+              {{ end }} <!-- END overall show loop -->
                     
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>

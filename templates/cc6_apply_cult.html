@@ -226,7 +226,7 @@
               </div>
 
               <hr>
-
+                {{ if $cult.Weapons }}
                 <h4>Choose Weapon Skills</h4>
 
                     {{ range $m, $w := $cult.Weapons }}
@@ -251,7 +251,8 @@
               </div>
 
                 <hr>
-                    {{ end }}
+                    {{ end }} <!-- END weapons Loop -->
+                    {{ end }} <!-- END show loop -->
 
             </div>
                     
