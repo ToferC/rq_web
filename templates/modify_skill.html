@@ -1,57 +1,65 @@
 {{ define "title"}}
 
-<title>Modify Power</title>
+<title>Modify Skill</title>
 
 {{ end }}
 
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
-{{ $power := .Power }}
-{{ $qualities := .Power.Qualities }}
-{{ $dice := $power.Dice }}
+{{ $skill := .Skill }}
 
-{{ $modifiers := .Modifiers }}
 
       <div class="container">
         <hr>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <form action="" method="POST">
-              <h3>Power</h3>
+              <h3>Skill</h3>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="name-addon">Name</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $power.Name }}">
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $skill.Name }}">
               </div>
 
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="normal-addon">Normal Dice</span>
+                  <span class="input-group-text" id="base-addon">Base</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="normal-addon" name="Normal" value ="{{ $dice.Normal }}">
+                <input type="number" class="form-control" aria-describedby="base-addon" name="Base" value ="{{ Skill.Base }}">
               </div>
+
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="hard-addon">Hard Dice</span>
+                  <span class="input-group-text" id="homeland-addon">Homeland</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="hard-addon" name="Hard" value ="{{ $dice.Hard }}">
+                <input type="number" class="form-control" aria-describedby="homeland-addon" name="Homeland" value ="{{ Skill.HomelandValue }}">
               </div>
+
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="wiggle-addon">Wiggle Dice</span>
+                  <span class="input-group-text" id="occupation-addon">Occupation</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="wiggle-addon" name="Wiggle" value ="{{ $dice.Wiggle }}">
+                <input type="number" class="form-control" aria-describedby="occupation-addon" name="Occupation" value ="{{ Skill.OccupationValue }}">
               </div>
+
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="Effect">Effect</label>
+                  <span class="input-group-text" id="homeland-addon">Cult</span>
                 </div>
-                <textarea type="text" class="form-control" aria-describedby="effect-addon" name="Effect" rows="4" value ="{{ $power.Effect }}">{{ $power.Effect }}</textarea>
+                <input type="number" class="form-control" aria-describedby="homeland-addon" name="Cult" value ="{{ Skill.CultValue }}">
               </div>
-              <h4>Cost Per Die: {{ $power.CostPerDie }}</h4>
-              <h4>Cost: {{ $power.Cost }}</h4>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="homeland-addon">Homeland</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="homeland-addon" name="Homeland" value ="{{ Skill.HomelandValue }}">
+              </div>
+
+              <h4>Cost Per Die: {{ $skill.CostPerDie }}</h4>
+              <h4>Cost: {{ $skill.Cost }}</h4>
               <hr>
               <input class="btn btn-primary" type="submit" value="Save">
           </div>

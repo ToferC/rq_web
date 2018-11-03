@@ -442,8 +442,37 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Description = req.FormValue("Description")
 
+		eventString := req.FormValue("Event")
+
 		for _, st := range runequest.StatMap {
-			c.Statistics[st].Base, _ = strconv.Atoi(req.FormValue(st))
+
+			stat := c.Statistics[st]
+
+			mod, _ := strconv.Atoi(req.FormValue(st))
+
+			if mod != stat.Total {
+
+				modVal := mod - stat.Total
+
+				t := time.Now()
+				tString := t.Format("2006-01-02")
+
+				update := &runequest.Update{
+					Date:  tString,
+					Event: fmt.Sprintf("%s", eventString),
+					Value: modVal,
+				}
+
+				if stat.Updates == nil {
+					stat.Updates = []*runequest.Update{}
+				}
+
+				stat.Updates = append(stat.Updates, update)
+
+			}
+
+			stat.UpdateStatistic()
+
 		}
 
 		for _, s := range c.Skills {
@@ -454,11 +483,11 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				modVal := mod - s.Total
 
 				t := time.Now()
-				tString := t.Format("2006-01-02 15:04:05")
+				tString := t.Format("2006-01-02")
 
 				update := &runequest.Update{
 					Date:  tString,
-					Event: fmt.Sprintf("Manual Update (%d)", modVal),
+					Event: fmt.Sprintf("%s", eventString),
 					Value: modVal,
 				}
 
@@ -473,6 +502,36 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				s.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.Name))
 			}
 			s.UpdateSkill()
+		}
+
+		// Update Abilities
+		for _, a := range c.Abilities {
+			mod, _ := strconv.Atoi(req.FormValue(a.Name))
+
+			if mod != a.Total {
+
+				modVal := mod - a.Total
+
+				t := time.Now()
+				tString := t.Format("2006-01-02")
+
+				update := &runequest.Update{
+					Date:  tString,
+					Event: fmt.Sprintf("%s", eventString),
+					Value: modVal,
+				}
+
+				if a.Updates == nil {
+					a.Updates = []*runequest.Update{}
+				}
+
+				a.Updates = append(a.Updates, update)
+
+			}
+			if a.UserString != "" {
+				a.UserString = req.FormValue(fmt.Sprintf("%s-UserString", a.Name))
+			}
+			a.UpdateAbility()
 		}
 
 		// Hit locations - need to add new map or amend old one
