@@ -58,8 +58,7 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Statistics</h3>
         {{ range $stat := $character.Statistics }}
-          <p><strong title="
-          Base: {{ $stat.Base }}
+          <p><strong title="Base: {{ $stat.Base }}
           Rune Bonus: {{ $stat.RuneBonus }}
           {{ range $u := $stat.Updates }}
           {{ $u.Event }}: {{ $u.Value }} ({{ $u.Date }})

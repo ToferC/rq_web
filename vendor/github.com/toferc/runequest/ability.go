@@ -181,12 +181,12 @@ func (c *Character) ModifyAbility(a Ability) {
 			ab.Base = a.Base
 		} else {
 			// Add or subtract s.Value from Ability
-			ab.Value += a.Value
-			ab.HomelandValue += a.HomelandValue
-			ab.OccupationValue += a.OccupationValue
-			ab.CultValue += a.CultValue
-			ab.CreationBonusValue += a.CreationBonusValue
-			ab.InPlayXPValue += a.InPlayXPValue
+			ab.Value = a.Value
+			ab.HomelandValue = a.HomelandValue
+			ab.OccupationValue = a.OccupationValue
+			ab.CultValue = a.CultValue
+			ab.CreationBonusValue = a.CreationBonusValue
+			ab.InPlayXPValue = a.InPlayXPValue
 		}
 	}
 	a.UpdateAbility()
