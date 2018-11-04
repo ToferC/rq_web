@@ -39,7 +39,7 @@
   {{end}}
 
   <hr>
-
+  {{ if $occupation.SkillChoices }}
   <h4>Skill Choices</h4>
     {{ range $schoice := $occupation.SkillChoices }}
     {{ if gt (len $schoice.Skills) 0}}
@@ -52,6 +52,7 @@
         <hr>
         {{ end }}
     {{ end }}
+    {{ end }} <!-- END show loop -->
 
 </div>
 

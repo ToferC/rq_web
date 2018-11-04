@@ -1,0 +1,89 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Create Character: Choose Homeland</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $counter := .Counter }}
+{{ $passions := .Passions }}
+
+<div class="container">
+    <hr>
+    <div class="row">
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <h4>Personal History (1.5 of 7)</h4>
+
+            <p>Based off your characters rolls in the personal history section of character creation, choose the
+                passions that shape your character.</p>
+
+            <h5>{{ $character.Name }}</h5>
+            <h5>{{ $character.Homeland.Name }}</h5>
+
+            <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
+                data-holder-rendered="true">
+
+            <p>{{ $character.Description }}</p>
+            <hr>
+        
+            <form action="" method="POST" enctype="multipart/form-data">
+                <button class="btn btn-primary" type="submit" value="Save">Save</button>
+
+
+        </div> <!-- END outer column 3 -->
+
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <h4>Passions</h4>
+            <p>Set the starting passions from your characters personal history.</p>
+
+            {{ range $m := $counter }}
+            <!-- Passions loop -->
+
+            <label for="Passion-{{$m}}-CoreString">Passion {{ $m }}</label>
+            <select type="text" class="form-control" id="Passion-{{$m}}-CoreString" name="Passion-{{$m}}-CoreString">
+                <option></option>
+                {{ range $passions }}
+                <option>{{ . }}</option>
+                {{ end }}
+            </select>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{$m}}-UserString-addon">Input</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Passion-{{$m}}-UserString-addon" name="Passion-{{$m}}-UserString"
+                    value="">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{$m}}-Base-addon">Passion Base</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="Passion-{{$m}}-Base-addon" name="Passion-{{$m}}-Base"
+                    value="60">
+            </div>
+
+            {{ end }}
+
+            <hr>
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+            </form>
+
+        </div> <!-- END 9 Col -->
+
+    </div> <!-- END outer ROW -->
+</div> <!-- END container -->
+
+{{ end }}
+<!-- end content -->

@@ -268,8 +268,8 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:       username,
 		IsLoggedIn:        loggedIn,
 		IsAdmin:           isAdmin,
-		Counter:           []int{1, 2, 3},
-		BigCounter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+		Counter:           numToArray(4),
+		BigCounter:        numToArray(15),
 		Passions:          runequest.PassionTypes,
 		WeaponCategories:  runequest.WeaponCategories,
 		CategoryOrder:     runequest.CategoryOrder,
@@ -411,7 +411,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		oc.Occupation.Skills = skillArray
 
 		// Read Weapons
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 
 			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
 
@@ -500,7 +500,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Read passions
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
 
@@ -537,7 +537,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Read New Skills
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
 
@@ -667,9 +667,9 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Add extra empty skillchoices if < 3
-	if len(oc.Occupation.SkillChoices) < 4 {
-		for i := len(oc.Occupation.SkillChoices); i < 4; i++ {
+	// Add extra empty skillchoices if < 5
+	if len(oc.Occupation.SkillChoices) < 5 {
+		for i := len(oc.Occupation.SkillChoices); i < 5; i++ {
 			tempSkillChoice := runequest.SkillChoice{
 				Skills: []runequest.Skill{
 					runequest.Skill{
@@ -701,8 +701,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:       username,
 		IsLoggedIn:        loggedIn,
 		IsAdmin:           isAdmin,
-		Counter:           []int{1, 2, 3},
-		BigCounter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+		Counter:           numToArray(4),
+		BigCounter:        numToArray(16),
 		Passions:          runequest.PassionTypes,
 		WeaponCategories:  runequest.WeaponCategories,
 		CategoryOrder:     runequest.CategoryOrder,
@@ -872,7 +872,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		// Read passions
 		tempPassions := []runequest.Ability{}
 
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
 
@@ -914,7 +914,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		tempChoices := []runequest.SkillChoice{}
 
 		// Read SkillChoices
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 
 			sc := runequest.SkillChoice{}
 
@@ -987,7 +987,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Read New Skills
 
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
 

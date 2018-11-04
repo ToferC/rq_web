@@ -208,7 +208,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/cc2_choose_runes/%d", cm.ID)
+		url := fmt.Sprintf("/cc12_personal_history/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
@@ -255,6 +255,8 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Unable to load CharacterModel")
 	}
 
+	c := cm.Character
+
 	IsAuthor := false
 
 	if username == cm.Author.UserName {
@@ -269,11 +271,13 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel:   cm,
 		OccupationModels: occupations,
+		Counter:          numToArray(5),
 		SessionUser:      username,
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
 		IsAuthor:         IsAuthor,
 		Skills:           runequest.Skills,
+		Passions:         runequest.PassionTypes,
 	}
 
 	if req.Method == "GET" {
@@ -291,6 +295,36 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Do Stuff
+
+		// Read passions
+		for i := 1; i < 6; i++ {
+
+			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
+
+			if coreString != "" {
+
+				p := runequest.Ability{
+					Type:       "Passion",
+					CoreString: coreString,
+				}
+
+				str := fmt.Sprintf("Passion-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+				p.Base = base
+
+				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+
+				if userString != "" {
+					p.UserChoice = true
+					p.UserString = userString
+				}
+
+				c.ModifyAbility(p)
+			}
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
