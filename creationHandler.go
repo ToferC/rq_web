@@ -658,11 +658,11 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Add Skills to Character
-		for _, s := range c.Homeland.Skills {
+		for i, s := range c.Homeland.Skills {
 			// Modify Skill
 			if s.UserString == "any" {
 				// User Chooses a new specialization
-				str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+				str := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if str != "" {
 					s.UserString = str
 				}
@@ -860,11 +860,11 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Add Skills to Character
-		for _, s := range c.Occupation.Skills {
+		for i, s := range c.Occupation.Skills {
 			// Modify Skill
 			if s.UserString == "any" {
 				// User Chooses a new specialization
-				str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+				str := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if str != "" {
 					s.UserString = str
 				}
@@ -941,13 +941,15 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Occupations grant a bonus to one Passion
-		str := req.FormValue("Passion")
-		n, err := strconv.Atoi(str)
-		if err != nil {
-			n = 0
-		}
+		if len(c.Occupation.PassionList) > 0 {
+			str := req.FormValue("Passion")
+			n, err := strconv.Atoi(str)
+			if err != nil {
+				n = 0
+			}
 
-		c.ModifyAbility(c.Occupation.PassionList[n])
+			c.ModifyAbility(c.Occupation.PassionList[n])
+		}
 
 		// Equipment
 
@@ -1141,11 +1143,11 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Add Skills to Character
-		for _, s := range c.Cult.Skills {
+		for i, s := range c.Cult.Skills {
 			// Modify Skill
 			if s.UserString == "any" {
 				// User Chooses a new specialization
-				str := req.FormValue(fmt.Sprintf("%s-UserString", s.CoreString))
+				str := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if str != "" {
 					s.UserString = str
 				}

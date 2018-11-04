@@ -43,16 +43,16 @@
             <h4>Choose Skills</h4>.
             <p>You automatically receive the following skills from your occupation:</p>
 
-                {{ range $skill := $occupation.Skills }}
+                {{ range $i, $skill := $occupation.Skills }}
                     <p>
                     {{ if eq $skill.UserString "any" }}
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CoreString}}</span>
+                        <span class="input-group-text" id="Skill-{{ $i }}-UserString-addon">{{$skill.CoreString}}</span>
                       </div>
-                      <input type="text" class="form-control" aria-describedby="{{ $skill.CoreString }}-UserString-addon" name="{{ $skill.CoreString }}-UserString" value ="{{ $skill.UserString }}">
+                      <input type="text" class="form-control" aria-describedby="Skill-{{ $i }}-UserString-addon" name="Skill-{{ $i }}-UserString" value ="{{ $skill.UserString }}">
                       <div class="input-group-append">
-                          <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.OccupationValue}}%</span>
+                          <span class="input-group-text" id="Skill-{{ $i }}-UserString-addon">{{$skill.OccupationValue}}%</span>
                         </div>
                     </div>
                     {{ else }}

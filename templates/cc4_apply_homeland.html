@@ -42,16 +42,16 @@
             <p>You automatically receive the following skills from your homeland:</p>
 
             <h5>Skill Bonuses</h5>
-            {{ range $skill := $homeland.Skills }}
+            {{ range $i, $skill := $homeland.Skills }}
             <p>
                     {{ if eq $skill.UserString "any" }}
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.CoreString}}</span>
+                        <span class="input-group-text" id="{{ $i }}-UserString-addon">{{$skill.CoreString}}</span>
                       </div>
-                      <input type="text" class="form-control" aria-describedby="{{ $skill.CoreString }}-UserString-addon" name="{{ $skill.CoreString }}-UserString" value ="{{ $skill.UserString }}">
+                      <input type="text" class="form-control" aria-describedby="{{ $i }}-UserString-addon" name="{{ $i }}-UserString" value ="{{ $skill.UserString }}">
                       <div class="input-group-append">
-                          <span class="input-group-text" id="{{ $skill.CoreString }}-UserString-addon">{{$skill.HomelandValue}}%</span>
+                          <span class="input-group-text" id="{{ $i }}-UserString-addon">{{$skill.HomelandValue}}%</span>
                         </div>
                     </div>
                     {{ else }}
