@@ -11,168 +11,211 @@
 {{ $skills := $character.Skills }}
 {{ $counter := .Counter }}
 
-      <div class="container">
+<div class="container">
+  <hr>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <form action="" method="POST" enctype="multipart/form-data">
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="name-addon">Name</span>
+          </div>
+          <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value="{{ $character.Name }}">
+        </div>
         <hr>
-        <div class="row">
-          <div class="col-sm-3 col-md-3 col-lg-3">
-            <form action="" method="POST" enctype="multipart/form-data">
-
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="name-addon">Name</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $character.Name }}">
-              </div>
-              <hr>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" for="Description">Description</span>
-                </div>
-                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
-              </div>
-              <hr>
-              <p>Image</p>
-              <img class ="card-img-top" data-src="" alt="Thumbnail"
-              style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
-              data-holder-rendered="true">
-              <br>
-              <div class="input-group">
-                <div class="custom-file">
-                  <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
-                  <label class="custom-file-label" for="inputGroupFile">Update Image</label>
-                </div>
-              </div>
-              <hr>
-
-              <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" {{if .CharacterModel.Open }}checked{{ end }}>
-
-              <hr>
-
-              <h4>Event</h4>
-              <p>Enter the description of the event that caused the updates.</p>
-
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="event-addon">Event</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="event-addon" name="Event" value ="Manual Update">
-              </div>
-
-              <hr>
-
-              <button class="btn btn-primary" type="submit" value="Save">Update</button>
-
-              </div>
-
-            <div class="col-sm-3 col-md-3 col-lg-3">
-              <h4>Stats</h4>
-              {{ range $k, $stat := $statistics }}
-
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
-                </div>
-                <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value ="{{ $stat.Total }}">
-              </div>
-              {{ end }}
-
-              <hr>
-
-              </div>
-
-              <div class="col-sm-3 col-md-3 col-lg-3">
-              <h4>Skills</h4>
-
-              {{ range $skill := $skills }}
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
-                </div>
-                <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}" value ="{{ $skill.Total }}">
-              </div>
-              {{ if $skill.UserString }}
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $skill.Name }}-UserString-addon">--Specialization</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="{{ $skill.Name }}-UserString-addon" name="{{ $skill.Name }}-UserString" value ="{{ $skill.UserString }}">
-              </div>
-              {{ end }}
-              {{end}}
-
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" for="Description">Description</span>
           </div>
+          <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value="{{ $character.Description }}">{{ $character.Description }}</textarea>
+        </div>
 
-      <div class="col-sm-3 col-md-3 col-lg-3">
-                <h4>Character Variables</h4>
+        <hr>
 
-              {{ range $ability := $character.Abilities }}
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $ability.Name }}-addon">{{ $ability.CoreString }}</span>
-                </div>
-                <input type="number" class="form-control" aria-describedby="{{ $ability.Name }}-addon" name="{{ $ability.Name }}" value ="{{ $ability.Total }}">
-              </div>
-              {{ if $ability.UserString }}
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="{{ $ability.Name }}-UserString-addon">--Specialization</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="{{ $ability.Name }}-UserString-addon" name="{{ $ability.Name }}-UserString" value ="{{ $ability.UserString }}">
-              </div>
-              {{ end }}
-              {{end}}
+        <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" for="Rank">Cult Rank</span>
+        </div>
+        <select type="text" class="form-control" id="Rank" name="Rank">
+          
+          <option>Initiate</option>
+          <option>Rune Priest</option>
+          <option>God Talker</option>
+          <option>Rune Lord</option>
+          
+        </select>
+        </div>
 
-              <br>
-        <h4>Hit Locations</h4>
-          {{ range $i, $loc := $character.HitLocations }}
+        <br>
 
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="{{ $i }}-name-addon">Name</span>
-            </div>
-            <input type="text" class="form-control" aria-describedby="{{ $i }}-name-addon" name="{{ $i }}-Name" value ="{{ $loc.Name }}">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="rp-addon">Rune Points</span>
           </div>
-          <br>
+          <input type="number" class="form-control" aria-describedby="rp-addon" name="RunePoints" value="{{ $character.Cult.NumRunePoints }}">
+        </div>
 
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="{{ $i }}-boxes-addon">Wound Boxes</span>
-            </div>
-            <input type="number" class="form-control" aria-describedby="{{ $i }}-boxes-addon" name="{{ $i }}-Boxes" value ="{{ $loc.Boxes }}">
+        <hr>
+
+
+
+        <p>Image</p>
+        <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
+          data-holder-rendered="true">
+        <br>
+        <div class="input-group">
+          <div class="custom-file">
+            <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+            <label class="custom-file-label" for="inputGroupFile">Update Image</label>
           </div>
-          <br>
+        </div>
+        <hr>
 
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="{{ $i }}-lar-addon">LAR</span>
-            </div>
-            <input type="number" class="form-control" aria-describedby="{{ $i }}-lar-addon" name="{{ $i }}-LAR" value ="{{ $loc.LAR }}">
+        <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox"
+          {{if .CharacterModel.Open }} checked{{ end }}>
+
+        <hr>
+
+        <h4>Event</h4>
+        <p>Enter the description of the event that caused the updates.</p>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="event-addon">Event</span>
           </div>
-          <br>
+          <input type="text" class="form-control" aria-describedby="event-addon" name="Event" value="Manual Update">
+        </div>
 
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="{{ $i }}-har-addon">HAR</span>
-            </div>
-            <input type="number" class="form-control" aria-describedby="{{ $i }}-har-addon" name="{{ $i }}-HAR" value ="{{ $loc.HAR }}">
-          </div>
-          <br>
+        <hr>
 
-          <label for="Locs">Select Hit Locations</label>
-          {{ range $c := $counter }}
-              {{ if isIn $loc.HitLoc $c }}
-            {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc" checked>
-              {{ else }}
-            {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc">
-              {{ end }} <!-- END if isIn -->
-          {{ end }} <!-- END counter Loop -->
-          <hr>
-          {{ end }} <!-- END overall location loop -->
+        <button class="btn btn-primary" type="submit" value="Save">Update</button>
 
-          <hr>
+    </div>
 
-            </div>
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <h4>Stats</h4>
+      {{ range $k, $stat := $statistics }}
 
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $stat.Total }}">
       </div>
-    </form>
-{{end}}
+      {{ end }}
+
+      <hr>
+
+      <h4>Abilities</h4>
+      {{ range $a := $character.Attributes }}
+      <p><strong>{{ $a }}</strong></p>
+      {{ end }}
+
+      <hr>
+
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <h4>Skills</h4>
+
+      {{ range $skill := $skills }}
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}"
+          value="{{ $skill.Total }}">
+      </div>
+      {{ if $skill.UserString }}
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $skill.Name }}-UserString-addon">--Specialization</span>
+        </div>
+        <input type="text" class="form-control" aria-describedby="{{ $skill.Name }}-UserString-addon" name="{{ $skill.Name }}-UserString"
+          value="{{ $skill.UserString }}">
+      </div>
+      {{ end }}
+      {{end}}
+
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <h4>Passions & Social</h4>
+
+      {{ range $ability := $character.Abilities }}
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $ability.Name }}-addon">{{ $ability.CoreString }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $ability.Name }}-addon" name="{{ $ability.Name }}"
+          value="{{ $ability.Total }}">
+      </div>
+      {{ if $ability.UserString }}
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $ability.Name }}-UserString-addon">--Specialization</span>
+        </div>
+        <input type="text" class="form-control" aria-describedby="{{ $ability.Name }}-UserString-addon" name="{{ $ability.Name }}-UserString"
+          value="{{ $ability.UserString }}">
+      </div>
+      {{ end }}
+      {{end}}
+
+      <br>
+      <h4>Hit Locations</h4>
+      {{ range $i, $loc := $character.HitLocations }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $i }}-name-addon">Name</span>
+        </div>
+        <input type="text" class="form-control" aria-describedby="{{ $i }}-name-addon" name="{{ $i }}-Name" value="{{ $loc.Name }}">
+      </div>
+      <br>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $i }}-boxes-addon">Wound Boxes</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $i }}-boxes-addon" name="{{ $i }}-Boxes" value="{{ $loc.Boxes }}">
+      </div>
+      <br>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $i }}-lar-addon">LAR</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $i }}-lar-addon" name="{{ $i }}-LAR" value="{{ $loc.LAR }}">
+      </div>
+      <br>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $i }}-har-addon">HAR</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $i }}-har-addon" name="{{ $i }}-HAR" value="{{ $loc.HAR }}">
+      </div>
+      <br>
+
+      <label for="Locs">Select Hit Locations</label>
+      {{ range $c := $counter }}
+      {{ if isIn $loc.HitLoc $c }}
+      {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc" checked>
+      {{ else }}
+      {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc">
+      {{ end }}
+      <!-- END if isIn -->
+      {{ end }}
+      <!-- END counter Loop -->
+      <hr>
+      {{ end }}
+      <!-- END overall location loop -->
+
+      <hr>
+
+    </div>
+
+  </div>
+  </form>
+  {{end}}

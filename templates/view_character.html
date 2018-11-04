@@ -92,13 +92,9 @@
         <hr>
         
         <h3>Abilities</h3>
-        {{ range $a := $character.Abilities }}
-          <p><strong title="{{ $a.Name }}
-        Base: {{ $a.Base }}
-        Homeland: {{ $a.HomelandValue }}%
-        Occupation: {{ $a.OccupationValue }}%
-        Cult: {{ $a.CultValue }}%{{ range $u := $a.Updates }}
-        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}</strong></p>
+        <p><strong>Rune Points ({{ $character.Cult.Name }}): {{ $character.Cult.NumRunePoints }}</strong></p>
+        {{ range $a := $character.Attributes }}
+          <p><strong>{{ $a }}</strong></p>
         {{ end }}
 
         <hr>
@@ -117,8 +113,7 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
         {{ range $skill := $character.Skills }}
-        <ul>
-        <strong title="{{ $skill.Name }} ({{ $skill.Category }})
+        <p><strong title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
         Category: {{ $skill.CategoryValue }}%
         Homeland: {{ $skill.HomelandValue }}%
@@ -126,15 +121,22 @@
         Cult: {{ $skill.CultValue }}%
         {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
         {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%</strong>
-        </ul>
+        </p>
         {{ end }}
       </div>
+
+      <hr>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
 
       <h4>Passions</h4>
-        {{ range $stat := $character.Attributes }}
-          <p><strong>{{ $stat }}</strong></p>
+        {{ range $a := $character.Abilities }}
+          <p><strong title="{{ $a.Name }}
+        Base: {{ $a.Base }}
+        Homeland: {{ $a.HomelandValue }}%
+        Occupation: {{ $a.OccupationValue }}%
+        Cult: {{ $a.CultValue }}%{{ range $u := $a.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}
         {{ end }}
 
         <hr>

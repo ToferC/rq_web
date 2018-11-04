@@ -53,16 +53,14 @@ func (c *Character) UpdateAttributes() {
 	}
 }
 
-func (d *Attribute) String() string {
-
-	d.Total = d.Base + d.Value
+func (a *Attribute) String() string {
 
 	var text string
 
-	if d.Text == "" {
-		text = fmt.Sprintf("%s: %d", d.Name, d.Total)
+	if a.Text == "" {
+		text = fmt.Sprintf("%s: %d", a.Name, a.Total)
 	} else {
-		text = fmt.Sprintf("%s: %s", d.Name, d.Text)
+		text = fmt.Sprintf("%s: %s", a.Name, a.Text)
 	}
 	return text
 }

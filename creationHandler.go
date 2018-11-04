@@ -1283,6 +1283,10 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 			c.ModifyAbility(c.Cult.PassionList[n])
 		}
 
+		// Add base runepoints
+		c.Cult.NumRunePoints = 3
+		c.Cult.NumSpiritMagic = 5
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)

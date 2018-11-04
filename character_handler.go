@@ -444,6 +444,16 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		eventString := req.FormValue("Event")
 
+		c.Cult.Rank = req.FormValue("Rank")
+
+		rp, err := strconv.Atoi(req.FormValue("RunePoints"))
+		if err != nil {
+			rp = 3
+			fmt.Println("Not a number")
+		}
+
+		c.Cult.NumRunePoints = rp
+
 		for _, st := range runequest.StatMap {
 
 			stat := c.Statistics[st]

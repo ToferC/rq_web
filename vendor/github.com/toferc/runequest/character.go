@@ -48,6 +48,9 @@ func (c *Character) UpdateCharacter() {
 	c.AddRuneModifiers()
 	c.TotalStatistics()
 	c.DetermineSkillCategoryValues()
+
+	// This can be optimized
+	c.SetAttributes()
 	c.UpdateAttributes()
 }
 

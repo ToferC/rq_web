@@ -29,13 +29,7 @@ func (c *Character) TotalStatistics() {
 
 	for _, s := range c.Statistics {
 
-		updates := 0
-
-		for _, u := range s.Updates {
-			updates += u.Value
-		}
-
-		s.Total = s.Base + s.RuneBonus + updates
+		s.UpdateStatistic()
 	}
 }
 
