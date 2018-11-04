@@ -764,9 +764,9 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Add extra empty skills if < 9
-	if len(cl.Cult.Skills) < 9 {
-		for i := len(cl.Cult.Skills); i < 9; i++ {
+	// Add extra empty skills if < 10
+	if len(cl.Cult.Skills) < 10 {
+		for i := len(cl.Cult.Skills); i < 10; i++ {
 			tempSkill := runequest.Skill{}
 			cl.Cult.Skills = append(cl.Cult.Skills, tempSkill)
 		}
@@ -1012,7 +1012,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		tempSkills := []runequest.Skill{}
 
 		// Read Base Skills from Form
-		for i := 1; i < 9; i++ {
+		for i := 1; i < 10; i++ {
 
 			core := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
