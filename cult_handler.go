@@ -279,7 +279,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:      username,
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
-		Counter:          numToArray(3),
+		Counter:          numToArray(7),
 		BigCounter:       numToArray(15),
 		Passions:         runequest.PassionTypes,
 		WeaponCategories: runequest.WeaponCategories,
@@ -497,7 +497,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		skillArray = append(skillArray, meditate)
 		skillArray = append(skillArray, lore)
 
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 7; i++ {
 
 			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
@@ -751,7 +751,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 	// Validate that User == Author
 	IsAuthor := false
 
-	if username == cl.Author.UserName {
+	if username == cl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
@@ -764,9 +764,9 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Add extra empty skills if < 6
-	if len(cl.Cult.Skills) < 8 {
-		for i := len(cl.Cult.Skills); i < 8; i++ {
+	// Add extra empty skills if < 9
+	if len(cl.Cult.Skills) < 9 {
+		for i := len(cl.Cult.Skills); i < 9; i++ {
 			tempSkill := runequest.Skill{}
 			cl.Cult.Skills = append(cl.Cult.Skills, tempSkill)
 		}
@@ -811,8 +811,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:      username,
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
-		Counter:          []int{1, 2, 3},
-		BigCounter:       []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+		Counter:          numToArray(9),
+		BigCounter:       numToArray(15),
 		Passions:         runequest.PassionTypes,
 		WeaponCategories: runequest.WeaponCategories,
 		CategoryOrder:    runequest.CategoryOrder,
@@ -1012,7 +1012,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		tempSkills := []runequest.Skill{}
 
 		// Read Base Skills from Form
-		for i := 1; i < 8; i++ {
+		for i := 1; i < 9; i++ {
 
 			core := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
