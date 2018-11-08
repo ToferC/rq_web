@@ -12,13 +12,15 @@
 {{ $cult := $character.Cult }}
 {{ $skills := .Skills }}
 {{ $wepCategory := .WeaponCategories }}
+{{ $spiritmagic := .SpiritMagic }}
 
       <div class="container">
         <hr>
         <div class="row">
 
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <h4>Apply Cult template (6 of 7)</h4>
+            <h4>Apply Cult template</h4>
+            <h5>(6 of 7)</h5>
 
             <p>Make choices based on your cult.</p>
 
@@ -34,6 +36,8 @@
             <p>{{ $character.Description }}</p>
             <hr>
             <form action="" method="POST" enctype="multipart/form-data">
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+
 
         </div>
             <!-- Cults give 3 Rune Spells and 5 pts of Spirit Magic -->
@@ -100,7 +104,7 @@
                 </div>
                   <select type="text" class="form-control" id="SpiritMagic-{{ $n }}" name="SpiritMagic-{{ $n }}">
                   <option></option>
-                {{ range $m, $sm := $cult.SpiritMagic }}
+                {{ range $m, $sm := $spiritmagic }}
                     {{ if eq $sm.UserString "" }}
                     <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}}</option>
                     {{ else }}

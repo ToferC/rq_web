@@ -16,9 +16,9 @@
         <hr>
         <div class="row">
 
-        <div class="col-sm-3 col-md-3 col-lg-3">
-            <h4>Personal Skills (7 of 7)</h4>
-
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <h4>Personal Skills</h4>
+            <h5>(Step 7 of 7)</h5>
             <p>Choose your character's Personal Skills</p>
 
         <h5>{{ $character.Name }}</h5>
@@ -30,13 +30,15 @@
 
             <p>{{ $character.Description }}</p>
             <hr>
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+            <form action="" method="POST" enctype="multipart/form-data">
+
 
         </div> <!-- END outer column 3 -->
 
 
-          <div class="col-sm-9 col-md-9 col-lg-9">
+          <div class="col-sm-4 col-md-4 col-lg-4">
 
-            <form action="" method="POST" enctype="multipart/form-data">
 
             <h4>Instructions</h4>
             <p>Choose 4 skills to add +25% to and 4 skills to add +10% to.</p>
@@ -68,6 +70,10 @@
                 {{ end }} <!-- end range counter -->
 
             <hr>
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+
 
             <h4>Add +10% to Skills</h4>
             {{ range $m := $counter }}

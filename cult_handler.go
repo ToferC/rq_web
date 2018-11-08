@@ -433,9 +433,10 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				if str != "" {
 					tempCult := runequest.Cult{
-						Name:       c.Name,
-						RuneSpells: c.RuneSpells,
-						SubCult:    false,
+						Name:        c.Name,
+						RuneSpells:  c.RuneSpells,
+						SpiritMagic: c.SpiritMagic,
+						SubCult:     false,
 					}
 					cl.Cult.AssociatedCults = append(cl.Cult.AssociatedCults, tempCult)
 				}
@@ -453,9 +454,10 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				if str != "" {
 					tempCult := runequest.Cult{
-						Name:       c.Name,
-						RuneSpells: c.RuneSpells,
-						SubCult:    true,
+						Name:        c.Name,
+						RuneSpells:  c.RuneSpells,
+						SpiritMagic: c.SpiritMagic,
+						SubCult:     true,
 					}
 					cl.Cult.SubCults = append(cl.Cult.SubCults, tempCult)
 				}
@@ -976,9 +978,10 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				if str != "" {
 					tempCult := runequest.Cult{
-						Name:       c.Name,
-						RuneSpells: c.RuneSpells,
-						SubCult:    false,
+						Name:        c.Name,
+						RuneSpells:  c.RuneSpells,
+						SpiritMagic: c.SpiritMagic,
+						SubCult:     false,
 					}
 					tempAssociatedCults = append(tempAssociatedCults, tempCult)
 				}
@@ -998,9 +1001,10 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				if str != "" {
 					tempCult := runequest.Cult{
-						Name:       c.Name,
-						RuneSpells: c.RuneSpells,
-						SubCult:    true,
+						Name:        c.Name,
+						RuneSpells:  c.RuneSpells,
+						SpiritMagic: c.SpiritMagic,
+						SubCult:     true,
 					}
 					tempSubCults = append(tempSubCults, tempCult)
 				}

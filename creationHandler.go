@@ -953,8 +953,10 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Equipment
 
-		for _, e := range c.Occupation.Equipment {
-			c.Equipment = append(c.Equipment, e)
+		if len(c.Occupation.Equipment) > 0 {
+			for _, e := range c.Occupation.Equipment {
+				c.Equipment = append(c.Equipment, e)
+			}
 		}
 
 		err = database.UpdateCharacterModel(db, cm)
@@ -1022,6 +1024,17 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 	numRunePoints := numToArray(3)
 	numSpiritMagic := numToArray(5)
 
+	// Add Associated Cult spells
+	totalSpiritMagic := []runequest.Spell{}
+
+	totalSpiritMagic = c.Cult.SpiritMagic
+
+	for _, ac := range c.Cult.AssociatedCults {
+		for _, spell := range ac.SpiritMagic {
+			totalSpiritMagic = append(totalSpiritMagic, spell)
+		}
+	}
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
@@ -1031,6 +1044,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		Skills:         runequest.Skills,
 		NumRunePoints:  numRunePoints,
 		NumSpiritMagic: numSpiritMagic,
+		SpiritMagic:    totalSpiritMagic,
 	}
 	// Test
 	if req.Method == "GET" {
@@ -1095,7 +1109,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Non-number entered")
 				}
 
-				baseSpell := c.Cult.SpiritMagic[index]
+				baseSpell := totalSpiritMagic[index]
 
 				s := &runequest.Spell{
 					Name:       baseSpell.Name,
