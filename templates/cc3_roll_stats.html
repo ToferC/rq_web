@@ -56,6 +56,20 @@
 
                 <input type="button" value="Re-roll" onclick="randomValue();" />
                 <hr>
+                <h4>Choose Rune Bonuses</h4>
+                <p>Your adventurer gets Rune Modifier bonuses to the characteristics corresponding to their primary (highest) and secondary (second-highest) Elemental Rune affinities.</p> 
+                {{ range $i, $r := .RuneArray }}
+                  <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="RuneMod-{{ $i }}-addon">Stat {{ add $i 1 }}</span>
+                        </div>
+                    <select type="text" class="form-control" id="RuneMod-{{ $i }}" name="RuneMod-{{ $i }}">
+                      <option>{{ $r }}</option>
+                      <option>CHA</option>
+                    </select>
+                </div>
+                {{ end }}
+                <hr>
 
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>

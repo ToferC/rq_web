@@ -69,24 +69,28 @@
 
         <h3>Elemental Runes</h3>
         {{ range $r := $character.ElementalRunes }}
+        {{ if gt $r.Total 0 }}
           <p title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%
         Occupation: {{ $r.OccupationValue }}%
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}</p>
+        {{ end }} <!-- END gt loop -->
         {{ end }}
 
         <hr>
 
       <h3>Power Runes</h3>
         {{ range $r := $character.PowerRunes }}
+        {{ if ne $r.Total 50 }}
           <p title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%
         Occupation: {{ $r.OccupationValue }}%
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}</p>
+        {{ end }} <!-- END ne loop -->
         {{ end }}
 
         <hr>
@@ -160,9 +164,17 @@
         <hr>
 
         <h4>Equipment</h4>
+        {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+          {{ range $ec, $eq := $character.Equipment }}
+            <div class="input-group">
+              <input type="text" class="form-control" aria-describedby="Equipment-{{$ec}}-addon" name="Equipment-{{$ec}}" value ="{{ $eq }}">
+            </div>
+            {{ end }}
+        {{ else }}
                 {{ range $e := $character.Equipment }}
                     <p>{{ $e }}</p>
                 {{ end }}
+        {{ end }} <!-- END IsAuthor Loop -->
         
       </div>
       </div>

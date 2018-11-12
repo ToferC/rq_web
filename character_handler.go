@@ -103,6 +103,11 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
+	// Always create 4 empty equipment slots.
+	for i := 0; i < 4; i++ {
+		c.Equipment = append(c.Equipment, "")
+	}
+
 	fmt.Println(c)
 
 	if cm.Image == nil {
@@ -118,7 +123,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:     loggedIn,
 		SessionUser:    username,
 		IsAdmin:        isAdmin,
-		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		Counter:        numToArray(10),
 	}
 
 	if req.Method == "GET" {
@@ -145,7 +150,22 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		c.Equipment[0] = req.FormValue("Equipment")
+		// Read Equipment
+		var equipment = []string{}
+
+		for i := 0; i < len(c.Equipment)+1; i++ {
+			str := req.FormValue(fmt.Sprintf("Equipment-%d", i))
+			if str != "" {
+				equipment = append(equipment, str)
+			}
+		}
+
+		c.Equipment = equipment
+
+		// Always create 4 empty equipment slots.
+		for i := 0; i < 4; i++ {
+			c.Equipment = append(c.Equipment, "")
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {

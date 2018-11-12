@@ -9,6 +9,7 @@ type Attribute struct {
 	Value           int
 	Base            int
 	Updates         []*Update
+	UserString      string
 	Total           int
 	Dice            int
 	Max             int

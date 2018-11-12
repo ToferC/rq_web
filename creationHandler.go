@@ -514,12 +514,16 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
+	// Determine Rune bonuses (returns array of 2 strings)
+	runeArray := c.DetermineRuneModifiers()
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
 		IsAuthor:       IsAuthor,
+		RuneArray:      runeArray,
 	}
 
 	if req.Method == "GET" {
@@ -542,15 +546,14 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 				n = 0
 			}
 			c.Statistics[st].Base = n
-
-			n, _ = strconv.Atoi(req.FormValue("Rune-Bonus-" + st))
-			if err != nil {
-				n = 0
-			}
-			c.Statistics[st].RuneBonus = n
 		}
 
-		c.AddRuneModifiers()
+		// Apply Rune Modifiers
+		target1 := req.FormValue(fmt.Sprintf("RuneMod-%d", 0))
+		c.Statistics[target1].RuneBonus = 2
+
+		target2 := req.FormValue(fmt.Sprintf("RuneMod-%d", 1))
+		c.Statistics[target2].RuneBonus = 1
 
 		c.SetAttributes()
 

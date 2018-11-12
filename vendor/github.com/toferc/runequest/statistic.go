@@ -43,6 +43,11 @@ func (s *Statistic) UpdateStatistic() {
 	}
 
 	s.Total = s.Base + s.RuneBonus + updates
+	s.Max = 18 + s.RuneBonus
+
+	if s.Total > s.Max {
+		s.Total = s.Max
+	}
 }
 
 // RuneQuestStats is the base stats for RuneQuest

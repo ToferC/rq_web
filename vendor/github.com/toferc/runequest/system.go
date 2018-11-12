@@ -33,11 +33,14 @@ func (a ByTotal) Len() int           { return len(a) }
 func (a ByTotal) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByTotal) Less(i, j int) bool { return a[i].Total > a[j].Total }
 
-// AddRuneModifiers adds stat modifiers based on runes
-func (c *Character) AddRuneModifiers() {
+// DetermineRuneModifiers adds stat modifiers based on runes
+func (c *Character) DetermineRuneModifiers() []string {
 
 	var runes []*Ability
 
+	var runeModifiers []string
+
+	// Add abilities to array for sorting
 	for _, a := range c.ElementalRunes {
 		a.UpdateAbility()
 		runes = append(runes, a)
@@ -56,32 +59,33 @@ func (c *Character) AddRuneModifiers() {
 
 	switch {
 	case primary == "Air":
-		c.Statistics["STR"].RuneBonus = 2
+		runeModifiers = append(runeModifiers, "STR")
 	case primary == "Earth":
-		c.Statistics["CON"].RuneBonus = 2
+		runeModifiers = append(runeModifiers, "CON")
 	case primary == "Darkness":
-		c.Statistics["SIZ"].RuneBonus = 2
+		runeModifiers = append(runeModifiers, "SIZ")
 	case primary == "Fire/Sky":
-		c.Statistics["INT"].RuneBonus = 2
+		runeModifiers = append(runeModifiers, "INT")
 	case primary == "Water":
-		c.Statistics["DEX"].RuneBonus = 2
+		runeModifiers = append(runeModifiers, "DEX")
 	case primary == "Moon":
-		c.Statistics["POW"].RuneBonus = 2
+		runeModifiers = append(runeModifiers, "POW")
 	}
 
 	switch {
 	case secondary == "Air":
-		c.Statistics["STR"].RuneBonus = 1
+		runeModifiers = append(runeModifiers, "STR")
 	case secondary == "Earth":
-		c.Statistics["CON"].RuneBonus = 1
+		runeModifiers = append(runeModifiers, "CON")
 	case secondary == "Darkness":
-		c.Statistics["SIZ"].RuneBonus = 1
+		runeModifiers = append(runeModifiers, "SIZ")
 	case secondary == "Fire/Sky":
-		c.Statistics["INT"].RuneBonus = 1
+		runeModifiers = append(runeModifiers, "INT")
 	case secondary == "Water":
-		c.Statistics["DEX"].RuneBonus = 1
+		runeModifiers = append(runeModifiers, "DEX")
 	case secondary == "Moon":
-		c.Statistics["POW"].RuneBonus = 1
+		runeModifiers = append(runeModifiers, "POW")
 	}
 
+	return runeModifiers
 }

@@ -7,33 +7,36 @@ import (
 
 // Character represents a generic RPG character
 type Character struct {
-	Name            string
-	Setting         string
-	Description     string
-	Race            *Race
-	Homeland        *Homeland
-	Occupation      *Occupation
-	Cult            *Cult
-	Abilities       map[string]*Ability
-	ElementalRunes  map[string]*Ability
-	PowerRunes      map[string]*Ability
-	Statistics      map[string]*Statistic
-	Attributes      map[string]*Attribute
-	DerivedMap      []string
-	Skills          map[string]*Skill
-	SkillMap        []string
-	SkillCategories map[string]*SkillCategory
-	Advantages      map[string]*Advantage
-	AdvantageMap    []string
-	RuneSpells      map[string]*Spell
-	SpiritMagic     map[string]*Spell
-	Powers          map[string]*Power
-	HitLocations    map[string]*HitLocation
-	HitLocationMap  []string
-	Equipment       []string
-	PointCost       int
-	InPlay          bool
-	Updates         []*Update
+	Name             string
+	Setting          string
+	Description      string
+	Race             *Race
+	Homeland         *Homeland
+	Occupation       *Occupation
+	Cult             *Cult
+	Abilities        map[string]*Ability
+	ElementalRunes   map[string]*Ability
+	PowerRunes       map[string]*Ability
+	Statistics       map[string]*Statistic
+	Attributes       map[string]*Attribute
+	DerivedMap       []string
+	Skills           map[string]*Skill
+	SkillMap         []string
+	SkillCategories  map[string]*SkillCategory
+	Advantages       map[string]*Advantage
+	AdvantageMap     []string
+	RuneSpells       map[string]*Spell
+	SpiritMagic      map[string]*Spell
+	Powers           map[string]*Power
+	HitLocations     map[string]*HitLocation
+	HitLocationMap   []string
+	Equipment        []string
+	Lunars           int
+	Ransom           int
+	StandardofLiving string
+	PointCost        int
+	InPlay           bool
+	Updates          []*Update
 }
 
 // Update tracks live changes to Character
@@ -45,7 +48,6 @@ type Update struct {
 
 // UpdateCharacter updates stats, runes and skills based on them
 func (c *Character) UpdateCharacter() {
-	c.AddRuneModifiers()
 	c.TotalStatistics()
 	c.DetermineSkillCategoryValues()
 
