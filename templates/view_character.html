@@ -83,7 +83,7 @@
 
       <h3>Power Runes</h3>
         {{ range $r := $character.PowerRunes }}
-        {{ if ne $r.Total 50 }}
+        {{ if gt $r.Total 0 }}
           <p title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%

@@ -410,6 +410,9 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Set runeTotal
+		runeTotal := 0
+
 		// Update Elemental Runes
 		for k := range c.ElementalRunes {
 			b, err := strconv.Atoi(req.FormValue(k))
@@ -426,7 +429,15 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 
 			// Modify Ability
 			c.ElementalRunes[k].Base = b
+			runeTotal += b
 			c.ElementalRunes[k].CreationBonusValue = cbv
+		}
+
+		switch {
+		case runeTotal < 120:
+			c.ElementalRunes["Air"].Base = 60
+			c.ElementalRunes["Earth"].Base = 40
+			c.ElementalRunes["Fire/Sky"].Base = 20
 		}
 
 		for k, v := range c.PowerRunes {

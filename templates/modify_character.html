@@ -107,9 +107,28 @@
 
       <hr>
 
-      <h4>Abilities</h4>
-      {{ range $a := $character.Attributes }}
-      <p><strong>{{ $a }}</strong></p>
+      <h4>Elemental Runes</h4>
+      {{ range $k, $v := $character.ElementalRunes }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+      </div>
+      {{ end }}
+
+      <hr>
+
+      <h4>Elemental Runes</h4>
+      {{ range $k, $v := $character.PowerRunes }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+      </div>
       {{ end }}
 
       <hr>

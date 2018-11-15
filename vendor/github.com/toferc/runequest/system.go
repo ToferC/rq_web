@@ -87,5 +87,6 @@ func (c *Character) DetermineRuneModifiers() []string {
 		runeModifiers = append(runeModifiers, "POW")
 	}
 
+	fmt.Println(runeModifiers)
 	return runeModifiers
 }

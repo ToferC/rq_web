@@ -14,6 +14,8 @@ type Character struct {
 	Homeland         *Homeland
 	Occupation       *Occupation
 	Cult             *Cult
+	Clan             string
+	Tribe            string
 	Abilities        map[string]*Ability
 	ElementalRunes   map[string]*Ability
 	PowerRunes       map[string]*Ability

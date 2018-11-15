@@ -534,6 +534,98 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			s.UpdateSkill()
 		}
 
+		// Update Elemental Runes
+		for k, v := range c.ElementalRunes {
+			mod, err := strconv.Atoi(req.FormValue(k))
+			if err != nil {
+				mod = v.Total
+			}
+
+			if mod != v.Total {
+
+				modVal := mod - v.Total
+
+				t := time.Now()
+				tString := t.Format("2006-01-02")
+
+				update := &runequest.Update{
+					Date:  tString,
+					Event: fmt.Sprintf("%s", eventString),
+					Value: modVal,
+				}
+
+				if v.Updates == nil {
+					v.Updates = []*runequest.Update{}
+				}
+
+				v.Updates = append(v.Updates, update)
+
+			}
+			v.UpdateAbility()
+		}
+
+		// Create array for watching which updates made to opposed Runes
+		triggered := []string{}
+
+		// Update Power Runes
+		for k, v := range c.PowerRunes {
+
+			if !isInString(triggered, k) {
+
+				mod, err := strconv.Atoi(req.FormValue(k))
+				if err != nil {
+					mod = v.Total
+				}
+
+				// Can't have Power rune > 99
+				if mod > 99 {
+					mod = 99
+				}
+
+				if mod != v.Total {
+
+					modVal := mod - v.Total
+
+					t := time.Now()
+					tString := t.Format("2006-01-02")
+
+					update := &runequest.Update{
+						Date:  tString,
+						Event: fmt.Sprintf("%s", eventString),
+						Value: modVal,
+					}
+
+					if v.Updates == nil {
+						v.Updates = []*runequest.Update{}
+					}
+
+					v.Updates = append(v.Updates, update)
+
+					v.UpdateAbility()
+
+					opposed := c.PowerRunes[v.OpposedAbility]
+
+					// Update opposed Power Rune if needed
+					if v.Total+opposed.Total > 100 {
+
+						opposedUpdate := &runequest.Update{
+							Date:  tString,
+							Event: fmt.Sprintf("%s", eventString),
+							Value: -modVal,
+						}
+
+						if opposed.Updates == nil {
+							opposed.Updates = []*runequest.Update{}
+						}
+						opposed.Updates = append(opposed.Updates, opposedUpdate)
+						opposed.UpdateAbility()
+						triggered = append(triggered, opposed.Name)
+					}
+				}
+			}
+
+		}
+
 		// Update Abilities
 		for _, a := range c.Abilities {
 			mod, _ := strconv.Atoi(req.FormValue(a.Name))
