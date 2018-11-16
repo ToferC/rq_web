@@ -45,61 +45,118 @@
             <p>Choose one rune at 60%, one at 40% and one at 20%.</p>
             <p>Your chosen homeland will provide a bonus of 10% to {{$character.Homeland.RuneBonus}}.
 
-                {{ range $k, $er := $character.ElementalRunes }}
                     <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $er.CoreString }}-addon">{{ $er.CoreString }} Rune</span>
+                    <span class="input-group-text" id="Rune1-addon">Rune at 60%</span>
                   </div>
-              <select type="text" class="form-control" id="{{ $er.CoreString }}" name="{{ $er.CoreString }}">
-                {{ if gt $er.Base 0 }}
-                  <option>{{ $er.Base }}</option>
-                  <option>--------------</option>
-                {{ end }}
-                <option>0</option>
-                <option>60</option>
-                <option>40</option>
-                <option>20</option>
-              </select>                  <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $er.CoreString }}-addon">%</span>
-                    </div>
-                </div>
+              <select type="text" class="form-control" id="Rune1" name="Rune1">
+                <option>Air</option>
+                <option>Earth</option>
+                <option>Fire/Sky</option>
+                <option>Darkness</option>
+                <option>Moon</option>
+                <option>Water</option>
+              </select>                  
+             </div>
 
+             <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Rune2-addon">Rune at 40%</span>
+                  </div>
+              <select type="text" class="form-control" id="Rune2" name="Rune2">
+                <option>Earth</option>
+                <option>Fire/Sky</option>
+                <option>Darkness</option>
+                <option>Moon</option>
+                <option>Water</option>
+                <option>Air</option>
+
+              </select>                  
+             </div>
+
+             <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Rune3-addon">Rune at 20%</span>
+                  </div>
+              <select type="text" class="form-control" id="Rune3" name="Rune3">
+                <option>Fire/Sky</option>
+                <option>Darkness</option>
+                <option>Moon</option>
+                <option>Water</option>
+                <option>Air</option>
+                <option>Earth</option>
+              </select>                  
+             </div>
+
+             <hr>
+              <h4>Power Runes</h4>
+            <p>Choose two runes at 75%. The Runes opposing Rune will start at 25%.</p>
+           
+             <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="PowerRune1-addon">Power Rune at 75%</span>
+                  </div>
+              <select type="text" class="form-control" id="PowerRune1" name="PowerRune1">
+                <option>Man</option>
+                <option>Beast</option>
+                <option>Fertility</option>
+                <option>Death</option>
+                <option>Harmony</option>
+                <option>Disorder</option>
+                <option>Truth</option>
+                <option>Illusion</option>
+                <option>Movement</option>
+                <option>Stasis</option>
+              </select>                  
+             </div>
+
+             <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="PowerRune2-addon">Power Rune at 75%</span>
+                  </div>
+              <select type="text" class="form-control" id="PowerRune2" name="PowerRune2">
+                <option>Fertility</option>
+                <option>Death</option>
+                <option>Harmony</option>
+                <option>Disorder</option>
+                <option>Truth</option>
+                <option>Illusion</option>
+                <option>Movement</option>
+                <option>Stasis</option>
+                <option>Man</option>
+                <option>Beast</option>
+              </select>                  
+             </div>
+              
+          </div>
+
+          <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <h4>Bonus Points</h4>
+            <p>Spread 50 points across the runes. No rune can go higher than 100%</p>
+
+            <h5>Elemental Runes</h5>
+            {{ range $k, $er := $character.ElementalRunes }}
+             
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="Bonus-{{ $er.CoreString }}-addon">Bonus</span>
+                    <span class="input-group-text" id="Bonus-{{ $er.CoreString }}-addon">{{ $er.CoreString }}</span>
                   </div>
                   <input type="number" class="form-control" aria-describedby="Bonus-{{ $er.CoreString }}-addon" name="Bonus-{{ $er.CoreString }}" value ="{{$er.CreationBonusValue}}">
                   <div class="input-group-append">
                       <span class="input-group-text" id="Bonus-{{ $er.CoreString }}-addon">%</span>
                     </div>
                 </div>
-
-                <hr>
                 {{ end }}
-          </div>
+                <hr>
 
-          <div class="col-sm-4 col-md-4 col-lg-4">
-
-            <h4>Power Runes</h4>
-            <p>Choose two runes at 75%. The Runes opposing Rune will start at 25%.</p>
-            <p>Your chosen homeland will provide a bonus of 10% to {{$character.Homeland.RuneBonus}}.
+                <h5>Power Runes</h5>
 
                 {{ range $k, $pr := $character.PowerRunes }}
-                    <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $pr.CoreString }}-addon">{{ $pr.CoreString }} Rune</span>
-                  </div>
- <select type="text" class="form-control" id="{{ $pr.CoreString }}" name="{{ $pr.CoreString }}">
-                <option>50</option>
-                <option>75</option>
-              </select>                  <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $pr.CoreString }}-addon">%</span>
-                    </div>
-                </div>
 
                  <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="Bonus-{{ $pr.CoreString }}-addon">Bonus</span>
+                    <span class="input-group-text" id="Bonus-{{ $pr.CoreString }}-addon">{{ $pr.CoreString }}</span>
                   </div>
                   <input type="number" class="form-control" aria-describedby="Bonus-{{ $pr.CoreString }}-addon" name="Bonus-{{ $pr.CoreString }}" value ="{{$pr.CreationBonusValue}}">
                   <div class="input-group-append">
@@ -107,8 +164,8 @@
                     </div>
                 </div>
 
-                <hr> 
                 {{ end }}
+                <hr> 
 
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>

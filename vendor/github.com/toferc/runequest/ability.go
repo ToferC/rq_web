@@ -250,8 +250,8 @@ var Abilities = map[string]*Ability{
 // ElementalRunes is a map of Rune abilities
 var ElementalRunes = map[string]*Ability{
 	// Elemental Runes
-	"Fire": &Ability{
-		CoreString: "Fire",
+	"Darkness": &Ability{
+		CoreString: "Darkness",
 		Type:       "Elemental Rune",
 		Value:      0,
 	},

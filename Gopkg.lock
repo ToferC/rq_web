@@ -40,8 +40,8 @@
     "service/s3/s3manager",
     "service/sts"
   ]
-  revision = "5021928b560f2919fa37e159720a45ea13b18d8f"
-  version = "v1.15.76"
+  revision = "64fc3d5c40fffc817c1cc1c1d89a6e482bf1120d"
+  version = "v1.15.77"
 
 [[projects]]
   name = "github.com/go-pg/pg"
@@ -113,7 +113,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "ca4e6fbb9ccfd1d4cc0bfb167512eb9450473142"
+  revision = "7a5ceff1eb56801eaf73a71c2739aa497464d5aa"
 
 [[projects]]
   branch = "master"
