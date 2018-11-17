@@ -549,20 +549,23 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		for _, st := range runequest.StatMap {
-			n, _ := strconv.Atoi(req.FormValue(st))
+		for k, v := range cm.Character.Homeland.StatisticFrames {
+			n, _ := strconv.Atoi(req.FormValue(k))
 			if err != nil {
 				n = 0
 			}
-			c.Statistics[st].Base = n
+			c.Statistics[k].Base = n
+			c.Statistics[k].Max = (v.Dice * 6) + v.Modifier
 		}
 
 		// Apply Rune Modifiers
 		target1 := req.FormValue(fmt.Sprintf("RuneMod-%d", 0))
 		c.Statistics[target1].RuneBonus = 2
+		c.Statistics[target1].Max += 2
 
 		target2 := req.FormValue(fmt.Sprintf("RuneMod-%d", 1))
 		c.Statistics[target2].RuneBonus = 1
+		c.Statistics[target2].Max++
 
 		c.SetAttributes()
 

@@ -43,6 +43,7 @@
                 data-holder-rendered="true">
 
                 <hr>
+                <h4>Image</h4>
               <div class="input-group">
                   <div class="custom-file">
                     <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
@@ -69,6 +70,33 @@
                       {{ end }}
                   </select>
               </div>
+
+              <hr>
+                <h4>Statistics</h4>
+              {{ range $k, $v := $homeland.StatisticFrames }}
+
+              <label for="Stat-{{ $k }}">{{ $k }}</label>
+                  <div class="form-row">
+                    <div class="col">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Stat-{{ $k }}-Dice-addon">Dice</span>
+                  </div>
+                      <input type="number" class="form-control" name="Stat-{{ $k }}-Dice" value="{{ $v.Dice }}">
+                    </div>
+                  </div>
+                    <div class="col">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Stat-{{ $k }}-Modifier-addon">Modifier</span>
+                  </div>
+                      <input type="number" class="form-control" name="Stat-{{ $k }}-Modifier" value="{{ $v.Modifier}}">
+                  </div>
+                  </div>
+                </div>
+              
+              {{ end }}
+
 
               <hr>
 

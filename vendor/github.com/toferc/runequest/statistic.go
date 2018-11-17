@@ -7,6 +7,7 @@ type Statistic struct {
 	Name            string
 	Base            int
 	RuneBonus       int
+	HomelandBonus   int
 	Updates         []*Update
 	Total           int
 	Max             int
@@ -43,7 +44,6 @@ func (s *Statistic) UpdateStatistic() {
 	}
 
 	s.Total = s.Base + s.RuneBonus + updates
-	s.Max = 18 + s.RuneBonus
 
 	if s.Total > s.Max {
 		s.Total = s.Max
@@ -55,29 +55,36 @@ var RuneQuestStats = map[string]*Statistic{
 	"STR": &Statistic{
 		Name: "Strength",
 		Base: RollDice(6, 1, 0, 3),
+		Max:  18,
 	},
 	"DEX": &Statistic{
 		Name: "Dexterity",
 		Base: RollDice(6, 1, 0, 3),
+		Max:  18,
 	},
 	"INT": &Statistic{
 		Name: "Intelligence",
 		Base: RollDice(6, 1, 6, 2),
+		Max:  18,
 	},
 	"CON": &Statistic{
 		Name: "Constitution",
 		Base: RollDice(6, 1, 6, 2),
+		Max:  18,
 	},
 	"POW": &Statistic{
 		Name: "Power",
 		Base: RollDice(6, 1, 0, 3),
+		Max:  18,
 	},
 	"SIZ": &Statistic{
 		Name: "Size",
 		Base: RollDice(6, 1, 6, 2),
+		Max:  18,
 	},
 	"CHA": &Statistic{
 		Name: "Charisma",
 		Base: RollDice(6, 1, 0, 3),
+		Max:  18,
 	},
 }

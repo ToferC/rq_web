@@ -161,6 +161,11 @@
     <hr>
 
         <h4>Hit Locations</h4>
+        {{ range $k, $v := $character.HitLocations }}
+          <p>{{ $v }}</p>
+        {{ end }}
+
+
         <hr>
 
         <h4>Equipment</h4>

@@ -28,9 +28,20 @@
   <hr>
   <a class="btn btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
   <a class="btn btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
+
+
+
 </div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">
+
+<h4>Statistics</h4>
+              {{ range $k, $v := $homeland.StatisticFrames }}
+
+              <p>{{ $k }}: {{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }}</p>
+              
+              {{ end }}
+<hr>
 
 <h4>Skills</h4>
 <h5>Skill Bonuses</h5>

@@ -150,6 +150,29 @@ func (c *Character) DetermineHitPoints() *Attribute {
 
 	hp.Base = baseHP
 
+	locHP := 0
+
+	switch {
+	case hp.Base < 7:
+		locHP = 2
+	case hp.Base < 10:
+		locHP = 3
+	case hp.Base < 13:
+		locHP = 4
+	case hp.Base < 16:
+		locHP = 5
+	case hp.Base < 19:
+		locHP = 6
+	case hp.Base < 22:
+		locHP = 7
+	case hp.Base > 21:
+		locHP = ((hp.Base - 21) / 3) + 7
+	}
+
+	for _, v := range c.HitLocations {
+		v.Max = locHP + v.Base
+	}
+
 	return hp
 }
 

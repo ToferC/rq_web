@@ -43,12 +43,12 @@
             <h4>Enter or choose your Statistics.</h4>
             
             
-                {{ range $k, $st := $character.Statistics }}
+                {{ range $k, $v := $character.Homeland.StatisticFrames }}
                     <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $k }}-addon">{{ $st.Name }}</span>
+                    <span class="input-group-text" id="{{ $k }}-addon">{{ $k }} ({{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }})</span>
                   </div>
-                  <input type="number" id="{{$k}}-roll" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value ="{{ $st.Base }}">
+                  <input type="number" id="{{$k}}-roll" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="0">
                 </div>
 
                 <hr>
@@ -85,6 +85,8 @@
   // Original JavaScript code by Chirp Internet: www.chirp.com.au
   // Please acknowledge use of this code by including this header.
 
+  window.onload = randomValue();
+
   function rollDie(sides)
   {
     if(!sides) sides = 6;
@@ -99,19 +101,9 @@
   }
 
   function randomValue() {
-      document.getElementById('STR-roll').value = rollDice(3,6);
-      
-      document.getElementById('CON-roll').value = rollDice(3,6);
-      
-      document.getElementById('SIZ-roll').value = rollDice(2,6)+6;
-      
-      document.getElementById('INT-roll').value = rollDice(2,6)+6;
-      
-      document.getElementById('POW-roll').value = rollDice(3,6);
-      
-      document.getElementById('CHA-roll').value = rollDice(3,6);
-      
-      document.getElementById('DEX-roll').value = rollDice(3,6);
+    {{ range $k, $v := $character.Homeland.StatisticFrames }}
+      document.getElementById('{{ $k }}-roll').value = rollDice({{ $v.Dice }},6)+{{ $v.Modifier}};
+    {{ end }}
       }
 
   </script>

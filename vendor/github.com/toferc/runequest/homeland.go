@@ -2,9 +2,10 @@ package runequest
 
 // Homeland represents a homeland and cultural learnings
 type Homeland struct {
-	Name        string
-	Description string
-	Skills      []Skill
+	Name            string
+	Description     string
+	StatisticFrames map[string]*StatisticFrame
+	Skills          []Skill
 	// Base Skill List
 	SkillChoices []SkillChoice
 	// Options for skills
@@ -14,6 +15,14 @@ type Homeland struct {
 	AbilityList    []Ability
 	PassionList    []Ability
 	Passions       []Ability
+	Advantages     []Advantage
+}
+
+// StatisticFrame represents stat modifiers to a character
+type StatisticFrame struct {
+	Name     string
+	Dice     int
+	Modifier int
 }
 
 // ChooseHomeland modifies a character's skills by homeland

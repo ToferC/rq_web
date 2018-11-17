@@ -13,6 +13,7 @@ func NewCharacter(name string) *Character {
 		Homeland:       &Homeland{},
 		Occupation:     &Occupation{},
 		Cult:           &Cult{},
+		HitLocations:   Locations,
 
 		SkillCategories: map[string]*SkillCategory{},
 	}

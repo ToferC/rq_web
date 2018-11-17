@@ -263,14 +263,25 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	c.Statistics["CHA"].Base = 10
 	c.Statistics["SIZ"].Base = 10
 
+	user := database.LoadUser(db, username)
+
+	// Map default Homeland to Character.Homelands
+	hl := models.HomelandModel{
+		Author: user,
+		Homeland: &runequest.Homeland{
+			StatisticFrames: runequest.HomeLandStats,
+		},
+	}
+
 	wc := WebChar{
 		CharacterModel: &cm,
+		HomelandModel:  &hl,
 		IsAuthor:       true,
 		SessionUser:    username,
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
-		Counter:        []int{1, 2, 3},
-		BigCounter:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
+		Counter:        numToArray(3),
+		BigCounter:     numToArray(20),
 		Passions:       runequest.PassionTypes,
 		CategoryOrder:  runequest.CategoryOrder,
 		Skills:         runequest.Skills,
@@ -292,16 +303,8 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		user := database.LoadUser(db, username)
-
-		// Map default Homeland to Character.Homelands
-		hl := models.HomelandModel{
-			Author: user,
-			Homeland: &runequest.Homeland{
-				Name:        req.FormValue("Name"),
-				Description: req.FormValue("Description"),
-			},
-		}
+		hl.Homeland.Name = req.FormValue("Name")
+		hl.Homeland.Description = req.FormValue("Description")
 
 		// Insert Homeland into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -357,6 +360,28 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		// Read Rune
 
 		hl.Homeland.RuneBonus = req.FormValue("Rune")
+
+		// Read Stat Framework
+
+		for k, v := range hl.Homeland.StatisticFrames {
+
+			dString := fmt.Sprintf("Stat-%s-Dice", k)
+			dice, err := strconv.Atoi(req.FormValue(dString))
+			if err != nil {
+				dice = 3
+			}
+
+			mString := fmt.Sprintf("Stat-%s-Modifier", k)
+			mod, err := strconv.Atoi(req.FormValue(mString))
+			if err != nil {
+				mod = 0
+			}
+
+			v.Dice = dice
+			v.Modifier = mod
+
+			fmt.Println(dice, mod)
+		}
 
 		// Read Base Skills
 
@@ -607,6 +632,11 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
+	// Add Homelandstats if not already there
+	if hl.Homeland.StatisticFrames == nil {
+		hl.Homeland.StatisticFrames = runequest.HomeLandStats
+	}
+
 	// Create empty skills for adding to the Homeland
 
 	// Add extra empty skills if < 20
@@ -680,6 +710,28 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			hl.Official = true
 		} else {
 			hl.Official = false
+		}
+
+		// Read Stat Framework
+
+		for k, v := range hl.Homeland.StatisticFrames {
+
+			dString := fmt.Sprintf("Stat-%s-Dice", k)
+			dice, err := strconv.Atoi(req.FormValue(dString))
+			if err != nil {
+				dice = 3
+			}
+
+			mString := fmt.Sprintf("Stat-%s-Modifier", k)
+			mod, err := strconv.Atoi(req.FormValue(mString))
+			if err != nil {
+				mod = 0
+			}
+
+			v.Dice = dice
+			v.Modifier = mod
+
+			fmt.Println(dice, mod)
 		}
 
 		// Upload image to s3
