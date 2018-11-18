@@ -11,6 +11,7 @@
 {{ $character := .CharacterModel.Character }}
 {{ $counter := .Counter }}
 {{ $passions := .Passions }}
+{{ $skills := .Skills }}
 
 <div class="container">
     <hr>
@@ -33,6 +34,31 @@
             <hr>
         
             <form action="" method="POST" enctype="multipart/form-data">
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Lunars-addon">Wealth</span>
+                        </div>
+                        <input type="number" class="form-control" aria-describedby="Lunars-addon" name="Lunars" value ="0">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="Lunars-addon">L</span>
+                          </div>
+                </div>
+
+                <hr>
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Reputation-addon">Reputation</span>
+                        </div>
+                        <input type="number" class="form-control" aria-describedby="Reputation-addon" name="Reputation" value ="0">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="Reputation-addon">%</span>
+                          </div>
+                </div>
+
+                <hr>
+
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
 
 
@@ -78,8 +104,45 @@
 
         <div class="col-sm-4 col-md-4 col-lg-4">
 
+            <h4>Background Skills</h4>
+            <p>Choose skills from your personal history.</p>
+
+            {{ range $m := $counter }} <!-- Skill loop - normally 3 to 4 -->
+              
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-CoreString-addon">Skill</span>
+                </div>
+                  <select type="text" class="form-control" id="Skill-{{$m}}-CoreString" name="Skill-{{$m}}-CoreString">
+                    <option></option>
+                    {{ range $s := $skills }}
+                    <option>{{ $s.CoreString }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="Skill-{{$m}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-UserString-addon" name="Skill-{{$m}}-UserString" value ="">
+              </div>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-Value-addon">+</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-Value-addon" name="Skill-{{$m}}-Value" value ="0">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="Skill-{{$m}}-Value-addon">%</span>
+                      </div>
+                </div>
+                <hr>
+                {{ end }} <!-- End Skill Loop -->
+
+                <hr>
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
-            </form>
+        </form>
 
         </div> <!-- END 9 Col -->
 

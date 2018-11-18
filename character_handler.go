@@ -141,13 +141,80 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Update MP
+		str := req.FormValue("MP")
+		mp, err := strconv.Atoi(str)
+		if err != nil {
+			mp = c.CurrentMP
+		}
+
+		if mp < 0 {
+			mp = 0
+		}
+
+		if mp > c.Attributes["MP"].Max {
+			mp = c.Attributes["MP"].Max
+		}
+
+		c.CurrentMP = mp
+
+		// Update MP
+		str = req.FormValue("RP")
+		rp, err := strconv.Atoi(str)
+		if err != nil {
+			rp = c.CurrentMP
+		}
+
+		if rp < 0 {
+			rp = 0
+		}
+
+		c.CurrentRP = rp
+
+		// Update HitLocations
+		totalDamage := 0
+
 		for k, v := range c.HitLocations {
-			for i := range v.Wounds {
-				v.Wounds[i] = false
-				if req.FormValue(fmt.Sprintf("%s-Shock-%d", k, i)) != "" {
-					v.Wounds[i] = true
-				}
+			str := req.FormValue(fmt.Sprintf("%s-HP", k))
+			hp, err := strconv.Atoi(str)
+			if err != nil {
+				hp = v.Value
 			}
+
+			if hp > v.Max {
+				hp = v.Max
+			}
+
+			if hp < v.Min {
+				hp = v.Min
+			}
+
+			if hp < 1 {
+				v.Disabled = true
+			} else {
+				v.Disabled = false
+			}
+
+			v.Value = hp
+			totalDamage += v.Max - hp
+		}
+
+		// Update HP
+		str = req.FormValue("HP")
+		hp, err := strconv.Atoi(str)
+		if err != nil {
+			hp = c.CurrentHP
+		}
+
+		if hp > c.Attributes["HP"].Max {
+			hp = c.Attributes["HP"].Max
+		}
+
+		c.CurrentHP = hp
+
+		// Subtract total damage from HP
+		if totalDamage > 0 {
+			c.CurrentHP -= totalDamage
 		}
 
 		// Read Equipment

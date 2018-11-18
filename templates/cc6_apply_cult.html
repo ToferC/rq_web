@@ -241,7 +241,7 @@
                   <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
                     <option></option>
                     {{ range $s := $skills }}
-                        {{ if eq $w.Description "Any" }}
+                        {{ if or (eq $w.Description "Any") (eq $w.Description "Cultural") }}
                             {{ if isInString $wepCategory $s.Category}}
                                 <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
                             {{ end }}

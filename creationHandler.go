@@ -296,6 +296,64 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Do Stuff
 
+		str := req.FormValue("Lunars")
+		lunars, err := strconv.Atoi(req.FormValue(str))
+		if err != nil {
+			lunars = 0
+		}
+		if lunars > 0 {
+			c.Equipment = append(c.Equipment, fmt.Sprintf("History: %d Lunars", lunars))
+		}
+
+		str = fmt.Sprintf("Reputation")
+		rep, err := strconv.Atoi(req.FormValue(str))
+		if err != nil {
+			rep = 0
+		}
+		c.Abilities["Reputation"].CreationBonusValue = rep
+
+		for i := 1; i < 4; i++ {
+
+			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+
+			if sk != "" {
+
+				skbaseSkill := runequest.Skills[sk]
+				fmt.Println(skbaseSkill)
+
+				// Skill
+				s1 := runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Category:   skbaseSkill.Category,
+					Base:       skbaseSkill.Base,
+				}
+
+				str := fmt.Sprintf("Skill-%d-Value", i)
+				v, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					v = 0
+				}
+				s1.CreationBonusValue = v
+
+				if s1.UserChoice {
+					userString := fmt.Sprintf("Skill-%d-UserString", i)
+					s1.UserString = req.FormValue(userString)
+				}
+
+				var targetString string
+
+				// Find target string for Skill
+				if s1.UserString != "" {
+					targetString = fmt.Sprintf("%s (%s)", s1.CoreString, s1.UserString)
+				} else {
+					targetString = fmt.Sprintf("%s", s1.CoreString)
+				}
+
+				c.Skills[targetString] = &s1
+			}
+		}
+
 		// Read passions
 		for i := 1; i < 6; i++ {
 

@@ -7,12 +7,18 @@ type HitLocation struct {
 	Name     string
 	HitLoc   []int
 	Base     int
+	Min      int
 	Max      int
 	Value    int
 	Updates  []*Update
 	Wounds   []bool
 	Armor    int
 	Disabled bool
+}
+
+// HitLocationMap is the set order for Hit Locations
+var HitLocationMap = []string{
+	"Head", "L Arm", "R Arm", "Chest", "Abdomen", "L Leg", "R Leg",
 }
 
 // Strings

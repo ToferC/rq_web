@@ -21,6 +21,9 @@ type Character struct {
 	PowerRunes       map[string]*Ability
 	Statistics       map[string]*Statistic
 	Attributes       map[string]*Attribute
+	CurrentHP        int
+	CurrentMP        int
+	CurrentRP        int
 	DerivedMap       []string
 	Skills           map[string]*Skill
 	SkillMap         []string

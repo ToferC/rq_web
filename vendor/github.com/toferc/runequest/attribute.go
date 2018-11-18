@@ -77,6 +77,7 @@ func (c *Character) DetermineMagicPoints() *Attribute {
 	p.UpdateStatistic()
 
 	mp.Base = p.Total
+	mp.Max = p.Total
 
 	return mp
 }
@@ -149,6 +150,7 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	}
 
 	hp.Base = baseHP
+	hp.Max = baseHP
 
 	locHP := 0
 
@@ -171,6 +173,7 @@ func (c *Character) DetermineHitPoints() *Attribute {
 
 	for _, v := range c.HitLocations {
 		v.Max = locHP + v.Base
+		v.Min = -(2 * v.Max)
 	}
 
 	return hp
