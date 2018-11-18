@@ -200,22 +200,23 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Update HP
-		str = req.FormValue("HP")
-		hp, err := strconv.Atoi(str)
-		if err != nil {
-			hp = c.CurrentHP
-		}
 
-		if hp > c.Attributes["HP"].Max {
-			hp = c.Attributes["HP"].Max
-		}
+		/*
+			str = req.FormValue("HP")
+			hp, err := strconv.Atoi(str)
+			if err != nil {
+				hp = c.CurrentHP
+			}
 
-		c.CurrentHP = hp
+			if hp > c.Attributes["HP"].Max {
+				hp = c.Attributes["HP"].Max
+			}
 
-		// Subtract total damage from HP
-		if totalDamage > 0 {
-			c.CurrentHP -= totalDamage
-		}
+			c.CurrentHP = hp
+		*/
+
+		// Determine total damage based on HitLocation HP
+		c.CurrentHP = c.Attributes["HP"].Max - totalDamage
 
 		// Read Equipment
 		var equipment = []string{}

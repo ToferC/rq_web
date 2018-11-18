@@ -74,7 +74,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="HP-addon">HP</span>
                   </div>
-                  <input type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $character.CurrentHP }}">
+                  <input {{ if lt $character.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $character.CurrentHP }}">
                   <div class="input-group-append">
                       <span class="input-group-text" id="HP-addon">/{{ $character.Attributes.HP.Max }}</span>
                     </div>

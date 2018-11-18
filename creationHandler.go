@@ -628,6 +628,13 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		c.SetAttributes()
 
 		// Update Character
+		c.CurrentHP = c.Attributes["HP"].Max
+		c.CurrentMP = c.Attributes["MP"].Max
+		c.CurrentRP = c.Cult.NumRunePoints
+
+		for _, v := range c.HitLocations {
+			v.Value = v.Max
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
