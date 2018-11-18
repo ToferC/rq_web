@@ -626,7 +626,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	// Validate that User == Author
 	IsAuthor := false
 
-	if username == hl.Author.UserName {
+	if username == hl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
