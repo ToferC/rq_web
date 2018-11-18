@@ -59,6 +59,7 @@
     {{end}}
     <hr>
 
+    {{ if $homeland.SkillChoices }}
     <h4>Skill Choices</h4>
     {{ range $schoice := $homeland.SkillChoices }}
     {{ if gt (len $schoice.Skills) 0}}
@@ -70,6 +71,7 @@
         {{ end }}
         <hr>
         {{ end }}
+    {{ end }}
     {{ end }}
 
 </div>  

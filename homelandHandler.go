@@ -1029,6 +1029,11 @@ func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
+	if hl.Image == nil {
+		hl.Image = new(models.Image)
+		hl.Image.Path = DefaultCharacterPortrait
+	}
+
 	// Validate that User == Author
 	IsAuthor := false
 

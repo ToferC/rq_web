@@ -1267,6 +1267,11 @@ func DeleteCultHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
+	if cl.Image == nil {
+		cl.Image = new(models.Image)
+		cl.Image.Path = DefaultCharacterPortrait
+	}
+
 	// Validate that User == Author
 	IsAuthor := false
 

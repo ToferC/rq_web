@@ -827,6 +827,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				v = 0
 			}
 
+			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+
 			if core != "" && v > 0 {
 
 				sk := runequest.Skill{
@@ -834,7 +836,6 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					OccupationValue: v,
 				}
 
-				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if userString != "" {
 					sk.UserString = userString
 				}
@@ -1072,6 +1073,11 @@ func DeleteOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	oc, err := database.PKLoadOccupationModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	if oc.Image == nil {
+		oc.Image = new(models.Image)
+		oc.Image.Path = DefaultCharacterPortrait
 	}
 
 	// Validate that User == Author
