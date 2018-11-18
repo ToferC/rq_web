@@ -1109,15 +1109,16 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		CharacterModel: cm,
-		SessionUser:    username,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		IsAuthor:       IsAuthor,
-		Skills:         runequest.Skills,
-		NumRunePoints:  numRunePoints,
-		NumSpiritMagic: numSpiritMagic,
-		SpiritMagic:    totalSpiritMagic,
+		CharacterModel:   cm,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		IsAuthor:         IsAuthor,
+		Skills:           runequest.Skills,
+		NumRunePoints:    numRunePoints,
+		NumSpiritMagic:   numSpiritMagic,
+		SpiritMagic:      totalSpiritMagic,
+		WeaponCategories: runequest.WeaponCategories,
 	}
 	// Test
 	if req.Method == "GET" {
