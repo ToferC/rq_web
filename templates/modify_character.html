@@ -183,53 +183,24 @@
 
       <br>
       <h4>Hit Locations</h4>
-      {{ range $i, $loc := $character.HitLocations }}
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $i }}-name-addon">Name</span>
-        </div>
-        <input type="text" class="form-control" aria-describedby="{{ $i }}-name-addon" name="{{ $i }}-Name" value="{{ $loc.Name }}">
-      </div>
-      <br>
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $i }}-boxes-addon">Wound Boxes</span>
-        </div>
-        <input type="number" class="form-control" aria-describedby="{{ $i }}-boxes-addon" name="{{ $i }}-Boxes" value="{{ $loc.Boxes }}">
-      </div>
-      <br>
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $i }}-lar-addon">LAR</span>
-        </div>
-        <input type="number" class="form-control" aria-describedby="{{ $i }}-lar-addon" name="{{ $i }}-LAR" value="{{ $loc.LAR }}">
-      </div>
-      <br>
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $i }}-har-addon">HAR</span>
-        </div>
-        <input type="number" class="form-control" aria-describedby="{{ $i }}-har-addon" name="{{ $i }}-HAR" value="{{ $loc.HAR }}">
-      </div>
-      <br>
-
-      <label for="Locs">Select Hit Locations</label>
-      {{ range $c := $counter }}
-      {{ if isIn $loc.HitLoc $c }}
-      {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc" checked>
-      {{ else }}
-      {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc">
-      {{ end }}
-      <!-- END if isIn -->
-      {{ end }}
-      <!-- END counter Loop -->
-      <hr>
-      {{ end }}
-      <!-- END overall location loop -->
+        {{ range $s := $character.HitLocationMap }}
+        {{ range $k, $v := $character.HitLocations }}
+        {{ if eq $s $k }}
+          <p {{ if $v.Disabled }}style="color:red"{{end}}>{{ $v.HitLoc }} <strong>{{ $v.Name }}</strong> - Armor: {{ $v.Armor }}</p>
+          <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="{{ $k }}-HP-addon">HP</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="{{ $k }}-HP-addon">/{{ $v.Max }}</span>
+                    </div>
+                </div>  
+         
+          <hr>
+        {{ end }} <!-- END if -->
+        {{ end }}
+        {{ end }} <!-- END map -->
 
       <hr>
 

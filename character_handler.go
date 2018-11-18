@@ -725,37 +725,34 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Hit locations - need to add new map or amend old one
 
-		newHL := map[string]*runequest.HitLocation{}
+		/*
+			newHL := map[string]*runequest.HitLocation{}
 
-		for i := range c.HitLocations {
+			for i := range c.HitLocations {
 
-			name := req.FormValue(fmt.Sprintf("%s-Name", i))
+				name := req.FormValue(fmt.Sprintf("%s-Name", i))
 
-			if name != "" {
-				max, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Max", i)))
-				armor, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Armor", i)))
+				if name != "" {
+					max, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Max", i)))
+					armor, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Armor", i)))
 
-				fmt.Println(name, max, armor)
+					fmt.Println(name, max, armor)
 
-				newHL[name] = &runequest.HitLocation{
-					Name:   name,
-					Max:    max,
-					Armor:  armor,
-					HitLoc: []int{},
-				}
+					newHL[name] = &runequest.HitLocation{
+						Name:   name,
+						Max:    max,
+						Armor:  armor,
+						HitLoc: []int{},
+					}
 
-				newHL[name].FillWounds()
-
-				for j := 1; j < 11; j++ {
-					if req.FormValue(fmt.Sprintf("%s-%d-loc", i, j)) != "" {
-						newHL[name].HitLoc = append(newHL[name].HitLoc, j)
 					}
 				}
 			}
-		}
 
-		fmt.Println(newHL)
-		c.HitLocations = newHL
+			fmt.Println(newHL)
+			c.HitLocations = newHL
+
+		*/
 
 		// Set Open to true if user authorizes
 		if req.FormValue("Archive") != "" {
