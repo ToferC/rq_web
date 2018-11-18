@@ -14,6 +14,7 @@ type HitLocation struct {
 	Wounds   []bool
 	Armor    int
 	Disabled bool
+	Maimed   bool
 }
 
 // HitLocationMap is the set order for Hit Locations

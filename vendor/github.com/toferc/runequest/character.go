@@ -59,6 +59,11 @@ func (c *Character) UpdateCharacter() {
 	// This can be optimized
 	c.SetAttributes()
 	c.UpdateAttributes()
+
+	if len(c.HitLocations) == 0 {
+		c.HitLocationMap = HitLocationMap
+		c.HitLocations = Locations
+	}
 }
 
 func (c Character) String() string {
