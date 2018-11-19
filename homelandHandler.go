@@ -637,6 +637,15 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Homeland.StatisticFrames = runequest.HomeLandStats
 	}
 
+	// Create empty passions for adding to the Homeland
+
+	if len(hl.Homeland.PassionList) < 4 {
+		for i := len(hl.Homeland.PassionList); i < 4; i++ {
+			passion := runequest.Ability{}
+			hl.Homeland.PassionList = append(hl.Homeland.PassionList, passion)
+		}
+	}
+
 	// Create empty skills for adding to the Homeland
 
 	// Add extra empty skills if < 20
@@ -662,6 +671,11 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			}
 			hl.Homeland.SkillChoices = append(hl.Homeland.SkillChoices, tempSkillChoice)
 		}
+	}
+
+	if hl.Image == nil {
+		hl.Image = new(models.Image)
+		hl.Image.Path = DefaultCharacterPortrait
 	}
 
 	wc := WebChar{
