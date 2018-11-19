@@ -147,7 +147,7 @@ func main() {
 	r.HandleFunc("/modify_cult/{id}", ModifyCultHandler)
 	r.HandleFunc("/delete_cult/{id}", DeleteCultHandler)
 
-	r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
+	r.HandleFunc("/add_character_content/{id}", AddCharacterContentHandler)
 	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 
 	r.HandleFunc("/user_index/", UserIndexHandler)

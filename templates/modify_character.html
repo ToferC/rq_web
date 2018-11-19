@@ -7,6 +7,7 @@
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character}}
+{{ $ID := .CharacterModel.ID }}
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
 {{ $counter := .Counter }}
@@ -88,7 +89,7 @@
         </div>
 
         <hr>
-
+        <a class="btn btn-primary" href="/add_character_content/{{ $ID }}">Add Traits</a>
         <button class="btn btn-primary" type="submit" value="Save">Update</button>
 
     </div>

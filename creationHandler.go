@@ -263,21 +263,15 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
-	occupations, err := database.ListOccupationModels(db)
-	if err != nil {
-		panic(err)
-	}
-
 	wc := WebChar{
-		CharacterModel:   cm,
-		OccupationModels: occupations,
-		Counter:          numToArray(5),
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		IsAuthor:         IsAuthor,
-		Skills:           runequest.Skills,
-		Passions:         runequest.PassionTypes,
+		CharacterModel: cm,
+		Counter:        numToArray(5),
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Skills:         runequest.Skills,
+		Passions:       runequest.PassionTypes,
 	}
 
 	if req.Method == "GET" {
@@ -312,6 +306,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		c.Abilities["Reputation"].CreationBonusValue = rep
 
+		// Add Skills
 		for i := 1; i < 4; i++ {
 
 			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
@@ -354,7 +349,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Read passions
+		// Add passions
 		for i := 1; i < 6; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))

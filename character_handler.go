@@ -199,7 +199,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			totalDamage += v.Max - hp
 		}
 
-		// Update HP
+		// Update HP - Need to review rules for this.
 
 		/*
 			str = req.FormValue("HP")
@@ -818,6 +818,242 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// AddCharacterContentHandler renders a character in a Web page
+func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	c := cm.Character
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	wc := WebChar{
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Counter:        numToArray(3),
+		Passions:       runequest.PassionTypes,
+		Skills:         runequest.Skills,
+		SpiritMagic:    runequest.SpiritMagicSpells,
+		RuneSpells:     runequest.RuneSpells,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/add_character_content.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		event := req.FormValue("Event")
+
+		// Add Skills
+		for i := 1; i < 4; i++ {
+			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+
+			valueStr := req.FormValue(fmt.Sprintf("Skill-%d-Value", i))
+			value, err := strconv.Atoi(valueStr)
+			if err != nil {
+				value = 0
+			}
+
+			// Skill exists in Character, modify it via pointer
+			if coreString != "" {
+				// Determine if skill already exists in c.Skills
+
+				bs := runequest.Skills[coreString]
+
+				sk := &runequest.Skill{
+					CoreString: bs.CoreString,
+					UserString: bs.UserString,
+					Category:   bs.Category,
+					Base:       bs.Base,
+					UserChoice: bs.UserChoice,
+					Updates:    []*runequest.Update{},
+				}
+
+				if userString != "" {
+					sk.UserString = userString
+				}
+
+				sk.GenerateName()
+
+				// Add Skill to Character
+				fmt.Println("Add Skill to character: " + sk.Name)
+				c.Skills[sk.Name] = sk
+				c.Skills[sk.Name].UpdateSkill()
+
+				t := time.Now()
+				tString := t.Format("2006-01-02 15:04:05")
+
+				update := &runequest.Update{
+					Date:  tString,
+					Event: event,
+					Value: value,
+				}
+
+				c.Skills[sk.Name].Updates = append(c.Skills[sk.Name].Updates, update)
+
+				c.Skills[sk.Name].UpdateSkill()
+
+				fmt.Println("Updated Character Skill: " + event)
+			}
+		}
+
+		// Add passions
+		for i := 1; i < 4; i++ {
+
+			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
+
+			if coreString != "" {
+
+				p := runequest.Ability{
+					Type:       "Passion",
+					CoreString: coreString,
+				}
+
+				str := fmt.Sprintf("Passion-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+				p.Base = base
+
+				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+
+				if userString != "" {
+					p.UserChoice = true
+					p.UserString = userString
+				}
+
+				c.ModifyAbility(p)
+				p.UpdateAbility()
+			}
+		}
+
+		// Rune Magic
+		for i := 1; i < 4; i++ {
+			str := req.FormValue(fmt.Sprintf("RuneSpell-%d", i))
+			spec := req.FormValue(fmt.Sprintf("RuneSpell-%d-UserString", i))
+			if str != "" {
+				index, err := strconv.Atoi(str)
+				if err != nil {
+					index = 0
+					fmt.Println("Spell Not found")
+				}
+				baseSpell := runequest.RuneSpells[index]
+
+				s := &baseSpell
+				if spec != "" {
+					s.UserString = spec
+				}
+				s.GenerateName()
+				c.RuneSpells[s.Name] = s
+			}
+		}
+
+		// Spirit Magic
+		for i := 1; i < 6; i++ {
+			str := req.FormValue(fmt.Sprintf("SpiritMagic-%d", i))
+			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%d-UserString", i))
+			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Cost", i))
+
+			if str != "" {
+
+				index, err := strconv.Atoi(str)
+				if err != nil {
+					index = 0
+					fmt.Println("Spell Not found")
+				}
+
+				cost, err := strconv.Atoi(cString)
+				if err != nil {
+					cost = 1
+					fmt.Println("Non-number entered")
+				}
+
+				baseSpell := runequest.SpiritMagicSpells[index]
+
+				s := &runequest.Spell{
+					Name:       baseSpell.Name,
+					CoreString: baseSpell.CoreString,
+					UserString: baseSpell.UserString,
+					Cost:       cost,
+					Domain:     baseSpell.Domain,
+				}
+
+				if spec != "" {
+					s.UserString = spec
+				}
+
+				s.GenerateName()
+				c.SpiritMagic[s.Name] = s
+			}
+		}
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
 		} else {
 			fmt.Println("Saved")
 		}
