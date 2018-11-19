@@ -46,7 +46,7 @@
 <h4>Skills</h4>
 <h5>Skill Bonuses</h5>
   {{ range $skill := $homeland.Skills }}
-  <p>{{ $skill.CoreString }} {{ if $skill.UserChoice }} ({{$skill.Base}}) ({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
+  <p>{{ $skill.CoreString }} ({{$skill.Base}}) {{ if $skill.UserChoice }} ({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
   {{end}}
 
 </div>
