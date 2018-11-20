@@ -764,12 +764,20 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Skill is new: " + targetString)
 
 					// New Skill
-					baseSkill := &s
+					baseSkill := &runequest.Skill{
+						CoreString:    s.CoreString,
+						UserString:    s.UserString,
+						Category:      s.Category,
+						Base:          s.Base,
+						UserChoice:    s.UserChoice,
+						HomelandValue: s.HomelandValue,
+					}
 					// Update our new skill
 					sc := c.SkillCategories[baseSkill.Category]
 
 					baseSkill.CategoryValue = sc.Value
 
+					baseSkill.GenerateName()
 					baseSkill.UpdateSkill()
 
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
