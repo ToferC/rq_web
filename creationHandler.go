@@ -978,12 +978,20 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Skill is new: " + targetString)
 
 					// New Skill
-					baseSkill := &s
+					baseSkill := &runequest.Skill{
+						CoreString:    s.CoreString,
+						UserString:    s.UserString,
+						Category:      s.Category,
+						Base:          s.Base,
+						UserChoice:    s.UserChoice,
+						HomelandValue: s.OccupationValue,
+					}
 					// Update our new skill
 					sc := c.SkillCategories[baseSkill.Category]
 
 					baseSkill.CategoryValue = sc.Value
 
+					baseSkill.GenerateName()
 					baseSkill.UpdateSkill()
 
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -1277,13 +1285,22 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Skill is new: " + targetString)
 
 					// New Skill
-					baseSkill := &s
+					baseSkill := &runequest.Skill{
+						CoreString: s.CoreString,
+						UserString: s.UserString,
+						Category:   s.Category,
+						Base:       s.Base,
+						UserChoice: s.UserChoice,
+						CultValue:  s.CultValue,
+					}
+
 					// Update our new skill
 					sc := c.SkillCategories[baseSkill.Category]
 
 					baseSkill.CategoryValue = sc.Value
 					baseSkill.UserString = s.UserString
 
+					baseSkill.GenerateName()
 					baseSkill.UpdateSkill()
 
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
