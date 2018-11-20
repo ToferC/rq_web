@@ -291,7 +291,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		// Do Stuff
 
 		str := req.FormValue("Lunars")
-		lunars, err := strconv.Atoi(req.FormValue(str))
+		lunars, err := strconv.Atoi(str)
 		if err != nil {
 			lunars = 0
 		}
