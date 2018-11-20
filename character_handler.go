@@ -199,22 +199,6 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			totalDamage += v.Max - hp
 		}
 
-		// Update HP - Need to review rules for this.
-
-		/*
-			str = req.FormValue("HP")
-			hp, err := strconv.Atoi(str)
-			if err != nil {
-				hp = c.CurrentHP
-			}
-
-			if hp > c.Attributes["HP"].Max {
-				hp = c.Attributes["HP"].Max
-			}
-
-			c.CurrentHP = hp
-		*/
-
 		// Determine total damage based on HitLocation HP
 		c.CurrentHP = c.Attributes["HP"].Max - totalDamage
 
@@ -726,34 +710,21 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Hit locations - need to add new map or amend old one
 
-		/*
-			newHL := map[string]*runequest.HitLocation{}
-
-			for i := range c.HitLocations {
-
-				name := req.FormValue(fmt.Sprintf("%s-Name", i))
-
-				if name != "" {
-					max, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Max", i)))
-					armor, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Armor", i)))
-
-					fmt.Println(name, max, armor)
-
-					newHL[name] = &runequest.HitLocation{
-						Name:   name,
-						Max:    max,
-						Armor:  armor,
-						HitLoc: []int{},
-					}
-
-					}
-				}
+		for k, v := range c.HitLocations {
+			str := req.FormValue(fmt.Sprintf("%s-Armor", k))
+			armor, err := strconv.Atoi(str)
+			if err != nil {
+				armor = v.Armor
 			}
+			v.Armor = armor
 
-			fmt.Println(newHL)
-			c.HitLocations = newHL
-
-		*/
+			str = req.FormValue(fmt.Sprintf("%s-HP-Max", k))
+			max, err := strconv.Atoi(str)
+			if err != nil {
+				max = v.Max
+			}
+			v.Max = max
+		}
 
 		// Set Open to true if user authorizes
 		if req.FormValue("Archive") != "" {

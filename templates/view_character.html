@@ -44,7 +44,7 @@
             {{ end }}
             <hr>
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-              <a class="btn btn-primary" href="/modify/{{ $ID }}">Edit</a>
+              <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a></h4>
               {{ else }}
               {{ if $open }}
@@ -74,7 +74,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="HP-addon">HP</span>
                   </div>
-                  <input {{ if lt $character.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $character.CurrentHP }}">
+                  <input {{ if lt $character.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $character.CurrentHP }}" disabled>
                   <div class="input-group-append">
                       <span class="input-group-text" id="HP-addon">/{{ $character.Attributes.HP.Max }}</span>
                     </div>

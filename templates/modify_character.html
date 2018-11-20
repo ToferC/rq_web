@@ -187,16 +187,17 @@
         {{ range $s := $character.HitLocationMap }}
         {{ range $k, $v := $character.HitLocations }}
         {{ if eq $s $k }}
-          <p {{ if $v.Disabled }}style="color:red"{{end}}>{{ $v.HitLoc }} <strong>{{ $v.Name }}</strong> - Armor: {{ $v.Armor }}</p>
+          <p>{{ $v.HitLoc }} <strong>{{ $v.Name }}</strong></p>
+
           <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="{{ $k }}-HP-addon">HP</span>
-                  </div>
-                  <input type="number" class="form-control" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">
-                  <div class="input-group-append">
-                      <span class="input-group-text" id="{{ $k }}-HP-addon">/{{ $v.Max }}</span>
-                    </div>
-                </div>  
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="{{ $k }}-Armor-addon">Armor</span>
+              </div>
+              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
+              <div class="input-group-append">
+                  <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
+                </div>
+            </div>  
          
           <hr>
         {{ end }} <!-- END if -->

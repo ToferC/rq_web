@@ -33,7 +33,7 @@
             <p>Follow the instructions for both Elemental and Power runes and then spread 50% of bonus points as desired.</p>
           <hr>
             <form action="" method="POST" enctype="multipart/form-data">
-            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+            <button class="btn btn-primary" type="submit" value="Save">Roll Stats</button>
 
 
         </div> <!-- END outer column 3 -->
@@ -44,7 +44,7 @@
             <h4>Elemental Runes</h4>
             <p>Choose one rune at 60%, one at 40% and one at 20%.</p>
             <p>Your chosen homeland will provide a bonus of 10% to {{$character.Homeland.RuneBonus}}.
-            <p>Your cult's runes are: {{ range $r := $character.Cult.Runes }}{{ $r }} {{ end }}</p>
+            <p>Your cult's runes are: {{ range $r := $character.Cult.Runes }}{{ $r }} {{ end }}.</p>
 
                     <div class="input-group">
                   <div class="input-group-prepend">
@@ -168,7 +168,7 @@
                 {{ end }}
                 <hr> 
 
-                <button class="btn btn-primary" type="submit" value="Save">Save</button>
+                <button class="btn btn-primary" type="submit" value="Save">Roll Stats</button>
               </form>
 
           </div> <!-- END 9 Col -->
