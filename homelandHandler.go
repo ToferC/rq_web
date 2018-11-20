@@ -799,24 +799,29 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			if sk != "" {
 
+				s1 := runequest.Skill{}
+
 				skbaseSkill := runequest.Skills[sk]
 				if skbaseSkill == nil {
+					// Skill is new
 					for _, ns := range hl.Homeland.Skills {
+						// Search for CoreString in Homeland Skills
 						if sk == ns.CoreString {
-							skbaseSkill = &ns
+							s1.CoreString = ns.CoreString
+							s1.UserChoice = ns.UserChoice
+							s1.Base = ns.Base
+							s1.Category = ns.Category
 						}
 					}
+				} else {
+					// Skill
+					s1.CoreString = skbaseSkill.CoreString
+					s1.UserChoice = skbaseSkill.UserChoice
+					s1.Base = skbaseSkill.Base
+					s1.Category = skbaseSkill.Category
 				}
 
 				fmt.Println(skbaseSkill)
-
-				// Skill
-				s1 := runequest.Skill{
-					CoreString: skbaseSkill.CoreString,
-					UserChoice: skbaseSkill.UserChoice,
-					Base:       skbaseSkill.Base,
-					Category:   skbaseSkill.Category,
-				}
 
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
