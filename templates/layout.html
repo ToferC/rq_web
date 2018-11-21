@@ -48,7 +48,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/homeland_index/">Homelands</a>
             <a class="dropdown-item" href="/occupation_index/">Occupations</a>
-            <a class="dropdown-item" href="/cult_index/">Cultss</a>
+            <a class="dropdown-item" href="/cult_index/">Cults</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/add_standalone_power/" role="button">Add Power</a>
           </div>
@@ -109,6 +109,16 @@
 </nav>
 
     <div class="container">
+
+    <h3>Open Character Roster</h3>
+
+{{ if eq $user ""}}
+      <hr>
+      <h4>Welcome to the Runequest Glorantha app [BETA]</h4>
+      <p>This unoffical app makes creating and managing characters in Runequest easy. 
+      Browse through the open characters, homelands, occupations and cults to get a feel for things, and when you're ready to create your own content, register, select "Add Content" and Create Character to get going.</p>
+      <hr>
+{{ end }}
 
       {{template "content" .}}
 
