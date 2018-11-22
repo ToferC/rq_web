@@ -41,6 +41,7 @@
 
 
             <h4>Enter or choose your Statistics.</h4>
+            <p>Rolling d6's and re-rolling 1's</p>
             
             
                 {{ range $k, $v := $character.Homeland.StatisticFrames }}
@@ -89,8 +90,8 @@
 
   function rollDie(sides)
   {
-    if(!sides) sides = 6;
-    with(Math) return 1 + floor(random() * sides);
+    if(!sides) sides = 5;
+    with(Math) return 2 + floor(random() * sides);
   }
 
   function rollDice(number, sides)
@@ -102,7 +103,7 @@
 
   function randomValue() {
     {{ range $k, $v := $character.Homeland.StatisticFrames }}
-      document.getElementById('{{ $k }}-roll').value = rollDice({{ $v.Dice }},6)+{{ $v.Modifier}};
+      document.getElementById('{{ $k }}-roll').value = rollDice({{ $v.Dice }},5)+{{ $v.Modifier}};
     {{ end }}
       }
 

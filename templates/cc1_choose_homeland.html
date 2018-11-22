@@ -12,6 +12,7 @@
 {{ $homelands := .HomelandModels }}
 {{ $occupations := .OccupationModels }}
 {{ $cults := .CultModels }}
+{{ $user := .SessionUser }}
 
       <div class="container">
         <hr>
@@ -21,9 +22,8 @@
             <h4>Details & Roles</h4>
             <h5>(Step 1 of 7)</h5>
 
-            <strong>Note: As in Runequest, creating a character has seven steps.</strong>
-            <strong>You need to complete all the steps to have a full character.</strong>
-            <br>
+            <p><strong>Note: As in Runequest, creating a character has seven steps.
+            You need to complete all the steps to have a full character.</strong></p>
             <p>Create your character by choosing a name, entering a description, choosing an image, a homeland, an occupation and a cult.</p>
 
             <form action="" method="POST" enctype="multipart/form-data">
@@ -39,7 +39,7 @@
                   <div class="input-group-prepend">
                 <span class="input-group-text" id="name-addon">Name</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $character.Name }}">
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" placeholder="{{ $user }}'s Character">
               </div><br>
 
               <div class="input-group">
@@ -47,18 +47,20 @@
                 <span class="input-group-text" for="Description">Description</span>
                 </div>
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
-              </div><br>
+              </div>
 
+              <hr>
+              <h4>Character Portrait</h4>
               <div class="input-group">
                 <div class="custom-file">
                   <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
-                  <label class="custom-file-label" for="inputGroupFile">Choose file</label>
+                  <label class="custom-file-label" for="inputGroupFile">Choose Image</label>
                 </div>
               </div>
 
               <hr>
 
-              <h3>Choose Homeland, Occupation & Cult</h3>
+              <h4>Choose Homeland, Occupation & Cult</h4>
               <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" for="Homeland">Homeland</span>
