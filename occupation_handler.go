@@ -506,32 +506,27 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				p := runequest.Ability{
-					Type:       "Passion",
-					CoreString: coreString,
-				}
-
 				str := fmt.Sprintf("Passion-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
 				}
-				p.Base = base
 
 				str = fmt.Sprintf("Passion-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				p.OccupationValue = v
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
-				if userString != "" {
-					p.UserChoice = true
-					p.UserString = userString
+				p := runequest.Ability{
+					Type:            "Passion",
+					CoreString:      coreString,
+					Base:            base,
+					OccupationValue: v,
+					UserString:      userString,
 				}
-
 				oc.Occupation.PassionList = append(oc.Occupation.PassionList, p)
 			}
 		}
@@ -879,32 +874,27 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				p := runequest.Ability{
-					Type:       "Passion",
-					CoreString: coreString,
-				}
-
 				str := fmt.Sprintf("Passion-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
 				}
-				p.Base = base
 
 				str = fmt.Sprintf("Passion-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				p.OccupationValue = v
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
-				if userString != "" {
-					p.UserChoice = true
-					p.UserString = userString
+				p := runequest.Ability{
+					Type:            "Passion",
+					CoreString:      coreString,
+					Base:            base,
+					OccupationValue: v,
+					UserString:      userString,
 				}
-
 				tempPassions = append(tempPassions, p)
 			}
 		}

@@ -304,6 +304,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			rep = 0
 		}
+
 		c.Abilities["Reputation"].CreationBonusValue = rep
 
 		// Add Skills
@@ -336,14 +337,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 					s1.UserString = req.FormValue(userString)
 				}
 
-				var targetString string
-
-				// Find target string for Skill
-				if s1.UserString != "" {
-					targetString = fmt.Sprintf("%s (%s)", s1.CoreString, s1.UserString)
-				} else {
-					targetString = fmt.Sprintf("%s", s1.CoreString)
-				}
+				targetString := createName(s1.CoreString, s1.UserString)
 
 				c.Skills[targetString] = &s1
 			}
@@ -353,29 +347,59 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 6; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
+			userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
 			if coreString != "" {
 
-				p := runequest.Ability{
-					Type:       "Passion",
-					CoreString: coreString,
+				targetString := createName(coreString, userString)
+
+				if c.Abilities[targetString] == nil {
+					// No ability
+					a := &runequest.Ability{
+						Type:       "Passion",
+						CoreString: coreString,
+						Updates:    []*runequest.Update{},
+					}
+
+					str := fmt.Sprintf("Passion-%d-Base", i)
+					base, err := strconv.Atoi(req.FormValue(str))
+					if err != nil {
+						base = 0
+					}
+
+					if base > 0 {
+						update := CreateUpdate("Base", base)
+						a.Updates = append(a.Updates, update)
+					}
+
+					str = fmt.Sprintf("Passion-%d-Value", i)
+					val, err := strconv.Atoi(req.FormValue(str))
+					if err != nil {
+						val = 0
+					}
+
+					if val > 0 {
+						update := CreateUpdate("History", val)
+						a.Updates = append(a.Updates, update)
+					}
+
+					if userString != "" {
+						a.UserChoice = true
+						a.UserString = userString
+					}
+
+					a.UpdateAbility()
+
+					c.Abilities[targetString] = a
+				} else {
+					// Update existing ability
+
+					update := CreateUpdate("History", 10)
+					c.Abilities[targetString].Updates = append(c.Abilities[targetString].Updates, update)
+
+					c.Abilities[targetString].UpdateAbility()
 				}
 
-				str := fmt.Sprintf("Passion-%d-Base", i)
-				base, err := strconv.Atoi(req.FormValue(str))
-				if err != nil {
-					base = 0
-				}
-				p.Base = base
-
-				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-
-				if userString != "" {
-					p.UserChoice = true
-					p.UserString = userString
-				}
-
-				c.ModifyAbility(p)
 			}
 		}
 
@@ -743,14 +767,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 
-			var targetString string
-
-			// Find target string for Skill
-			if s.UserString != "" {
-				targetString = fmt.Sprintf("%s (%s)", s.CoreString, s.UserString)
-			} else {
-				targetString = fmt.Sprintf("%s", s.CoreString)
-			}
+			targetString := createName(s.CoreString, s.UserString)
 
 			if c.Skills[targetString] != nil {
 				// Skill exists in Character, modify it via pointer
@@ -818,11 +835,35 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Homelands grant 3 base passions
-		// Find number of abilities
 
-		for _, selected := range c.Homeland.PassionList {
-			c.Homeland.Passions = append(c.Homeland.Passions, selected)
-			c.ModifyAbility(selected)
+		for _, a := range c.Homeland.PassionList {
+			c.Homeland.Passions = append(c.Homeland.Passions, a)
+
+			targetString := createName(a.CoreString, a.UserString)
+
+			if c.Abilities[targetString] == nil {
+				// Need to create a new ability
+				a := &runequest.Ability{
+					Type:       "Passion",
+					CoreString: a.CoreString,
+					UserChoice: a.UserChoice,
+					UserString: a.UserString,
+					Updates:    []*runequest.Update{},
+				}
+
+				update := CreateUpdate("Homeland", 60)
+				a.Updates = append(a.Updates, update)
+
+				a.UpdateAbility()
+				c.Abilities[targetString] = a
+			} else {
+				// Update existing ability
+
+				update := CreateUpdate("Homeland", 10)
+				c.Abilities[targetString].Updates = append(c.Abilities[targetString].Updates, update)
+
+				c.Abilities[targetString].UpdateAbility()
+			}
 		}
 
 		// Homeland grants a bonus to a rune affinity
@@ -953,14 +994,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 
-			var targetString string
-
-			// Find target string for Skill
-			if s.UserString != "" {
-				targetString = fmt.Sprintf("%s (%s)", s.CoreString, s.UserString)
-			} else {
-				targetString = fmt.Sprintf("%s", s.CoreString)
-			}
+			targetString := createName(s.CoreString, s.UserString)
 
 			if c.Skills[targetString] != nil {
 				// Skill exists in Character, modify it via pointer
@@ -1039,7 +1073,34 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				n = 0
 			}
 
-			c.ModifyAbility(c.Occupation.PassionList[n])
+			a := c.Occupation.PassionList[n]
+
+			targetString := createName(a.CoreString, a.UserString)
+
+			if c.Abilities[targetString] == nil {
+				// Need to create a new ability
+				a := &runequest.Ability{
+					Type:       "Passion",
+					CoreString: a.CoreString,
+					UserChoice: a.UserChoice,
+					UserString: a.UserString,
+					Updates:    []*runequest.Update{},
+				}
+
+				update := CreateUpdate("Occupation", 60)
+				a.Updates = append(a.Updates, update)
+
+				a.UpdateAbility()
+				c.Abilities[targetString] = a
+			} else {
+				// Update existing ability
+
+				update := CreateUpdate("Occupation", 10)
+				c.Abilities[targetString].Updates = append(c.Abilities[targetString].Updates, update)
+
+				c.Abilities[targetString].UpdateAbility()
+			}
+
 		}
 
 		// Equipment
@@ -1259,14 +1320,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 
-			var targetString string
-
-			// Find target string for Skill
-			if s.UserString != "" {
-				targetString = fmt.Sprintf("%s (%s)", s.CoreString, s.UserString)
-			} else {
-				targetString = fmt.Sprintf("%s", s.CoreString)
-			}
+			targetString := createName(s.CoreString, s.UserString)
 
 			if c.Skills[targetString] != nil {
 				// Skill exists in Character, modify it via pointer
@@ -1426,12 +1480,39 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Cults grant a bonus to one Passion
 		str := req.FormValue("Passion")
+
 		if str != "" {
 			n, err := strconv.Atoi(str)
 			if err != nil {
 				n = 0
 			}
-			c.ModifyAbility(c.Cult.PassionList[n])
+			a := c.Cult.PassionList[n]
+
+			targetString := createName(a.CoreString, a.UserString)
+
+			if c.Abilities[targetString] == nil {
+				// Need to create a new ability
+				a := &runequest.Ability{
+					Type:       "Passion",
+					CoreString: a.CoreString,
+					UserChoice: a.UserChoice,
+					UserString: a.UserString,
+					Updates:    []*runequest.Update{},
+				}
+
+				update := CreateUpdate("Cult", 60)
+				a.Updates = append(a.Updates, update)
+
+				a.UpdateAbility()
+				c.Abilities[targetString] = a
+			} else {
+				// Update existing ability
+
+				update := CreateUpdate("Cult", 10)
+				c.Abilities[targetString].Updates = append(c.Abilities[targetString].Updates, update)
+
+				c.Abilities[a.Name].UpdateAbility()
+			}
 		}
 
 		// Add base runepoints
@@ -1536,14 +1617,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 			coreString := req.FormValue(fmt.Sprintf("Skill-25-%d", i))
 			userString := req.FormValue(fmt.Sprintf("Skill-25-%d-UserString", i))
 
-			var targetString string
-
-			// Find target string for Skill
-			if userString != "" {
-				targetString = fmt.Sprintf("%s (%s)", coreString, userString)
-			} else {
-				targetString = fmt.Sprintf("%s", coreString)
-			}
+			targetString := createName(coreString, userString)
 
 			fmt.Println(targetString)
 
@@ -1605,14 +1679,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 			coreString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
 			userString := req.FormValue(fmt.Sprintf("Skill-10-%d-UserString", i))
 
-			var targetString string
-
-			// Find target string for Skill
-			if userString != "" {
-				targetString = fmt.Sprintf("%s (%s)", coreString, userString)
-			} else {
-				targetString = fmt.Sprintf("%s", coreString)
-			}
+			targetString := createName(coreString, userString)
 
 			// Skill exists in Character, modify it via pointer
 			if targetString != "" {

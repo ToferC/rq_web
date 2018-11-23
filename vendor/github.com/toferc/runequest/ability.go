@@ -176,18 +176,27 @@ func (c *Character) ModifyAbility(a Ability) {
 		// Modify existing Ability
 		ab := c.Abilities[a.Name]
 
-		if ab.Base == 0 {
-			// Change Ability.Base if needed
-			ab.Base = a.Base
-		} else {
-			// Add or subtract s.Value from Ability
-			ab.Value = a.Value
+		// Add or subtract s.Value from Ability
+		if a.HomelandValue > 0 {
 			ab.HomelandValue = a.HomelandValue
+		}
+
+		if a.OccupationValue > 0 {
 			ab.OccupationValue = a.OccupationValue
+		}
+
+		if a.CultValue > 0 {
 			ab.CultValue = a.CultValue
+		}
+
+		if a.CreationBonusValue > 0 {
 			ab.CreationBonusValue = a.CreationBonusValue
+		}
+
+		if a.InPlayXPValue > 0 {
 			ab.InPlayXPValue = a.InPlayXPValue
 		}
+
 	}
 	a.UpdateAbility()
 }

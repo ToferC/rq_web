@@ -437,23 +437,21 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				p := runequest.Ability{
-					Type:       "Passion",
-					CoreString: coreString,
-				}
-
 				str := fmt.Sprintf("Passion-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
-					base = 0
+					fmt.Println(err)
+					base = 60
 				}
-				p.Base = base
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
-				if userString != "" {
-					p.UserChoice = true
-					p.UserString = userString
+				p := runequest.Ability{
+					Type:          "Passion",
+					CoreString:    coreString,
+					Base:          base,
+					HomelandValue: 10,
+					UserString:    userString,
 				}
 
 				hl.Homeland.PassionList = append(hl.Homeland.PassionList, p)
@@ -861,23 +859,20 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				p := runequest.Ability{
-					Type:       "Passion",
-					CoreString: coreString,
-				}
-
 				str := fmt.Sprintf("Passion-%d-Base", i)
 				base, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					base = 0
 				}
-				p.Base = base
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
-				if userString != "" {
-					p.UserChoice = true
-					p.UserString = userString
+				p := runequest.Ability{
+					Type:          "Passion",
+					CoreString:    coreString,
+					Base:          base,
+					HomelandValue: 10,
+					UserString:    userString,
 				}
 
 				tempPassions = append(tempPassions, p)

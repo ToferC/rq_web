@@ -536,14 +536,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				modVal := mod - stat.Total
 
-				t := time.Now()
-				tString := t.Format("2006-01-02")
-
-				update := &runequest.Update{
-					Date:  tString,
-					Event: fmt.Sprintf("%s", eventString),
-					Value: modVal,
-				}
+				update := CreateUpdate(eventString, modVal)
 
 				if stat.Updates == nil {
 					stat.Updates = []*runequest.Update{}
@@ -564,14 +557,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				modVal := mod - s.Total
 
-				t := time.Now()
-				tString := t.Format("2006-01-02")
-
-				update := &runequest.Update{
-					Date:  tString,
-					Event: fmt.Sprintf("%s", eventString),
-					Value: modVal,
-				}
+				update := CreateUpdate(eventString, modVal)
 
 				if s.Updates == nil {
 					s.Updates = []*runequest.Update{}
@@ -597,14 +583,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				modVal := mod - v.Total
 
-				t := time.Now()
-				tString := t.Format("2006-01-02")
-
-				update := &runequest.Update{
-					Date:  tString,
-					Event: fmt.Sprintf("%s", eventString),
-					Value: modVal,
-				}
+				update := CreateUpdate(eventString, modVal)
 
 				if v.Updates == nil {
 					v.Updates = []*runequest.Update{}
@@ -638,14 +617,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 					modVal := mod - v.Total
 
-					t := time.Now()
-					tString := t.Format("2006-01-02")
-
-					update := &runequest.Update{
-						Date:  tString,
-						Event: fmt.Sprintf("%s", eventString),
-						Value: modVal,
-					}
+					update := CreateUpdate(eventString, modVal)
 
 					if v.Updates == nil {
 						v.Updates = []*runequest.Update{}
@@ -660,11 +632,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					// Update opposed Power Rune if needed
 					if v.Total+opposed.Total > 100 {
 
-						opposedUpdate := &runequest.Update{
-							Date:  tString,
-							Event: fmt.Sprintf("%s", eventString),
-							Value: -modVal,
-						}
+						opposedUpdate := CreateUpdate(eventString, -modVal)
 
 						if opposed.Updates == nil {
 							opposed.Updates = []*runequest.Update{}
@@ -675,7 +643,6 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					}
 				}
 			}
-
 		}
 
 		// Update Abilities
@@ -686,14 +653,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				modVal := mod - a.Total
 
-				t := time.Now()
-				tString := t.Format("2006-01-02")
-
-				update := &runequest.Update{
-					Date:  tString,
-					Event: fmt.Sprintf("%s", eventString),
-					Value: modVal,
-				}
+				update := CreateUpdate(eventString, modVal)
 
 				if a.Updates == nil {
 					a.Updates = []*runequest.Update{}

@@ -169,12 +169,7 @@
 
       <h4>Passions</h4>
         {{ range $a := $character.Abilities }}
-          <p title="{{ $a.Name }}
-        Base: {{ $a.Base }}
-        History: {{ $a.CreationBonusValue }}%
-        Homeland: {{ $a.HomelandValue }}%
-        Occupation: {{ $a.OccupationValue }}%
-        Cult: {{ $a.CultValue }}%{{ range $u := $a.Updates }}
+          <p title="{{ $a.Name }}{{ range $u := $a.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}</p>
         {{ end }}
 

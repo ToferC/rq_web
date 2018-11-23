@@ -12,8 +12,8 @@ import (
 	"github.com/toferc/runequest"
 )
 
-// AddSkillHandler renders a character in a Web page
-func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
+// AddSkillsHandler renders a character in a Web page
+func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Get session values or redirect to Login
 	session, err := sessions.Store.Get(req, "session")

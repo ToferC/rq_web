@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/toferc/runequest"
+	"time"
 
 	"github.com/gorilla/sessions"
 )
@@ -53,4 +55,32 @@ func numToArray(m int) []int {
 	}
 
 	return a
+}
+
+// CreateUpdate creates an update for a runequest Object
+func CreateUpdate(text string, value int) *runequest.Update {
+
+	t := time.Now()
+	tString := t.Format("2006-01-02")
+
+	update := &runequest.Update{
+		Date:  tString,
+		Event: fmt.Sprintf("%s", text),
+		Value: value,
+	}
+	fmt.Printf("Add Update: %s %d\n", text, value)
+	return update
+}
+
+func createName(coreString string, userString string) string {
+
+	targetString := ""
+
+	if userString != "" {
+		targetString = fmt.Sprintf("%s (%s)", coreString, userString)
+	} else {
+		targetString = fmt.Sprintf("%s", coreString)
+	}
+
+	return targetString
 }
