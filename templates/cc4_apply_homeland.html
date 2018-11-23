@@ -16,7 +16,7 @@
         <hr>
         <div class="row">
 
-        <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Apply Homeland template</h4>
             <h5>(Step 4 of 7)</h5>
             <p>Make choices based on your homeland.</p>
@@ -38,7 +38,7 @@
         </div> <!-- END outer column 3 -->
 
 
-          <div class="col-sm-9 col-md-9 col-lg-9">
+          <div class="col-sm-4 col-md-4 col-lg-4">
 
 
             <h4>Choose Skills</h4>.
@@ -82,11 +82,21 @@
               {{ end }} <!-- End IF loop-->
               {{ end }} <!-- END schoice Loop-->
               {{ end }} <!-- END overall show loop -->
-                    
-                <button class="btn btn-primary" type="submit" value="Save">Apply Occupation</button>
+                  
+
+          </div> <!-- END 4 Col -->
+
+          <div class="col-sm-4 col-md-4 col-lg-4">
+          <h4>Passions</h4>
+          <p>Your homeland grants the following passions.</p>
+    {{ range $passion := $homeland.PassionList }}
+    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base: {{ $passion.Base }}%</p>    
+    {{end}}
+    <hr>
+    <button class="btn btn-primary" type="submit" value="Save">Apply Occupation</button>
               </form>
 
-          </div> <!-- END 9 Col -->
+          </div>
 
           </div> <!-- END outer ROW -->
         </div> <!-- END container -->

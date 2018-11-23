@@ -14,9 +14,9 @@
 {{ $wepCategory := .WeaponCategories }}
 {{ $spiritmagic := .SpiritMagic }}
 
-      <div class="container">
-        <hr>
-        <div class="row">
+<div class="container">
+    <hr>
+    <div class="row">
 
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Apply Cult template</h4>
@@ -24,42 +24,41 @@
 
             <p>Make choices based on your cult.</p>
 
-        <h3>{{ $character.Name }}</h3>
-        <h5>Homeland: {{ $character.Homeland.Name }}</h5>
-        <h5>Occupation: {{ $character.Occupation.Name }}</h5>
-        <h5>Cult: {{ $character.Cult.Name }}</h5>
+            <h3>{{ $character.Name }}</h3>
+            <h5>Homeland: {{ $character.Homeland.Name }}</h5>
+            <h5>Occupation: {{ $character.Occupation.Name }}</h5>
+            <h5>Cult: {{ $character.Cult.Name }}</h5>
 
-          <img class ="card-img-top" data-src="" alt="Thumbnail"
-          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
-          data-holder-rendered="true">
+            <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
+                data-holder-rendered="true">
 
             <p>{{ $character.Description }}</p>
             <hr>
             <form action="" method="POST" enctype="multipart/form-data">
-            <button class="btn btn-primary" type="submit" value="Save">Choose Personal Skills</button>
+                <button class="btn btn-primary" type="submit" value="Save">Choose Personal Skills</button>
 
 
         </div>
-            <!-- Cults give 3 Rune Spells and 5 pts of Spirit Magic -->
+        <!-- Cults give 3 Rune Spells and 5 pts of Spirit Magic -->
 
-            <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="col-sm-4 col-md-4 col-lg-4">
 
-                <h3>Choose Rank</h3>    
-              <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" for="Rank">Rank</span>
-              </div>
-              <select type="text" class="form-control" id="Rank" name="Rank">
-                
-                <option>Initiate</option>
-                <option>Rune Priest</option>
-                <option>God Talker</option>
-                <option>Rune Lord</option>
-                
-              </select>
-              </div>
+            <h3>Choose Rank</h3>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" for="Rank">Rank</span>
+                </div>
+                <select type="text" class="form-control" id="Rank" name="Rank">
 
-              <hr>
+                    <option>Initiate</option>
+                    <option>Rune Priest</option>
+                    <option>God Talker</option>
+                    <option>Rune Lord</option>
+
+                </select>
+            </div>
+
+            <hr>
 
             <h4>Rune Spells</h4>
 
@@ -69,28 +68,29 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="RuneSpell-{{ $n }}-addon">Rune Spell</span>
                 </div>
-                  <select type="text" class="form-control" id="RuneSpell-{{ $n }}" name="RuneSpell-{{ $n }}">
+                <select type="text" class="form-control" id="RuneSpell-{{ $n }}" name="RuneSpell-{{ $n }}">
                     <option></option>
-                {{ range $m, $rs := $cult.RuneSpells }}
+                    {{ range $m, $rs := $cult.RuneSpells }}
                     {{ if eq $rs.UserString "" }}
                     <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts)</option>
                     {{ else }}
                     <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts) ({{ $rs.UserString }})</option>
                     {{ end }}
-                {{ end }}
-                  </select>
-              </div>
-            
-            
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="RuneSpell-{{$n}}-UserString-addon">Specialization</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="RuneSpell-{{$n}}-UserString-addon" name="RuneSpell-{{$n}}-UserString" value ="">
-              </div>
+                    {{ end }}
+                </select>
+            </div>
 
-              <hr>
-              {{ end }}
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="RuneSpell-{{$n}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="RuneSpell-{{$n}}-UserString-addon" name="RuneSpell-{{$n}}-UserString"
+                    value="">
+            </div>
+
+            <hr>
+            {{ end }}
 
 
 
@@ -102,43 +102,45 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="SpiritMagic-{{ $n }}-addon">Spirit Magic</span>
                 </div>
-                  <select type="text" class="form-control" id="SpiritMagic-{{ $n }}" name="SpiritMagic-{{ $n }}">
-                  <option></option>
-                {{ range $m, $sm := $spiritmagic }}
+                <select type="text" class="form-control" id="SpiritMagic-{{ $n }}" name="SpiritMagic-{{ $n }}">
+                    <option></option>
+                    {{ range $m, $sm := $spiritmagic }}
                     {{ if eq $sm.UserString "" }}
                     <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}}</option>
                     {{ else }}
                     <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}} ({{ $sm.UserString }})</option>
                     {{ end }}
-                {{ end }}
-                  </select>
-              </div>
+                    {{ end }}
+                </select>
+            </div>
 
-              <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">Level</span>
-                  </div>
-                  <input type="number" class="form-control" aria-describedby="SpiritMagic-{{$n}}-Cost-addon" name="SpiritMagic-{{$n}}-Cost" value ="0">
-                  <div class="input-group-append">
-                        <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">pts</span>
-                      </div>
-                </div>
-            
-              <div class="input-group">
+            <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="SpiritMagic-{{$n}}-UserString-addon">Specialization</span>
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">Level</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="SpiritMagic-{{$n}}-UserString-addon" name="SpiritMagic-{{$n}}-UserString" value ="">
-              </div>
+                <input type="number" class="form-control" aria-describedby="SpiritMagic-{{$n}}-Cost-addon" name="SpiritMagic-{{$n}}-Cost"
+                    value="0">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">pts</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="SpiritMagic-{{$n}}-UserString-addon" name="SpiritMagic-{{$n}}-UserString"
+                    value="">
+            </div>
 
 
-              <hr>
-              {{ end }}
+            <hr>
+            {{ end }}
 
         </div> <!-- END outer column 3 -->
 
 
-          <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="col-sm-4 col-md-4 col-lg-4">
 
 
             <h4>Choose Skills</h4>.
@@ -147,19 +149,20 @@
             <h5>Skill Bonuses</h5>
             {{ range $i, $skill := $cult.Skills }}
             <p>
-                    {{ if eq $skill.UserString "any" }}
-                    <div class="input-group">
-                      <div class="input-group-prepend">
+                {{ if eq $skill.UserString "any" }}
+                <div class="input-group">
+                    <div class="input-group-prepend">
                         <span class="input-group-text" id="Skill-{{ $i }}-UserString-addon">{{$skill.CoreString}}</span>
-                      </div>
-                      <input type="text" class="form-control" aria-describedby="Skill-{{ $i }}-UserString-addon" name="Skill-{{ $i }}-UserString" value ="{{ $skill.UserString }}">
-                      <div class="input-group-append">
-                          <span class="input-group-text" id="Skill-{{ $i }}-UserString-addon">{{$skill.CultValue}}%</span>
-                        </div>
                     </div>
-                    {{ else }}
-                    {{ $skill.CoreString }} {{ if $skill.UserString }}({{ $skill.UserString }}){{end}} +{{ $skill.CultValue }}%
-                    {{ end }} 
+                    <input type="text" class="form-control" aria-describedby="Skill-{{ $i }}-UserString-addon" name="Skill-{{ $i }}-UserString"
+                        value="{{ $skill.UserString }}">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="Skill-{{ $i }}-UserString-addon">{{$skill.CultValue}}%</span>
+                    </div>
+                </div>
+                {{ else }}
+                {{ $skill.CoreString }} {{ if $skill.UserString }}({{ $skill.UserString }}){{end}} +{{ $skill.CultValue }}%
+                {{ end }}
             </p>
             {{end}}
 
@@ -169,103 +172,113 @@
             <p>Additionally, you can choose between the following skill choices.</p>
 
             {{ range $m, $schoice := $cult.SkillChoices }}
-                {{ if $schoice.Skills }}
-                {{ range $c, $skill := $schoice.Skills }}
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox-SC-{{ $m }}-{{ $c }}" value-SC-="{{ $m }}-{{ $c }}" name-SC-="{{ $m }}-{{ $c }}">
-                        <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.CultValue }}%</label>
-                    </div>
-                {{ end }} <!-- END skill loop-->
+            {{ if $schoice.Skills }}
+            {{ range $c, $skill := $schoice.Skills }}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox-SC-{{ $m }}-{{ $c }}" value-SC-="{{ $m }}-{{ $c }}"
+                    name-SC-="{{ $m }}-{{ $c }}">
+                <label class="form-check-label" for="inlineCheckbox-SC-{{ $m }}-{{ $c }}">{{ $skill.CoreString }} {{ if $skill.UserChoice }}({{$skill.UserString}}){{end}} +{{ $skill.CultValue }}%</label>
+            </div>
+            {{ end }}
+            <!-- END skill loop-->
 
-              <hr>
+            <hr>
 
-              {{ end }} <!-- End IF loop-->
-              {{ end }} <!-- END schoice Loop-->
-              {{ end }} <!-- END show loop -->
-            
+            {{ end }}
+            <!-- End IF loop-->
+            {{ end }}
+            <!-- END schoice Loop-->
+            {{ end }}
+            <!-- END show loop -->
+
             <hr>
 
             <h4>Add +20% to one Cult skill</h4>
-                <div class="input-group">
-                    <div class="input-group-prepend">
+            <div class="input-group">
+                <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-20-addon">Add 20</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-20" name="Skill-20">
+                <select type="text" class="form-control" id="Skill-20" name="Skill-20">
                     <option></option>
                     {{ range $n, $s := $cult.Skills }}
-                                <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
-                      {{ end }} <!-- END range $skills -->
-                  </select>
-              </div>
-                <hr>
+                    <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
+                    {{ end }}
+                    <!-- END range $skills -->
+                </select>
+            </div>
+            <hr>
 
-                <h4>Add +15% to one Cult skill</h4>
-                <div class="input-group">
-                    <div class="input-group-prepend">
+            <h4>Add +15% to one Cult skill</h4>
+            <div class="input-group">
+                <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-15-addon">Add 15</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-15" name="Skill-15">
+                <select type="text" class="form-control" id="Skill-15" name="Skill-15">
                     <option></option>
                     {{ range $n, $s := $cult.Skills }}
-                                <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
-                      {{ end }} <!-- END range $skills -->
-                  </select>
-              </div>
-                <hr>
+                    <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
+                    {{ end }}
+                    <!-- END range $skills -->
+                </select>
+            </div>
+            <hr>
 
-                <h4>Choose Passion Bonus</h4>
-                <div class="input-group">
+            <h4>Choose Passion Bonus</h4>
+            <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Passion-addon">Passion</span>
                 </div>
-                  <select type="text" class="form-control" id="Passion" name="Passion">
-                {{ range $m, $p := $cult.PassionList }}
+                <select type="text" class="form-control" id="Passion" name="Passion">
+                    {{ range $m, $p := $cult.PassionList }}
                     {{ if eq $p.UserString "" }}
                     <option>{{ $p.CoreString }}</option>
                     {{ else }}
                     <option>{{ $p.CoreString }} ({{ $p.UserString }})</option>
                     {{ end }}
-                {{ end }}
-                  </select>
-              </div>
+                    {{ end }}
+                </select>
+            </div>
 
-              <hr>
-                {{ if $cult.Weapons }}
-                <h4>Choose Weapon Skills</h4>
+            <hr>
+            {{ if $cult.Weapons }}
+            <h4>Choose Weapon Skills</h4>
 
-                    {{ range $m, $w := $cult.Weapons }}
-                        <div class="input-group">
+            {{ range $m, $w := $cult.Weapons }}
+            <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Weapon-{{$m}}-CoreString-addon">{{ $w.Description }}</span>
                 </div>
-                  <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
+                <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
                     <option></option>
                     {{ range $s := $skills }}
-                        {{ if or (eq $w.Description "Any") (eq $w.Description "Cultural") }}
-                            {{ if isInString $wepCategory $s.Category}}
-                                <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
-                            {{ end }}
-                        {{ else }}
-                        {{ if eq $s.Category $w.Description }}
+                    {{ if or (eq $w.Description "Any") (eq $w.Description "Cultural") }}
+                    {{ if isInString $wepCategory $s.Category}}
                     <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
-                        {{ end }}
-                      {{ end }}
-                      {{ end }}
-                  </select>
-              </div>
-
-                <hr>
-                    {{ end }} <!-- END weapons Loop -->
-                    {{ end }} <!-- END show loop -->
-
+                    {{ end }}
+                    {{ else }}
+                    {{ if eq $s.Category $w.Description }}
+                    <option value="{{ $s.CoreString }}">{{ $s.CoreString }} +{{ $w.Value }}%</option>
+                    {{ end }}
+                    {{ end }}
+                    {{ end }}
+                </select>
             </div>
-                    
-                <button class="btn btn-primary" type="submit" value="Save">Choose Personal Skills</button>
-              </form>
 
-          </div> <!-- END 9 Col -->
+            <hr>
+            {{ end }}
+            <!-- END weapons Loop -->
+            {{ end }}
+            <!-- END show loop -->
+            
+            <button class="btn btn-primary" type="submit" value="Save">Choose Personal Skills</button>
+            </form>
+        </div>
 
-          </div> <!-- END outer ROW -->
-        </div> <!-- END container -->
 
-{{ end }} <!-- end content -->
+    </div> <!-- END 9 Col -->
+
+</div> <!-- END outer ROW -->
+</div> <!-- END container -->
+
+{{ end }}
+<!-- end content -->
