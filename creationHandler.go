@@ -1511,7 +1511,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 				update := CreateUpdate("Cult", 10)
 				c.Abilities[targetString].Updates = append(c.Abilities[targetString].Updates, update)
 
-				c.Abilities[a.Name].UpdateAbility()
+				c.Abilities[targetString].UpdateAbility()
 			}
 		}
 
