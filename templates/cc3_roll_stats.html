@@ -49,7 +49,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="{{ $k }}-addon">{{ $k }} ({{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }})</span>
                   </div>
-                  <input type="number" id="{{$k}}-roll" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="0">
+                  <input type="number" id="{{$k}}-roll" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="0" required>
                 </div>
 
                 <hr>

@@ -10,6 +10,7 @@
 
 {{ $character := .CharacterModel.Character }}
 {{ $counter := .Counter }}
+{{ $bigcounter := .BigCounter }}
 {{ $skills := .Skills }}
 
       <div class="container">
@@ -41,7 +42,7 @@
 
 
             <h4>Instructions</h4>
-            <p>Choose 4 skills to add +25% to and 4 skills to add +10% to.</p>
+            <p>Choose 4 skills to add +25%</p>
 
             <h4>Add +25% to Skills</h4>
             {{ range $m := $counter }}
@@ -76,7 +77,8 @@
 
 
             <h4>Add +10% to Skills</h4>
-            {{ range $m := $counter }}
+            <p>Choose 5 skills to add +10% to.</p>
+            {{ range $m := $bigcounter }}
                 <div class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-10-{{$m}}-addon">Skill {{ $m }}</span>

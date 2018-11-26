@@ -26,7 +26,7 @@
             You need to complete all the steps to have a full character.</strong></p>
             <p>Create your character by choosing a name, entering a description, choosing an image, a homeland, an occupation and a cult.</p>
 
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form class="needs-validation" action="" method="POST" enctype="multipart/form-data">
           <button class="btn btn-primary" type="submit" value="Save">Go to Personal History</button>
           <hr>
 
@@ -39,7 +39,8 @@
                   <div class="input-group-prepend">
                 <span class="input-group-text" id="name-addon">Name</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" placeholder="Enter Name Here">
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" placeholder="Enter Name Here" required>
+                <div class="invalid-feedback">Example invalid custom file feedback</div>
               </div><br>
 
               <div class="input-group">

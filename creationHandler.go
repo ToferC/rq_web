@@ -1173,7 +1173,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
-	numRunePoints := numToArray(3)
+	numRunePoints := numToArray(5)
 	numSpiritMagic := numToArray(5)
 
 	// Add Associated Cult spells
@@ -1217,6 +1217,20 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		// Do Stuff
 
 		c.Cult.Rank = req.FormValue("Rank")
+
+		rPS, err := strconv.Atoi(req.FormValue("RunePoints"))
+		if err != nil {
+			rPS = 3
+		}
+
+		c.Cult.NumRunePoints = rPS
+
+		if c.Cult.NumRunePoints > 3 {
+
+			update := CreateUpdate("POW pledge to cult", 3-c.Cult.NumRunePoints)
+
+			c.Statistics["POW"].Updates = append(c.Statistics["POW"].Updates, update)
+		}
 
 		c.RuneSpells = map[string]*runequest.Spell{}
 		c.SpiritMagic = map[string]*runequest.Spell{}
@@ -1515,9 +1529,15 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Add base runepoints
-		c.Cult.NumRunePoints = 3
+		// Add Spirit Magic
 		c.Cult.NumSpiritMagic = 5
+
+		if c.Occupation.Name == "Assistant Shaman" {
+			c.Cult.NumSpiritMagic += 5
+		}
+
+		// Set Rune Points to Max
+		c.CurrentRP = c.Cult.NumRunePoints
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -1594,6 +1614,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:          isAdmin,
 		IsAuthor:         IsAuthor,
 		Counter:          numToArray(4),
+		BigCounter:       numToArray(5),
 		Skills:           runequest.Skills,
 	}
 
@@ -1675,7 +1696,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// 10% additions
-		for i := 1; i < 5; i++ {
+		for i := 1; i < 6; i++ {
 			coreString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
 			userString := req.FormValue(fmt.Sprintf("Skill-10-%d-UserString", i))
 
