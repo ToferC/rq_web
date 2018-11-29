@@ -12,6 +12,7 @@ type Spell struct {
 	UserChoice  bool
 	Range       int
 	Duration    string
+	Runes       []string
 	Variable    bool
 	Cost        int
 	Points      int

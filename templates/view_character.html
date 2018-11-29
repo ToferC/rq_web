@@ -56,13 +56,16 @@
           </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Statistics</h3>
-        {{ range $stat := $character.Statistics }}
+        <h4>Statistics</h4>
+        {{ range $k, $stat := $character.Statistics }}
           <p title="Base: {{ $stat.Base }}
           Rune Bonus: {{ $stat.RuneBonus }}
           {{ range $u := $stat.Updates }}
           {{ $u.Event }}: {{ $u.Value }} ({{ $u.Date }})
-        {{end}}">{{ $stat.Name }}: {{ $stat.Total }} ({{ multiply $stat.Total 5}}%)</p>
+        {{end}}">{{ $stat.Name }}: {{ $stat.Total }} ({{ multiply $stat.Total 5}}%)
+        {{ if and (eq $k "POW") ( $IsAuthor) }}
+                  <input type="checkbox" name="{{ $k }}-XP" value="{{ $stat.ExperienceCheck }}" id="checkbox" {{ if $stat.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
         {{ end }}
 
         <hr>
@@ -103,7 +106,7 @@
         <hr>
         {{ end }} <!-- END in play IF -->
 
-        <h3>Elemental Runes</h3>
+        <h4>Elemental Runes</h4>
         {{ range $r := $character.ElementalRunes }}
         {{ if gt $r.Total 0 }}
           <p title="{{ $r.Name }}
@@ -111,7 +114,10 @@
         Homeland: {{ $r.HomelandValue }}%
         Occupation: {{ $r.OccupationValue }}%
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
-        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}</p>
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}
+        {{ if $IsAuthor }}
+        <input type="checkbox" name="{{ $r.Name }}-XP" value="{{ $r.ExperienceCheck }}" id="checkbox" {{ if $r.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
         {{ end }} <!-- END gt loop -->
         {{ end }}
 
@@ -125,7 +131,9 @@
         Homeland: {{ $r.HomelandValue }}%
         Occupation: {{ $r.OccupationValue }}%
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
-        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}</p>
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}{{ if $IsAuthor }}
+        <input type="checkbox" name="{{ $r.Name }}-XP" value="{{ $r.ExperienceCheck }}" id="checkbox" {{ if $r.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
         {{ end }} <!-- END ne loop -->
         {{ end }}
 
@@ -151,7 +159,7 @@
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Skills</h3>
+        <h4>Skills</h4>
         {{ range $skill := $character.Skills }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
@@ -162,7 +170,9 @@
         Cult: {{ $skill.CultValue }}%
         {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
         {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
-        </p>
+        {{ if $IsAuthor }}
+        <input type="checkbox" name="{{ $skill.Name }}-XP" value="{{ $skill.ExperienceCheck }}" id="checkbox" {{ if $skill.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
         {{ end }}
 
       <hr>
@@ -170,7 +180,10 @@
       <h4>Passions</h4>
         {{ range $a := $character.Abilities }}
           <p title="{{ $a.Name }}{{ range $u := $a.Updates }}
-        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}</p>
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}
+        {{ if $IsAuthor }}
+        <input type="checkbox" name="{{ $a.Name }}-XP" value="{{ $a.ExperienceCheck }}" id="checkbox" {{ if $a.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
         {{ end }}
 
         <hr>

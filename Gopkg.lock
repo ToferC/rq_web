@@ -40,8 +40,8 @@
     "service/s3/s3manager",
     "service/sts"
   ]
-  revision = "66af558c91f83a793b4a0101f70742062982f611"
-  version = "v1.15.81"
+  revision = "89734ade0df0a4a437cbf4aa9c14e17daf37c5ac"
+  version = "v1.15.86"
 
 [[projects]]
   name = "github.com/go-pg/pg"
@@ -113,7 +113,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "d55f3069e9d8c09bb4bbfdac11651b6475ed2ff8"
+  revision = "48b10152a426a9ebcc4da5037bbd77839bb30de3"
 
 [[projects]]
   branch = "master"
@@ -123,7 +123,7 @@
     "blowfish",
     "pbkdf2"
   ]
-  revision = "3d3f9f413869b949e48070b5bc593aa22cc2b8f2"
+  revision = "eb0de9b17e854e9b1ccd9963efafc79862359959"
 
 [[projects]]
   name = "mellium.im/sasl"

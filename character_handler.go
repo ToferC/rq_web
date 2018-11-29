@@ -171,6 +171,49 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.CurrentRP = rp
 
+		// Check skill xp
+		for _, v := range c.Skills {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check Elemental Rune xp
+		for _, v := range c.ElementalRunes {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check Power Rune XP
+		for _, v := range c.PowerRunes {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check Passion xp
+		for _, v := range c.Abilities {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check POW xp
+		if req.FormValue("POW-XP") != "" {
+			c.Statistics["POW"].ExperienceCheck = true
+		} else {
+			c.Statistics["POW"].ExperienceCheck = false
+		}
+
 		// Update HitLocations
 		totalDamage := 0
 
@@ -526,6 +569,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Cult.NumRunePoints = rp
 
+		// Update statistics
 		for _, st := range runequest.StatMap {
 
 			stat := c.Statistics[st]
@@ -544,6 +588,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				stat.Updates = append(stat.Updates, update)
 
+				stat.ExperienceCheck = false
 			}
 
 			stat.UpdateStatistic()
@@ -565,6 +610,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				s.Updates = append(s.Updates, update)
 
+				s.ExperienceCheck = false
 			}
 			if s.UserString != "" {
 				s.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.Name))
@@ -590,6 +636,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				v.Updates = append(v.Updates, update)
+				v.ExperienceCheck = false
 
 			}
 			v.UpdateAbility()
@@ -626,6 +673,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					v.Updates = append(v.Updates, update)
 
 					v.UpdateAbility()
+					v.ExperienceCheck = false
 
 					opposed := c.PowerRunes[v.OpposedAbility]
 
@@ -661,6 +709,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				a.Updates = append(a.Updates, update)
 
+				a.ExperienceCheck = false
 			}
 			if a.UserString != "" {
 				a.UserString = req.FormValue(fmt.Sprintf("%s-UserString", a.Name))

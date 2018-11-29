@@ -27,11 +27,20 @@
         <h5>Homeland: {{ $character.Homeland.Name }}</h5>
         <h5>Occupation: {{ $character.Occupation.Name }}</h5>
 
-          <img class ="card-img-top" data-src="" alt="Thumbnail"
-          style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
-          data-holder-rendered="true">
-
-            <p>{{ $character.Description }}</p>
+        <hr>
+          <h4>Current Skills</h4>
+        {{ range $skill := $character.Skills }}
+        <p title="{{ $skill.Name }} ({{ $skill.Category }})
+        Base: {{ $skill.Base }}%
+        History: {{ $skill.CreationBonusValue }}%
+        Category: {{ $skill.CategoryValue }}%
+        Homeland: {{ $skill.HomelandValue }}%
+        Occupation: {{ $skill.OccupationValue }}%
+        Cult: {{ $skill.CultValue }}%
+        {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
+        {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
+        </p>
+        {{ end }}
             <hr>
             
             <form action="" method="POST" enctype="multipart/form-data">

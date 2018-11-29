@@ -90,7 +90,7 @@
 
         <hr>
         <a class="btn btn-primary" href="/add_character_content/{{ $ID }}">Add Traits</a>
-        <button class="btn btn-primary" type="submit" value="Save">Update</button>
+        <button class="btn btn-primary" type="submit" value="Save">Save</button>
 
     </div>
 
@@ -100,7 +100,7 @@
 
       <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+          <span {{ if $stat.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
         </div>
         <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $stat.Total }}">
       </div>
@@ -113,7 +113,7 @@
 
       <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+          <span {{ if $v.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
         </div>
         <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
       </div>
@@ -126,7 +126,7 @@
 
       <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+          <span {{ if $v.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
         </div>
         <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
       </div>
@@ -142,7 +142,7 @@
       {{ range $skill := $skills }}
       <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
+          <span {{ if $skill.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
         </div>
         <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}"
           value="{{ $skill.Total }}">
@@ -166,7 +166,7 @@
       {{ range $ability := $character.Abilities }}
       <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="{{ $ability.Name }}-addon">{{ $ability.CoreString }}</span>
+          <span {{ if $ability.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $ability.Name }}-addon">{{ $ability.CoreString }}</span>
         </div>
         <input type="number" class="form-control" aria-describedby="{{ $ability.Name }}-addon" name="{{ $ability.Name }}"
           value="{{ $ability.Total }}">

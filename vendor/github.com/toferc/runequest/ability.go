@@ -171,6 +171,7 @@ func (c *Character) ModifyAbility(a Ability) {
 			UserString: a.UserString,
 			Base:       a.Base,
 			Type:       a.Type,
+			Updates:    []*Update{},
 		}
 	} else {
 		// Modify existing Ability
@@ -196,7 +197,6 @@ func (c *Character) ModifyAbility(a Ability) {
 		if a.InPlayXPValue > 0 {
 			ab.InPlayXPValue = a.InPlayXPValue
 		}
-
 	}
 	a.UpdateAbility()
 }
