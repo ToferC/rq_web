@@ -45,13 +45,8 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 		panic(err)
 	}
 
-	// Add CreationSteps if needed and print names and PK
+	// Print names and PK
 	for i, cm := range cms {
-
-		if cm.Character.CreationSteps == nil {
-			cm.Character.CreationSteps = map[string]bool{}
-			cm.Character.CreationSteps["Complete"] = true
-		}
 
 		fmt.Println(i, cm.Character.Name)
 	}
@@ -77,11 +72,6 @@ func ListUserCharacterModels(db *pg.DB, username string) ([]*models.CharacterMod
 
 	// Print names and PK
 	for i, cm := range cms {
-
-		if cm.Character.CreationSteps == nil {
-			cm.Character.CreationSteps = map[string]bool{}
-			cm.Character.CreationSteps["Complete"] = true
-		}
 
 		fmt.Println(i, cm.Character.Name)
 	}
