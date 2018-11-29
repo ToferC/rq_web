@@ -7,17 +7,19 @@ import (
 
 // Character represents a generic RPG character
 type Character struct {
-	Name             string
-	Setting          string
-	Description      string
-	Race             *Race
-	Homeland         *Homeland
-	Occupation       *Occupation
-	Cult             *Cult
-	Clan             string
-	Tribe            string
-	Abilities        map[string]*Ability
-	ElementalRunes   map[string]*Ability
+	Name        string
+	Setting     string
+	Description string
+	Race        *Race
+	Homeland    *Homeland
+	Occupation  *Occupation
+	Cult        *Cult
+	Clan        string
+	Tribe       string
+	Abilities   map[string]*Ability
+	// Passions and Reputation
+	ElementalRunes map[string]*Ability
+	// Elemental Runes
 	PowerRunes       map[string]*Ability
 	Statistics       map[string]*Statistic
 	Attributes       map[string]*Attribute
@@ -42,6 +44,7 @@ type Character struct {
 	PointCost        int
 	InPlay           bool
 	Updates          []*Update
+	CreationSteps    map[string]bool
 }
 
 // Update tracks live changes to Character
@@ -66,11 +69,24 @@ func (c *Character) UpdateCharacter() {
 	}
 }
 
+// CreationStatus tracks the completion of character creation
+var CreationStatus = map[string]bool{
+	"Base Choices":     false,
+	"Personal History": false,
+	"Rune Affinities":  false,
+	"Roll Stats":       false,
+	"Apply Homeland":   false,
+	"Apply Occupation": false,
+	"Apply Cult":       false,
+	"Personal Skills":  false,
+	"Complete":         false,
+}
+
 func (c Character) String() string {
 	text := c.Name
 	text += fmt.Sprintf("\nHomeland: %s", c.Homeland.Name)
 	text += fmt.Sprintf("\nOccupation: %s", c.Occupation.Name)
-	text += fmt.Sprintf("\nCult: %s", c.Cult.Name)
+	text += fmt.Sprintf("\n%s of Cult: %s", c.Cult.Rank, c.Cult.Name)
 
 	text += "\n\nStats:\n"
 	for _, stat := range StatMap {

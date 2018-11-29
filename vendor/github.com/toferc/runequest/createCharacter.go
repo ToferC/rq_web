@@ -15,6 +15,7 @@ func NewCharacter(name string) *Character {
 		Cult:           &Cult{},
 		HitLocations:   Locations,
 		HitLocationMap: HitLocationMap,
+		CreationSteps:  CreationStatus,
 
 		SkillCategories: map[string]*SkillCategory{},
 	}

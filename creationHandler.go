@@ -201,6 +201,9 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		cm.Open = true
 		//fmt.Println(c)
 
+		// Update CreationSteps
+		c.CreationSteps["Base Choices"] = true
+
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			log.Panic(err)
@@ -403,6 +406,9 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		// Update CreationSteps
+		c.CreationSteps["Personal History"] = true
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)
@@ -538,6 +544,9 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		// Update CreationSteps
+		c.CreationSteps["Rune Affinities"] = true
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
@@ -654,6 +663,9 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		for _, v := range c.HitLocations {
 			v.Value = v.Max
 		}
+
+		// Update CreationSteps
+		c.CreationSteps["Roll Stats"] = true
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -868,6 +880,9 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Homeland grants a bonus to a rune affinity
 		c.ElementalRunes[c.Homeland.RuneBonus].HomelandValue += 10
+
+		// Update CreationSteps
+		c.CreationSteps["Apply Homeland"] = true
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -1110,6 +1125,9 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				c.Equipment = append(c.Equipment, e)
 			}
 		}
+
+		// Update CreationSteps
+		c.CreationSteps["Apply Occupation"] = true
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
@@ -1539,6 +1557,9 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		// Set Rune Points to Max
 		c.CurrentRP = c.Cult.NumRunePoints
 
+		// Update CreationSteps
+		c.CreationSteps["Apply Cult"] = true
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)
@@ -1753,6 +1774,10 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 				fmt.Println("Updated Character Skill 10%: " + s.Name)
 			}
 		}
+
+		// Update CreationSteps
+		c.CreationSteps["Personal Skills"] = true
+		c.CreationSteps["Complete"] = true
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {

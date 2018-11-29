@@ -125,6 +125,30 @@ func isInString(s []string, t string) bool {
 	return false
 }
 
+// Generate URL for next step of Character creation
+func generateCharacterCreationURL(cStep map[string]bool) string {
+
+	url := ""
+
+	switch {
+	case !cStep["Personal History"]:
+		url = "cc12_personal_history"
+	case !cStep["Rune Affinities"]:
+		url = "cc2_choose_runes"
+	case !cStep["Roll Stats"]:
+		url = "cc3_roll_stats"
+	case !cStep["Apply Homeland"]:
+		url = "cc4_apply_homeland"
+	case !cStep["Apply Occupation"]:
+		url = "cc5_apply_occupation"
+	case !cStep["Apply Cult"]:
+		url = "cc6_apply_cult"
+	case !cStep["Personal Skills"]:
+		url = "cc7_personal_skills"
+	}
+	return url
+}
+
 // Render combines templates, funcs and renders all Web pages in the app
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
@@ -132,14 +156,15 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	// Set up FuncMap
 	funcMap := template.FuncMap{
-		"skillRoll":   skillRoll,
-		"statRoll":    statRoll,
-		"subtract":    subtract,
-		"add":         add,
-		"multiply":    multiply,
-		"isIn":        isIn,
-		"sliceString": sliceString,
-		"isInString":  isInString,
+		"skillRoll":                    skillRoll,
+		"statRoll":                     statRoll,
+		"subtract":                     subtract,
+		"add":                          add,
+		"multiply":                     multiply,
+		"isIn":                         isIn,
+		"sliceString":                  sliceString,
+		"isInString":                   isInString,
+		"generateCharacterCreationURL": generateCharacterCreationURL,
 	}
 
 	baseTemplate := "templates/layout.html"

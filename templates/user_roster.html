@@ -30,9 +30,11 @@
                   <div class="btn-group">
                     <a type="button" class="btn btn-sm btn-primary"
                     href="/view_character/{{ .ID }}">View</a>
-                    {{ if eq $user .Author.UserName }}
-                    <a type="button" class="btn btn-sm btn-secondary"
-                    href="/modify/{{ .ID }}">Modify</a>
+                    {{ if eq $user .Author.UserName }}{{ if not .Character.CreationSteps.Complete }}
+                      <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL .Character.CreationSteps }}/{{ .ID }}">Resume Creation</a>
+                      {{ else }}
+                      <a class="btn btn-sm btn-primary" href="/modify/{{ .ID }}">Modify</a>
+                    {{ end }}
                     {{ end }}
                   </div>
                 </div>

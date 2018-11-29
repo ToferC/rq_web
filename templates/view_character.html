@@ -44,7 +44,11 @@
             {{ end }}
             <hr>
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+              {{ if not $character.CreationSteps.Complete }}
+              <a class="btn btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
+              {{ else }}
               <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
+              {{ end }}
               <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a></h4>
               {{ else }}
               {{ if $open }}
