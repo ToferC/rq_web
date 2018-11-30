@@ -89,11 +89,6 @@ func PKLoadCharacterModel(db *pg.DB, pk int64) (*models.CharacterModel, error) {
 		return &models.CharacterModel{}, err
 	}
 
-	if cm.Character.CreationSteps == nil {
-		cm.Character.CreationSteps = map[string]bool{}
-		cm.Character.CreationSteps["Complete"] = true
-	}
-
 	fmt.Println("Character loaded From DB")
 	return cm, nil
 }
