@@ -983,7 +983,7 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				baseSpell := runequest.RuneSpells[index]
 
-				s := &baseSpell
+				s := baseSpell
 				if spec != "" {
 					s.UserString = spec
 				}

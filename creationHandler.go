@@ -153,7 +153,34 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("No Cult Found")
 		}
 
-		c.Cult = cultModel.Cult
+		if cultModel.Cult.SubCult {
+			// Set base to ParentCult
+			// Easier to add to
+			parentCult := cultModel.Cult.ParentCult
+			if parentCult != nil {
+				// Add SubCult skills
+				for _, s := range cultModel.Cult.Skills {
+					parentCult.Skills = append(parentCult.Skills, s)
+				}
+				// Add SubCult RuneSpells
+				for _, rs := range cultModel.Cult.RuneSpells {
+					parentCult.RuneSpells = append(parentCult.RuneSpells, rs)
+				}
+				// Add SubCult SpiritMagic
+				for _, sm := range cultModel.Cult.SpiritMagic {
+					parentCult.SpiritMagic = append(parentCult.SpiritMagic, sm)
+				}
+
+				// Set Details to ParentCult
+				parentCult.Name = cultModel.Cult.Name
+				parentCult.Description = cultModel.Cult.Description
+				// Set cult to ParentCult
+				c.Cult = parentCult
+			}
+		} else {
+			c.Cult = cultModel.Cult
+		}
+
 		fmt.Println("CULT: " + c.Cult.Name)
 
 		// Upload image to s3
@@ -1195,7 +1222,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 	numSpiritMagic := numToArray(5)
 
 	// Add Associated Cult spells
-	totalSpiritMagic := []runequest.Spell{}
+	totalSpiritMagic := []*runequest.Spell{}
 
 	totalSpiritMagic = c.Cult.SpiritMagic
 
@@ -1265,7 +1292,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				baseSpell := c.Cult.RuneSpells[index]
 
-				s := &baseSpell
+				s := baseSpell
 				if spec != "" {
 					s.UserString = spec
 				}

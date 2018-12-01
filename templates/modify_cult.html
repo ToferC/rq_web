@@ -17,7 +17,6 @@
 {{ $runespells := .RuneSpells }}
 {{ $spiritmagic := .SpiritMagic }}
 {{ $cults := .CultModels }}
-{{ $subcults := .SubCults }}
 {{ $elementalrunes := .ElementalRunes }}
 {{ $powerrunes := .PowerRunes }}
 
@@ -53,7 +52,27 @@
 
               <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" {{ if .CultModel.Official }}checked{{ end }}>
               <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox" {{ if $cult.SubCult }}checked{{ end }}>
-
+              <hr>
+              <p>If your Cult is a SubCult, please choose your parent Cult.</p>
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Cult">Parent Cult</span>
+              </div>
+              <select type="text" class="form-control" id="ParentCult" name="ParentCult">
+                {{ if $cult.ParentCult }}
+                <option>{{ $cult.ParentCult.Name }}</option>
+                {{ else }}
+                <option></option>
+                {{ end }}
+                {{ range $k, $v := $cults }}
+                  {{ if not $v.Cult.SubCult }}
+                    <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>
+                  {{ end }}
+                {{ end }}
+              </select>
+              </div>
+              <hr>
+                <input class="btn btn-primary" type="submit" value="Save">
               <hr>
 
               <h4>Cult Runes</h4>
@@ -179,20 +198,7 @@
               {{ end }}
 
               <hr>
-
-              <h4>SubCults</h4>
-              <!-- Choose from list of Cults ($cults) -->
-  
-              {{ range $c := $cults }}
-              {{ if and ($c.Cult.SubCult) (ne $c.Cult.Name $cult.Name) }}
-                <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="SubCult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $sc := $cult.SubCults }}{{ if eq $c.Cult.Name $sc.Name }}checked{{end}}{{ end }}>
-            {{ end }}
-            {{ end }}
-  
-                <hr>
-            
-              <input class="button" type="submit" value="Save">
-          </div>
+            </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
               <h4>Regular Skills</h4>
@@ -403,6 +409,8 @@
                 <hr>
 
                 {{ end }}
+                <input class="btn btn-primary" type="submit" value="Save">
+
 
             </div> <!-- End Passions & SkillChoices COL 1 -->
 

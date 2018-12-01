@@ -54,9 +54,8 @@ type WebChar struct {
 	PowerRunes        []string
 	ElementalRunes    []string
 	Skills            map[string]*runequest.Skill
-	SpiritMagic       []runequest.Spell
-	RuneSpells        []runequest.Spell
-	SubCults          []runequest.Cult
+	SpiritMagic       []*runequest.Spell
+	RuneSpells        []*runequest.Spell
 	NumRunePoints     []int
 	NumSpiritMagic    []int
 	Counter           []int

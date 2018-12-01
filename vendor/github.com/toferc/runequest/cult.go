@@ -14,11 +14,10 @@ type Cult struct {
 	Weapons         []WeaponSelection
 	PassionList     []Ability
 	Passions        []Ability
-	RuneSpells      []Spell
+	RuneSpells      []*Spell
 	NumRunePoints   int
 	NumSpiritMagic  int
-	SpiritMagic     []Spell
-	SubCults        []Cult
+	SpiritMagic     []*Spell
 	ParentCult      *Cult
 	AssociatedCults []Cult
 }

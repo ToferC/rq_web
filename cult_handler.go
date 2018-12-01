@@ -288,7 +288,6 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		ElementalRunes:   runequest.ElementalRuneOrder,
 		Skills:           runequest.Skills,
 		CultModels:       cults,
-		SubCults:         []runequest.Cult{},
 		RuneSpells:       runequest.RuneSpells,
 		SpiritMagic:      runequest.SpiritMagicSpells,
 	}
@@ -323,6 +322,39 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			cl.Official = true
 		} else {
 			cl.Official = false
+		}
+
+		if req.FormValue("SubCult") != "" {
+			cl.Cult.SubCult = true
+		} else {
+			cl.Cult.SubCult = false
+		}
+
+		parentCultModel := &models.CultModel{}
+
+		if cl.Cult.SubCult {
+			// Set ParentCult
+			cStr := req.FormValue("ParentCult")
+			if cStr != cl.Cult.ParentCult.Name {
+
+				cID, err := strconv.Atoi(cStr)
+				if err != nil {
+					for _, v := range cults {
+						// Take first cult in map
+						cID = int(v.ID)
+						break
+					}
+				}
+
+				parentCultModel, err = database.PKLoadCultModel(db, int64(cID))
+				if err != nil {
+					fmt.Println("No Cult Found")
+				}
+
+				cl.Cult.ParentCult = parentCultModel.Cult
+
+				fmt.Println("ParentCULT: " + cl.Cult.Name)
+			}
 		}
 
 		// Upload image to s3
@@ -380,21 +412,11 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			str := req.FormValue(fmt.Sprintf("RS-%s-CoreString", rs.CoreString))
 			if str != "" {
 
-				t := runequest.Spell{
-					CoreString: rs.CoreString,
-					Points:     rs.Points,
-					UserChoice: rs.UserChoice,
-					Domain:     rs.Domain,
-					Source:     rs.Source,
-					Variable:   rs.Variable,
-					Cost:       rs.Cost,
+				if rs.UserChoice {
+					rs.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
 				}
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
-				}
-
-				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, t)
+				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, rs)
 			}
 		}
 
@@ -404,21 +426,11 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			str := req.FormValue(fmt.Sprintf("SM-%s-CoreString", sm.CoreString))
 			if str != "" {
 
-				t := runequest.Spell{
-					CoreString: sm.CoreString,
-					Points:     sm.Points,
-					UserChoice: sm.UserChoice,
-					Domain:     sm.Domain,
-					Source:     sm.Source,
-					Variable:   sm.Variable,
-					Cost:       sm.Cost,
+				if sm.UserChoice {
+					sm.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
 				}
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
-				}
-
-				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, t)
+				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, sm)
 			}
 		}
 
@@ -443,61 +455,44 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// SubCult
-
-		for _, ac := range cults {
-			c := ac.Cult
-
-			if c.SubCult {
-
-				str := req.FormValue(fmt.Sprintf("Subcult-%s-Name", c.Name))
-
-				if str != "" {
-					tempCult := runequest.Cult{
-						Name:        c.Name,
-						RuneSpells:  c.RuneSpells,
-						SpiritMagic: c.SpiritMagic,
-						SubCult:     true,
-					}
-					cl.Cult.SubCults = append(cl.Cult.SubCults, tempCult)
-				}
-			}
-		}
-
 		// Read Base Skills
 
 		skillArray := []runequest.Skill{}
 
-		// Add common skills
+		// Add common skills for non-SubCults
+		if !cl.Cult.SubCult {
 
-		worship := runequest.Skill{
-			CoreString: "Worship",
-			UserChoice: true,
-			UserString: cl.Cult.Name,
-			Category:   "Magic",
-			Base:       5,
-			CultValue:  20,
+			cultName := cl.Cult.Name
+
+			worship := runequest.Skill{
+				CoreString: "Worship",
+				UserChoice: true,
+				UserString: cultName,
+				Category:   "Magic",
+				Base:       5,
+				CultValue:  20,
+			}
+
+			meditate := runequest.Skill{
+				CoreString: "Meditate",
+				Category:   "Magic",
+				Base:       0,
+				CultValue:  5,
+			}
+
+			lore := runequest.Skill{
+				CoreString: "Cult Lore",
+				UserChoice: true,
+				UserString: cultName,
+				Category:   "Knowledge",
+				Base:       5,
+				CultValue:  15,
+			}
+
+			skillArray = append(skillArray, worship)
+			skillArray = append(skillArray, meditate)
+			skillArray = append(skillArray, lore)
 		}
-
-		meditate := runequest.Skill{
-			CoreString: "Meditate",
-			Category:   "Magic",
-			Base:       0,
-			CultValue:  5,
-		}
-
-		lore := runequest.Skill{
-			CoreString: "Cult Lore",
-			UserChoice: true,
-			UserString: cl.Cult.Name,
-			Category:   "Knowledge",
-			Base:       5,
-			CultValue:  15,
-		}
-
-		skillArray = append(skillArray, worship)
-		skillArray = append(skillArray, meditate)
-		skillArray = append(skillArray, lore)
 
 		for i := 1; i < 7; i++ {
 
@@ -698,7 +693,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Panic(err)
 		} else {
-			fmt.Println("Saved")
+			fmt.Println("Saved Cult")
 		}
 
 		url := fmt.Sprintf("/view_cult/%d", cl.ID)
@@ -818,7 +813,6 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		ElementalRunes:   runequest.ElementalRuneOrder,
 		Skills:           runequest.Skills,
 		CultModels:       cults,
-		SubCults:         []runequest.Cult{},
 		RuneSpells:       runequest.RuneSpells,
 		SpiritMagic:      runequest.SpiritMagicSpells,
 	}
@@ -855,6 +849,34 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			cl.Cult.SubCult = true
 		} else {
 			cl.Cult.SubCult = false
+		}
+
+		parentCultModel := &models.CultModel{}
+
+		if cl.Cult.SubCult {
+			// Set ParentCult
+
+			cStr := req.FormValue("ParentCult")
+			if cStr != cl.Cult.ParentCult.Name && cStr != "" {
+
+				cID, err := strconv.Atoi(cStr)
+				if err != nil {
+					for _, v := range cults {
+						// Take first cult in map
+						cID = int(v.ID)
+						break
+					}
+				}
+
+				parentCultModel, err = database.PKLoadCultModel(db, int64(cID))
+				if err != nil {
+					fmt.Println("No Cult Found")
+				}
+
+				cl.Cult.ParentCult = parentCultModel.Cult
+
+				fmt.Println("ParentCULT: " + cl.Cult.Name)
+			}
 		}
 
 		// Upload image to s3
@@ -911,53 +933,29 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Rune Spells
 
-		tempRuneSpells := []runequest.Spell{}
+		tempRuneSpells := []*runequest.Spell{}
 
 		for _, rs := range runequest.RuneSpells {
 			str := req.FormValue(fmt.Sprintf("RS-%s-CoreString", rs.CoreString))
 			if str != "" {
 
-				t := runequest.Spell{
-					CoreString: rs.CoreString,
-					Points:     rs.Points,
-					UserChoice: rs.UserChoice,
-					Domain:     rs.Domain,
-					Source:     rs.Source,
-					Variable:   rs.Variable,
-					Cost:       rs.Cost,
-				}
+				rs.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
-				}
-
-				tempRuneSpells = append(tempRuneSpells, t)
+				tempRuneSpells = append(tempRuneSpells, rs)
 			}
 		}
 		cl.Cult.RuneSpells = tempRuneSpells
 
 		// Spirit Magic
-		tempSpiritMagic := []runequest.Spell{}
+		tempSpiritMagic := []*runequest.Spell{}
 
 		for _, sm := range runequest.SpiritMagicSpells {
 			str := req.FormValue(fmt.Sprintf("SM-%s-CoreString", sm.CoreString))
 			if str != "" {
 
-				t := runequest.Spell{
-					CoreString: sm.CoreString,
-					Points:     sm.Points,
-					UserChoice: sm.UserChoice,
-					Domain:     sm.Domain,
-					Source:     sm.Source,
-					Variable:   sm.Variable,
-					Cost:       sm.Cost,
-				}
+				sm.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
-				}
-
-				tempSpiritMagic = append(tempSpiritMagic, t)
+				tempSpiritMagic = append(tempSpiritMagic, sm)
 			}
 		}
 		cl.Cult.SpiritMagic = tempSpiritMagic
@@ -984,29 +982,6 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 		cl.Cult.AssociatedCults = tempAssociatedCults
-
-		// SubCult
-		tempSubCults := []runequest.Cult{}
-
-		for _, ac := range cults {
-			c := ac.Cult
-
-			if c.SubCult {
-
-				str := req.FormValue(fmt.Sprintf("SubCult-%s-Name", c.Name))
-
-				if str != "" {
-					tempCult := runequest.Cult{
-						Name:        c.Name,
-						RuneSpells:  c.RuneSpells,
-						SpiritMagic: c.SpiritMagic,
-						SubCult:     true,
-					}
-					tempSubCults = append(tempSubCults, tempCult)
-				}
-			}
-		}
-		cl.Cult.SubCults = tempSubCults
 
 		// Read Skills
 		tempSkills := []runequest.Skill{}

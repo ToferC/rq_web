@@ -17,7 +17,6 @@
 {{ $runespells := .RuneSpells }}
 {{ $spiritmagic := .SpiritMagic }}
 {{ $cults := .CultModels }}
-{{ $subcults := .SubCults }}
 {{ $elementalrunes := .ElementalRunes }}
 {{ $powerrunes := .PowerRunes }}
 
@@ -53,6 +52,21 @@
 
               <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
               <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox">
+              <hr>
+              <p>If your Cult is a SubCult, please choose your parent Cult.</p>
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Cult">Parent Cult</span>
+              </div>
+              <select type="text" class="form-control" id="ParentCult" name="ParentCult">
+                <option></option>
+                {{ range $k, $v := $cults }}
+                  {{ if not $v.Cult.SubCult }}
+                    <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>
+                  {{ end }}
+                {{ end }}
+              </select> 
+              </div>
 
               <hr>
 
@@ -136,17 +150,6 @@
               {{ end }}
 
               <hr>
-
-              <h4>SubCults</h4>
-              <!-- Choose from list of Cults ($cults) -->
-  
-              {{ range $sc := $subcults }}
-              {{ if $sc.Cult.SubCult }}
-                <br><strong>{{ $sc.Cult.Name }}</strong> <input type="checkbox" name="SubCult-{{$sc.Cult.Name}}-Name" value="true" id="checkbox">
-            {{ end }}
-            {{ end }}
-  
-                <hr>
             
               <input class="button" type="submit" value="Save">
           </div>

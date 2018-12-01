@@ -15,13 +15,14 @@
   <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
       <form action="" method="POST" enctype="multipart/form-data">
-        <h3>{{ $cult.Name }}{{ if .CultModel.Official }} | Official{{ end }}{{ if $cult.SubCult }} | Sub-Cult{{ end }}</h3>
+        <h3>{{ $cult.Name }}{{ if .CultModel.Official }} | Official{{ end }}{{ if $cult.SubCult }} | Sub-Cult of {{ $cult.ParentCult.Name }}{{ end }}</h3>
 
         <strong>Author: {{ .CultModel.Author.UserName }}</strong>
 
         <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CultModel.Image.Path }}"
           data-holder-rendered="true">
 
+        <hr>
         {{ $cult.Description }}
         <hr>
 
@@ -68,11 +69,6 @@
         {{ end }}</p>
       <hr>
 
-      <p>Sub-Cults:
-        {{ range $c := $cult.SubCults }}
-        {{ $c.Name }},
-        {{ end }}</p>
-      <hr>
       <a class="btn btn-primary" href="/modify_cult/{{ .CultModel.ID }}">Modify</a>
       <a class="btn btn-danger" href="/delete_cult/{{ .CultModel.ID }}">Delete</a>
 
