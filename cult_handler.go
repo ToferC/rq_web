@@ -335,7 +335,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		if cl.Cult.SubCult {
 			// Set ParentCult
 			cStr := req.FormValue("ParentCult")
-			if cStr != cl.Cult.ParentCult.Name {
+			if cStr != "" {
 
 				cID, err := strconv.Atoi(cStr)
 				if err != nil {
@@ -457,14 +457,14 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Read Base Skills
 
-		skillArray := []runequest.Skill{}
+		skillArray := []*runequest.Skill{}
 
 		// Add common skills for non-SubCults
 		if !cl.Cult.SubCult {
 
 			cultName := cl.Cult.Name
 
-			worship := runequest.Skill{
+			worship := &runequest.Skill{
 				CoreString: "Worship",
 				UserChoice: true,
 				UserString: cultName,
@@ -473,14 +473,14 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				CultValue:  20,
 			}
 
-			meditate := runequest.Skill{
+			meditate := &runequest.Skill{
 				CoreString: "Meditate",
 				Category:   "Magic",
 				Base:       0,
 				CultValue:  5,
 			}
 
-			lore := runequest.Skill{
+			lore := &runequest.Skill{
 				CoreString: "Cult Lore",
 				UserChoice: true,
 				UserString: cultName,
@@ -503,25 +503,18 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
-				// Skill
-				s1 := runequest.Skill{
-					CoreString: skbaseSkill.CoreString,
-					UserChoice: skbaseSkill.UserChoice,
-					Category:   skbaseSkill.Category,
-				}
-
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				s1.CultValue = v
+				skbaseSkill.CultValue = v
 
-				if s1.UserChoice {
+				if skbaseSkill.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+					skbaseSkill.UserString = req.FormValue(userString)
 				}
-				skillArray = append(skillArray, s1)
+				skillArray = append(skillArray, skbaseSkill)
 			}
 		}
 
@@ -653,7 +646,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				sk := runequest.Skill{}
+				sk := &runequest.Skill{}
 
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
@@ -760,7 +753,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 	// Add extra empty skills if < 10
 	if len(cl.Cult.Skills) < 10 {
 		for i := len(cl.Cult.Skills); i < 10; i++ {
-			tempSkill := runequest.Skill{}
+			tempSkill := &runequest.Skill{}
 			cl.Cult.Skills = append(cl.Cult.Skills, tempSkill)
 		}
 	}
@@ -984,7 +977,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		cl.Cult.AssociatedCults = tempAssociatedCults
 
 		// Read Skills
-		tempSkills := []runequest.Skill{}
+		tempSkills := []*runequest.Skill{}
 
 		// Read Base Skills from Form
 		for i := 1; i < 10; i++ {
@@ -999,7 +992,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 			if core != "" && v > 0 {
 
-				sk := runequest.Skill{
+				sk := &runequest.Skill{
 					CoreString: core,
 					CultValue:  v,
 				}
@@ -1155,7 +1148,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				sk := runequest.Skill{}
+				sk := &runequest.Skill{}
 
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))

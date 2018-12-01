@@ -385,7 +385,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Read Base Skills
 
-		skillArray := []runequest.Skill{}
+		skillArray := []*runequest.Skill{}
 
 		for i := 1; i < 20; i++ {
 
@@ -396,35 +396,27 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
-				// Skill
-				s1 := runequest.Skill{
-					CoreString: skbaseSkill.CoreString,
-					UserChoice: skbaseSkill.UserChoice,
-					Base:       skbaseSkill.Base,
-					Category:   skbaseSkill.Category,
-				}
-
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				s1.HomelandValue = v
+				skbaseSkill.HomelandValue = v
 
 				str = fmt.Sprintf("Skill-%d-Base", i)
 				b, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					b = 0
 				}
-				if b > s1.Base {
-					s1.Base = b
+				if b > skbaseSkill.Base {
+					skbaseSkill.Base = b
 				}
 
-				if s1.UserChoice {
+				if skbaseSkill.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+					skbaseSkill.UserString = req.FormValue(userString)
 				}
-				skillArray = append(skillArray, s1)
+				skillArray = append(skillArray, skbaseSkill)
 			}
 		}
 
@@ -533,7 +525,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				sk := runequest.Skill{}
+				sk := &runequest.Skill{}
 
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
@@ -649,7 +641,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	// Add extra empty skills if < 20
 	if len(hl.Homeland.Skills) < 20 {
 		for i := len(hl.Homeland.Skills); i < 20; i++ {
-			tempSkill := runequest.Skill{}
+			tempSkill := &runequest.Skill{}
 			hl.Homeland.Skills = append(hl.Homeland.Skills, tempSkill)
 		}
 	}
@@ -788,7 +780,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Read Base Skills
 
-		skillArray := []runequest.Skill{}
+		skillArray := []*runequest.Skill{}
 
 		for i := 1; i < 20; i++ {
 
@@ -797,7 +789,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			if sk != "" {
 
-				s1 := runequest.Skill{}
+				s1 := &runequest.Skill{}
 
 				skbaseSkill := runequest.Skills[sk]
 				if skbaseSkill == nil {
@@ -990,7 +982,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				sk.HomelandValue = v
 
-				hl.Homeland.Skills = append(hl.Homeland.Skills, sk)
+				hl.Homeland.Skills = append(hl.Homeland.Skills, &sk)
 			}
 		}
 

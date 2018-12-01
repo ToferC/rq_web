@@ -347,29 +347,21 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
-				// Skill
-				s1 := runequest.Skill{
-					CoreString: skbaseSkill.CoreString,
-					UserChoice: skbaseSkill.UserChoice,
-					Category:   skbaseSkill.Category,
-					Base:       skbaseSkill.Base,
-				}
-
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				s1.CreationBonusValue = v
+				skbaseSkill.CreationBonusValue = v
 
-				if s1.UserChoice {
+				if skbaseSkill.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+					skbaseSkill.UserString = req.FormValue(userString)
 				}
 
-				targetString := createName(s1.CoreString, s1.UserString)
+				targetString := createName(skbaseSkill.CoreString, skbaseSkill.UserString)
 
-				c.Skills[targetString] = &s1
+				c.Skills[targetString] = skbaseSkill
 			}
 		}
 
@@ -790,7 +782,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			for m := range sc.Skills {
 				str := fmt.Sprintf("SC-%d-%d", i, m)
 				if req.FormValue(str) != "" {
-					c.Homeland.Skills = append(c.Homeland.Skills, sc.Skills[m])
+					c.Homeland.Skills = append(c.Homeland.Skills, &sc.Skills[m])
 				}
 			}
 		}
@@ -820,6 +812,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Skill is new: " + targetString)
 
 					// New Skill
+					// New Skill
 					baseSkill := &runequest.Skill{
 						CoreString:    s.CoreString,
 						UserString:    s.UserString,
@@ -828,6 +821,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 						UserChoice:    s.UserChoice,
 						HomelandValue: s.HomelandValue,
 					}
+
 					// Update our new skill
 					sc := c.SkillCategories[baseSkill.Category]
 
@@ -844,13 +838,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 					bs := runequest.Skills[s.CoreString]
 
-					baseSkill := &runequest.Skill{
-						CoreString: bs.CoreString,
-						UserString: bs.UserString,
-						Category:   bs.Category,
-						Base:       bs.Base,
-						UserChoice: bs.UserChoice,
-					}
+					baseSkill := bs
 
 					fmt.Println(baseSkill)
 					baseSkill.HomelandValue = s.HomelandValue
@@ -1002,7 +990,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			for m := range sc.Skills {
 				str := fmt.Sprintf("SC-%d-%d", i, m)
 				if req.FormValue(str) != "" {
-					c.Occupation.Skills = append(c.Occupation.Skills, sc.Skills[m])
+					c.Occupation.Skills = append(c.Occupation.Skills, &sc.Skills[m])
 				}
 			}
 		}
@@ -1015,13 +1003,9 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 				bs := runequest.Skills[fv]
 
-				ws := runequest.Skill{
-					CoreString:      bs.CoreString,
-					Category:        bs.Category,
-					Base:            bs.Base,
-					OccupationValue: w.Value,
-				}
-				c.Occupation.Skills = append(c.Occupation.Skills, ws)
+				bs.OccupationValue = w.Value
+
+				c.Occupation.Skills = append(c.Occupation.Skills, bs)
 			}
 		}
 
@@ -1323,20 +1307,14 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				baseSpell := totalSpiritMagic[index]
 
-				s := &runequest.Spell{
-					Name:       baseSpell.Name,
-					CoreString: baseSpell.CoreString,
-					UserString: baseSpell.UserString,
-					Cost:       cost,
-					Domain:     baseSpell.Domain,
-				}
+				baseSpell.Cost = cost
 
 				if spec != "" {
-					s.UserString = spec
+					baseSpell.UserString = spec
 				}
 
-				s.GenerateName()
-				c.SpiritMagic[s.Name] = s
+				baseSpell.GenerateName()
+				c.SpiritMagic[baseSpell.Name] = baseSpell
 			}
 		}
 
@@ -1345,7 +1323,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 			for m := range sc.Skills {
 				str := fmt.Sprintf("SC-%d-%d", i, m)
 				if req.FormValue(str) != "" {
-					c.Cult.Skills = append(c.Cult.Skills, sc.Skills[m])
+					c.Cult.Skills = append(c.Cult.Skills, &sc.Skills[m])
 				}
 			}
 		}
@@ -1358,13 +1336,8 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 			if fv != "" {
 				bs := runequest.Skills[fv]
 
-				ws := runequest.Skill{
-					CoreString: bs.CoreString,
-					Category:   bs.Category,
-					Base:       bs.Base,
-					CultValue:  w.Value,
-				}
-				c.Cult.Skills = append(c.Cult.Skills, ws)
+				bs.CultValue = w.Value
+				c.Cult.Skills = append(c.Cult.Skills, bs)
 			}
 		}
 

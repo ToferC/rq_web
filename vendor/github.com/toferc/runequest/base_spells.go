@@ -1,6 +1,6 @@
 package runequest
 
-// Rune&Spells is the base rune magic list
+// RuneSpells is the base rune magic list
 var RuneSpells = []*Spell{
 	&Spell{
 		CoreString:  "Absorption",
@@ -1715,7 +1715,7 @@ var RuneSpells = []*Spell{
 	},
 }
 
-// SpiritMagic&Spells represents spirit magic
+// SpiritMagicSpells represents spirit magic
 var SpiritMagicSpells = []*Spell{
 	&Spell{
 		CoreString:  "Befuddle",

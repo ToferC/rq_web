@@ -373,7 +373,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Read Base Skills
 
-		skillArray := []runequest.Skill{}
+		skillArray := []*runequest.Skill{}
 
 		for i := 1; i < 16; i++ {
 
@@ -384,27 +384,19 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
-				// Skill
-				s1 := runequest.Skill{
-					CoreString: skbaseSkill.CoreString,
-					UserChoice: skbaseSkill.UserChoice,
-					Category:   skbaseSkill.Category,
-					Base:       skbaseSkill.Base,
-				}
-
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				s1.OccupationValue = v
+				skbaseSkill.OccupationValue = v
 
-				if s1.UserChoice {
+				if skbaseSkill.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+					skbaseSkill.UserString = req.FormValue(userString)
 				}
-				s1.GenerateName()
-				skillArray = append(skillArray, s1)
+				skbaseSkill.GenerateName()
+				skillArray = append(skillArray, skbaseSkill)
 			}
 		}
 
@@ -538,7 +530,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				sk := runequest.Skill{}
+				sk := &runequest.Skill{}
 
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
@@ -646,7 +638,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	// Add extra empty skills if < 20
 	if len(oc.Occupation.Skills) < 20 {
 		for i := len(oc.Occupation.Skills); i < 20; i++ {
-			tempSkill := runequest.Skill{}
+			tempSkill := &runequest.Skill{}
 			oc.Occupation.Skills = append(oc.Occupation.Skills, tempSkill)
 		}
 	}
@@ -809,7 +801,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		oc.Occupation.Equipment = equipment
 
 		// Read Skills
-		tempSkills := []runequest.Skill{}
+		tempSkills := []*runequest.Skill{}
 
 		// Read Base Skills from Form
 		for i := 1; i < 20; i++ {
@@ -826,7 +818,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			if core != "" && v > 0 {
 
-				sk := runequest.Skill{
+				sk := &runequest.Skill{
 					CoreString:      core,
 					OccupationValue: v,
 				}
@@ -984,7 +976,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" {
 
-				sk := runequest.Skill{}
+				sk := &runequest.Skill{}
 
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
