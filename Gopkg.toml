@@ -28,11 +28,6 @@
   root-package = "github.com/toferc/rq_web"
 
 
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/toferc/oneroll"
-
 [prune]
   go-tests = true
   unused-packages = true

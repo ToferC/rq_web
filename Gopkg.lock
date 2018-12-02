@@ -99,18 +99,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/toferc/onegc"
-  packages = ["model"]
-  revision = "8d1642ac0774eb03547deb3facb9e58008e35865"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/toferc/oneroll"
-  packages = ["."]
-  revision = "3e99e81a34e973336138733f34c614b7875b7001"
-
-[[projects]]
-  branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
   revision = "55993a42f14767048c38f6cd2af13ea807a804ce"
@@ -134,6 +122,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6d13585371faf038397f75e048e3a094c1bdfdb5faf1796dc0de1bef9b6e9a1d"
+  inputs-digest = "988bb0b428343b7eb4611a7ee561e91e7fd83ff98138f88b3f20a7d304851c84"
   solver-name = "gps-cdcl"
   solver-version = 1

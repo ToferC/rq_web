@@ -41,26 +41,22 @@
         <a class="nav-link" href="/user_roster/">Personal Roster<span class="sr-only"></span></a>
       </li>
       {{ end }}
-      <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Templates
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/homeland_index/">Homelands</a>
-            <a class="dropdown-item" href="/occupation_index/">Occupations</a>
-            <a class="dropdown-item" href="/cult_index/">Cults</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/add_standalone_power/" role="button">Add Power</a>
-          </div>
-        </li>
+      <li>
+      <a class="nav-link active" href="/homeland_index/">Homelands<span class="sr-only"></a></li>
+      <li>
+      <a class="nav-link active" href="/occupation_index/">Occupations<span class="sr-only"></a></li>
+      <li>
+      <a class="nav-link active" href="/cult_index/">Cults<span class="sr-only"></a></li>
+      <li>
+        <a class="nav-link active" href="/cc1_choose_homeland/">Create Character<span class="sr-only"></a>
+      </li>
+            
       {{ if ne $user ""}}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Add Content
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/cc1_choose_homeland/">Create Character</a>
-        <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/add_homeland/">Add Homeland</a>
           <a class="dropdown-item" href="/add_occupation/">Add Occupation</a>
           <a class="dropdown-item" href="/add_cult/">Add Cult</a>

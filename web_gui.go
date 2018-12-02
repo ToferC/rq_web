@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/toferc/onegc/model"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
 )
@@ -32,7 +31,7 @@ type WebUser struct {
 
 // WebChar is a framework to send objects & data to a Web view
 type WebChar struct {
-	User            model.User
+	User            *models.User
 	CharacterModel  *models.CharacterModel
 	HomelandModel   *models.HomelandModel
 	OccupationModel *models.OccupationModel

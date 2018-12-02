@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/go-pg/pg"
-	"github.com/toferc/oneroll"
 	"github.com/toferc/rq_web/database"
 	"github.com/toferc/rq_web/models"
+	"github.com/toferc/runequest"
 )
 
 var db *pg.DB
@@ -57,15 +57,15 @@ func main() {
 
 		fmt.Println("Create SuperUser for Runequest")
 
-		username = oneroll.UserQuery("Enter user name (or hit Enter to quit): ")
+		username = runequest.UserQuery("Enter user name (or hit Enter to quit): ")
 
 		if username == "" {
 			break
 		}
 
-		email = oneroll.UserQuery("Enter user email: ")
-		password = oneroll.UserQuery("Enter password: ")
-		password2 = oneroll.UserQuery("Re-enter password: ")
+		email = runequest.UserQuery("Enter user email: ")
+		password = runequest.UserQuery("Enter password: ")
+		password2 = runequest.UserQuery("Re-enter password: ")
 
 		hashedPassword, err := database.HashPassword(password)
 		if err != nil {
