@@ -48,6 +48,11 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	// Print names and PK
 	for i, cm := range cms {
 
+		if cm.Character.CreationSteps == nil {
+			cm.Character.CreationSteps = map[string]bool{}
+			cm.Character.CreationSteps["Complete"] = true
+		}
+
 		fmt.Println(i, cm.Character.Name)
 	}
 	return cms, nil
@@ -87,6 +92,11 @@ func PKLoadCharacterModel(db *pg.DB, pk int64) (*models.CharacterModel, error) {
 	if err != nil {
 		fmt.Println(err)
 		return &models.CharacterModel{}, err
+	}
+
+	if cm.Character.CreationSteps == nil {
+		cm.Character.CreationSteps = map[string]bool{}
+		cm.Character.CreationSteps["Complete"] = true
 	}
 
 	fmt.Println("Character loaded From DB")

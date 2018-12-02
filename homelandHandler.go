@@ -396,27 +396,35 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
+				// Skill
+				s1 := &runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Base:       skbaseSkill.Base,
+					Category:   skbaseSkill.Category,
+				}
+
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				skbaseSkill.HomelandValue = v
+				s1.HomelandValue = v
 
 				str = fmt.Sprintf("Skill-%d-Base", i)
 				b, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					b = 0
 				}
-				if b > skbaseSkill.Base {
-					skbaseSkill.Base = b
+				if b > s1.Base {
+					s1.Base = b
 				}
 
-				if skbaseSkill.UserChoice {
+				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					skbaseSkill.UserString = req.FormValue(userString)
+					s1.UserString = req.FormValue(userString)
 				}
-				skillArray = append(skillArray, skbaseSkill)
+				skillArray = append(skillArray, s1)
 			}
 		}
 
@@ -792,7 +800,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				s1 := &runequest.Skill{}
 
 				skbaseSkill := runequest.Skills[sk]
-				if skbaseSkill == nil {
+				if &skbaseSkill == nil {
 					// Skill is new
 					for _, ns := range hl.Homeland.Skills {
 						// Search for CoreString in Homeland Skills

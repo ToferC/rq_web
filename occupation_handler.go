@@ -384,19 +384,27 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
+				// Skill
+				s1 := &runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Category:   skbaseSkill.Category,
+					Base:       skbaseSkill.Base,
+				}
+
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				skbaseSkill.OccupationValue = v
+				s1.OccupationValue = v
 
-				if skbaseSkill.UserChoice {
+				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					skbaseSkill.UserString = req.FormValue(userString)
+					s1.UserString = req.FormValue(userString)
 				}
-				skbaseSkill.GenerateName()
-				skillArray = append(skillArray, skbaseSkill)
+				s1.GenerateName()
+				skillArray = append(skillArray, s1)
 			}
 		}
 

@@ -347,21 +347,28 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 				skbaseSkill := runequest.Skills[sk]
 				fmt.Println(skbaseSkill)
 
+				s1 := &runequest.Skill{
+					CoreString: skbaseSkill.CoreString,
+					UserChoice: skbaseSkill.UserChoice,
+					Category:   skbaseSkill.Category,
+					Base:       skbaseSkill.Base,
+				}
+
 				str := fmt.Sprintf("Skill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
 				}
-				skbaseSkill.CreationBonusValue = v
+				s1.CreationBonusValue = v
 
-				if skbaseSkill.UserChoice {
+				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					skbaseSkill.UserString = req.FormValue(userString)
+					s1.UserString = req.FormValue(userString)
 				}
 
-				targetString := createName(skbaseSkill.CoreString, skbaseSkill.UserString)
+				targetString := createName(s1.CoreString, skbaseSkill.UserString)
 
-				c.Skills[targetString] = skbaseSkill
+				c.Skills[targetString] = s1
 			}
 		}
 
@@ -808,10 +815,10 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			} else {
 				// We need to find the base skill from the Master list or create it
-				if runequest.Skills[s.CoreString] == nil {
+				bs, ok := runequest.Skills[s.CoreString]
+				if !ok {
 					fmt.Println("Skill is new: " + targetString)
 
-					// New Skill
 					// New Skill
 					baseSkill := &runequest.Skill{
 						CoreString:    s.CoreString,
@@ -836,11 +843,15 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					// Skill exists in master list
 					fmt.Println("Skill in master list: " + targetString)
 
-					bs := runequest.Skills[s.CoreString]
+					fmt.Println(bs)
 
-					baseSkill := bs
+					baseSkill := &runequest.Skill{
+						CoreString: bs.CoreString,
+						Category:   bs.Category,
+						Base:       bs.Base,
+						UserChoice: bs.UserChoice,
+					}
 
-					fmt.Println(baseSkill)
 					baseSkill.HomelandValue = s.HomelandValue
 					fmt.Println(s.HomelandValue, baseSkill.HomelandValue)
 
@@ -1003,9 +1014,14 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 				bs := runequest.Skills[fv]
 
-				bs.OccupationValue = w.Value
+				ws := &runequest.Skill{
+					CoreString:      bs.CoreString,
+					Category:        bs.Category,
+					Base:            bs.Base,
+					OccupationValue: w.Value,
+				}
 
-				c.Occupation.Skills = append(c.Occupation.Skills, bs)
+				c.Occupation.Skills = append(c.Occupation.Skills, ws)
 			}
 		}
 
@@ -1034,18 +1050,20 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			} else {
 				// We need to find the base skill from the Master list or create it
-				if runequest.Skills[s.CoreString] == nil {
+				bs, ok := runequest.Skills[s.CoreString]
+				if !ok {
 					fmt.Println("Skill is new: " + targetString)
 
 					// New Skill
 					baseSkill := &runequest.Skill{
-						CoreString:    s.CoreString,
-						UserString:    s.UserString,
-						Category:      s.Category,
-						Base:          s.Base,
-						UserChoice:    s.UserChoice,
-						HomelandValue: s.OccupationValue,
+						CoreString:      s.CoreString,
+						UserString:      s.UserString,
+						Category:        s.Category,
+						Base:            s.Base,
+						UserChoice:      s.UserChoice,
+						OccupationValue: s.OccupationValue,
 					}
+
 					// Update our new skill
 					sc := c.SkillCategories[baseSkill.Category]
 
@@ -1060,17 +1078,15 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					// Skill exists in master list
 					fmt.Println("Skill in master list: " + targetString)
 
-					bs := runequest.Skills[s.CoreString]
+					fmt.Println(bs)
 
 					baseSkill := &runequest.Skill{
 						CoreString: bs.CoreString,
-						UserString: bs.UserString,
 						Category:   bs.Category,
 						Base:       bs.Base,
 						UserChoice: bs.UserChoice,
 					}
 
-					fmt.Println(baseSkill)
 					baseSkill.OccupationValue = s.OccupationValue
 					fmt.Println(s.OccupationValue, baseSkill.OccupationValue)
 
@@ -1225,7 +1241,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		Skills:           runequest.Skills,
 		NumRunePoints:    numRunePoints,
 		NumSpiritMagic:   numSpiritMagic,
-		SpiritMagic:      totalSpiritMagic,
+		TotalSpiritMagic: totalSpiritMagic,
 		WeaponCategories: runequest.WeaponCategories,
 	}
 	// Test
@@ -1336,8 +1352,13 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 			if fv != "" {
 				bs := runequest.Skills[fv]
 
-				bs.CultValue = w.Value
-				c.Cult.Skills = append(c.Cult.Skills, bs)
+				ws := &runequest.Skill{
+					CoreString: bs.CoreString,
+					Category:   bs.Category,
+					Base:       bs.Base,
+					CultValue:  w.Value,
+				}
+				c.Cult.Skills = append(c.Cult.Skills, ws)
 			}
 		}
 
@@ -1366,8 +1387,8 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 			} else {
 				// We need to find the base skill from the Master list or create it
-				if runequest.Skills[s.CoreString] == nil {
-					// Skill doesn't exist in master list
+				bs, ok := runequest.Skills[s.CoreString]
+				if !ok {
 					fmt.Println("Skill is new: " + targetString)
 
 					// New Skill
@@ -1384,7 +1405,6 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 					sc := c.SkillCategories[baseSkill.Category]
 
 					baseSkill.CategoryValue = sc.Value
-					baseSkill.UserString = s.UserString
 
 					baseSkill.GenerateName()
 					baseSkill.UpdateSkill()
@@ -1395,17 +1415,15 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 					// Skill exists in master list
 					fmt.Println("Skill in master list: " + targetString)
 
-					bs := runequest.Skills[s.CoreString]
+					fmt.Println(bs)
 
 					baseSkill := &runequest.Skill{
 						CoreString: bs.CoreString,
-						UserString: bs.UserString,
 						Category:   bs.Category,
 						Base:       bs.Base,
 						UserChoice: bs.UserChoice,
 					}
 
-					fmt.Println(baseSkill)
 					baseSkill.CultValue = s.CultValue
 					fmt.Println(s.CultValue, baseSkill.CultValue)
 

@@ -988,7 +988,7 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 					s.UserString = spec
 				}
 				s.GenerateName()
-				c.RuneSpells[s.Name] = s
+				c.RuneSpells[s.Name] = &s
 			}
 		}
 

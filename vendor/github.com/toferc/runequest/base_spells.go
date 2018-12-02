@@ -1,8 +1,8 @@
 package runequest
 
 // RuneSpells is the base rune magic list
-var RuneSpells = []*Spell{
-	&Spell{
+var RuneSpells = []Spell{
+	Spell{
 		CoreString:  "Absorption",
 		Description: "",
 		Domain:      "Rune",
@@ -10,7 +10,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Affix Darkness",
 		Description: "",
 		Domain:      "Rune",
@@ -18,7 +18,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Alter Creature",
 		Description: "",
 		Domain:      "Rune",
@@ -26,7 +26,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Analyze Magic",
 		Description: "",
 		Domain:      "Rune",
@@ -34,7 +34,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Arouse Passion",
 		Description: "",
 		Domain:      "Rune",
@@ -42,7 +42,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Axe Trance",
 		Description: "",
 		Domain:      "Rune",
@@ -50,7 +50,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Axis Mundi",
 		Description: "",
 		Domain:      "Rune",
@@ -58,7 +58,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Ban",
 		Description: "",
 		Domain:      "Rune",
@@ -66,7 +66,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bear Fruit",
 		Description: "",
 		Domain:      "Rune",
@@ -74,7 +74,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bear's Skin",
 		Description: "",
 		Domain:      "Rune",
@@ -82,7 +82,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bear's Strength",
 		Description: "",
 		Domain:      "Rune",
@@ -90,7 +90,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Beastmaster",
 		Description: "",
 		Domain:      "Rune",
@@ -98,7 +98,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Become",
 		UserChoice:  true,
 		UserString:  "any",
@@ -108,7 +108,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Ban",
 		Description: "",
 		Domain:      "Rune",
@@ -116,7 +116,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Berserker",
 		Description: "",
 		Domain:      "Rune",
@@ -124,7 +124,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Binding Enchantment",
 		Description: "",
 		Domain:      "Rune",
@@ -132,7 +132,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bind Ghost",
 		Description: "",
 		Domain:      "Rune",
@@ -140,7 +140,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Blast Earth",
 		Description: "",
 		Domain:      "Rune",
@@ -148,7 +148,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless Animals",
 		Description: "",
 		Domain:      "Rune",
@@ -156,7 +156,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless Champion",
 		Description: "",
 		Domain:      "Rune",
@@ -164,7 +164,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless Crops",
 		Description: "",
 		Domain:      "Rune",
@@ -172,7 +172,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless Grave",
 		Description: "",
 		Domain:      "Rune",
@@ -180,7 +180,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless Pregnancy",
 		Description: "",
 		Domain:      "Rune",
@@ -188,7 +188,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless ThunderStone",
 		Description: "",
 		Domain:      "Rune",
@@ -196,7 +196,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bless Woad",
 		Description: "",
 		Domain:      "Rune",
@@ -204,7 +204,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Breath Air/Water",
 		Description: "",
 		Domain:      "Rune",
@@ -212,7 +212,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Call Founder",
 		Description: "",
 		Domain:      "Rune",
@@ -220,7 +220,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        6,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Catseye",
 		Description: "",
 		Domain:      "Rune",
@@ -228,7 +228,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Chaos Gift",
 		Description: "",
 		Domain:      "Rune",
@@ -236,7 +236,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Charisma",
 		Description: "",
 		Domain:      "Rune",
@@ -244,7 +244,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Clairvoyance",
 		Description: "",
 		Domain:      "Rune",
@@ -252,7 +252,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Claws",
 		Description: "",
 		Domain:      "Rune",
@@ -260,7 +260,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Clever Tongue",
 		Description: "",
 		Domain:      "Rune",
@@ -268,7 +268,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Cloud Call",
 		Description: "",
 		Domain:      "Rune",
@@ -276,7 +276,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Cloud Clear",
 		Description: "",
 		Domain:      "Rune",
@@ -284,7 +284,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Comfort Song",
 		Description: "",
 		Domain:      "Rune",
@@ -292,7 +292,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Command Cult Spirit",
 		Description: "",
 		Domain:      "Rune",
@@ -300,7 +300,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Command Priests",
 		Description: "",
 		Domain:      "Rune",
@@ -308,7 +308,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Command",
 		Description: "",
 		UserChoice:  true,
@@ -318,7 +318,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Command Worshippers",
 		Description: "",
 		Domain:      "Rune",
@@ -326,7 +326,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Crack",
 		Description: "",
 		Domain:      "Rune",
@@ -334,7 +334,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Fissure",
 		Description: "",
 		Domain:      "Rune",
@@ -342,7 +342,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Great Market",
 		Description: "",
 		Domain:      "Rune",
@@ -350,7 +350,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Market",
 		Description: "",
 		Domain:      "Rune",
@@ -358,7 +358,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Shadow",
 		Description: "",
 		Domain:      "Rune",
@@ -366,7 +366,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Wildfire",
 		Description: "",
 		Domain:      "Rune",
@@ -374,7 +374,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Cremate Dead",
 		Description: "",
 		Domain:      "Rune",
@@ -382,7 +382,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Cure All Disease",
 		Description: "",
 		Domain:      "Rune",
@@ -390,7 +390,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Cure Chaos Wound",
 		Description: "",
 		Domain:      "Rune",
@@ -398,7 +398,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Cure Poison",
 		Description: "",
 		Domain:      "Rune",
@@ -406,7 +406,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dark Walk",
 		Description: "",
 		Domain:      "Rune",
@@ -414,7 +414,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Honor",
 		Description: "",
 		Domain:      "Rune",
@@ -422,7 +422,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Truth",
 		Description: "",
 		Domain:      "Rune",
@@ -430,7 +430,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Discorporation",
 		Description: "",
 		Domain:      "Rune",
@@ -438,7 +438,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dismiss Elemental",
 		Description: "",
 		UserChoice:  true,
@@ -448,7 +448,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dismiss Magic",
 		Description: "",
 		Domain:      "Rune",
@@ -456,7 +456,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Divination",
 		Description: "",
 		Domain:      "Rune",
@@ -464,7 +464,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Draw Beast",
 		Description: "",
 		Domain:      "Rune",
@@ -472,7 +472,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Earth Shield",
 		Description: "",
 		Domain:      "Rune",
@@ -480,7 +480,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Earthpower",
 		Description: "",
 		Domain:      "Rune",
@@ -488,7 +488,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Enchant Metal",
 		Description: "",
 		Domain:      "Rune",
@@ -496,7 +496,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Extension",
 		Description: "",
 		Domain:      "Rune",
@@ -504,7 +504,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Face Chaos",
 		Description: "",
 		Domain:      "Rune",
@@ -512,7 +512,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Fear",
 		Description: "",
 		Domain:      "Rune",
@@ -520,7 +520,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Fearless",
 		Description: "",
 		Domain:      "Rune",
@@ -528,7 +528,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Fight Disease",
 		Description: "",
 		Domain:      "Rune",
@@ -536,7 +536,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Find Enemy",
 		Description: "",
 		Domain:      "Rune",
@@ -544,7 +544,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Find Substance",
 		Description: "",
 		UserChoice:  true,
@@ -554,7 +554,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Fireshield",
 		Description: "",
 		Domain:      "Rune",
@@ -562,7 +562,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Flight",
 		Description: "",
 		Domain:      "Rune",
@@ -570,7 +570,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Float",
 		Description: "",
 		Domain:      "Rune",
@@ -578,7 +578,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Free Ghost",
 		Description: "",
 		Domain:      "Rune",
@@ -586,7 +586,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Gnome to Gargoyle",
 		Description: "",
 		Domain:      "Rune",
@@ -594,7 +594,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Group Laughter",
 		Description: "",
 		Domain:      "Rune",
@@ -602,7 +602,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Guided Teleportation",
 		Description: "",
 		Domain:      "Rune",
@@ -610,7 +610,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Hallucinate",
 		Description: "",
 		Domain:      "Rune",
@@ -618,7 +618,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Harmony",
 		Description: "",
 		Domain:      "Rune",
@@ -626,7 +626,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Heal Body",
 		Description: "",
 		Domain:      "Rune",
@@ -634,7 +634,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Healing Trance",
 		Description: "",
 		Domain:      "Rune",
@@ -642,7 +642,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Heal Wound",
 		Description: "",
 		Domain:      "Rune",
@@ -650,7 +650,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Hide Fire",
 		Description: "",
 		Domain:      "Rune",
@@ -658,7 +658,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Hide Wealth",
 		Description: "",
 		Domain:      "Rune",
@@ -666,7 +666,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Identify Secret",
 		Description: "",
 		Domain:      "Rune",
@@ -674,7 +674,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Illusory Motion",
 		Description: "",
 		Domain:      "Rune",
@@ -682,7 +682,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Illusory Odor",
 		Description: "",
 		Domain:      "Rune",
@@ -690,7 +690,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Illusory Sight",
 		Description: "",
 		Domain:      "Rune",
@@ -698,7 +698,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Illusory Sound",
 		Description: "",
 		Domain:      "Rune",
@@ -706,7 +706,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Illusory Substance",
 		Description: "",
 		Domain:      "Rune",
@@ -714,7 +714,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Illusory Taste",
 		Description: "",
 		Domain:      "Rune",
@@ -722,7 +722,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Impede Chaos",
 		Description: "",
 		Domain:      "Rune",
@@ -730,7 +730,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Incarnate Ancestor",
 		Description: "",
 		Domain:      "Rune",
@@ -738,7 +738,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Increase/Decrease Wind",
 		Description: "",
 		Domain:      "Rune",
@@ -746,7 +746,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Invigorate",
 		Description: "",
 		Domain:      "Rune",
@@ -754,7 +754,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Inviolable",
 		Description: "",
 		Domain:      "Rune",
@@ -762,7 +762,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Invisibility",
 		Description: "",
 		Domain:      "Rune",
@@ -770,7 +770,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Knowledge",
 		Description: "",
 		Domain:      "Rune",
@@ -778,7 +778,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Leap",
 		Description: "",
 		Domain:      "Rune",
@@ -786,7 +786,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Lie",
 		Description: "",
 		Domain:      "Rune",
@@ -794,7 +794,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Lightning",
 		Description: "",
 		Domain:      "Rune",
@@ -802,7 +802,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Lock",
 		Description: "",
 		Domain:      "Rune",
@@ -810,7 +810,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Madness",
 		Description: "",
 		Domain:      "Rune",
@@ -818,7 +818,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Magic Point Enchantment",
 		Description: "",
 		Domain:      "Rune",
@@ -826,7 +826,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Matrix Creation",
 		Description: "",
 		Domain:      "Rune",
@@ -834,7 +834,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Mindblast",
 		Description: "",
 		Domain:      "Rune",
@@ -842,7 +842,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Mind Read",
 		Description: "",
 		Domain:      "Rune",
@@ -850,7 +850,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Mist Cloud",
 		Description: "",
 		Domain:      "Rune",
@@ -858,7 +858,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Morale",
 		Description: "",
 		Domain:      "Rune",
@@ -866,15 +866,15 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
-		CoreString:  "Multi&Spell",
+	Spell{
+		CoreString:  "MultiSpell",
 		Description: "",
 		Domain:      "Rune",
 		Source:      "Magic",
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Oath",
 		Description: "",
 		Domain:      "Rune",
@@ -882,7 +882,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Panic",
 		Description: "",
 		Domain:      "Rune",
@@ -890,7 +890,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Passage",
 		Description: "",
 		Domain:      "Rune",
@@ -898,7 +898,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Path Watch",
 		Description: "",
 		Domain:      "Rune",
@@ -906,7 +906,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Pathway",
 		Description: "",
 		Domain:      "Rune",
@@ -914,7 +914,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Peace",
 		Description: "",
 		Domain:      "Rune",
@@ -922,7 +922,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Rain",
 		Description: "",
 		Domain:      "Rune",
@@ -930,7 +930,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Reconstruction",
 		Description: "",
 		Domain:      "Rune",
@@ -938,7 +938,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Reflection",
 		Description: "",
 		Domain:      "Rune",
@@ -946,7 +946,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Regrow Limb",
 		Description: "",
 		Domain:      "Rune",
@@ -954,7 +954,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Remove Body Part",
 		Description: "",
 		UserChoice:  true,
@@ -964,7 +964,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Reproduce",
 		Description: "",
 		Domain:      "Rune",
@@ -972,7 +972,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Resurrect",
 		Description: "",
 		Domain:      "Rune",
@@ -980,7 +980,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Restone Health",
 		Description: "",
 		Domain:      "Rune",
@@ -988,7 +988,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Safe",
 		Description: "",
 		Domain:      "Rune",
@@ -996,7 +996,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sanctify",
 		Description: "",
 		Domain:      "Rune",
@@ -1004,7 +1004,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Seal Soul",
 		Description: "",
 		Domain:      "Rune",
@@ -1012,7 +1012,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sever Spirit",
 		Description: "",
 		Domain:      "Rune",
@@ -1020,7 +1020,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Shake Earth",
 		Description: "",
 		Domain:      "Rune",
@@ -1028,7 +1028,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Shattering",
 		Description: "",
 		Domain:      "Rune",
@@ -1036,7 +1036,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Shield",
 		Description: "",
 		Domain:      "Rune",
@@ -1044,7 +1044,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Slash",
 		Description: "",
 		Domain:      "Rune",
@@ -1052,7 +1052,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Snow",
 		Description: "",
 		Domain:      "Rune",
@@ -1060,7 +1060,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Soul Sight",
 		Description: "",
 		Domain:      "Rune",
@@ -1068,7 +1068,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Speak With Herd Beasts",
 		Description: "",
 		Domain:      "Rune",
@@ -1076,7 +1076,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Speak With Insects",
 		Description: "",
 		Domain:      "Rune",
@@ -1084,15 +1084,15 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
-		CoreString:  "&Spell Trading",
+	Spell{
+		CoreString:  "Spell Trading",
 		Description: "",
 		Domain:      "Rune",
 		Source:      "Magic",
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Spirit Armor Enchantment",
 		Description: "",
 		Domain:      "Rune",
@@ -1100,7 +1100,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Spirit Block",
 		Description: "",
 		Domain:      "Rune",
@@ -1108,7 +1108,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Spirit Guardian",
 		Description: "",
 		Domain:      "Rune",
@@ -1116,7 +1116,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Spirit Melding",
 		Description: "",
 		Domain:      "Rune",
@@ -1124,7 +1124,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Strike",
 		Description: "",
 		Domain:      "Rune",
@@ -1132,7 +1132,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Strongnet",
 		Description: "",
 		Domain:      "Rune",
@@ -1140,7 +1140,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Ancestor",
 		Description: "",
 		Domain:      "Rune",
@@ -1148,7 +1148,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Cult Spirit",
 		Description: "",
 		Domain:      "Rune",
@@ -1156,7 +1156,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Elemental",
 		Description: "",
 		UserChoice:  true,
@@ -1166,7 +1166,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Household Guardian",
 		Description: "",
 		Domain:      "Rune",
@@ -1174,7 +1174,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Specific Ancestor",
 		Description: "",
 		Domain:      "Rune",
@@ -1182,7 +1182,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Spirit of Law",
 		Description: "",
 		Domain:      "Rune",
@@ -1190,7 +1190,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Spirit Teacher",
 		Description: "",
 		Domain:      "Rune",
@@ -1198,7 +1198,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summons of Evil",
 		Description: "",
 		Domain:      "Rune",
@@ -1206,7 +1206,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sunbright",
 		Description: "",
 		Domain:      "Rune",
@@ -1214,7 +1214,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sunspear",
 		Description: "",
 		Domain:      "Rune",
@@ -1222,7 +1222,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Suppress Lodril",
 		Description: "",
 		Domain:      "Rune",
@@ -1230,7 +1230,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sureshot",
 		Description: "",
 		Domain:      "Rune",
@@ -1238,7 +1238,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Swallow",
 		Description: "",
 		Domain:      "Rune",
@@ -1246,7 +1246,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sword Trance",
 		Description: "",
 		Domain:      "Rune",
@@ -1254,7 +1254,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Tame Bull",
 		Description: "",
 		Domain:      "Rune",
@@ -1262,7 +1262,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Teleportation",
 		Description: "",
 		Domain:      "Rune",
@@ -1270,7 +1270,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Thunderbolt",
 		Description: "",
 		Domain:      "Rune",
@@ -1278,7 +1278,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Transform Self",
 		Description: "",
 		Domain:      "Rune",
@@ -1286,7 +1286,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Translate",
 		Description: "",
 		Domain:      "Rune",
@@ -1294,7 +1294,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Truespeak",
 		Description: "",
 		Domain:      "Rune",
@@ -1302,7 +1302,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "True Weapon",
 		Description: "",
 		UserChoice:  true,
@@ -1312,7 +1312,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Turn Undead",
 		Description: "",
 		Domain:      "Rune",
@@ -1320,7 +1320,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Warding",
 		Description: "",
 		Domain:      "Rune",
@@ -1328,7 +1328,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Wind Warp",
 		Description: "",
 		Domain:      "Rune",
@@ -1336,7 +1336,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Wind Words",
 		Description: "",
 		Domain:      "Rune",
@@ -1345,7 +1345,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Aldryami
-	&Spell{
+	Spell{
 		CoreString:  "Animate War Tree",
 		Description: "",
 		Domain:      "Rune",
@@ -1354,7 +1354,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Arrow Trance",
 		Description: "",
 		Domain:      "Rune",
@@ -1363,7 +1363,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Chameleon",
 		Description: "",
 		Domain:      "Rune",
@@ -1372,7 +1372,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create War Tree",
 		Description: "",
 		Domain:      "Rune",
@@ -1381,7 +1381,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Plant Spy",
 		Description: "",
 		Domain:      "Rune",
@@ -1390,7 +1390,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Silence Sphere",
 		Description: "",
 		Domain:      "Rune",
@@ -1399,7 +1399,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Tanglethicket",
 		Description: "",
 		Domain:      "Rune",
@@ -1409,7 +1409,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Dragonnewts
-	&Spell{
+	Spell{
 		CoreString:  "Dragon Armor",
 		Description: "",
 		Domain:      "Rune",
@@ -1418,7 +1418,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dragon Claw",
 		Description: "",
 		Domain:      "Rune",
@@ -1427,7 +1427,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dragon Strength",
 		Description: "",
 		Domain:      "Rune",
@@ -1436,7 +1436,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Firebreath",
 		Description: "",
 		Domain:      "Rune",
@@ -1445,7 +1445,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Growth",
 		Description: "",
 		Domain:      "Rune",
@@ -1454,7 +1454,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Heroic Leap",
 		Description: "",
 		Domain:      "Rune",
@@ -1463,7 +1463,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sprout Wings",
 		Description: "",
 		Domain:      "Rune",
@@ -1472,7 +1472,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sustain Life",
 		Description: "",
 		Domain:      "Rune",
@@ -1482,7 +1482,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Tailed Priests
-	&Spell{
+	Spell{
 		CoreString:  "Attune Landscape",
 		Description: "",
 		Domain:      "Rune",
@@ -1491,7 +1491,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Don Armor",
 		Description: "",
 		Domain:      "Rune",
@@ -1500,7 +1500,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Soul-blast",
 		Description: "",
 		Domain:      "Rune",
@@ -1510,7 +1510,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Full Priests
-	&Spell{
+	Spell{
 		CoreString:  "Deflection",
 		Description: "",
 		Domain:      "Rune",
@@ -1519,7 +1519,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dragon Thought",
 		Description: "",
 		Domain:      "Rune",
@@ -1528,7 +1528,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon Dream Dragon",
 		Description: "",
 		Domain:      "Rune",
@@ -1537,7 +1537,7 @@ var RuneSpells = []*Spell{
 		Variable:    true,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Terrify",
 		Description: "",
 		Domain:      "Rune",
@@ -1547,7 +1547,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Tusk Riders
-	&Spell{
+	Spell{
 		CoreString:  "Appease Earth",
 		Description: "",
 		Domain:      "Rune",
@@ -1556,7 +1556,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Death Binding",
 		Description: "",
 		Domain:      "Rune",
@@ -1565,7 +1565,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Pain Tooth",
 		Description: "",
 		Domain:      "Rune",
@@ -1574,7 +1574,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Seal Wound",
 		Description: "",
 		Domain:      "Rune",
@@ -1585,7 +1585,7 @@ var RuneSpells = []*Spell{
 	},
 	// Trolls
 	// Kygor Litor
-	&Spell{
+	Spell{
 		CoreString:  "Attack Soul",
 		Description: "",
 		Domain:      "Rune",
@@ -1594,7 +1594,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Blinding",
 		Description: "",
 		Domain:      "Rune",
@@ -1603,7 +1603,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Counterchaos",
 		Description: "",
 		Domain:      "Rune",
@@ -1612,7 +1612,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Darksee",
 		Description: "",
 		Domain:      "Rune",
@@ -1622,7 +1622,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Zorak Zoran
-	&Spell{
+	Spell{
 		CoreString:  "Create Ghost",
 		Description: "",
 		Domain:      "Rune",
@@ -1631,7 +1631,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Revenant",
 		Description: "",
 		Domain:      "Rune",
@@ -1640,7 +1640,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Skeleton",
 		Description: "",
 		Domain:      "Rune",
@@ -1649,7 +1649,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Zombie",
 		Description: "",
 		Domain:      "Rune",
@@ -1658,7 +1658,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Crush",
 		Description: "",
 		Domain:      "Rune",
@@ -1667,7 +1667,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Create Ghost",
 		Description: "",
 		Domain:      "Rune",
@@ -1677,7 +1677,7 @@ var RuneSpells = []*Spell{
 		Cost:        1,
 	},
 	// Telmori
-	&Spell{
+	Spell{
 		CoreString:  "Transform Self",
 		Description: "",
 		Domain:      "Rune",
@@ -1686,7 +1686,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Wolf's Head",
 		Description: "",
 		Domain:      "Rune",
@@ -1695,7 +1695,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Wolfhide",
 		Description: "",
 		Domain:      "Rune",
@@ -1704,7 +1704,7 @@ var RuneSpells = []*Spell{
 		Variable:    false,
 		Cost:        3,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Wolfrunning",
 		Description: "",
 		Domain:      "Rune",
@@ -1716,36 +1716,36 @@ var RuneSpells = []*Spell{
 }
 
 // SpiritMagicSpells represents spirit magic
-var SpiritMagicSpells = []*Spell{
-	&Spell{
+var SpiritMagicSpells = []Spell{
+	Spell{
 		CoreString:  "Befuddle",
 		Description: "",
 		Domain:      "Spirit",
 		Source:      "POW",
 		Cost:        2,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Binding Enchantment",
 		Description: "",
 		Domain:      "Spirit",
 		Source:      "POW",
 		Cost:        1,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bladesharp",
 		Description: "",
 		Domain:      "Spirit",
 		Source:      "POW",
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Bludgeon",
 		Description: "",
 		Domain:      "Spirit",
 		Source:      "POW",
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Control",
 		Description: "",
 		UserChoice:  true,
@@ -1754,7 +1754,7 @@ var SpiritMagicSpells = []*Spell{
 		Source:      "POW",
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Coordination",
 		Description: "",
 		Domain:      "Spirit",
@@ -1762,14 +1762,14 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Countermagic",
 		Description: "",
 		Domain:      "Spirit",
 		Source:      "POW",
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Darkwall",
 		Description: "",
 		Domain:      "Spirit",
@@ -1777,7 +1777,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Demoralize",
 		Description: "",
 		Domain:      "Spirit",
@@ -1785,7 +1785,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Enemies",
 		Description: "",
 		Domain:      "Spirit",
@@ -1793,7 +1793,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Life",
 		Description: "",
 		Domain:      "Spirit",
@@ -1801,7 +1801,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Magic",
 		Description: "",
 		Domain:      "Spirit",
@@ -1809,7 +1809,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Spirit",
 		Description: "",
 		Domain:      "Spirit",
@@ -1817,7 +1817,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect (Substance)",
 		Description: "",
 		Domain:      "Spirit",
@@ -1825,7 +1825,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Trap",
 		Description: "",
 		Domain:      "Spirit",
@@ -1833,7 +1833,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Detect Undead",
 		Description: "",
 		Domain:      "Spirit",
@@ -1841,7 +1841,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dispel Magic",
 		Description: "",
 		Domain:      "Spirit",
@@ -1849,7 +1849,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Disruption",
 		Description: "",
 		Domain:      "Spirit",
@@ -1857,7 +1857,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Distraction",
 		Description: "",
 		Domain:      "Spirit",
@@ -1865,7 +1865,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Dullblade",
 		Description: "",
 		Domain:      "Spirit",
@@ -1873,7 +1873,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Extinguish",
 		Description: "",
 		Domain:      "Spirit",
@@ -1881,7 +1881,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Fanaticism",
 		Description: "",
 		Domain:      "Spirit",
@@ -1889,7 +1889,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Farsee",
 		Description: "",
 		Domain:      "Spirit",
@@ -1897,7 +1897,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Firearrow",
 		Description: "",
 		Domain:      "Spirit",
@@ -1905,7 +1905,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Fireblade",
 		Description: "",
 		Domain:      "Spirit",
@@ -1913,7 +1913,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        4,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Glamour",
 		Description: "",
 		Domain:      "Spirit",
@@ -1921,7 +1921,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Glue",
 		Description: "",
 		Domain:      "Spirit",
@@ -1929,7 +1929,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Heal",
 		Description: "",
 		Domain:      "Spirit",
@@ -1937,7 +1937,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Ignite",
 		Description: "",
 		Domain:      "Spirit",
@@ -1945,7 +1945,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Ironhand",
 		Description: "",
 		Domain:      "Spirit",
@@ -1953,7 +1953,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Lantern",
 		Description: "",
 		Domain:      "Spirit",
@@ -1961,7 +1961,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Light",
 		Description: "",
 		Domain:      "Spirit",
@@ -1969,7 +1969,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Lightwall",
 		Description: "",
 		Domain:      "Spirit",
@@ -1977,7 +1977,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Magic Point Enchantment",
 		Description: "",
 		Domain:      "Spirit",
@@ -1985,7 +1985,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Mobility",
 		Description: "",
 		Domain:      "Spirit",
@@ -1993,7 +1993,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Multimissile",
 		Description: "",
 		Domain:      "Spirit",
@@ -2001,7 +2001,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Parry",
 		Description: "",
 		Domain:      "Spirit",
@@ -2009,7 +2009,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Protection",
 		Description: "",
 		Domain:      "Spirit",
@@ -2017,7 +2017,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Repair",
 		Description: "",
 		Domain:      "Spirit",
@@ -2025,7 +2025,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Rivereyes",
 		Description: "",
 		Domain:      "Spirit",
@@ -2033,7 +2033,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Second Sight",
 		Description: "",
 		Domain:      "Spirit",
@@ -2041,7 +2041,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        3,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Shimmer",
 		Description: "",
 		Domain:      "Spirit",
@@ -2049,7 +2049,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Silence",
 		Description: "",
 		Domain:      "Spirit",
@@ -2057,7 +2057,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Sleep",
 		Description: "",
 		Domain:      "Spirit",
@@ -2065,7 +2065,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        3,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Slow",
 		Description: "",
 		Domain:      "Spirit",
@@ -2073,7 +2073,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Disruption",
 		Description: "",
 		Domain:      "Spirit",
@@ -2081,7 +2081,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Speedart",
 		Description: "",
 		Domain:      "Spirit",
@@ -2089,15 +2089,15 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
-		CoreString:  "&Spell Matrix Enchantment",
+	Spell{
+		CoreString:  "Spell Matrix Enchantment",
 		Description: "",
 		Domain:      "Spirit",
 		Source:      "POW",
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Spirit Binding",
 		Description: "",
 		Domain:      "Spirit",
@@ -2105,7 +2105,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        1,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Spirit Screen",
 		Description: "",
 		Domain:      "Spirit",
@@ -2113,7 +2113,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Strength",
 		Description: "",
 		Domain:      "Spirit",
@@ -2121,7 +2121,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Summon",
 		UserChoice:  true,
 		UserString:  "Fire Elemental",
@@ -2131,7 +2131,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        0,
 		Variable:    true,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Vigor",
 		Description: "",
 		Domain:      "Spirit",
@@ -2139,7 +2139,7 @@ var SpiritMagicSpells = []*Spell{
 		Cost:        2,
 		Variable:    false,
 	},
-	&Spell{
+	Spell{
 		CoreString:  "Visibility",
 		Description: "",
 		Domain:      "Spirit",
