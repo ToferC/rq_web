@@ -145,7 +145,6 @@ func main() {
 	r.HandleFunc("/login/", LoginFunc)
 	r.HandleFunc("/logout/", LogoutFunc)
 
-	r.Handle("/google/signup", google.StateHandler(stateConfig, google.LoginHandler(oauth2Config, nil)))
 	r.Handle("/google/login", google.StateHandler(stateConfig, google.LoginHandler(oauth2Config, nil)))
 	r.Handle("/google/callback", google.StateHandler(stateConfig, google.CallbackHandler(oauth2Config, googleLoginFunc(), nil)))
 
