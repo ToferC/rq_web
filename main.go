@@ -17,6 +17,8 @@ import (
 	"golang.org/x/oauth2"
 	googleOAuth2 "golang.org/x/oauth2/google"
 
+	"github.com/joho/godotenv"
+
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
 )
@@ -68,8 +70,12 @@ func main() {
 		os.Setenv("BUCKET", "runequeset")
 		os.Setenv("AWS_REGION", "us-east-1")
 
-		configGoogleOAUTH()
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 
+		configGoogleOAUTH()
 	}
 
 	defer db.Close()
@@ -132,6 +138,7 @@ func main() {
 	r.HandleFunc("/login/", LoginFunc)
 	r.HandleFunc("/logout/", LogoutFunc)
 
+	r.Handle("/google/signup", google.StateHandler(stateConfig, google.LoginHandler(oauth2Config, nil)))
 	r.Handle("/google/login", google.StateHandler(stateConfig, google.LoginHandler(oauth2Config, nil)))
 	r.Handle("/google/callback", google.StateHandler(stateConfig, google.CallbackHandler(oauth2Config, googleLoginFunc(), nil)))
 
