@@ -99,6 +99,12 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		c.Name = req.FormValue("Name")
 		c.Description = req.FormValue("Description")
 
+		if req.FormValue("Open") != "" {
+			cm.Open = true
+		} else {
+			cm.Open = false
+		}
+
 		// Set Homeland
 		hlStr := req.FormValue("Homeland")
 
@@ -229,9 +235,6 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Image = new(models.Image)
 			cm.Image.Path = DefaultCharacterPortrait
 		}
-
-		cm.Open = true
-		//fmt.Println(c)
 
 		// Update CreationSteps
 		c.CreationSteps["Base Choices"] = true

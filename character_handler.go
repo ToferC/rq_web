@@ -319,6 +319,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
 	}
+
 	fmt.Println(author)
 
 	cm = models.CharacterModel{
@@ -744,13 +745,6 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = true
 		} else {
 			cm.Open = false
-		}
-
-		// Finalize base Character Cost for play
-		if req.FormValue("InPlay") != "" {
-			c.InPlay = true
-		} else {
-			c.InPlay = false
 		}
 
 		// Upload image to s3
