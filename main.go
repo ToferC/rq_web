@@ -12,6 +12,11 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 
+	"github.com/dghubble/gologin"
+	"github.com/dghubble/gologin/google"
+	"golang.org/x/oauth2"
+	googleOAuth2 "golang.org/x/oauth2/google"
+
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
 )
@@ -62,6 +67,9 @@ func main() {
 		os.Setenv("CookieSecret", "kimchee-typhoon")
 		os.Setenv("BUCKET", "runequeset")
 		os.Setenv("AWS_REGION", "us-east-1")
+
+		configGoogleOAUTH()
+
 	}
 
 	defer db.Close()
@@ -91,6 +99,21 @@ func main() {
 
 	uploader = s3manager.NewUploader(sess)
 
+	// Config Google Oauth
+	config := &Config{
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+	}
+
+	oauth2Config := &oauth2.Config{
+		ClientID:     config.ClientID,
+		ClientSecret: config.ClientSecret,
+		RedirectURL:  "http://localhost:8080/google/callback",
+		Endpoint:     googleOAuth2.Endpoint,
+		Scopes:       []string{"profile", "email"},
+	}
+	stateConfig := gologin.DebugOnlyCookieConfig
+
 	port := os.Getenv("PORT")
 
 	if port == "" {
@@ -108,6 +131,9 @@ func main() {
 	r.HandleFunc("/signup/", SignUpFunc)
 	r.HandleFunc("/login/", LoginFunc)
 	r.HandleFunc("/logout/", LogoutFunc)
+
+	r.Handle("/google/login", google.StateHandler(stateConfig, google.LoginHandler(oauth2Config, nil)))
+	r.Handle("/google/callback", google.StateHandler(stateConfig, google.CallbackHandler(oauth2Config, googleLoginFunc(), nil)))
 
 	r.HandleFunc("/users/", UserIndexHandler)
 

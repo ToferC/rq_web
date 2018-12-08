@@ -33,7 +33,7 @@ func UpdateUser(db *pg.DB, u *models.User) error {
 
 //LoadUser will check if the user exists in db and if the
 //username password combination is valid
-func LoadUser(db *pg.DB, username string) *models.User {
+func LoadUser(db *pg.DB, username string) (*models.User, error) {
 	user := new(models.User)
 
 	fmt.Println("Loading User " + username)
@@ -43,9 +43,9 @@ func LoadUser(db *pg.DB, username string) *models.User {
 		Select()
 	if err != nil {
 		fmt.Println(err)
-		return new(models.User)
+		return new(models.User), err
 	}
-	return user
+	return user, nil
 }
 
 //ValidUser will check if the user exists in db and if the
@@ -107,4 +107,22 @@ func DeleteUser(db *pg.DB, pk int64) error {
 	err := db.Delete(&user)
 
 	return err
+}
+
+// CreateGoogleUser adds a user to the database based on a google user context
+func CreateGoogleUser(db *pg.DB, username, email string) (*models.User, error) {
+
+	fmt.Println(username, "no password", email)
+
+	u := models.User{
+		UserName: username,
+		Email:    email,
+	}
+
+	err := SaveUser(db, &u)
+	if err != nil {
+		return &models.User{UserName: "New"}, err
+	}
+
+	return &u, nil
 }

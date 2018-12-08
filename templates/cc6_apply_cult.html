@@ -224,7 +224,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-20-addon">Add 20</span>
                 </div>
-                <select type="text" class="form-control" id="Skill-20" name="Skill-20">
+                <select type="text" class="form-control" id="Skill-20" name="Skill-20" required>
                     <option></option>
                     {{ range $n, $s := $cult.Skills }}
                     <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
@@ -239,7 +239,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-15-addon">Add 15</span>
                 </div>
-                <select type="text" class="form-control" id="Skill-15" name="Skill-15">
+                <select type="text" class="form-control" id="Skill-15" name="Skill-15" required>
                     <option></option>
                     {{ range $n, $s := $cult.Skills }}
                     <option value="{{ $n }}">{{ $s.CoreString }} {{ if ne $s.UserString ""}}({{ $s.UserString }}){{end}}</option>
@@ -274,7 +274,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Weapon-{{$m}}-CoreString-addon">{{ $w.Description }}</span>
                 </div>
-                <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
+                <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString" required>
                     <option></option>
                     {{ range $s := $skills }}
                     {{ if or (eq $w.Description "Any") (eq $w.Description "Cultural") }}

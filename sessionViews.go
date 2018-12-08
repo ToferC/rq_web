@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dghubble/gologin/google"
+
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
 	"github.com/toferc/rq_web/models"
@@ -50,6 +52,44 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	Render(w, "templates/index_users.html", wu)
+}
+
+func googleLoginFunc() http.Handler {
+	fn := func(w http.ResponseWriter, req *http.Request) {
+
+		session, err := sessions.Store.Get(req, "session")
+
+		ctx := req.Context()
+		googleUser, err := google.UserFromContext(ctx)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Implement a success handler
+		session.Values["loggedin"] = "true"
+		session.Values["username"] = googleUser.Name
+
+		user, err := database.LoadUser(db, googleUser.Name)
+		if err != nil {
+			// No user exist for Google ID - Create one
+			user, err = database.CreateGoogleUser(db, googleUser.Name, googleUser.Email)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+
+		if user.IsAdmin {
+			session.Values["isAdmin"] = "true"
+		} else {
+			session.Values["isAdmin"] = "false"
+		}
+
+		session.Save(req, w)
+		log.Print("user ", googleUser.Name, " is authenticated")
+		fmt.Println(session.Values)
+		http.Redirect(w, req, "/", 302)
+	}
+	return http.HandlerFunc(fn)
 }
 
 //LogoutFunc Implements the logout functionality
@@ -107,7 +147,12 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 			session.Values["loggedin"] = "true"
 			session.Values["username"] = username
 
-			user := database.LoadUser(db, username)
+			user, err := database.LoadUser(db, username)
+			if err != nil {
+				fmt.Println(err)
+				http.Redirect(w, req, "/", 302)
+			}
+
 			if user.IsAdmin {
 				session.Values["isAdmin"] = "true"
 			} else {

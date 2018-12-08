@@ -124,7 +124,7 @@
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Weapon-{{$m}}-CoreString-addon">{{ $w.Description }}</span>
                 </div>
-                  <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString">
+                  <select type="text" class="form-control" id="Weapon-{{$m}}-CoreString" name="Weapon-{{$m}}-CoreString" required>
                     <option></option>
                     {{ range $s := $skills }}
                         {{ if or (eq $w.Description "Any") (eq $w.Description "Cultural") }}

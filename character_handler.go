@@ -314,7 +314,11 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.HitLocations["z"+string(i)] = &t
 	}
 
-	author := database.LoadUser(db, username)
+	author, err := database.LoadUser(db, username)
+	if err != nil {
+		fmt.Println(err)
+		http.Redirect(w, req, "/", 302)
+	}
 	fmt.Println(author)
 
 	cm = models.CharacterModel{

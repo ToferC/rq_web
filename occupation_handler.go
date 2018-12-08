@@ -291,7 +291,11 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		user := database.LoadUser(db, username)
+		user, err := database.LoadUser(db, username)
+		if err != nil {
+			fmt.Println(err)
+			http.Redirect(w, req, "/", 302)
+		}
 
 		// Map default Occupation to Character.Occupations
 		oc := models.OccupationModel{
@@ -571,7 +575,11 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Add other OccupationModel fields
 
-		author := database.LoadUser(db, username)
+		author, err := database.LoadUser(db, username)
+		if err != nil {
+			fmt.Println(err)
+			http.Redirect(w, req, "/", 302)
+		}
 
 		oc.Author = author
 

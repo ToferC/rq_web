@@ -263,7 +263,11 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	c.Statistics["CHA"].Base = 10
 	c.Statistics["SIZ"].Base = 10
 
-	user := database.LoadUser(db, username)
+	user, err := database.LoadUser(db, username)
+	if err != nil {
+		fmt.Println(err)
+		http.Redirect(w, req, "/", 302)
+	}
 
 	// Map default Homeland to Character.Homelands
 	hl := models.HomelandModel{
@@ -565,7 +569,11 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Add other HomelandModel fields
 
-		author := database.LoadUser(db, username)
+		author, err := database.LoadUser(db, username)
+		if err != nil {
+			fmt.Println(err)
+			http.Redirect(w, req, "/", 302)
+		}
 
 		hl.Author = author
 

@@ -74,7 +74,11 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	username := sessionMap["username"]
 
-	author := database.LoadUser(db, username)
+	author, err := database.LoadUser(db, username)
+	if err != nil {
+		fmt.Println(err)
+		http.Redirect(w, req, "/", 302)
+	}
 
 	// Get variables from URL
 	vars := mux.Vars(req)
