@@ -43,6 +43,8 @@ func init() {
 
 func main() {
 
+	var callback string
+
 	if os.Getenv("ENVIRONMENT") == "production" {
 		// Production system
 		url, ok := os.LookupEnv("DATABASE_URL")
@@ -58,6 +60,9 @@ func main() {
 		}
 
 		db = pg.Connect(options)
+
+		// Set Google Oauth Callback
+		callback = "https://rq-web.herokuapp.com/google/callback"
 
 	} else {
 		// Not production
@@ -76,6 +81,8 @@ func main() {
 		}
 
 		configGoogleOAUTH()
+
+		callback = "http://localhost:8080/google/callback"
 	}
 
 	defer db.Close()
@@ -114,8 +121,8 @@ func main() {
 	oauth2Config := &oauth2.Config{
 		ClientID:     config.ClientID,
 		ClientSecret: config.ClientSecret,
-		RedirectURL:  "http://localhost:8080/google/callback",
 		Endpoint:     googleOAuth2.Endpoint,
+		RedirectURL:  callback,
 		Scopes:       []string{"profile", "email"},
 	}
 	stateConfig := gologin.DebugOnlyCookieConfig
