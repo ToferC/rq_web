@@ -4,6 +4,7 @@ package runequest
 type Homeland struct {
 	Name            string
 	Description     string
+	Notes           string
 	StatisticFrames map[string]*StatisticFrame
 	Skills          []*Skill
 	// Base Skill List

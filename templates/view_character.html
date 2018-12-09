@@ -23,6 +23,8 @@
             <h3>{{ $character.Name }}</h3>
             <br>
             <h5>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</h5>
+              <h4>{{ if ne $character.Clan "" }}{{ $character.Clan }} Clan | {{end}}{{ if ne $character.Tribe "" }}{{ $character.Tribe }} Tribe</h4>
+            {{ end }}
             
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
@@ -37,7 +39,9 @@
             <h5>Description</h5>
             {{ $character.Description }}
             <hr>
-
+            <h5>Standard of Living: {{ $character.StandardofLiving }}</h5>
+            <h5>Ransom: {{ $character.Ransom }} Lunars</h5>
+            <hr>
             
             {{ if $IsAuthor }}
             <button class="btn btn-primary" type="submit" value="Update Character State">Update State</button>

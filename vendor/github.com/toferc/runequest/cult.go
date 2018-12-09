@@ -4,6 +4,7 @@ package runequest
 type Cult struct {
 	Name            string
 	Description     string
+	Notes           string
 	SubCult         bool
 	Runes           []string
 	Rank            string

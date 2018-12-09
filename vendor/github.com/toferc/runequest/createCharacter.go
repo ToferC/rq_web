@@ -4,6 +4,7 @@ package runequest
 func NewCharacter(name string) *Character {
 	c := Character{
 		Name:           name,
+		Role:           "Player Character",
 		Statistics:     RuneQuestStats,
 		Abilities:      Abilities,
 		PowerRunes:     PowerRunes,

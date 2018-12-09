@@ -7,13 +7,15 @@ import (
 
 // Character represents a generic RPG character
 type Character struct {
-	Name        string
-	Setting     string
+	Name string
+	Role string
+	// Type of Character - Player, NPC, Creature, etc.
 	Description string
 	Race        *Race
 	Homeland    *Homeland
 	Occupation  *Occupation
 	Cult        *Cult
+	Age         int
 	Clan        string
 	Tribe       string
 	Abilities   map[string]*Ability
@@ -45,6 +47,15 @@ type Character struct {
 	InPlay           bool
 	Updates          []*Update
 	CreationSteps    map[string]bool
+}
+
+// CharacterRoles is an array of options for Character.Role
+var CharacterRoles = []string{
+	"Player Character",
+	"Non-Player Character",
+	"Creature",
+	"Spirit",
+	"Elemental",
 }
 
 // Update tracks live changes to Character

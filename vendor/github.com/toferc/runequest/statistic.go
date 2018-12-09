@@ -25,6 +25,16 @@ func (s *Statistic) String() string {
 var StatMap = []string{
 	"STR", "DEX", "CON", "SIZ", "POW", "INT", "CHA"}
 
+// SpiritMap is a base map of stats for Spirits
+var SpiritMap = []string{
+	"INT", "POW", "CHA",
+}
+
+// ElementalMap is a base map of stast for Elementals
+var ElementalMap = []string{
+	"SIZ", "POW", "STR",
+}
+
 // TotalStatistics updates values for stats after being modified
 func (c *Character) TotalStatistics() {
 

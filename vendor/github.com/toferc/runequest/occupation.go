@@ -4,6 +4,7 @@ package runequest
 type Occupation struct {
 	Name             string
 	Description      string
+	Notes            string
 	Skills           []*Skill
 	Weapons          []WeaponSelection
 	SkillChoices     []SkillChoice

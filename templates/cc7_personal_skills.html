@@ -22,8 +22,31 @@
             <h5>(Step 7 of 7)</h5>
             <p>Choose your character's Personal Skills</p>
 
-        <h5>{{ $character.Name }}</h5>
-        <h5>{{ $character.Homeland.Name }}</h5>
+            <h4>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</h4>
+        <hr>
+
+        <h4>Clan & Tribe</h4>
+        <p>Enter your character's home Clan and Tribe/City.</p>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="Clan-addon">Clan</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Clan-addon" name="Clan" value="">
+            </div>
+            <br>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="Tribe-addon">Tribe/City</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Tribe-addon" name="Tribe" value="">
+            </div>
+
+        <hr>
+        <h4>Share your content</h4>
+          <p>By adding your character to the open roster, others can see your work and copy it for inclusion in their own games. If you de-select this option, you will be the only one able to see your characters.</p>
+          <p>Future updates will allow liking and ranking of high-quality content.</p>
+          <strong>Add to Open Roster?</strong> <input type="checkbox" name="Open" value="true" id="checkbox" checked>
 
           <hr>
           <h4>Current Skills</h4>
@@ -41,6 +64,7 @@
         {{ end }}
 
       <hr>
+
             <hr>
             <form action="" method="POST" enctype="multipart/form-data">
             <button class="btn btn-primary" type="submit" value="Save">Complete Character</button>
@@ -61,7 +85,7 @@
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-25-{{$m}}-addon">Skill {{$m}}</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}">
+                  <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}" required>
                     <option></option>
                     {{ range $s := $character.Skills }}
                         <option value="{{ $s.Name }}">{{ $s }}</option>
@@ -94,7 +118,7 @@
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-10-{{$m}}-addon">Skill {{ $m }}</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}">
+                  <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}" required>
                     <option></option>
                     {{ range $s := $character.Skills }}
                         <option value="{{ $s.Name }}">{{ $s }}</option>
@@ -116,7 +140,7 @@
 
 
 
-                <button class="btn btn-primary" type="submit" value="Save">Finish Character</button>
+                <button class="btn btn-primary" type="submit" value="Save">Complete Character</button>
               </form>
 
           </div> <!-- END 9 Col -->

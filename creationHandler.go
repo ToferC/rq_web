@@ -99,12 +99,6 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		c.Name = req.FormValue("Name")
 		c.Description = req.FormValue("Description")
 
-		if req.FormValue("Open") != "" {
-			cm.Open = true
-		} else {
-			cm.Open = false
-		}
-
 		// Set Homeland
 		hlStr := req.FormValue("Homeland")
 
@@ -192,7 +186,17 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			c.Cult = cultModel.Cult
 		}
 
+		c.Cult.Rank = "Initiate"
+
 		fmt.Println("CULT: " + c.Cult.Name)
+
+		if c.Occupation.StandardOfLiving == "Free" {
+			c.Abilities["Reputation"].OccupationValue = 5
+		}
+
+		if c.Occupation.StandardOfLiving == "Noble" {
+			c.Abilities["Reputation"].OccupationValue = 10
+		}
 
 		// Upload image to s3
 		file, h, err := req.FormFile("image")
@@ -1678,6 +1682,19 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			panic(err)
 		}
+
+		if req.FormValue("Open") != "" {
+			cm.Open = true
+		} else {
+			cm.Open = false
+		}
+
+		c.Clan = req.FormValue("Clan")
+		c.Tribe = req.FormValue("Tribe")
+		c.Age = 21
+
+		c.StandardofLiving = c.Occupation.StandardOfLiving
+		c.Ransom = c.Occupation.Ransom
 
 		// Do Stuff
 		// 25% additions
