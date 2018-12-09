@@ -747,6 +747,9 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = false
 		}
 
+		c.Clan = req.FormValue("Clan")
+		c.Tribe = req.FormValue("Tribe")
+
 		// Upload image to s3
 		file, h, err := req.FormFile("image")
 		switch err {

@@ -22,9 +22,9 @@
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h3>{{ $character.Name }}</h3>
             <br>
-            <h5>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</h5>
-              <h4>{{ if ne $character.Clan "" }}{{ $character.Clan }} Clan | {{end}}{{ if ne $character.Tribe "" }}{{ $character.Tribe }} Tribe</h4>
-            {{ end }}
+            <h5>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}<br>
+              {{ if ne $character.Clan "" }}{{ $character.Clan }} Clan | {{end}}{{ if ne $character.Tribe "" }}{{ $character.Tribe }} Tribe
+            {{ end }}</h5>
             
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
@@ -37,16 +37,12 @@
 
             <form action="" method="POST">
             <h5>Description</h5>
-            {{ $character.Description }}
+            <p>{{ $character.Description }}</p>
             <hr>
-            <h5>Standard of Living: {{ $character.StandardofLiving }}</h5>
-            <h5>Ransom: {{ $character.Ransom }} Lunars</h5>
+            <p>Standard of Living: {{ $character.StandardofLiving }}</p>
+            <p>Ransom: {{ $character.Ransom }} Lunars</p>
             <hr>
             
-            {{ if $IsAuthor }}
-            <button class="btn btn-primary" type="submit" value="Update Character State">Update State</button>
-            {{ end }}
-            <hr>
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               {{ if not $character.CreationSteps.Complete }}
               <a class="btn btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
@@ -60,6 +56,17 @@
               {{ end }}
             {{ end }}
             <hr>
+
+            <h4>Passions</h4>
+        {{ range $a := $character.Abilities }}
+          <p title="{{ $a.Name }}{{ range $u := $a.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}
+        {{ if $IsAuthor }}
+        <input type="checkbox" name="{{ $a.Name }}-XP" value="{{ $a.ExperienceCheck }}" id="checkbox" {{ if $a.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
+        {{ end }}
+
+        <hr>
             
           </div>
 
@@ -110,7 +117,10 @@
                       <span class="input-group-text" id="RP-addon">/{{ $character.Cult.NumRunePoints }}</span>
                     </div>
         </div>        
-
+        {{ if $IsAuthor }}
+        <br>
+            <button class="btn btn-primary" type="submit" value="Save Character State">Save Play State</button>
+        {{ end }}
         <hr>
         {{ end }} <!-- END in play IF -->
 
@@ -155,19 +165,10 @@
 
         <hr>
 
-        <h3>Skill Categories</h3>
-        {{ range $sc := $character.SkillCategories }}
-          <p>{{ $sc }}</p>
-        {{ end }}
-
-        <hr>
-
-      
-
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h4>Skills</h4>
+        <h4 title="Skill Categories{{ range $sc := $character.SkillCategories }}{{ $sc }}{{ end }}">Skills</h4>
         {{ range $skill := $character.Skills }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
@@ -184,17 +185,6 @@
         {{ end }}
 
       <hr>
-
-      <h4>Passions</h4>
-        {{ range $a := $character.Abilities }}
-          <p title="{{ $a.Name }}{{ range $u := $a.Updates }}
-        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $a }}
-        {{ if $IsAuthor }}
-        <input type="checkbox" name="{{ $a.Name }}-XP" value="{{ $a.ExperienceCheck }}" id="checkbox" {{ if $a.ExperienceCheck }}checked{{end}}>
-        {{ end }}</p>
-        {{ end }}
-
-        <hr>
 
       <h4>Rune Spells</h4>
     
