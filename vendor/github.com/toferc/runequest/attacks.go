@@ -4,10 +4,12 @@ package runequest
 type Attack struct {
 	Name             string
 	Skill            *Skill
+	Weapon           *Weapon
 	Range            int
 	StrikeRank       int
 	BaseDamage       *DieCode
 	AdditionalDamage []*DieCode
+	DamageString     string
 	StrengthDamage   bool
 	Special          string
 }

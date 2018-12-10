@@ -164,6 +164,7 @@ func main() {
 	r.HandleFunc("/cc5_apply_occupation/{id}", ApplyOccupationHandler)
 	r.HandleFunc("/cc6_apply_cult/{id}", ApplyCultHandler)
 	r.HandleFunc("/cc7_personal_skills/{id}", PersonalSkillsHandler)
+	r.HandleFunc("/cc8_finishing_touches/{id}", FinishingTouchesHandler)
 
 	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)

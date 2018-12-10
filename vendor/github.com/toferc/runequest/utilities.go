@@ -2,8 +2,10 @@ package runequest
 
 import (
 	"bufio"
+	"encoding/csv"
 	"fmt"
 	"math/rand"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -67,4 +69,20 @@ func ChooseRandom(l int) int {
 	r := rand.New(s)
 
 	return r.Intn(l)
+}
+
+func readCSVFromURL(url string) ([][]string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+	reader := csv.NewReader(resp.Body)
+	data, err := reader.ReadAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

@@ -49,6 +49,7 @@ type WebChar struct {
 	Passions          []string
 	CategoryOrder     []string
 	WeaponCategories  []string
+	BaseWeapons       []*runequest.Weapon
 	StandardsOfLiving []string
 	PowerRunes        []string
 	ElementalRunes    []string
@@ -145,6 +146,8 @@ func generateCharacterCreationURL(cStep map[string]bool) string {
 		url = "cc6_apply_cult"
 	case !cStep["Personal Skills"]:
 		url = "cc7_personal_skills"
+	case !cStep["Finishing Touches"]:
+		url = "cc8_finishing_touches"
 	}
 	return url
 }

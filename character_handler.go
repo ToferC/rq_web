@@ -262,6 +262,25 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.Equipment = append(c.Equipment, "")
 		}
 
+		// Track Weapon HP
+		for k, v := range c.Attacks {
+			hpString := req.FormValue(fmt.Sprintf("%s-HP", k))
+			hp, err := strconv.Atoi(hpString)
+			if err != nil {
+				hp = v.Weapon.HP
+			}
+
+			if hp > v.Weapon.HP {
+				hp = v.Weapon.HP
+			}
+
+			if hp < -(2 * v.Weapon.HP) {
+				hp = -v.Weapon.HP * 2
+			}
+
+			v.Weapon.CurrentHP = hp
+		}
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
@@ -270,8 +289,10 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		// Render page
-		Render(w, "templates/view_character.html", wc)
+
+		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 
 }
@@ -446,13 +467,6 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Error getting file ", err)
 		}
 
-		// Finalize base Character Cost for play
-		if req.FormValue("InPlay") != "" {
-			c.InPlay = true
-		} else {
-			c.InPlay = false
-		}
-
 		fmt.Println(c)
 
 		err = database.SaveCharacterModel(db, &cm)
@@ -621,6 +635,13 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				s.UserString = req.FormValue(fmt.Sprintf("%s-UserString", s.Name))
 			}
 			s.UpdateSkill()
+
+			// Update Weapons Skills
+			for _, v := range c.Attacks {
+				if v.Skill.Name == s.Name {
+					v.Skill = s
+				}
+			}
 		}
 
 		// Update Elemental Runes

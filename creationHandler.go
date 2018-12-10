@@ -796,6 +796,22 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Add common skills based on statistics
+		dodge := &runequest.Skill{
+			CoreString: "Dodge",
+			Category:   "Agility",
+			Base:       c.Statistics["DEX"].Total * 2,
+		}
+
+		jump := &runequest.Skill{
+			CoreString: "Jump",
+			Category:   "Agility",
+			Base:       c.Statistics["DEX"].Total * 3,
+		}
+
+		c.Skills["Dodge"] = dodge
+		c.Skills["Jump"] = jump
+
 		// Add choices to c.Homeland.Skills
 		for i, sc := range c.Homeland.SkillChoices {
 			for m := range sc.Skills {
@@ -1820,6 +1836,156 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Update CreationSteps
 		c.CreationSteps["Personal Skills"] = true
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/cc8_finishing_touches/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// FinishingTouchesHandler assigns attacks and armor
+func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	c := cm.Character
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	baseWeapons := runequest.BaseWeapons
+
+	wc := WebChar{
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Counter:        numToArray(4),
+		BigCounter:     numToArray(5),
+		Skills:         runequest.Skills,
+		BaseWeapons:    baseWeapons,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/cc8_finishing_touches.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		if c.Attacks == nil {
+			c.Attacks = map[string]*runequest.Attack{}
+		}
+
+		// Do Stuff
+		// Weapons & Attacks
+		for i := 1; i < 5; i++ {
+			weaponString := req.FormValue(fmt.Sprintf("Weapon-%d", i))
+			skillString := req.FormValue(fmt.Sprintf("Skill-%d", i))
+
+			if weaponString != "" && skillString != "" {
+
+				weaponIndex, err := strconv.Atoi(weaponString)
+				if err != nil {
+					weaponIndex = 0
+				}
+
+				weapon := baseWeapons[weaponIndex]
+
+				if weapon.Type == "Melee" {
+					c.Attacks[weapon.Name] = &runequest.Attack{
+						Name:         weapon.Name,
+						Skill:        c.Skills[skillString],
+						DamageString: weapon.Damage + c.Attributes["DB"].Text,
+						StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
+						Weapon:       weapon,
+					}
+				} else {
+					// Ranged weapon
+					c.Attacks[weapon.Name] = &runequest.Attack{
+						Name:         weapon.Name,
+						Skill:        c.Skills[skillString],
+						DamageString: weapon.Damage,
+						StrikeRank:   c.Attributes["DEXSR"].Base,
+						Weapon:       weapon,
+					}
+				}
+			}
+		}
+
+		// Armor
+		for k, v := range c.HitLocations {
+			str := req.FormValue(fmt.Sprintf("%s-Armor", k))
+			armor, err := strconv.Atoi(str)
+			if err != nil {
+				armor = v.Armor
+			}
+			v.Armor = armor
+
+			str = req.FormValue(fmt.Sprintf("%s-HP-Max", k))
+			max, err := strconv.Atoi(str)
+			if err != nil {
+				max = v.Max
+			}
+			v.Max = max
+		}
+
+		// Update CreationSteps
+		c.CreationSteps["Finishing Touches"] = true
 		c.CreationSteps["Complete"] = true
 
 		err = database.UpdateCharacterModel(db, cm)

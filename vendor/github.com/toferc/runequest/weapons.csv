@@ -1,0 +1,60 @@
+Small Axe,melee,4,1D6+1,1,6,0.4
+1H Battle Axe,melee,3,1D8+2,2,8,0.8
+2H Battle Axe,melee,3,1D8+2,2,8,0.8
+Great Axe,melee,2,2D6+2,2,10,1.2
+Dagger-axe,melee,1,3D6,3,10,1.5-2
+Dagger,melee,4,1D4+2,(4),6,0.2-0.3
+Parrying Dagger,melee,4,1D4+2,(3),8,0.2-0.3
+Throwing Dagger,melee,4,1D4,(6),6,0.2
+Sickle,melee,3,1D6+1,1,6,0.5
+Broadsword,melee,2,1D8+1,1,12,1
+Kopis,melee,2,1D8+1,1,12,1
+Rapier,melee,3,1D6+1,1,8,1.2
+Shortsword,melee,3,1D6+1,1,12,0.6
+Greatsword,melee,1,2D8,2,12,1.5
+Rhomphaia,melee,2,2D6+2,2,10,1.2
+Sickle-sword,melee,2,1D10+1,1,12,1.2
+Heavy Cestus,melee,4,1D3+2,1,8,0
+Light Cestus,melee,4,1D3+1,(2),4,0
+Claw,melee,4,1D4+1,0,0,
+Fist,melee,4,1D3,0,0,
+Grapple,melee,4,Special,0,0,
+Kick,melee,4,1D6,0,0,
+Bite (Baboon),melee,4,1D8+1,0,0,
+Hoof (Centaur),melee,4,1D8,0,0,
+War Hammer,melee,3,1D6+2,1,10,0.8
+Great Hammer,melee,1,2D6+2,3,5,1.5
+Maul,melee,1,2D8,3,12,1.5
+Heavy Mace,melee,3,1D8+2,2,10,0.8
+Light Mace,melee,3,1D6+2,1,6,0.6
+Singlestick,melee,4,1D6,(2),5,0.9
+Wooden Club,melee,4,1D6,(2),4,0.4
+Two-handed Mace,melee,3,1D8+2,2,10,0.8
+Quarterstaff,melee,0,1D8,2,8,2
+1H Javelin,melee,2,1D6,1,8,1.5
+1H Short Spear,melee,2,1D6+1,2,10,1.5
+Lance,melee,0,1D10+1,3,10,3.5+
+Pike,melee,0,2D6+1,3,12,3.5+
+Long Spear,melee,0,1D10+1,3,10,3
+2H Short Spear,melee,1,1D8+1,2,10,1.5
+Pole Lasso,melee,1/MR,N/A,3,4,3
+Head Butt (Minotaur),melee,4,1D6,0,0,
+Composite Bow,missile,S/MR,1D8+1,2,7,100
+Elf Bow,missile,S/MR,1D8+1,2,6,80
+Self Bow,missile,S/MR,1D6+1,2,5,80
+Arbalest,missile,1/5R,3D6+1,3,10,150
+Heavy Crossbow,missile,1/3R,2D6+2,2,10,120
+Light Crossbow,missile,l/2R,2D4+2,2,6,100
+Repeating Crossbow,missile,1/MR,2D4+2,2,6,100
+Atlatl,missile,1/MR,+1D6*,(2),6,10
+Dart,missile,S/MR,1D6,(2),4,20
+Thrown Javelin,missile,1/MR,1D10,1,8,20
+Thrown Spear,missile,1/MR,1D6+1,2,10,20
+Thrown Axe,missile,S/MR,1D6,1,6,20
+Thrown Dagger,missile,S/MR,1D4,(4),6,20
+Thrown Rock,missile,S/MR,1D4,(4),20,
+Sling,missile,S/MR,1D8,1,80,
+Staff Sling,missile,1/MR,1D10,2,8,100
+Small Shield,melee,3,1D3,1,8,
+Medium Shield,melee,3,1D4,2,12,
+Large Shield,melee,3,1D6,3,16,

@@ -131,7 +131,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "692c670101061e501c7f7d9b834a84b16e786197"
+  revision = "fa03905daa2d73c9e099e2e9deded26e1a884dfd"
 
 [[projects]]
   branch = "master"
