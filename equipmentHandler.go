@@ -234,7 +234,7 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/view_character/%d", cm.ID)
+		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
