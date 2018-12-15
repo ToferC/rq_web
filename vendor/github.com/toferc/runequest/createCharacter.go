@@ -18,6 +18,9 @@ func NewCharacter(name string) *Character {
 		HitLocationMap: HitLocationMap,
 		CreationSteps:  CreationStatus,
 
+		MeleeAttacks:  map[string]*Attack{},
+		RangedAttacks: map[string]*Attack{},
+
 		SkillCategories: map[string]*SkillCategory{},
 	}
 

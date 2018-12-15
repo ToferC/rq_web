@@ -1927,15 +1927,19 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		if c.Attacks == nil {
-			c.Attacks = map[string]*runequest.Attack{}
+		if c.MeleeAttacks == nil {
+			c.MeleeAttacks = map[string]*runequest.Attack{}
+		}
+
+		if c.RangedAttacks == nil {
+			c.RangedAttacks = map[string]*runequest.Attack{}
 		}
 
 		// Do Stuff
-		// Weapons & Attacks
+		// Melee Weapons & Attacks
 		for i := 1; i < 5; i++ {
-			weaponString := req.FormValue(fmt.Sprintf("Weapon-%d", i))
-			skillString := req.FormValue(fmt.Sprintf("Skill-%d", i))
+			weaponString := req.FormValue(fmt.Sprintf("Melee-Weapon-%d", i))
+			skillString := req.FormValue(fmt.Sprintf("Melee-Skill-%d", i))
 
 			if weaponString != "" && skillString != "" {
 
@@ -1946,23 +1950,37 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 
 				weapon := baseWeapons[weaponIndex]
 
-				if weapon.Type == "Melee" {
-					c.Attacks[weapon.Name] = &runequest.Attack{
-						Name:         weapon.Name,
-						Skill:        c.Skills[skillString],
-						DamageString: weapon.Damage + c.Attributes["DB"].Text,
-						StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
-						Weapon:       weapon,
-					}
-				} else {
-					// Ranged weapon
-					c.Attacks[weapon.Name] = &runequest.Attack{
-						Name:         weapon.Name,
-						Skill:        c.Skills[skillString],
-						DamageString: weapon.Damage,
-						StrikeRank:   c.Attributes["DEXSR"].Base,
-						Weapon:       weapon,
-					}
+				c.MeleeAttacks[weapon.Name] = &runequest.Attack{
+					Name:         weapon.Name,
+					Skill:        c.Skills[skillString],
+					DamageString: weapon.Damage + c.Attributes["DB"].Text,
+					StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
+					Weapon:       weapon,
+				}
+			}
+		}
+
+		// Ranged Weapons & Attacks
+		for i := 1; i < 4; i++ {
+			weaponString := req.FormValue(fmt.Sprintf("Ranged-Weapon-%d", i))
+			skillString := req.FormValue(fmt.Sprintf("Ranged-Skill-%d", i))
+
+			if weaponString != "" && skillString != "" {
+
+				weaponIndex, err := strconv.Atoi(weaponString)
+				if err != nil {
+					weaponIndex = 0
+				}
+
+				weapon := baseWeapons[weaponIndex]
+
+				// Ranged weapon
+				c.RangedAttacks[weapon.Name] = &runequest.Attack{
+					Name:         weapon.Name,
+					Skill:        c.Skills[skillString],
+					DamageString: weapon.Damage,
+					StrikeRank:   c.Attributes["DEXSR"].Base,
+					Weapon:       weapon,
 				}
 			}
 		}

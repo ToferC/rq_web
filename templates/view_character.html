@@ -67,7 +67,7 @@ tr:nth-child(even) {
               {{ else }}
               <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
               {{ end }}
-              <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a></h4>
+              <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a>
               {{ else }}
               {{ if $open }}
               <a class="btn btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to Personal Roster</a>
@@ -183,10 +183,8 @@ tr:nth-child(even) {
             <th>Damage</th>
             <th>SR</th>
             <th>HP</th>
-            <th>ENC</th>
           </tr>
-        {{ range $k, $v := $character.Attacks }}
-        {{ if eq $v.Skill.Category "Melee" }}
+        {{ range $k, $v := $character.MeleeAttacks }}
         <tr>
           <td>{{ $k }}</td>
           <td>{{ $v.Skill.Total }}</td>
@@ -200,9 +198,7 @@ tr:nth-child(even) {
             </div>
           </div>
         </td>
-        <td>{{ $v.Weapon.ENC }}</td>
         </tr>
-        {{ end }}
         {{ end }}
         </table>
 
@@ -217,20 +213,16 @@ tr:nth-child(even) {
             <th>SR</th>
             <th>HP</th>
             <th>Range</th>
-            <th>ENC</th>
           </tr>
-        {{ range $k, $v := $character.Attacks }}
-        {{ if eq $v.Skill.Category "Ranged" }}
+        {{ range $k, $v := $character.RangedAttacks }}
         <tr>
           <td>{{ $k }}</td>
           <td>{{ $v.Skill.Total }}</td>
           <td>{{ $v.DamageString }}</td>
           <td>{{ $v.StrikeRank }}</td>
           <td>{{ $v.Weapon.HP }}</td>
-          <td>{{ $v.Weapon.Range }}</td>
-          <td>{{ $v.Weapon.ENC }}</td>
+          <td>{{ $v.Weapon.Range }}m</td>
         </tr>
-        {{ end }}
         {{ end }}
         </table>
 
@@ -276,6 +268,7 @@ tr:nth-child(even) {
             </div>        
             {{ if $IsAuthor }}
             <br>
+                <a class="btn btn-primary" href="/equip_weapons_armor/{{ $ID }}">Weapons & Armor</a> 
                 <button class="btn btn-primary" type="submit" value="Save Character State">Save Play State</button>
             {{ end }}
             <hr>

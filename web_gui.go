@@ -50,6 +50,8 @@ type WebChar struct {
 	CategoryOrder     []string
 	WeaponCategories  []string
 	BaseWeapons       []*runequest.Weapon
+	MeleeAttacks      map[string]*runequest.Attack
+	RangedAttacks     map[string]*runequest.Attack
 	StandardsOfLiving []string
 	PowerRunes        []string
 	ElementalRunes    []string

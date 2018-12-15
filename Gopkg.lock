@@ -47,8 +47,8 @@
     "service/s3/s3manager",
     "service/sts"
   ]
-  revision = "c4e0e593d5f18b478f17ff0e86b56d41a70ced2d"
-  version = "v1.16.2"
+  revision = "056aa960bc0fb3918d8b2101e2a9c92675327ea3"
+  version = "v1.16.5"
 
 [[projects]]
   name = "github.com/dghubble/gologin"
@@ -131,7 +131,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "fa03905daa2d73c9e099e2e9deded26e1a884dfd"
+  revision = "60afffdc9984ab5e01f5deaa52b2847a70677511"
 
 [[projects]]
   branch = "master"
@@ -150,7 +150,7 @@
     "context",
     "context/ctxhttp"
   ]
-  revision = "610586996380ceef02dd726cc09df7e00a3f8e56"
+  revision = "891ebc4b82d6e74f468c533b06f983c7be918a96"
 
 [[projects]]
   branch = "master"
@@ -173,7 +173,7 @@
     "googleapi/internal/uritemplates",
     "oauth2/v2"
   ]
-  revision = "1a5ef82f9af45ef51c486291ef2b0a16d82fdb95"
+  revision = "874d9dc5b186e361475b082852f136f094555c30"
 
 [[projects]]
   name = "google.golang.org/appengine"

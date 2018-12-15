@@ -39,7 +39,8 @@ type Character struct {
 	Powers           map[string]*Power
 	HitLocations     map[string]*HitLocation
 	HitLocationMap   []string
-	Attacks          map[string]*Attack
+	MeleeAttacks     map[string]*Attack
+	RangedAttacks    map[string]*Attack
 	Equipment        []string
 	Lunars           int
 	Ransom           int

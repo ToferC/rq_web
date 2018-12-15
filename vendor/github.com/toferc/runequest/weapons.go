@@ -12,7 +12,6 @@ import (
 // Weapon represents a Runequest weapon
 type Weapon struct {
 	Name      string
-	Skill     *Skill
 	STR       int
 	DEX       int
 	Damage    string

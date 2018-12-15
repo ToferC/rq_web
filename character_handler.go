@@ -263,7 +263,26 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Track Weapon HP
-		for k, v := range c.Attacks {
+		for k, v := range c.MeleeAttacks {
+			hpString := req.FormValue(fmt.Sprintf("%s-HP", k))
+			hp, err := strconv.Atoi(hpString)
+			if err != nil {
+				hp = v.Weapon.HP
+			}
+
+			if hp > v.Weapon.HP {
+				hp = v.Weapon.HP
+			}
+
+			if hp < -(2 * v.Weapon.HP) {
+				hp = -v.Weapon.HP * 2
+			}
+
+			v.Weapon.CurrentHP = hp
+		}
+
+		// Track Weapon HP
+		for k, v := range c.RangedAttacks {
 			hpString := req.FormValue(fmt.Sprintf("%s-HP", k))
 			hp, err := strconv.Atoi(hpString)
 			if err != nil {
@@ -637,7 +656,13 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			s.UpdateSkill()
 
 			// Update Weapons Skills
-			for _, v := range c.Attacks {
+			for _, v := range c.MeleeAttacks {
+				if v.Skill.Name == s.Name {
+					v.Skill = s
+				}
+			}
+
+			for _, v := range c.RangedAttacks {
 				if v.Skill.Name == s.Name {
 					v.Skill = s
 				}

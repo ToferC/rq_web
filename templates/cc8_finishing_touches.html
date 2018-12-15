@@ -64,17 +64,17 @@
             <h4>Instructions</h4>
             <p>Choose your characters weapons and attacks. Start with a weapon skill and then select the appropriate weapon.</p>
 
-            <h4>Attacks</h4>
+            <h4>Melee Attacks</h4>
 
             {{ range $m := $bigcounter }}
             <div class="input-group">
                     <div class="input-group-prepend">
-                    <span class="input-group-text" id="Skill-{{$m}}-addon">Skill</span>
+                    <span class="input-group-text" id="Melee-Skill-{{$m}}-addon">Skill</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-{{$m}}" name="Skill-{{$m}}">
+                  <select type="text" class="form-control" id="Melee-Skill-{{$m}}" name="Melee-Skill-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
-                        {{ if or (eq $s.Category "Melee") (eq $s.Category "Ranged") (eq $s.Category "Shield")}}
+                        {{ if or (eq $s.Category "Melee") (eq $s.Category "Shield")}}
                         <option value="{{ $s.Name }}">{{ $s }}</option>
                         {{ end }}
                       {{ end }} <!-- END range $skills -->                      
@@ -83,12 +83,14 @@
 
                 <div class="input-group">
                     <div class="input-group-prepend">
-                    <span class="input-group-text" id="Weapon-{{$m}}-addon">Weapon</span>
+                    <span class="input-group-text" id="Melee-Weapon-{{$m}}-addon">Weapon</span>
                 </div>
-                  <select type="text" class="form-control" id="Weapon-{{$m}}" name="Weapon-{{$m}}">
+                  <select type="text" class="form-control" id="Melee-Weapon-{{$m}}" name="Melee-Weapon-{{$m}}">
                     <option></option>
                     {{ range $i, $w := $baseweapons }}
+                      {{ if or (eq $w.Type "Melee") (eq $w.Type "Shield")}}
                         <option value="{{ $i }}">{{ $w.Name }}: {{ $w.Damage }}</option>
+                        {{ end }}
                       {{ end }} <!-- END range $skills -->
                   </select>
               </div>
@@ -97,6 +99,40 @@
                 {{ end }} <!-- end range counter -->
 
             <hr>
+
+            <h4>Ranged Attacks</h4>
+
+            {{ range $m := $counter }}
+            <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Ranged-Skill-{{$m}}-addon">Skill</span>
+                </div>
+                  <select type="text" class="form-control" id="Ranged-Skill-{{$m}}" name="Ranged-Skill-{{$m}}">
+                    <option></option>
+                    {{ range $s := $character.Skills }}
+                        {{ if eq $s.Category "Ranged" }}
+                        <option value="{{ $s.Name }}">{{ $s }}</option>
+                        {{ end }}
+                      {{ end }} <!-- END range $skills -->                      
+                  </select>
+              </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="Ranged-Weapon-{{$m}}-addon">Weapon</span>
+                </div>
+                  <select type="text" class="form-control" id="Ranged-Weapon-{{$m}}" name="Ranged-Weapon-{{$m}}">
+                    <option></option>
+                    {{ range $i, $w := $baseweapons }}
+                      {{ if eq $w.Type "Ranged"}}
+                        <option value="{{ $i }}">{{ $w.Name }}: {{ $w.Damage }}</option>
+                        {{ end }}
+                      {{ end }} <!-- END range $skills -->
+                  </select>
+              </div>
+              
+                <hr>
+                {{ end }} <!-- end range counter -->
             </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
