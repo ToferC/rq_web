@@ -128,6 +128,20 @@
   window.alert("{{ $f }}");
 {{ end }}
 {{ end }}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+window.onload = async function() {
+  var notes = document.getElementById('Notes')
+    notes.style.color = "white";
+    notes.style.background = "grey";
+    await sleep(1000)
+    notes.style.color = "black";
+    notes.style.background = "white";
+  };
+
 </script>
 
     <!-- Bootstrap core JavaScript

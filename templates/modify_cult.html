@@ -41,6 +41,13 @@
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description">{{ $cult.Description }}</textarea>
               </div>
               <hr>
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                <span class="input-group-text" for="Notes">Creation Notes</span>
+                </div>
+                <textarea class="form-control" aria-describedby="notes-addon" name="Notes" rows="4" default="Enter Notes">{{ $cult.Notes }}</textarea>
+              </div>
+              <hr>
             
                 <label for="Image">Image</label>
               <div class="input-group">

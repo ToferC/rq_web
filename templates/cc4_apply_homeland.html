@@ -28,8 +28,14 @@
           style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
           data-holder-rendered="true">
 
-            <p>{{ $character.Description }}</p>
             <hr>
+            {{ if $homeland.Notes }}
+            <div id="Notes">
+            <h4>Creation Notes</h4>
+              {{ $homeland.Notes }}
+            </div>
+            <hr>
+            {{ end }}
 
             <form action="" method="POST" enctype="multipart/form-data">
           <button class="btn btn-primary" type="submit" value="Save">Continue to Occupation</button>

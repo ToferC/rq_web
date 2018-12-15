@@ -318,7 +318,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			Cult: &runequest.Cult{
 				Name:        req.FormValue("Name"),
 				Description: req.FormValue("Description"),
-				//CultChoices:
+				Notes:       req.FormValue("Notes"),
 			},
 		}
 
@@ -858,11 +858,9 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Update Cult here
-		clName := req.FormValue("Name")
-		description := req.FormValue("Description")
-
-		cl.Cult.Name = clName
-		cl.Cult.Description = description
+		cl.Cult.Name = req.FormValue("Name")
+		cl.Cult.Description = req.FormValue("Description")
+		cl.Cult.Notes = req.FormValue("Notes")
 
 		if req.FormValue("Official") != "" {
 			cl.Official = true

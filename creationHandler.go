@@ -167,6 +167,10 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				for _, s := range cultModel.Cult.Skills {
 					parentCult.Skills = append(parentCult.Skills, s)
 				}
+				// Add SubCult weapons
+				for _, w := range cultModel.Cult.Weapons {
+					parentCult.Weapons = append(parentCult.Weapons, w)
+				}
 				// Add SubCult RuneSpells
 				for _, rs := range cultModel.Cult.RuneSpells {
 					parentCult.RuneSpells = append(parentCult.RuneSpells, rs)
@@ -179,6 +183,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				// Set Details to ParentCult
 				parentCult.Name = cultModel.Cult.Name
 				parentCult.Description = cultModel.Cult.Description
+				parentCult.Notes += "\n" + cultModel.Cult.Notes
 				// Set cult to ParentCult
 				c.Cult = parentCult
 			}
@@ -712,6 +717,8 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
+		// Add Flash messages
+
 		url := fmt.Sprintf("/cc4_apply_homeland/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
@@ -736,6 +743,10 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	username := sessionMap["username"]
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
+
+	flashes := session.Flashes("message")
+
+	session.Save(req, w)
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
@@ -780,6 +791,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:          isAdmin,
 		IsAuthor:         IsAuthor,
 		Skills:           runequest.Skills,
+		Flashes:          flashes,
 	}
 
 	if req.Method == "GET" {
@@ -858,6 +870,11 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					}
 
 					// Update our new skill
+
+					if baseSkill.Category == "" {
+						baseSkill.Category = "Agility"
+					}
+
 					sc := c.SkillCategories[baseSkill.Category]
 
 					baseSkill.CategoryValue = sc.Value
@@ -945,6 +962,8 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
+		// Add Flash messages
+
 		url := fmt.Sprintf("/cc5_apply_occupation/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
@@ -969,6 +988,10 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	username := sessionMap["username"]
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
+
+	flashes := session.Flashes("message")
+
+	session.Save(req, w)
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
@@ -1008,6 +1031,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor:         IsAuthor,
 		Skills:           runequest.Skills,
 		WeaponCategories: runequest.WeaponCategories,
+		Flashes:          flashes,
 	}
 
 	if req.Method == "GET" {
@@ -1191,6 +1215,8 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
+		// Add Flash messages
+
 		url := fmt.Sprintf("/cc6_apply_cult/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
@@ -1215,6 +1241,10 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 	username := sessionMap["username"]
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
+
+	flashes := session.Flashes("message")
+
+	session.Save(req, w)
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
@@ -1271,6 +1301,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 		NumSpiritMagic:   numSpiritMagic,
 		TotalSpiritMagic: totalSpiritMagic,
 		WeaponCategories: runequest.WeaponCategories,
+		Flashes:          flashes,
 	}
 	// Test
 	if req.Method == "GET" {

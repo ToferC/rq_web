@@ -26,6 +26,11 @@
 
   {{ $homeland.Description }}
   <hr>
+  {{ if $homeland.Notes }}
+  <h4>Creation Notes</h4>
+  {{ $homeland.Notes }}
+  <hr>
+  {{ end }}
   <a class="btn btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
   <a class="btn btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
 

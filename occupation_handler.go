@@ -304,7 +304,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				Name:             req.FormValue("Name"),
 				Description:      req.FormValue("Description"),
 				StandardOfLiving: req.FormValue("Standard"),
-				//CultChoices:
+				Notes:            req.FormValue("Notes"),
 			},
 		}
 
@@ -733,6 +733,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		oc.Occupation.Name = ocName
 		oc.Occupation.Description = description
+		oc.Occupation.Notes = req.FormValue("Notes")
 
 		income, err := strconv.Atoi(req.FormValue("Income"))
 		if err != nil {

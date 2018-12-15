@@ -24,10 +24,17 @@
             <p>Make choices based on your occupation.</p>
 
         <h3>{{ $character.Name }}</h3>
-        <h5>Homeland: {{ $character.Homeland.Name }}</h5>
         <h5>Occupation: {{ $character.Occupation.Name }}</h5>
 
         <hr>
+        {{ if $occupation.Notes }}
+        <div id="Notes">
+        <h4>Creation Notes</h4>
+            {{ $occupation.Notes }}
+        </div>
+            <hr>
+        {{ end }}
+
           <h4>Current Skills</h4>
         {{ range $skill := $character.Skills }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})

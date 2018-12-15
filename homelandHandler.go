@@ -309,6 +309,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		hl.Homeland.Name = req.FormValue("Name")
 		hl.Homeland.Description = req.FormValue("Description")
+		hl.Homeland.Notes = req.FormValue("Notes")
 
 		// Insert Homeland into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -712,11 +713,10 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		hlName := req.FormValue("Name")
-
-		hl.Homeland.Name = hlName
-
 		// Update Homeland here
+		hl.Homeland.Name = req.FormValue("Name")
+		hl.Homeland.Description = req.FormValue("Description")
+		hl.Homeland.Notes = req.FormValue("Notes")
 
 		// Insert Homeland into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -807,8 +807,8 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 				s1 := &runequest.Skill{}
 
-				skbaseSkill := runequest.Skills[sk]
-				if &skbaseSkill == nil {
+				skbaseSkill, ok := runequest.Skills[sk]
+				if !ok {
 					// Skill is new
 					for _, ns := range hl.Homeland.Skills {
 						// Search for CoreString in Homeland Skills

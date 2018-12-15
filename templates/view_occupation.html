@@ -23,6 +23,11 @@
 
   {{ $occupation.Description }}
   <hr>
+  {{ if $occupation.Notes }}
+  <h4>Creation Notes</h4>
+  {{ $occupation.Notes }}
+  <hr>
+  {{ end }}
   <p>Standard of Living: {{ $occupation.StandardOfLiving }}</p>
   <p>Income: {{ $occupation.Income }} L</p>
   <p>Ransom: {{ $occupation.Ransom }} L</p>

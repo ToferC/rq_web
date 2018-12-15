@@ -25,11 +25,17 @@
             <p>Make choices based on your cult.</p>
 
             <h3>{{ $character.Name }}</h3>
-            <h5>Homeland: {{ $character.Homeland.Name }}</h5>
-            <h5>Occupation: {{ $character.Occupation.Name }}</h5>
             <h5>Cult: {{ $character.Cult.Name }}</h5>
 
             <hr>
+            <div id="Notes">
+            {{ if $cult.Notes }}
+             <h4>Creation Notes</h4>
+                {{ $cult.Notes }}
+            </div>
+        <hr>
+        {{ end }}
+
             <h4>Current Skills</h4>
         {{ range $skill := $character.Skills }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})
@@ -45,7 +51,6 @@
         {{ end }}
 
       <hr>
-            <hr>
             <form action="" method="POST" enctype="multipart/form-data">
                 <button class="btn btn-primary" type="submit" value="Save">Continue to Personal Skills</button>
                 <hr>
