@@ -122,6 +122,13 @@
 
     </div><!-- /.container -->
 
+<script>
+{{ if .Flashes }}
+  {{ range $f := .Flashes}}
+  window.alert("{{ $f }}");
+{{ end }}
+{{ end }}
+</script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

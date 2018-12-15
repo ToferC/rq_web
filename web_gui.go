@@ -66,6 +66,8 @@ type WebChar struct {
 	MidCounter        []int
 	BigCounter        []int
 	RuneArray         []string
+
+	Flashes []interface{}
 }
 
 // SplitLines transfomrs results text string into slice

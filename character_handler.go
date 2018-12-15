@@ -75,6 +75,10 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
+	flashes := session.Flashes("message")
+
+	session.Save(req, w)
+
 	vars := mux.Vars(req)
 	pk := vars["id"]
 
@@ -124,6 +128,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		SessionUser:    username,
 		IsAdmin:        isAdmin,
 		Counter:        numToArray(10),
+		Flashes:        flashes,
 	}
 
 	if req.Method == "GET" {
@@ -633,7 +638,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		}
 
-		for _, s := range c.Skills {
+		for k, s := range c.Skills {
 			mod, _ := strconv.Atoi(req.FormValue(s.Name))
 
 			if mod != s.Total {
@@ -666,6 +671,11 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				if v.Skill.Name == s.Name {
 					v.Skill = s
 				}
+			}
+
+			// Remove Character skill is zeroed out
+			if s.Total < 1 {
+				delete(c.Skills, k)
 			}
 		}
 
@@ -848,6 +858,9 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		} else {
 			fmt.Println("Saved")
 		}
+
+		session.AddFlash("Character Updated with "+eventString, "message")
+		session.Save(req, w)
 
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
