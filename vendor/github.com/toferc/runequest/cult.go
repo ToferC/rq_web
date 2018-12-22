@@ -22,3 +22,12 @@ type Cult struct {
 	ParentCult      *Cult
 	AssociatedCults []Cult
 }
+
+// ExtraCult represents a secondary cult that must be tracked, but isn't used in character creation
+type ExtraCult struct {
+	Name              string
+	RunePoints        int
+	CurrentRunePoints int
+	Runes             []string
+	Rank              string
+}

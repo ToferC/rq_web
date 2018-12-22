@@ -5,37 +5,32 @@ import (
 	"sort"
 )
 
-// Character represents a generic RPG character
-type Character struct {
+// Creature represents a generic RPG Creature
+type Creature struct {
 	Name string
 	Role string
-	// Type of Character - Player, NPC, Creature, etc.
+	// Type of Creature
 	Description string
-	Race        *Race
-	Homeland    *Homeland
-	Occupation  *Occupation
-	Cult        *Cult
-	ExtraCults  []*ExtraCult
+	
 	Age         int
-	Clan        string
-	Tribe       string
+	Affiliations        string
 	Abilities   map[string]*Ability
 	// Passions and Reputation
 	ElementalRunes map[string]*Ability
 	// Elemental Runes
 	PowerRunes       map[string]*Ability
+	StatisticFrames  map[string]*StatisticFrame
 	Statistics       map[string]*Statistic
 	Attributes       map[string]*Attribute
 	CurrentHP        int
 	CurrentMP        int
 	CurrentRP        int
+	Cults map[string]int
 	Move             int
 	DerivedMap       []string
 	Skills           map[string]*Skill
 	SkillMap         []string
 	SkillCategories  map[string]*SkillCategory
-	Advantages       map[string]*Advantage
-	AdvantageMap     []string
 	RuneSpells       map[string]*Spell
 	SpiritMagic      map[string]*Spell
 	Powers           map[string]*Power
@@ -44,17 +39,10 @@ type Character struct {
 	MeleeAttacks     map[string]*Attack
 	RangedAttacks    map[string]*Attack
 	Equipment        []string
-	Lunars           int
-	Ransom           int
-	StandardofLiving string
-	InPlay           bool
-	Updates          []*Update
-	CreationSteps    map[string]bool
 }
 
-// CharacterRoles is an array of options for Character.Role
-var CharacterRoles = []string{
-	"Player Character",
+// CreatureRoles is an array of options for Creature.Role
+var CreatureRoles = []string{
 	"Non-Player Character",
 	"Animal",
 	"Chaos",
@@ -64,15 +52,17 @@ var CharacterRoles = []string{
 	"Spirit",
 }
 
-// Update tracks live changes to Character
-type Update struct {
-	Date  string
-	Event string
-	Value int
+// TotalStatistics updates values for stats after being modified
+func (c *Creature) TotalStatistics() {
+
+	for _, s := range c.Statistics {
+
+		s.UpdateStatistic()
+	}
 }
 
-// UpdateCharacter updates stats, runes and skills based on them
-func (c *Character) UpdateCharacter() {
+// UpdateCreature updates stats, runes and skills based on them
+func (c *Creature) UpdateCreature() {
 	c.TotalStatistics()
 	c.DetermineSkillCategoryValues()
 
@@ -86,34 +76,56 @@ func (c *Character) UpdateCharacter() {
 	}
 }
 
-// TotalStatistics updates values for stats after being modified
-func (c *Character) TotalStatistics() {
+// DetermineSkillCategoryValues figures out base values for skill categories based on stats
+func (c *Creature) DetermineSkillCategoryValues() {
 
-	for _, s := range c.Statistics {
+	for _, sc := range CategoryOrder {
 
-		s.UpdateStatistic()
+		c.SkillCategories[sc] = &SkillCategory{}
+
+		c.SkillCategories[sc].Name = sc
+		c.SkillCategories[sc].Value = 0
 	}
-}
 
-// CreationStatus tracks the completion of character creation
-var CreationStatus = map[string]bool{
-	"Base Choices":      false,
-	"Personal History":  false,
-	"Rune Affinities":   false,
-	"Roll Stats":        false,
-	"Apply Homeland":    false,
-	"Apply Occupation":  false,
-	"Apply Cult":        false,
-	"Personal Skills":   false,
-	"Finishing Touches": false,
-	"Complete":          false,
-}
+	for k, sc := range RQSkillCategories {
+		// For each category
 
-func (c Character) String() string {
+		for _, sm := range sc {
+			// For each modifier in a category
+
+			// Identify the stat
+			stat := c.Statistics[sm.statistic]
+			stat.UpdateStatistic()
+
+			// Match to SkillCategory
+			s := c.SkillCategories[k]
+
+			// Map against specific values
+			switch {
+			case stat.Total <= 4:
+				s.Value += sm.values[4]
+			case stat.Total <= 8:
+				s.Value += sm.values[8]
+			case stat.Total <= 12:
+				s.Value += sm.values[12]
+			case stat.Total <= 16:
+				s.Value += sm.values[16]
+			case stat.Total <= 20:
+				s.Value += sm.values[20]
+			case stat.Total > 20:
+				if sm.values[20] > 0 {
+					s.Value += sm.values[20] + ((stat.Total-20)/4)*5
+				} else {
+					s.Value += sm.values[20] - ((stat.Total-20)/4)*5
+				}
+			}
+		}
+	}
+
+func (c Creature) String() string {
+	
 	text := c.Name
-	text += fmt.Sprintf("\nHomeland: %s", c.Homeland.Name)
-	text += fmt.Sprintf("\nOccupation: %s", c.Occupation.Name)
-	text += fmt.Sprintf("\n%s of Cult: %s", c.Cult.Rank, c.Cult.Name)
+	text += fmt.Sprintf("\nAffiliations: %s", c.Affiliations)
 
 	text += "\n\nStats:\n"
 	for _, stat := range StatMap {
