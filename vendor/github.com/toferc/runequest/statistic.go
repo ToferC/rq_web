@@ -35,15 +35,6 @@ var ElementalMap = []string{
 	"SIZ", "POW", "STR",
 }
 
-// TotalStatistics updates values for stats after being modified
-func (c *Character) TotalStatistics() {
-
-	for _, s := range c.Statistics {
-
-		s.UpdateStatistic()
-	}
-}
-
 // UpdateStatistic updates values for stats after being modified
 func (s *Statistic) UpdateStatistic() {
 
