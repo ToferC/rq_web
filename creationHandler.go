@@ -879,7 +879,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 					baseSkill.CategoryValue = sc.Value
 
-					baseSkill.GenerateName()
+					baseSkill.Name = createName(baseSkill.CoreString, baseSkill.UserString)
 					baseSkill.UpdateSkill()
 
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -907,7 +907,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 						baseSkill.UserString = s.UserString
 					}
 
-					baseSkill.GenerateName()
+					baseSkill.Name = createName(baseSkill.CoreString, baseSkill.UserString)
 
 					// Add Skill to Character
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -1121,7 +1121,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 					baseSkill.CategoryValue = sc.Value
 
-					baseSkill.GenerateName()
+					baseSkill.Name = createName(baseSkill.CoreString, baseSkill.UserString)
 					baseSkill.UpdateSkill()
 
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -1149,7 +1149,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 						baseSkill.UserString = s.UserString
 					}
 
-					baseSkill.GenerateName()
+					baseSkill.Name = createName(baseSkill.CoreString, baseSkill.UserString)
 
 					// Add Skill to Character
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -1465,7 +1465,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 					baseSkill.CategoryValue = sc.Value
 
-					baseSkill.GenerateName()
+					baseSkill.Name = createName(baseSkill.CoreString, baseSkill.UserString)
 					baseSkill.UpdateSkill()
 
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -1493,7 +1493,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 						baseSkill.UserString = s.UserString
 					}
 
-					baseSkill.GenerateName()
+					baseSkill.Name = createName(baseSkill.CoreString, baseSkill.UserString)
 
 					// Add Skill to Character
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
@@ -1755,9 +1755,9 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 			// Skill exists in Character, modify it via pointer
 			if targetString != "" {
-				// Determine if skill already exists in c.Skills
 
-				if c.Skills[targetString] == nil {
+				s, ok := c.Skills[targetString]
+				if !ok {
 					// Skill isn't in c.Skills, so create new skill
 					fmt.Println("Unable to find skill: " + targetString)
 
@@ -1775,7 +1775,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 						sk.UserString = userString
 					}
 
-					sk.GenerateName()
+					sk.Name = createName(sk.CoreString, sk.UserString)
 
 					// Add Skill to Character
 					fmt.Println("Add Skill to character: " + sk.Name)
@@ -1784,7 +1784,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				// Potential error here - Insight (Human)
-				s := c.Skills[targetString]
+				s = c.Skills[targetString]
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")
@@ -1839,7 +1839,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 						sk.UserString = userString
 					}
 
-					sk.GenerateName()
+					sk.Name = createName(sk.CoreString, sk.UserString)
 
 					// Add Skill to Character
 					fmt.Println("Add Skill to character: " + sk.Name)
