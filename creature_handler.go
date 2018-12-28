@@ -346,7 +346,8 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	cm := models.CreatureModel{}
 
-	c := runequest.NewCreature("Default")
+	//c := runequest.NewCreature("Default")
+	c := &runequest.Creature{}
 
 	//vars := mux.Vars(req)
 
@@ -602,7 +603,7 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 		eventString := req.FormValue("Event")
 
-		c.Cult.Rank = req.FormValue("Rank")
+		//c.Cult.Rank = req.FormValue("Rank")
 
 		rp, err := strconv.Atoi(req.FormValue("RunePoints"))
 		if err != nil {
@@ -610,7 +611,8 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Not a number")
 		}
 
-		c.Cult.NumRunePoints = rp
+		//c.Cult.NumRunePoints = rp
+		fmt.Println(rp)
 
 		// Update statistics
 		for _, st := range runequest.StatMap {
@@ -803,8 +805,8 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = false
 		}
 
-		c.Clan = req.FormValue("Clan")
-		c.Tribe = req.FormValue("Tribe")
+		//c.Clan = req.FormValue("Clan")
+		//c.Tribe = req.FormValue("Tribe")
 
 		// Upload image to s3
 		file, h, err := req.FormFile("image")
@@ -1026,7 +1028,7 @@ func AddCreatureContentHandler(w http.ResponseWriter, req *http.Request) {
 					p.UserString = userString
 				}
 
-				c.ModifyAbility(p)
+				//c.ModifyAbility(p)
 				p.UpdateAbility()
 			}
 		}

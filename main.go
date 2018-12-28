@@ -34,6 +34,8 @@ const MaxMemory = 2 * 1024 * 1024
 
 // DefaultCharacterPortrait is a base image used as a default
 const DefaultCharacterPortrait = "/media/shadow.jpeg"
+
+// DefaultCreaturePortrait is a base image used as a default
 const DefaultCreaturePortrait = "/media/shadow.jpeg"
 
 func init() {
