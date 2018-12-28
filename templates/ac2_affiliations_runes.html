@@ -32,7 +32,7 @@
           <span class="input-group-text" for="Role">Role</span>
         </div>
         <select type="text" class="form-control" id="Role" name="Role">
-          <option>Non-Player Creature</option>
+          <option>Non-Player Character</option>
           <option>Animal</option>
           <option>Chaos</option>
           <option>Creature</option>
@@ -57,20 +57,6 @@
             <span class="input-group-text" for="Cult">Cult</span>
           </div>
           <input type="text" class="form-control" aria-describedby="name-addon" name="Cult" value="{{ $creature.Cult.Name }}">
-        </div>
-
-        <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" for="Rank">Cult Rank</span>
-        </div>
-        <select type="text" class="form-control" id="Rank" name="Rank">
-          <option></option>
-          <option>Initiate</option>
-          <option>Rune Priest</option>
-          <option>God Talker</option>
-          <option>Rune Lord</option>
-          
-        </select>
         </div>
 
         <br>
@@ -149,7 +135,7 @@
     <div class="col-sm-3 col-md-3 col-lg-3">
       <h4>Skills</h4>
 
-            <p>Choose up to 10 skills.</p>
+            <p>Choose up to 15 skills.</p>
             {{ range $m := $bigcounter }}
                 <div class="input-group">
                     <div class="input-group-prepend">

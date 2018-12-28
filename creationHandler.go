@@ -1783,7 +1783,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 					c.Skills[sk.Name].UpdateSkill()
 				}
 
-				s := c.Skills[targetString]
+				s := c.Skills[sk.Name]
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")
@@ -1846,7 +1846,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 					c.Skills[sk.Name].UpdateSkill()
 				}
 
-				s = c.Skills[targetString]
+				s = c.Skills[sk.Name]
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")

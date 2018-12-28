@@ -6,8 +6,8 @@
 
 {{define "content"}}
 
-{{ $creature := .CreatureModel.Creature}}
-{{ $ID := .CreatureModel.ID }}
+{{ $creature := .CharacterModel.Character}}
+{{ $ID := .CharacterModel.ID }}
 {{ $statistics := $creature.Statistics }}
 {{ $skills := $creature.Skills }}
 {{ $counter := .Counter }}
@@ -32,7 +32,7 @@
           <span class="input-group-text" for="Role">Role</span>
         </div>
         <select type="text" class="form-control" id="Role" name="Role">
-          <option>Non-Player Creature</option>
+          <option>Non-Player Character</option>
           <option>Animal</option>
           <option>Chaos</option>
           <option>Creature</option>
@@ -85,7 +85,7 @@
         <hr>
 
         <p>Image</p>
-        <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CreatureModel.Image.Path }}"
+        <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
           data-holder-rendered="true">
         <br>
         <div class="input-group">
@@ -97,7 +97,7 @@
         <hr>
 
         <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox"
-          {{if .CreatureModel.Open }} checked{{ end }}>
+          {{if .CharacterModel.Open }} checked{{ end }}>
 
         <hr>
 

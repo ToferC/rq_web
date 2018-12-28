@@ -25,9 +25,11 @@
         <hr>
         {{ $cult.Description }}
         <hr>
+        {{ if $cult.Notes }}
         <h4>Creation Notes</h4>
         {{ $cult.Notes }}
         <hr>
+        {{ end }}
 
     </div>
 
