@@ -950,7 +950,13 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Homeland grants a bonus to a rune affinity
-		c.ElementalRunes[c.Homeland.RuneBonus].HomelandValue += 10
+		if isInString(runequest.ElementalRuneOrder, c.Homeland.RuneBonus) {
+			c.ElementalRunes[c.Homeland.RuneBonus].HomelandValue += 10
+		}
+
+		if isInString(runequest.PowerRuneOrder, c.Homeland.RuneBonus) {
+			c.PowerRunes[c.Homeland.RuneBonus].HomelandValue += 10
+		}
 
 		// Update CreationSteps
 		c.CreationSteps["Apply Homeland"] = true

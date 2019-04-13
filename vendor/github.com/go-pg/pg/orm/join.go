@@ -9,8 +9,8 @@ import (
 
 type join struct {
 	Parent    *join
-	BaseModel tableModel
-	JoinModel tableModel
+	BaseModel TableModel
+	JoinModel TableModel
 	Rel       *Relation
 
 	ApplyQuery func(*Query) (*Query, error)
@@ -172,7 +172,7 @@ func (j *join) appendAliasColumn(b []byte, column string) []byte {
 	b = append(b, '"')
 	b = appendAlias(b, j, true)
 	b = append(b, "__"...)
-	b = types.AppendField(b, column, 2)
+	b = types.AppendField(b, column, 0)
 	b = append(b, '"')
 	return b
 }
@@ -230,7 +230,7 @@ func (j *join) appendHasOneColumns(b []byte) []byte {
 
 func (j *join) appendHasOneJoin(q *Query, b []byte) []byte {
 	b = append(b, "LEFT JOIN "...)
-	b = q.FormatQuery(b, string(j.JoinModel.Table().NameForSelects))
+	b = q.FormatQuery(b, string(j.JoinModel.Table().FullNameForSelects))
 	b = append(b, " AS "...)
 	b = j.appendAlias(b)
 
@@ -290,7 +290,7 @@ type hasManyColumnsAppender struct {
 	*join
 }
 
-func (q hasManyColumnsAppender) AppendFormat(b []byte, f QueryFormatter) []byte {
+func (q hasManyColumnsAppender) AppendFormat(b []byte, fmter QueryFormatter) []byte {
 	if q.Rel.M2MTableAlias != "" {
 		b = append(b, q.Rel.M2MTableAlias...)
 		b = append(b, ".*, "...)

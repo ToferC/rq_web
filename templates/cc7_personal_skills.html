@@ -20,7 +20,7 @@
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Personal Skills</h4>
             <h5>(Step 7 of 7)</h5>
-            <p>Choose your character's Personal Skills</p>
+            <p>Choose up to 4 skills to add +25% and up to 5 skills to add +10% as your character's Personal Skills</p>
 
             <h4>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</h4>
         <hr>
@@ -85,7 +85,7 @@
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-25-{{$m}}-addon">Skill {{$m}}</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}" required>
+                  <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
                         <option value="{{ $s.Name }}">{{ $s }}</option>
@@ -118,7 +118,7 @@
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Skill-10-{{$m}}-addon">Skill {{ $m }}</span>
                 </div>
-                  <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}" required>
+                  <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
                         <option value="{{ $s.Name }}">{{ $s }}</option>

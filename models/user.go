@@ -8,10 +8,10 @@ import (
 //User implements a generic user model
 type User struct {
 	ID        int64
-	UserName  string `sql:",unique"`
-	Email     string
-	Password  string
-	IsAdmin   bool
+	UserName  string    `sql:",unique"`
+	Email     string    `json:"-"`
+	Password  string    `json:"-"`
+	IsAdmin   bool      `json:"-"`
 	CreatedAt time.Time `sql:"default:now()"`
 	UpdatedAt time.Time
 }

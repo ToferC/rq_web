@@ -196,6 +196,14 @@ func main() {
 
 	r.HandleFunc("/user_index/", UserIndexHandler)
 
+	// API
+	r.HandleFunc("/api/character", GetCharacterModels).Methods("GET")
+	r.HandleFunc("/api/character/user/{id}", GetUserCharacterModels).Methods("GET")
+	r.HandleFunc("/api/character/{id}", GetCharacterModel).Methods("GET")
+	r.HandleFunc("/api/character/{id}", CreateCharacterModel).Methods("POST")
+	r.HandleFunc("/api/character/{id}", DeleteCharacterModel).Methods("DELETE")
+	r.HandleFunc("/api/character/{id}", UpdateCharacterModel).Methods("PUT")
+
 	http.Handle("/", r)
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
