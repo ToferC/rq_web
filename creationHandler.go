@@ -96,6 +96,12 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
+		// Pull form values into cm.Character via gorilla/schema
+		err = decoder.Decode(c, req.PostForm)
+		if err != nil {
+			panic(err)
+		}
+
 		c.Name = req.FormValue("Name")
 		c.Description = req.FormValue("Description")
 

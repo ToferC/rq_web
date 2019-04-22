@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/schema"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -27,6 +29,7 @@ var (
 	db       *pg.DB
 	svc      *s3.S3
 	uploader *s3manager.Uploader
+	decoder  = schema.NewDecoder()
 )
 
 // MaxMemory is the max upload size for images
@@ -135,6 +138,9 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+
+	// Set Schema ignoreunknownkeys to true
+	decoder.IgnoreUnknownKeys(true)
 
 	r := mux.NewRouter()
 
