@@ -66,7 +66,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" for="Homeland">Homeland</span>
                 </div>
-              <select type="text" class="form-control" id="Homeland" name="Homeland">
+              <select type="text" class="form-control" id="Homeland" name="HLStr">
                 {{ range $k, $v := $homelands }}
                 <option value={{ $v.ID }}>{{ $v.Homeland.Name }}</option>
                 {{ end }}
@@ -79,7 +79,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" for="Occupation">Occupation</span>
                 </div>
-              <select type="text" class="form-control" id="Occupation" name="Occupation">
+              <select type="text" class="form-control" id="Occupation" name="OCStr">
                 
                 {{ range $k, $v := $occupations }}
                     <option value={{ $v.ID }}>{{ $v.Occupation.Name }}</option>
@@ -93,7 +93,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" for="Cult">Cult</span>
               </div>
-              <select type="text" class="form-control" id="Cult" name="Cult">
+              <select type="text" class="form-control" id="Cult" name="CStr">
                 
                 {{ range $k, $v := $cults }}
                     <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>

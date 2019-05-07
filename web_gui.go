@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"html/template"
 	"net/http"
 	"strings"
@@ -130,6 +131,19 @@ func isInString(s []string, t string) bool {
 		}
 	}
 	return false
+}
+
+func indexSpell(str string, spells []runequest.Spell) (int, error) {
+
+	err := errors.New("Spell Not Found")
+
+	for i, spell := range spells {
+		if str == spell.CoreString {
+			return i, nil
+		}
+	}
+
+	return 0, err
 }
 
 // Generate URL for next step of Character creation

@@ -917,6 +917,26 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
+	// Add extra runespells
+	for i := 1; i < 4; i++ {
+		trs := &runequest.Spell{
+			Name: "Add New Spell",
+			Cost: 0,
+		}
+		c.RuneSpells["zzNewRS-"+string(i)] = trs
+	}
+
+	// Add extra spirit magic
+	for i := 1; i < 4; i++ {
+		tsm := &runequest.Spell{
+			CoreString: "Add New Spell",
+			UserString: "",
+			Cost:       0,
+		}
+		tsm.Name = createName(tsm.CoreString, tsm.UserString)
+		c.SpiritMagic["zzNewSM-"+tsm.Name+""+string(i)] = tsm
+	}
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
@@ -1032,15 +1052,31 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Rune Magic
-		for i := 1; i < 4; i++ {
-			str := req.FormValue(fmt.Sprintf("RuneSpell-%d", i))
-			spec := req.FormValue(fmt.Sprintf("RuneSpell-%d-UserString", i))
-			if str != "" {
-				index, err := strconv.Atoi(str)
+
+		tempRuneSpells := map[string]*runequest.Spell{}
+
+		for k, v := range c.RuneSpells {
+			str := req.FormValue(fmt.Sprintf("RuneSpell-%s", k))
+			spec := req.FormValue(fmt.Sprintf("RuneSpell-%s-UserString", k))
+
+			switch str {
+			case "Add New Spell":
+				continue
+
+			case v.CoreString:
+				// Same spell as previous
+				tempRuneSpells[v.Name] = v
+				continue
+
+			default:
+				// Spell has changed or is new
+				// Get info from runequest.RuneSpells
+				index, err := indexSpell(str, runequest.RuneSpells)
 				if err != nil {
-					index = 0
-					fmt.Println("Spell Not found")
+					fmt.Println(err)
+					continue
 				}
+
 				baseSpell := runequest.RuneSpells[index]
 
 				s := baseSpell
@@ -1048,9 +1084,11 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 					s.UserString = spec
 				}
 				s.GenerateName()
-				c.RuneSpells[s.Name] = &s
+				tempRuneSpells[s.Name] = &s
 			}
 		}
+
+		c.RuneSpells = tempRuneSpells
 
 		// Spirit Magic
 		for i := 1; i < 6; i++ {

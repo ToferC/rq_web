@@ -102,11 +102,8 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		c.Name = req.FormValue("Name")
-		c.Description = req.FormValue("Description")
-
 		// Set Homeland
-		hlStr := req.FormValue("Homeland")
+		hlStr := req.FormValue("HLStr")
 
 		fmt.Println("Results: " + hlStr)
 
@@ -128,7 +125,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("HOMELAND: " + c.Homeland.Name)
 
 		// Set Occupation
-		ocStr := req.FormValue("Occupation")
+		ocStr := req.FormValue("OCStr")
 
 		ocID, err := strconv.Atoi(ocStr)
 		if err != nil {
@@ -148,7 +145,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("OCCUPATION: " + c.Occupation.Name)
 
 		// Set Cult
-		cStr := req.FormValue("Cult")
+		cStr := req.FormValue("CStr")
 
 		cID, err := strconv.Atoi(cStr)
 		if err != nil {

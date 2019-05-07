@@ -132,16 +132,17 @@
 
         <h4>Rune Spells</h4>
 
-            {{ range $n := $counter }}
+            {{ range $k, $v := $character.RuneSpells }}
 
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="RuneSpell-{{ $n }}-addon">Rune Spell</span>
+                    <span class="input-group-text" id="RuneSpell-{{ $k }}-addon">Rune Spell</span>
                 </div>
-                  <select type="text" class="form-control" id="RuneSpell-{{ $n }}" name="RuneSpell-{{ $n }}">
+                  <select type="text" class="form-control" id="RuneSpell-{{ $k }}" name="RuneSpell-{{ $v.Name }}">
+                    <option value={{ $v.Name }}>{{ $v.CoreString }} ({{ $v.Cost}})pts</option>
                     <option></option>
                 {{ range $m, $rs := $runespells }}
-                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts)</option>
+                    <option value="{{ $rs.Name }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts)</option>
                 {{ end }}
                   </select>
               </div>
@@ -149,9 +150,9 @@
             
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="RuneSpell-{{$n}}-UserString-addon">Specialization</span>
+                  <span class="input-group-text" id="RuneSpell-{{$k}}-UserString-addon">Specialization</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="RuneSpell-{{$n}}-UserString-addon" name="RuneSpell-{{$n}}-UserString" value ="">
+                <input type="text" class="form-control" aria-describedby="RuneSpell-{{$k}}-UserString-addon" name="RuneSpell-{{$k}}-UserString" value ="{{ $v.UserString }}">
               </div>
 
               <hr>
