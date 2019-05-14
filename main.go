@@ -175,6 +175,9 @@ func main() {
 	r.HandleFunc("/cc7_personal_skills/{id}", PersonalSkillsHandler)
 	r.HandleFunc("/cc8_finishing_touches/{id}", FinishingTouchesHandler)
 
+	// Character Modification
+	r.HandleFunc("/edit_magic/{id}", EditMagicHandler)
+
 	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)
 	r.HandleFunc("/add_homeland/", AddHomelandHandler)

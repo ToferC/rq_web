@@ -917,6 +917,7 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
+	// Remove this to new view
 	// Add extra runespells
 	for i := 1; i < 4; i++ {
 		trs := &runequest.Spell{
@@ -1128,6 +1129,226 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 				c.SpiritMagic[s.Name] = s
 			}
 		}
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// EditMagicHandler renders a character in a Web page
+func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	c := cm.Character
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	// Remove this to new view
+	// Add extra runespells
+	for i := 1; i < 4; i++ {
+		trs := &runequest.Spell{
+			Name:       "",
+			CoreString: "",
+			UserString: "",
+			Cost:       0,
+		}
+		c.RuneSpells["zzNewRS-"+string(i)] = trs
+	}
+
+	// Add extra spirit magic
+	for i := 1; i < 4; i++ {
+		tsm := &runequest.Spell{
+			Name:       "",
+			CoreString: "",
+			UserString: "",
+			Cost:       0,
+		}
+		tsm.Name = createName(tsm.CoreString, tsm.UserString)
+		c.SpiritMagic["zzNewSM-"+string(i)] = tsm
+	}
+
+	wc := WebChar{
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Counter:        numToArray(3),
+		SpiritMagic:    runequest.SpiritMagicSpells,
+		RuneSpells:     runequest.RuneSpells,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/edit_magic.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
+		// Rune Magic
+
+		tempRuneSpells := map[string]*runequest.Spell{}
+
+		for k, v := range c.RuneSpells {
+			str := req.FormValue(fmt.Sprintf("RuneSpell-%s", k))
+			spec := req.FormValue(fmt.Sprintf("RuneSpell-%s-UserString", k))
+
+			fmt.Println(str, spec)
+
+			switch {
+			case str == "":
+				fmt.Println("No spell")
+				continue
+
+			case v.CoreString == str && v.UserString == spec:
+				// Same spell as previous
+				fmt.Println("Same spell")
+				tempRuneSpells[v.Name] = v
+
+			case v.CoreString != str || v.UserString != spec:
+				// Spell has changed or is new
+				fmt.Printf("New spell: %s - %s", str, spec)
+				// Get info from runequest.RuneSpells
+				index, err := indexSpell(str, runequest.RuneSpells)
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+
+				baseSpell := runequest.RuneSpells[index]
+
+				s := &runequest.Spell{
+					Name:       baseSpell.Name,
+					CoreString: baseSpell.CoreString,
+					UserString: baseSpell.UserString,
+					Cost:       baseSpell.Cost,
+					Domain:     baseSpell.Domain,
+				}
+
+				if spec != "" {
+					s.UserString = spec
+				}
+
+				s.GenerateName()
+				tempRuneSpells[s.Name] = s
+			}
+		}
+
+		c.RuneSpells = tempRuneSpells
+
+		// Spirit Magic
+
+		tempSpiritMagic := map[string]*runequest.Spell{}
+
+		for k, v := range c.SpiritMagic {
+			str := req.FormValue(fmt.Sprintf("SpiritMagic-%s", k))
+			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%s-UserString", k))
+			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%s-Cost", k))
+
+			cost, err := strconv.Atoi(cString)
+			if err != nil {
+				cost = 1
+				fmt.Println("Non-number entered")
+			}
+
+			switch {
+			case str == "":
+				fmt.Println("No spell")
+				continue
+
+			case v.CoreString == str && v.UserString == spec && v.Cost == cost:
+				fmt.Println("Same spell")
+
+				// Same spell as previous
+				tempSpiritMagic[v.Name] = v
+
+			case v.CoreString != str || v.UserString != spec || v.Cost != cost:
+				// Spell has changed or is new
+				fmt.Printf("NEW Spell: %s - %s", str, spec)
+
+				// Get info from runequest.RuneSpells
+				index, err := indexSpell(str, runequest.SpiritMagicSpells)
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+
+				baseSpell := runequest.SpiritMagicSpells[index]
+
+				s := &runequest.Spell{
+					Name:       baseSpell.Name,
+					CoreString: baseSpell.CoreString,
+					UserString: baseSpell.UserString,
+					Cost:       cost,
+					Domain:     baseSpell.Domain,
+				}
+
+				if spec != "" {
+					s.UserString = spec
+				}
+
+				s.GenerateName()
+				tempSpiritMagic[s.Name] = s
+			}
+		}
+
+		c.SpiritMagic = tempSpiritMagic
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
