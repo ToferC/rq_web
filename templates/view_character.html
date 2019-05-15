@@ -41,6 +41,11 @@ tr:nth-child(even) {
             <h3>{{ $character.Name }}</h3>
             <br>
             <h5>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}<br>
+              {{ if $character.ExtraCults }}
+              {{ range $ec := $character.ExtraCults }}
+                {{ $ec.Rank }} of {{ $ec.Name }}<br>
+              {{ end }}
+              {{ end }}
               {{ if ne $character.Clan "" }}{{ $character.Clan }} Clan | {{end}}{{ if ne $character.Tribe "" }}{{ $character.Tribe }} Tribe
             {{ end }}</h5>
             
@@ -66,6 +71,7 @@ tr:nth-child(even) {
               <a class="btn btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
               {{ else }}
               <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
+              <a class="btn btn-info" href="/edit_magic/{{ $ID }}">Edit Magic</a>
               {{ end }}
               <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a>
               {{ else }}
@@ -276,6 +282,11 @@ tr:nth-child(even) {
 
             <h3>Abilities</h3>
             <p>Rune Points ({{ $character.Cult.Name }}): {{ $character.Cult.NumRunePoints }}</p>
+            {{ if $character.ExtraCults }}
+              {{ range $ec := $character.ExtraCults }}
+                <p>Rune Points ({{ $ec.Name }}): {{ $ec.RunePoints }}</p>
+              {{ end }}
+            {{ end }}
             {{ range $a := $character.Attributes }}
               <p>{{ $a }}</p>
             {{ end }}

@@ -2,7 +2,7 @@
 
 {{ $character := .CharacterModel.Character }}
 
-<title>Add Skills</title>
+<title>Edit Magic</title>
 
 {{ end }}
 
@@ -14,15 +14,17 @@
 {{ $skills := .Skills }}
 {{ $spiritmagic := .SpiritMagic }}
 {{ $runespells := .RuneSpells }}
+{{ $cults := .CultModels }}
+{{ $pow := index $character.Statistics "POW" }}
 
 <div class="container">
     <hr>
     <div class="row">
 
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <h4>Add Skills</h4>
+            <h4>Edit Magic</h4>
 
-            <p>Add new skills to {{ $character.Name }}</p>
+            <p>Add or alter magic for {{ $character.Name }}</p>
 
             <h5>{{ $character.Name }}</h5>
             <h5>{{ $character.Homeland.Name }}</h5>
@@ -30,12 +32,30 @@
             <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
                 data-holder-rendered="true">
 
-            <p>{{ $character.Description }}</p>
             <hr>
-        
+
             <form action="" method="POST" enctype="multipart/form-data">
 
-                <hr>
+            <h5>Update Power</h5>
+            <p>Modify your character's Power here. This will NOT be automatically modified when you add Rune Points, but must be altered manually.</p>
+
+            <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text" id="Power-addon">Power</div>
+        </div>
+        <input type="number" class="form-control" aria-describedby="Power-addon" name="Power" value="{{ $pow.Total }}">
+      </div>
+      <hr>
+
+                <h4>Event</h4>
+        <p>Enter the description of the event that caused the updates.</p>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="event-addon">Event</span>
+          </div>
+          <input type="text" class="form-control" aria-describedby="event-addon" name="Event" value="Manual Update">
+        </div>
 
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
 
@@ -76,11 +96,7 @@
               <hr>
               {{ end }}
 
-        </div>
-
-        <div class="col-sm-4 col-md-4 col-lg-4">
-
-            <h4>Spirit Magic Spells</h4>
+              <h4>Spirit Magic Spells</h4>
 
             {{ range $k, $v := $character.SpiritMagic }}
 
@@ -121,8 +137,97 @@
               <hr>
               {{ end }}
 
-            
+            <hr>
+
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <h5>Primary Cult: {{ $character.Cult.Name }}</h5>
+        
+            <form action="" method="POST" enctype="multipart/form-data">
+
+                <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" for="Rank">Cult Rank</span>
+                </div>
+                <select type="text" class="form-control" id="Rank" name="Rank">
+                  <option>{{ $character.Cult.Rank }}</option>
+                  <option></option>
+                  <option>Initiate</option>
+                  <option>Rune Priest</option>
+                  <option>God Talker</option>
+                  <option>Rune Lord</option>
+                  
+                </select>
+                </div>
+        
+                <br>
+        
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="rp-addon">Rune Points</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="rp-addon" name="RunePoints" value="{{ $character.Cult.NumRunePoints }}">
+                </div>
+        
                 <hr>
+
+                <h5>Secondary Cults</h5>
+
+                {{ range $i, $c := $character.ExtraCults }}
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" for="Cult-{{ add $i 1 }}">Cult</span>
+                        </div>
+                        <select type="text" class="form-control" id="Cult-{{ add $i 1 }}" name="Cult-{{ add $i 1 }}">
+                          
+                        {{ if eq $c.Name "" }}
+                                <option></option>
+                        {{else }}
+                                <option>{{ $c.Name }}</option>
+                        {{ end }}
+                            <option></option>
+                          {{ range $k, $v := $cults }}
+                              <option>{{ $v.Cult.Name }}</option>
+                          {{ end }}
+                        </select>
+                </div>
+                
+
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" for="Rank-{{ add $i 1 }}">Cult Rank</span>
+                        </div>
+                        <select type="text" class="form-control" id="Rank-{{ add $i 1 }}" name="Rank-{{ add $i 1 }}">
+                        
+                        {{ if eq $c.Rank "" }}
+                                <option></option>
+                        {{else }}
+                                <option>{{ $c.Rank }}</option>
+                        {{ end }}
+                          <option></option>
+                          <option>Initiate</option>
+                          <option>Rune Priest</option>
+                          <option>God Talker</option>
+                          <option>Rune Lord</option>
+                          
+                        </select>
+                </div>
+                                
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="rp-addon">Rune Points</span>
+                          </div>
+                          <input type="number" class="form-control" aria-describedby="rp-addon" name="RunePoints-{{ add $i 1 }}" value="{{ $c.RunePoints }}">
+                        </div>
+
+                <br>
+                {{ end }} <!-- END counter -->
+
+                <hr>
+
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
         </form>
 

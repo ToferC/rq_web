@@ -103,6 +103,7 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 		Author:    author,
 		Character: cm.Character,
 		Open:      false,
+		Image:     cm.Image,
 	}
 
 	err = database.SaveCharacterModel(db, &newCharacterModel)

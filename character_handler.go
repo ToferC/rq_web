@@ -917,27 +917,6 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
-	// Remove this to new view
-	// Add extra runespells
-	for i := 1; i < 4; i++ {
-		trs := &runequest.Spell{
-			Name: "Add New Spell",
-			Cost: 0,
-		}
-		c.RuneSpells["zzNewRS-"+string(i)] = trs
-	}
-
-	// Add extra spirit magic
-	for i := 1; i < 4; i++ {
-		tsm := &runequest.Spell{
-			CoreString: "Add New Spell",
-			UserString: "",
-			Cost:       0,
-		}
-		tsm.Name = createName(tsm.CoreString, tsm.UserString)
-		c.SpiritMagic["zzNewSM-"+tsm.Name+""+string(i)] = tsm
-	}
-
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
@@ -1052,84 +1031,6 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Rune Magic
-
-		tempRuneSpells := map[string]*runequest.Spell{}
-
-		for k, v := range c.RuneSpells {
-			str := req.FormValue(fmt.Sprintf("RuneSpell-%s", k))
-			spec := req.FormValue(fmt.Sprintf("RuneSpell-%s-UserString", k))
-
-			switch str {
-			case "Add New Spell":
-				continue
-
-			case v.CoreString:
-				// Same spell as previous
-				tempRuneSpells[v.Name] = v
-				continue
-
-			default:
-				// Spell has changed or is new
-				// Get info from runequest.RuneSpells
-				index, err := indexSpell(str, runequest.RuneSpells)
-				if err != nil {
-					fmt.Println(err)
-					continue
-				}
-
-				baseSpell := runequest.RuneSpells[index]
-
-				s := baseSpell
-				if spec != "" {
-					s.UserString = spec
-				}
-				s.GenerateName()
-				tempRuneSpells[s.Name] = &s
-			}
-		}
-
-		c.RuneSpells = tempRuneSpells
-
-		// Spirit Magic
-		for i := 1; i < 6; i++ {
-			str := req.FormValue(fmt.Sprintf("SpiritMagic-%d", i))
-			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%d-UserString", i))
-			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Cost", i))
-
-			if str != "" {
-
-				index, err := strconv.Atoi(str)
-				if err != nil {
-					index = 0
-					fmt.Println("Spell Not found")
-				}
-
-				cost, err := strconv.Atoi(cString)
-				if err != nil {
-					cost = 1
-					fmt.Println("Non-number entered")
-				}
-
-				baseSpell := runequest.SpiritMagicSpells[index]
-
-				s := &runequest.Spell{
-					Name:       baseSpell.Name,
-					CoreString: baseSpell.CoreString,
-					UserString: baseSpell.UserString,
-					Cost:       cost,
-					Domain:     baseSpell.Domain,
-				}
-
-				if spec != "" {
-					s.UserString = spec
-				}
-
-				s.GenerateName()
-				c.SpiritMagic[s.Name] = s
-			}
-		}
-
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			log.Panic(err)
@@ -1192,7 +1093,27 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
-	// Remove this to new view
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	ecLen := len(c.ExtraCults)
+
+	if ecLen == 0 {
+		ecLen = 1
+	}
+
+	// Add ExtraCults
+	for i := ecLen; i < 4; i++ {
+		ec := &runequest.ExtraCult{
+			Name:       "",
+			RunePoints: 0,
+			Rank:       "",
+		}
+		c.ExtraCults = append(c.ExtraCults, ec)
+	}
+
 	// Add extra runespells
 	for i := 1; i < 4; i++ {
 		trs := &runequest.Spell{
@@ -1225,6 +1146,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 		Counter:        numToArray(3),
 		SpiritMagic:    runequest.SpiritMagicSpells,
 		RuneSpells:     runequest.RuneSpells,
+		CultModels:     cults,
 	}
 
 	if req.Method == "GET" {
@@ -1240,6 +1162,69 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			panic(err)
 		}
+
+		eventString := req.FormValue("Event")
+
+		// Power
+
+		stat := c.Statistics["POW"]
+
+		mod, _ := strconv.Atoi(req.FormValue("Power"))
+
+		if mod != stat.Total {
+
+			modVal := mod - stat.Total
+
+			update := CreateUpdate(eventString, modVal)
+
+			if stat.Updates == nil {
+				stat.Updates = []*runequest.Update{}
+			}
+
+			stat.Updates = append(stat.Updates, update)
+
+			stat.ExperienceCheck = false
+		}
+
+		stat.UpdateStatistic()
+
+		// Primary Cults
+		c.Cult.Rank = req.FormValue("Rank")
+
+		rp, err := strconv.Atoi(req.FormValue("RunePoints"))
+		if err != nil {
+			rp = 3
+			fmt.Println("Not a number")
+		}
+
+		c.Cult.NumRunePoints = rp
+
+		// Secondary Cults
+
+		tempCults := []*runequest.ExtraCult{}
+
+		for i := 1; i < 4; i++ {
+			eCult := req.FormValue(fmt.Sprintf("Cult-%d", i))
+
+			if eCult != "" {
+
+				eRank := req.FormValue(fmt.Sprintf("Rank-%d", i))
+				eRP, err := strconv.Atoi(req.FormValue(fmt.Sprintf("RunePoints-%d", i)))
+				if err != nil {
+					eRP = 1
+					fmt.Println("Not a number")
+				}
+
+				tempCults = append(tempCults,
+					&runequest.ExtraCult{
+						Name:       eCult,
+						Rank:       eRank,
+						RunePoints: eRP,
+					})
+			}
+		}
+
+		c.ExtraCults = tempCults
 
 		// Rune Magic
 
