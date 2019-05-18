@@ -163,7 +163,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.CurrentMP = mp
 
-		// Update MP
+		// Update RP
 		str = req.FormValue("RP")
 		rp, err := strconv.Atoi(str)
 		if err != nil {
@@ -175,6 +175,21 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.CurrentRP = rp
+
+		// Update ExtraCults RPs
+		for _, ec := range c.ExtraCults {
+			str = req.FormValue("RP-" + ec.Name)
+			rp, err := strconv.Atoi(str)
+			if err != nil {
+				rp = ec.CurrentRunePoints
+			}
+
+			if rp < 0 {
+				rp = 0
+			}
+
+			ec.CurrentRunePoints = rp
+		}
 
 		// Check skill xp
 		for _, v := range c.Skills {
@@ -262,10 +277,278 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Equipment = equipment
 
-		// Always create 4 empty equipment slots.
-		for i := 0; i < 4; i++ {
-			c.Equipment = append(c.Equipment, "")
+		// Track Weapon HP
+		for k, v := range c.MeleeAttacks {
+			hpString := req.FormValue(fmt.Sprintf("%s-HP", k))
+			hp, err := strconv.Atoi(hpString)
+			if err != nil {
+				hp = v.Weapon.HP
+			}
+
+			if hp > v.Weapon.HP {
+				hp = v.Weapon.HP
+			}
+
+			if hp < -(2 * v.Weapon.HP) {
+				hp = -v.Weapon.HP * 2
+			}
+
+			v.Weapon.CurrentHP = hp
 		}
+
+		// Track Weapon HP
+		for k, v := range c.RangedAttacks {
+			hpString := req.FormValue(fmt.Sprintf("%s-HP", k))
+			hp, err := strconv.Atoi(hpString)
+			if err != nil {
+				hp = v.Weapon.HP
+			}
+
+			if hp > v.Weapon.HP {
+				hp = v.Weapon.HP
+			}
+
+			if hp < -(2 * v.Weapon.HP) {
+				hp = -v.Weapon.HP * 2
+			}
+
+			v.Weapon.CurrentHP = hp
+		}
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		fmt.Println(c)
+
+		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+
+}
+
+// SummaryCharacterHandler renders a character in a Web page
+func SummaryCharacterHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	flashes := session.Flashes("message")
+
+	session.Save(req, w)
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	fmt.Println(cm)
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	c := cm.Character
+
+	// Always create 4 empty equipment slots.
+	for i := 0; i < 4; i++ {
+		c.Equipment = append(c.Equipment, "")
+	}
+
+	fmt.Println(c)
+
+	if cm.Image == nil {
+		cm.Image = new(models.Image)
+		cm.Image.Path = DefaultCharacterPortrait
+	}
+
+	//c.DetermineSkillCategoryValues()
+
+	wc := WebChar{
+		CharacterModel: cm,
+		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
+		SessionUser:    username,
+		IsAdmin:        isAdmin,
+		Counter:        numToArray(10),
+		Flashes:        flashes,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/summary_view_character.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		// Parse Form and redirect
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		// Update MP
+		str := req.FormValue("MP")
+		mp, err := strconv.Atoi(str)
+		if err != nil {
+			mp = c.CurrentMP
+		}
+
+		if mp < 0 {
+			mp = 0
+		}
+
+		if mp > c.Attributes["MP"].Max {
+			mp = c.Attributes["MP"].Max
+		}
+
+		c.CurrentMP = mp
+
+		// Update RP
+		str = req.FormValue("RP")
+		rp, err := strconv.Atoi(str)
+		if err != nil {
+			rp = c.CurrentMP
+		}
+
+		if rp < 0 {
+			rp = 0
+		}
+
+		c.CurrentRP = rp
+
+		// Update ExtraCults RPs
+		for _, ec := range c.ExtraCults {
+			str = req.FormValue("RP-" + ec.Name)
+			rp, err := strconv.Atoi(str)
+			if err != nil {
+				rp = ec.CurrentRunePoints
+			}
+
+			if rp < 0 {
+				rp = 0
+			}
+
+			ec.CurrentRunePoints = rp
+		}
+
+		// Check skill xp
+		for _, v := range c.Skills {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check Elemental Rune xp
+		for _, v := range c.ElementalRunes {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check Power Rune XP
+		for _, v := range c.PowerRunes {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check Passion xp
+		for _, v := range c.Abilities {
+			if req.FormValue(fmt.Sprintf("%s-XP", v.Name)) != "" {
+				v.ExperienceCheck = true
+			} else {
+				v.ExperienceCheck = false
+			}
+		}
+
+		// Check POW xp
+		if req.FormValue("POW-XP") != "" {
+			c.Statistics["POW"].ExperienceCheck = true
+		} else {
+			c.Statistics["POW"].ExperienceCheck = false
+		}
+
+		// Update HitLocations
+		totalDamage := 0
+
+		for k, v := range c.HitLocations {
+			str := req.FormValue(fmt.Sprintf("%s-HP", k))
+			hp, err := strconv.Atoi(str)
+			if err != nil {
+				hp = v.Value
+			}
+
+			if hp > v.Max {
+				hp = v.Max
+			}
+
+			if hp < v.Min {
+				hp = v.Min
+			}
+
+			if hp < 1 {
+				v.Disabled = true
+			} else {
+				v.Disabled = false
+			}
+
+			v.Value = hp
+			totalDamage += v.Max - hp
+		}
+
+		// Determine total damage based on HitLocation HP
+		c.CurrentHP = c.Attributes["HP"].Max - totalDamage
+
+		// Read Equipment
+		var equipment = []string{}
+
+		for i := 0; i < len(c.Equipment)+1; i++ {
+			str := req.FormValue(fmt.Sprintf("Equipment-%d", i))
+			if str != "" {
+				equipment = append(equipment, str)
+			}
+		}
+
+		c.Equipment = equipment
 
 		// Track Weapon HP
 		for k, v := range c.MeleeAttacks {

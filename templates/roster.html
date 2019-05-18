@@ -15,7 +15,7 @@
           {{ range .CharacterModels }}
           <div class="col-md-4">
             <div class="card mb-4 box-shadow">
-              <a href="/view_character/{{ .ID }}">
+              <a href="/summary_view_character/{{ .ID }}">
               <img class ="card-img-top" data-src="" alt="Thumbnail"
               style="width: 100%; height: 50%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .Image.Path }}"
               data-holder-rendered="true">
@@ -31,6 +31,8 @@
                   <div class="btn-group">
                     <a class="btn btn-sm btn-primary"
                     href="/view_character/{{ .ID }}">View</a>
+                    <a class="btn btn-sm btn-primary"
+                    href="/summary_view_character/{{ .ID }}">Summary</a>
                     {{ if eq $user .Author.UserName }}
                     {{ if not .Character.CreationSteps.Complete }}
                       <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL .Character.CreationSteps }}/{{ .ID }}">Resume Creation</a>

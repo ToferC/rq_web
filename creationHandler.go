@@ -340,6 +340,12 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Do Stuff
 
+		// Pull form values into cm.Character via gorilla/schema
+		err = decoder.Decode(c, req.PostForm)
+		if err != nil {
+			panic(err)
+		}
+
 		str := req.FormValue("Lunars")
 		lunars, err := strconv.Atoi(str)
 		if err != nil {

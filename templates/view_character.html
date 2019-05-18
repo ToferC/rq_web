@@ -66,6 +66,8 @@ tr:nth-child(even) {
             <p>Ransom: {{ $character.Ransom }} Lunars</p>
             <hr>
             
+            <a class="btn btn-sm btn-primary"
+                    href="/summary_view_character/{{ $ID }}">Summary</a>
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               {{ if not $character.CreationSteps.Complete }}
               <a class="btn btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/toferc/rq_web/models"
@@ -133,6 +134,35 @@ func isInString(s []string, t string) bool {
 	return false
 }
 
+func formatStringArray(a []string) string {
+	text := ""
+	end := len(a)
+
+	for i, t := range a {
+		if i+1 == end {
+			text += t
+		} else {
+			text += t + ", "
+		}
+	}
+	return text
+}
+
+func formatIntArray(a []int) string {
+	text := ""
+	end := len(a)
+
+	for i, t := range a {
+		str := strconv.Itoa(t)
+		if i+1 == end {
+			text += string(str)
+		} else {
+			text += string(str) + ", "
+		}
+	}
+	return text
+}
+
 func indexSpell(str string, spells []runequest.Spell) (int, error) {
 
 	err := errors.New("Spell Not Found")
@@ -188,6 +218,8 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"sliceString":                  sliceString,
 		"isInString":                   isInString,
 		"generateCharacterCreationURL": generateCharacterCreationURL,
+		"formatStringArray":            formatStringArray,
+		"formatIntArray":               formatIntArray,
 	}
 
 	baseTemplate := "templates/layout.html"
