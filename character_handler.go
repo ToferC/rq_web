@@ -597,7 +597,7 @@ func SummaryCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(c)
 
-		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
+		url := fmt.Sprintf("/summary_view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
