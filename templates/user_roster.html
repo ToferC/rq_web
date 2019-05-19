@@ -18,9 +18,13 @@
           <div class="row">
               <form action="" method="POST">
                 <hr>
-                  <h4>Filter Characters</h4>
-                  <p>Choose your desired filters from the drop downs below.</p>
+                  <h4>Find Characters</h4>
+                  <p>Search using free text or choose your desired filters from the drop downs below.</p>
+                  Free text search: 
+                  <input type="text" id="search" placeholder="Type to search">
+                  <hr>
           </div>
+
           <div class="row">
             <div class="col-md-3">
                 <div class="input-group">
@@ -76,7 +80,7 @@
 
         <div class="row">
           {{ range .CharacterModels }}
-          <div class="col-md-4">
+          <div id="character" class="col-md-4">
             <div class="card mb-4 box-shadow">
               <a href="/summary_view_character/{{ .ID }}">
               <img class ="card-img-top" data-src="" alt="Thumbnail"
@@ -109,5 +113,20 @@
           {{ end }}
       </div>
     </div>
+
+    <script type="text/JavaScript">
+      var $names = $('h5');
+      $('#search').keyup(function () {
+
+        var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+        reg = RegExp(val, 'i'),
+        text;
+
+    $names.parent().parent().parent().show().filter(function () {
+        text = $(this).children().text().replace(/\s+/g, ' ');
+        return !reg.test(text);
+    }).hide();
+});
+    </script>
 
 {{end}}

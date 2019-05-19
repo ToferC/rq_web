@@ -17,8 +17,14 @@
 
         <div class="row">
             <form action="" method="POST">
-                <h4>Filter Characters</h4>
+              <hr>
+                <h4>Find Characters</h4>
+                <p>Search using free text or choose your desired filters from the drop downs below.</p>
+                Free text search: 
+                <input type="text" id="search" placeholder="Type to search">
+                <hr>
         </div>
+
         <div class="row">
           <div class="col-md-3">
               <div class="input-group">
@@ -77,14 +83,14 @@
 
         <div class="row">
           {{ range .CharacterModels }}
-          <div class="col-md-4">
+          <div id="character" class="col-md-4">
             <div class="card mb-4 box-shadow">
               <a href="/summary_view_character/{{ .ID }}">
               <img class ="card-img-top" data-src="" alt="Thumbnail"
               style="width: 100%; height: 50%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .Image.Path }}"
               data-holder-rendered="true">
               <div class="card-body"></a>
-                <h5 class="card-title">{{ .Character.Name }}</h5>
+                <h5 id="name" class="card-title">{{ .Character.Name }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} {{if .Character.Occupation.Name }}| {{ .Character.Occupation.Name }}{{end}} {{ if .Character.Cult.Name }}| {{ .Character.Cult.Name }}{{ end }}
                 <h6>{{ .Author.UserName }}</h6>
 
@@ -117,6 +123,20 @@
       </div>
     </div>
 
+    <script type="text/JavaScript">
+      var $names = $('h5');
+      $('#search').keyup(function () {
+
+        var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+        reg = RegExp(val, 'i'),
+        text;
+
+    $names.parent().parent().parent().show().filter(function () {
+        text = $(this).children().text().replace(/\s+/g, ' ');
+        return !reg.test(text);
+    }).hide();
+});
+    </script>
 
 
 {{end}}
