@@ -48,14 +48,56 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	wc := WebChar{
-		SessionUser:     username,
-		IsLoggedIn:      loggedIn,
-		IsAdmin:         isAdmin,
-		CharacterModels: characters,
+	homelands, err := database.ListHomelandModels(db)
+	if err != nil {
+		panic(err)
 	}
 
-	Render(w, "templates/roster.html", wc)
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		CharacterModels:  characters,
+		HomelandModels:   homelands,
+		OccupationModels: occupations,
+		CultModels:       cults,
+	}
+
+	if req.Method == "GET" {
+		Render(w, "templates/roster.html", wc)
+	}
+
+	if req.Method == "POST" {
+
+		// Parse Form and redirect
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		query := &database.QueryArgs{
+			Homeland:   req.FormValue("Homeland"),
+			Occupation: req.FormValue("Occupation"),
+			Cult:       req.FormValue("Cult"),
+		}
+
+		wc.CharacterModels, err = query.GetFilteredCharacterModels(db)
+		if err != nil {
+			log.Println(err)
+		}
+		Render(w, "templates/roster.html", wc)
+	}
+
 }
 
 // CharacterHandler renders a character in a Web page

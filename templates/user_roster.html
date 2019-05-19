@@ -7,10 +7,73 @@
 {{define "content"}}
 
 {{ $user := .SessionUser }}
+{{ $homelands := .HomelandModels }}
+{{ $occupations := .OccupationModels }}
+{{ $cults := .CultModels }}
 
 <h3>{{ $user }}'s Character Roster</h3>
 
       <div class="container">
+
+          <div class="row">
+              <form action="" method="POST">
+                <hr>
+                  <h4>Filter Characters</h4>
+                  <p>Choose your desired filters from the drop downs below.</p>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+                <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" for="Homeland">Homeland</span>
+                  </div>
+                <select type="text" class="form-control" id="Homeland" name="Homeland">
+                  <option></option>
+                  {{ range $k, $v := $homelands }}
+                  <option>{{ $v.Homeland.Name }}</option>
+                  {{ end }}
+                </select>
+                </div>
+  
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" for="Occupation">Occupation</span>
+                  </div>
+                <select type="text" class="form-control" id="Occupation" name="Occupation">
+                  <option></option>
+                  {{ range $k, $v := $occupations }}
+                      <option>{{ $v.Occupation.Name }}</option>
+                  {{ end }}
+                </select>
+                </div>
+  
+            </div>
+            <div class="col-md-3">
+  
+                <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" for="Cult">Cult</span>
+                </div>
+                <select type="text" class="form-control" id="Cult" name="Cult">
+                  <option></option>
+                  {{ range $k, $v := $cults }}
+                      <option>{{ $v.Cult.Name }}</option>
+                  {{ end }}
+                </select>
+                </div>
+  
+            </div>
+  
+            <div class="col-md-3">
+              <button class="btn btn-primary" type="submit" value="Save">Filter</button>
+            </div>
+  
+            </form>
+          </div>
+          <hr><br>
+
         <div class="row">
           {{ range .CharacterModels }}
           <div class="col-md-4">

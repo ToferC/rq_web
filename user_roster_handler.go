@@ -47,14 +47,56 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	wc := WebChar{
-		SessionUser:     username,
-		IsLoggedIn:      loggedIn,
-		IsAdmin:         isAdmin,
-		CharacterModels: characters,
+	homelands, err := database.ListHomelandModels(db)
+	if err != nil {
+		panic(err)
 	}
 
-	Render(w, "templates/user_roster.html", wc)
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		CharacterModels:  characters,
+		HomelandModels:   homelands,
+		OccupationModels: occupations,
+		CultModels:       cults,
+	}
+
+	if req.Method == "GET" {
+		Render(w, "templates/user_roster.html", wc)
+	}
+
+	if req.Method == "POST" {
+
+		// Parse Form and redirect
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		query := &database.QueryArgs{
+			UserName:   username,
+			Homeland:   req.FormValue("Homeland"),
+			Occupation: req.FormValue("Occupation"),
+			Cult:       req.FormValue("Cult"),
+		}
+
+		wc.CharacterModels, err = query.GetUserFilteredCharacterModels(db)
+		if err != nil {
+			log.Println(err)
+		}
+		Render(w, "templates/user_roster.html", wc)
+	}
 }
 
 // AddToUserRosterHandler adds an open charactermodel to the individual user roster
