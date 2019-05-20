@@ -4,6 +4,10 @@
 {{ $character := .CharacterModel.Character }}
 
 <title>View {{ $character.Name }}</title>
+<meta property="og:site_name" content="Runequest Glorantha Character Creator" />
+<meta property="og:title" content="RQG: View {{ $character.Name }}" />
+<meta property="og:image" content="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}" />
+<meta property="og:description" content="{{ sliceString $character.Description 144 }}" />
 
 <style>
 table {
@@ -70,18 +74,18 @@ tr:nth-child(even) {
                     href="/summary_view_character/{{ $ID }}">Summary</a>
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               {{ if not $character.CreationSteps.Complete }}
-              <a class="btn btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
+              <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
               {{ else }}
-              <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
-              <a class="btn btn-info" href="/edit_magic/{{ $ID }}">Edit Magic</a>
+              <a class="btn btn-sm btn-primary" href="/modify/{{ $ID }}">Modify</a>
+              <a class="btn btn-sm btn-info" href="/edit_magic/{{ $ID }}">Edit Magic</a>
               {{ end }}
-              <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a>
+              <a class="btn btn-sm btn-danger" href="/delete/{{ $ID }}">Delete</a>
               {{ else }}
               {{ if $open }}
-              <a class="btn btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to Personal Roster</a>
+              <a class="btn btn-sm btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to my Roster</a>
               {{ end }}
             {{ end }}
-            
+            <hr>
           </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">

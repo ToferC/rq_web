@@ -24,6 +24,7 @@ type Character struct {
 	ElementalRunes map[string]*Ability
 	// Elemental Runes
 	PowerRunes       map[string]*Ability
+	ConditionRunes   map[string]*Ability
 	Statistics       map[string]*Statistic
 	Attributes       map[string]*Attribute
 	CurrentHP        int
@@ -50,6 +51,9 @@ type Character struct {
 	InPlay           bool
 	Updates          []*Update
 	CreationSteps    map[string]bool
+
+	Tags  []string
+	Notes string
 }
 
 // CharacterRoles is an array of options for Character.Role

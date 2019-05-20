@@ -9,6 +9,7 @@ func NewCharacter(name string) *Character {
 		Abilities:      Abilities,
 		PowerRunes:     PowerRunes,
 		ElementalRunes: ElementalRunes,
+		ConditionRunes: ConditionRunes,
 		RuneSpells:     map[string]*Spell{},
 		SpiritMagic:    map[string]*Spell{},
 		Homeland:       &Homeland{},

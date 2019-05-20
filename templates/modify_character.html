@@ -137,8 +137,21 @@
 
       <hr>
 
-      <h4>Power Runes</h4>
+      <h4>Power/Form Runes</h4>
       {{ range $k, $v := $character.PowerRunes }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span {{ if $v.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+      </div>
+      {{ end }}
+
+      <hr>
+
+      <h4>Condition Runes</h4>
+      {{ range $k, $v := $character.ConditionRunes }}
 
       <div class="input-group">
         <div class="input-group-prepend">

@@ -78,6 +78,13 @@ var PowerRuneOrder = []string{
 	"Harmony", "Disorder",
 	"Truth", "Illusion",
 	"Movement", "Stasis",
+	"Chaos", "Dragonewt",
+	"Plant", "Spirit",
+}
+
+// ConditionRuneOrder sets the order for condition runes
+var ConditionRuneOrder = []string{
+	"Law", "Mastery", "Magic", "Infinity",
 }
 
 // PassionTypes represents different passions in Glorantha
@@ -296,13 +303,13 @@ var PowerRunes = map[string]*Ability{
 	// Power Runes
 	"Man": &Ability{
 		CoreString:     "Man",
-		Type:           "Power Rune",
+		Type:           "Form Rune",
 		OpposedAbility: "Beast",
 		Base:           50,
 	},
 	"Beast": &Ability{
 		CoreString:     "Beast",
-		Type:           "Power Rune",
+		Type:           "Form Rune",
 		OpposedAbility: "Man",
 		Base:           50,
 	},
@@ -353,5 +360,53 @@ var PowerRunes = map[string]*Ability{
 		Type:           "Power Rune",
 		OpposedAbility: "Stasis",
 		Base:           50,
+	},
+	"Chaos": &Ability{
+		CoreString: "Chaos",
+		Type:       "Form Rune",
+		Base:       0,
+	},
+	"Dragonewt": &Ability{
+		CoreString:     "Dragonewt",
+		Type:           "Form Rune",
+		OpposedAbility: "Man",
+		Base:           0,
+	},
+	"Plant": &Ability{
+		CoreString:     "Plant",
+		Type:           "Form Rune",
+		OpposedAbility: "Man",
+		Base:           0,
+	},
+	"Spirit": &Ability{
+		CoreString:     "Spirit",
+		Type:           "Form Rune",
+		OpposedAbility: "Man",
+		Base:           0,
+	},
+}
+
+// ConditionRunes is a map of Power Runes
+var ConditionRunes = map[string]*Ability{
+	// Condition Runes
+	"Law": &Ability{
+		CoreString: "Law",
+		Type:       "Condition Rune",
+		Base:       0,
+	},
+	"Mastery": &Ability{
+		CoreString: "Mastery",
+		Type:       "Condition Rune",
+		Base:       0,
+	},
+	"Magic": &Ability{
+		CoreString: "Magic",
+		Type:       "Condition Rune",
+		Base:       0,
+	},
+	"Infinity": &Ability{
+		CoreString: "Infinity",
+		Type:       "Condition Rune",
+		Base:       0,
 	},
 }
