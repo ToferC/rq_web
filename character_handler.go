@@ -881,17 +881,9 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
-	// Assign additional empty HitLocations to populate form
-	/*
-		if len(c.HitLocations) < 10 {
-			for i := len(c.HitLocations); i < 10; i++ {
-				t := runequest.HitLocation{
-					Name: "",
-				}
-				c.HitLocations["z"+string(i)] = &t
-			}
-		}
-	*/
+	if c.ConditionRunes == nil {
+		c.ConditionRunes = runequest.ConditionRunes
+	}
 
 	if cm.Image == nil {
 		cm.Image = new(models.Image)
@@ -1077,6 +1069,30 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					}
 				}
 			}
+		}
+
+		// Update Condition Runes
+		for k, v := range c.ConditionRunes {
+			mod, err := strconv.Atoi(req.FormValue(k))
+			if err != nil {
+				mod = v.Total
+			}
+
+			if mod != v.Total {
+
+				modVal := mod - v.Total
+
+				update := CreateUpdate(eventString, modVal)
+
+				if v.Updates == nil {
+					v.Updates = []*runequest.Update{}
+				}
+
+				v.Updates = append(v.Updates, update)
+				v.ExperienceCheck = false
+
+			}
+			v.UpdateAbility()
 		}
 
 		// Update Abilities

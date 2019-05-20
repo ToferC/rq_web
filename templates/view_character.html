@@ -76,8 +76,9 @@ tr:nth-child(even) {
               {{ if not $character.CreationSteps.Complete }}
               <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
               {{ else }}
-              <a class="btn btn-sm btn-primary" href="/modify/{{ $ID }}">Modify</a>
-              <a class="btn btn-sm btn-info" href="/edit_magic/{{ $ID }}">Edit Magic</a>
+              <a class="btn btn-sm btn-primary" href="/modify/{{ $ID }}">Edit</a>
+              <button class="btn btn-sm btn-success" type="submit" value="Save Character State">Save</button>
+              <a class="btn btn-sm btn-info" href="/edit_magic/{{ $ID }}">Magic</a>
               {{ end }}
               <a class="btn btn-sm btn-danger" href="/delete/{{ $ID }}">Delete</a>
               {{ else }}
@@ -120,7 +121,7 @@ tr:nth-child(even) {
 
         <hr>
 
-      <h3>Power Runes</h3>
+      <h3>Power/Form Runes</h3>
         {{ range $r := $character.PowerRunes }}
         {{ if ne $r.Total 50 }}
           <p title="{{ $r.Name }}
@@ -133,6 +134,25 @@ tr:nth-child(even) {
         {{ end }}</p>
         {{ end }} <!-- END ne loop -->
         {{ end }}
+
+        <hr>
+
+        <h4>Condition Runes</h4>
+        {{ range $r := $character.ConditionRunes }}
+        {{ if gt $r.Total 0 }}
+          <p title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">{{ $r }}
+        {{ if $IsAuthor }}
+        <input type="checkbox" name="{{ $r.Name }}-XP" value="{{ $r.ExperienceCheck }}" id="checkbox" {{ if $r.ExperienceCheck }}checked{{end}}>
+        {{ end }}</p>
+        {{ end }} <!-- END gt loop -->
+        {{ end }}
+
+        <hr>
 
       </div>
 
