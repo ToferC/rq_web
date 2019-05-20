@@ -123,7 +123,7 @@ tr:nth-child(even) {
 
       <h3>Power/Form Runes</h3>
         {{ range $r := $character.PowerRunes }}
-        {{ if ne $r.Total 50 }}
+        {{ if and (ne $r.Total 50) (ne $r.Total 0) }}
           <p title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%

@@ -881,8 +881,19 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
+	// Add options for new runes
 	if c.ConditionRunes == nil {
 		c.ConditionRunes = runequest.ConditionRunes
+	}
+
+	newRunes := []string{"Chaos", "Dragonewt", "Plant", "Spirit"}
+
+	for rk, rv := range runequest.PowerRunes {
+		if isInString(newRunes, rk) {
+			if _, ok := c.PowerRunes[rk]; !ok {
+				c.PowerRunes[rk] = rv
+			}
+		}
 	}
 
 	if cm.Image == nil {
