@@ -1,0 +1,30 @@
+{{ define "title"}}
+
+<title>Delete {{ .Faction.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $faction := .Faction }}
+
+      <div class="container">
+        <h1>DELETE {{ $faction.Name }}</h1>
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            
+            <h4>Description</h4>
+              <p>{{ $faction.Description }}</p>
+              <hr>
+            <h4>Members</h4>
+            {{ range $s := $faction.CharacterModelSlugs }}
+                <p>{{ $s }}</p>
+            {{ end }}
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/view_faction/{{ $faction.Slug }}" class="btn btn-primary">Return to Faction</a>
+          </div>
+    </div>
+      </div>
+{{end}}

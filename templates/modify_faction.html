@@ -1,0 +1,72 @@
+{{ define "title"}}
+
+<title>Edit Faction {{ .Faction.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $faction := .Faction }}
+{{ $IsAuthor := .IsAuthor }}
+{{ $factionCharacters := .FactionCharacters }}
+{{ $roster := .CharacterModels }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <form action="" method="POST" enctype="multipart/form-data">
+              <h3>Edit Faction</h3>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $faction.Name }}">
+              </div>
+
+              <br>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                <span class="input-group-text" for="Description">Description</span>
+                </div>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description">{{ $faction.Description }}</textarea>
+              </div>
+              <hr>
+
+              <br><strong>Add to Open Factions?</strong> <input type="checkbox" name="Open" value="true" id="checkbox" {{ if $faction.Open }}checked{{ end }}>
+              <hr>
+              <input class="button" type="submit" value="Save">
+          </div>
+
+            <div class="col-sm-8 col-md-8 col-lg-8">
+              
+                <h4>Characters</h4>
+                <p>Choose characters to add to the faction.</p>
+              
+                {{ range $i, $fc := $factionCharacters }}
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Character-{{ add $i 1 }}-addon">Character {{ add $i 1 }}</span>
+                </div>
+                  <select type="text" class="form-control" id="Character-{{ add $i 1 }}" name="Character-{{ add $i 1 }}">
+                    <option value="{{ $fc.Slug }}">{{ $fc.Character.Name }}</option>
+                    <option></option>
+                    {{ range $c := $roster }}
+                    <option value={{$c.Slug}}>{{ $c.Character.Name }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+              <br>
+              {{ end }}
+              
+
+              
+
+              </div> <!-- End Skills Column -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

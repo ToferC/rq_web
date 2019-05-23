@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gorilla/schema"
+	"github.com/gosimple/slug"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -133,6 +134,14 @@ func main() {
 	}
 	stateConfig := gologin.DebugOnlyCookieConfig
 
+	// AddSlug to cms
+	cms, _ := database.ListAllCharacterModels(db)
+
+	for _, cm := range cms {
+		cm.Slug = slug.Make(fmt.Sprintf("%s-%s", cm.Author.UserName, cm.Character.Name))
+		database.UpdateCharacterModel(db, cm)
+	}
+
 	port := os.Getenv("PORT")
 
 	if port == "" {
@@ -204,6 +213,15 @@ func main() {
 	r.HandleFunc("/equip_weapons_armor/{id}", EquipWeaponsArmorHandler)
 	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 
+	// Faction Handlers
+	r.HandleFunc("/faction_index/", FactionIndexHandler)
+	r.HandleFunc("/user_faction_index/", UserFactionIndexHandler)
+	r.HandleFunc("/add_faction/", AddFactionHandler)
+	r.HandleFunc("/view_faction/{slug}", FactionHandler)
+	r.HandleFunc("/modify_faction/{slug}", ModifyFactionHandler)
+	r.HandleFunc("/delete_faction/{slug}", DeleteFactionHandler)
+
+	// Admin handlers
 	r.HandleFunc("/user_index/", UserIndexHandler)
 
 	// API

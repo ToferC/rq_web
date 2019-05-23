@@ -1,0 +1,58 @@
+{{ define "title"}}
+
+<title>Faction: {{ .Faction.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $faction := .Faction }}
+{{ $IsAuthor := .IsAuthor }}
+{{ $chars := .FactionCharacters }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <h3>{{ $faction.Name }}</h3>
+            <p>Author: {{ $faction.Author.UserName }}</p>
+            <hr>
+            <p>{{ $faction.Description }}</p>
+            <hr>
+            <p>Open: {{ $faction.Open }}</p>
+            {{ if $IsAuthor }}
+            <hr>
+            <a class="btn btn-sm btn-primary" href="/modify_faction/{{ $faction.Slug }}">Edit</a>
+            {{ end }}
+          </div>
+
+            <div class="col-sm-8 col-md-8 col-lg-8">
+              
+                <h4>Characters</h4>
+                
+              
+                <table class="table table-striped">
+                    <thead>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Cult</strong></td>
+                        <td><strong>Link</strong></td>
+                    </thead>
+                    {{ range $c := $chars }}
+                  <tr>
+                      <td>{{ $c.Character.Name }}</td>
+                      <td>{{ $c.Character.Cult.Name }}</td>
+                      <td><a href="/view_character/{{ $c.ID }}">Link</a></td>
+                  </tr>
+                  {{ end }}
+              </table>
+              
+
+              
+
+              </div> <!-- End Character Column -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

@@ -23,6 +23,9 @@ func createSchema(db *pg.DB) error {
 		(*models.OccupationModel)(nil),
 		(*models.CultModel)(nil),
 		(*models.Image)(nil),
+		(*models.Faction)(nil),
+		(*models.Encounter)(nil),
+		(*models.Campaign)(nil),
 		(*models.User)(nil)} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
 			Temp:        false,

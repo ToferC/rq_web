@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
+	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 )
 
@@ -11,6 +12,10 @@ import (
 func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
 	cm.Character.UpdateCharacter()
+
+	if cm.Slug == "" {
+		cm.Slug = slug.Make(fmt.Sprintf("%s-%s", cm.Author.UserName, cm.Character.Name))
+	}
 
 	// Save character in Database
 	_, err := db.Model(cm).
@@ -28,11 +33,28 @@ func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
 	cm.Character.UpdateCharacter()
 
+	if cm.Slug == "" {
+		cm.Slug = slug.Make(fmt.Sprintf("%s-%s", cm.Author.UserName, cm.Character.Name))
+	}
+
 	err := db.Update(cm)
 	if err != nil {
 		panic(err)
 	}
 	return err
+}
+
+// ListAllCharacterModels queries Character names and add to slice
+func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
+	var cms []*models.CharacterModel
+
+	_, err := db.Query(&cms, `SELECT * FROM character_models`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return cms, nil
 }
 
 // ListCharacterModels queries Character names and add to slice

@@ -39,6 +39,9 @@ type WebChar struct {
 	HomelandModel   *models.HomelandModel
 	OccupationModel *models.OccupationModel
 	CultModel       *models.CultModel
+	Faction         *models.Faction
+	Encounter       *models.Encounter
+	Campaign        *models.Campaign
 	IsAuthor        bool
 	SessionUser     string
 	IsLoggedIn      string
@@ -50,6 +53,10 @@ type WebChar struct {
 	HomelandModels    map[string]*models.HomelandModel
 	OccupationModels  map[string]*models.OccupationModel
 	CultModels        map[string]*models.CultModel
+	Factions          []*models.Faction
+	FactionCharacters []*models.CharacterModel
+	Encounters        []*models.Encounter
+	Campaigns         []*models.Campaign
 	Passions          []string
 	CategoryOrder     []string
 	WeaponCategories  []string

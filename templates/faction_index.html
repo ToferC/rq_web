@@ -1,0 +1,46 @@
+{{ define "title"}}
+
+<title>Factions</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $factions := .Factions }}
+{{ $IsAuthor := .IsAuthor }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            
+                <h4>Factions</h4>
+                
+              
+                <table class="table table-striped">
+                    <thead>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Description</strong></td>
+                        <td><strong>Members</strong></td>
+                        <td><strong>Link</strong></td>
+                    </thead>
+                    {{ range $f := $factions }}
+                  <tr>
+                      <td>{{ $f.Name }}</td>
+                      <td>{{ $f.Description }}</td>
+                      <td>{{ len $f.CharacterModelSlugs }}</td>
+                      <td><a href="/view_faction/{{ $f.Slug }}">Link</a></td>
+                  </tr>
+                  {{ end }}
+              </table>
+              
+
+              
+
+              </div> <!-- End Character Column -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->
