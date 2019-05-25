@@ -19,11 +19,14 @@
             <hr>
             <p>{{ $faction.Description }}</p>
             <hr>
-            <p>Open: {{ $faction.Open }}</p>
+            <p>{{ if $faction.Open }}Open Faction{{ else }}Closed Faction{{end}}</p>
             {{ if $IsAuthor }}
             <hr>
             <a class="btn btn-sm btn-primary" href="/modify_faction/{{ $faction.Slug }}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="/delete_faction/{{ $faction.Slug }}">Delete</a>
             {{ end }}
+            <hr>
+
           </div>
 
             <div class="col-sm-8 col-md-8 col-lg-8">

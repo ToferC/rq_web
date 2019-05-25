@@ -120,6 +120,10 @@ func FactionHandler(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
+	for _, c := range cms {
+		fmt.Println(c.Character.Name)
+	}
+
 	wc := WebChar{
 		Faction:           fac,
 		FactionCharacters: cms,

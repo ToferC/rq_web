@@ -100,7 +100,32 @@ func LoadFactionCharacterModels(db *pg.DB, slugs []string) ([]*models.CharacterM
 		log.Panic(err)
 	}
 
+	c := counter(slugs)
+
+	for k, v := range c {
+		if v > 1 {
+			for i := 1; i < v; i++ {
+				for _, cm := range cms {
+					if cm.Slug == k {
+						cms = append(cms, cm)
+						break
+					}
+				}
+			}
+		}
+	}
+
 	return cms, nil
+}
+
+func counter(ar []string) map[string]int {
+	m := map[string]int{}
+
+	for _, a := range ar {
+		m[a]++
+	}
+
+	return m
 }
 
 // DeleteFaction deletes a single faction from DB by ID
