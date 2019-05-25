@@ -37,12 +37,16 @@
                 <table class="table table-striped">
                     <thead>
                         <td><strong>Name</strong></td>
+                        <td><strong>Homeland</strong></td>
+                        <td><strong>Occupation</strong></td>
                         <td><strong>Cult</strong></td>
                         <td><strong>Link</strong></td>
                     </thead>
                     {{ range $c := $chars }}
                   <tr>
                       <td>{{ $c.Character.Name }}</td>
+                      <td>{{ $c.Character.Homeland.Name }}</td>
+                      <td>{{ $c.Character.Occupation.Name }}</td>
                       <td>{{ $c.Character.Cult.Name }}</td>
                       <td><a href="/view_character/{{ $c.ID }}">Link</a></td>
                   </tr>

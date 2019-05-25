@@ -1,0 +1,72 @@
+{{ define "title"}}
+
+<title>Edit Encounter {{ .Encounter.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $encounter := .Encounter }}
+{{ $IsAuthor := .IsAuthor }}
+{{ $factions := .Factions }}
+{{ $encounterFactions := $encounter.Factions }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <form action="" method="POST" enctype="multipart/form-data">
+              <h3>Edit Encounter</h3>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $encounter.Name }}">
+              </div>
+
+              <br>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                <span class="input-group-text" for="Description">Description</span>
+                </div>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description">{{ $encounter.Description }}</textarea>
+              </div>
+              <hr>
+
+              <br><strong>Add to Open Encounters?</strong> <input type="checkbox" name="Open" value="true" id="checkbox" {{ if $encounter.Open }}checked{{ end }}>
+              <hr>
+              <input class="button" type="submit" value="Save">
+          </div>
+
+            <div class="col-sm-8 col-md-8 col-lg-8">
+              
+                <h4>Factions</h4>
+                <p>Choose factions to add to the encounter.</p>
+              
+                {{ range $i, $ef := $encounterFactions }}
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Faction-{{ add $i 1 }}-addon">Faction {{ add $i 1 }}</span>
+                </div>
+                  <select type="text" class="form-control" id="Faction-{{ add $i 1 }}" name="Faction-{{ add $i 1 }}">
+                    <option value="{{ $ef.Slug }}">{{ $ef.Name }}</option>
+                    <option></option>
+                    {{ range $f := $factions }}
+                    <option value={{$f.Slug}}>{{ $f.Name }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+              <br>
+              {{ end }}
+              
+
+              
+
+              </div> <!-- End Skills Column -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

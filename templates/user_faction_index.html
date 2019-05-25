@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
             
-                <h4>Factions</h4>
+                <h4>Factions   {{ if ne .SessionUser "" }}<a class="btn btn-sm btn-primary" href="/add_faction/">Add Faction</a>{{ end }}</h4>
                 
               
                 <table class="table table-striped">

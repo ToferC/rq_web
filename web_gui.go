@@ -56,6 +56,7 @@ type WebChar struct {
 	Factions          []*models.Faction
 	FactionCharacters []*models.CharacterModel
 	Encounters        []*models.Encounter
+	FactionMap        map[string][]*models.CharacterModel
 	Campaigns         []*models.Campaign
 	Passions          []string
 	CategoryOrder     []string
@@ -156,15 +157,13 @@ func formatStringArray(a []string) string {
 }
 
 func formatIntArray(a []int) string {
-	text := ""
+	text := strconv.Itoa(a[0])
 	end := len(a)
 
 	for i, t := range a {
-		str := strconv.Itoa(t)
 		if i+1 == end {
-			text += string(str)
-		} else {
-			text += string(str) + ", "
+			str := strconv.Itoa(t)
+			text += "-" + str
 		}
 	}
 	return text

@@ -118,16 +118,6 @@ func LoadFactionCharacterModels(db *pg.DB, slugs []string) ([]*models.CharacterM
 	return cms, nil
 }
 
-func counter(ar []string) map[string]int {
-	m := map[string]int{}
-
-	for _, a := range ar {
-		m[a]++
-	}
-
-	return m
-}
-
 // DeleteFaction deletes a single faction from DB by ID
 func DeleteFaction(db *pg.DB, pk int64) error {
 

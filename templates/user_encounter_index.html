@@ -1,0 +1,45 @@
+{{ define "title"}}
+
+<title>Encounters</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $encounters := .Encounters }}
+{{ $IsAuthor := .IsAuthor }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            
+                <h4>Encounters   {{ if ne .SessionUser "" }}<a class="btn btn-sm btn-primary" href="/add_encounter/">Add Encounter</a>{{ end }}</h4>
+                
+                <table class="table table-striped">
+                    <thead>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Description</strong></td>
+                        <td><strong>Factions</strong></td>
+                        <td><strong>Link</strong></td>
+                    </thead>
+                    {{ range $e := $encounters }}
+                  <tr>
+                      <td>{{ $e.Name }}</td>
+                      <td>{{ $e.Description }}</td>
+                      <td>{{ len $e.Factions }}</td>
+                      <td><a href="/view_encounter/{{ $e.Slug }}">Link</a></td>
+                  </tr>
+                  {{ end }}
+              </table>
+              
+
+              
+
+              </div> <!-- End Character Column -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

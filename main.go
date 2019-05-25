@@ -222,6 +222,14 @@ func main() {
 	r.HandleFunc("/modify_faction/{slug}", ModifyFactionHandler)
 	r.HandleFunc("/delete_faction/{slug}", DeleteFactionHandler)
 
+	// Encounter Handlers
+	r.HandleFunc("/encounter_index/", EncounterIndexHandler)
+	r.HandleFunc("/user_encounter_index/", UserEncounterIndexHandler)
+	r.HandleFunc("/add_encounter/", AddEncounterHandler)
+	r.HandleFunc("/view_encounter/{slug}", EncounterHandler)
+	r.HandleFunc("/modify_encounter/{slug}", ModifyEncounterHandler)
+	r.HandleFunc("/delete_encounter/{slug}", DeleteEncounterHandler)
+
 	// Admin handlers
 	r.HandleFunc("/user_index/", UserIndexHandler)
 

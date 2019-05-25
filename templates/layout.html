@@ -42,22 +42,34 @@
         <a class="nav-link" href="/">Open Roster <span class="sr-only">(current)</span></a>
       </li>
       {{ if ne $user "" }}
-      <li class="nav-item active">
-        <a class="nav-link" href="/user_roster/">My Roster<span class="sr-only"></span></a>
-      </li>
-      <li class="nav-item active">
-          <a class="nav-link" href="/user_faction_index/">My Factions<span class="sr-only"></span></a>
-        </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            My Content</a>
+            <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
+               <a class="dropdown-item" href="/user_roster/">Characters</span></a>
+               <a class="dropdown-item" href="/user_faction_index/">Factions</span></a>
+               <a class="dropdown-item" href="/user_encounter_index/">Encounters</span></a>
+            </div>
+          </li>
       {{ end }}
+
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Backgrounds</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                <a class="dropdown-item" href="/homeland_index/">Homelands</a>
+                  <a class="dropdown-item" href="/occupation_index/">Occupations</a>
+                  <a class="dropdown-item" href="/cult_index/">Cults</a>
+            </div>
+          </li>
       <li>
-      <a class="nav-link active" href="/homeland_index/">Homelands<span class="sr-only"></a></li>
-      <li>
-      <a class="nav-link active" href="/occupation_index/">Occupations<span class="sr-only"></a></li>
-      <li>
-      <a class="nav-link active" href="/cult_index/">Cults<span class="sr-only"></a></li>
+      
         <li>
             <a class="nav-link active" href="/faction_index/">Factions<span class="sr-only"></a>
           </li>
+          <li>
+              <a class="nav-link active" href="/encounter_index/">Encounters<span class="sr-only"></a>
+            </li>
       <li>
         <a class="nav-link active" href="/cc1_choose_homeland/">Create Character<span class="sr-only"></a>
       </li>
@@ -72,6 +84,8 @@
           <a class="dropdown-item" href="/add_occupation/">Add Occupation</a>
           <a class="dropdown-item" href="/add_cult/">Add Cult</a>
           <a class="dropdown-item" href="/add_faction/">Add Faction</a>
+          <a class="dropdown-item" href="/add_encounter/">Add Encounter</a>
+
         </div>
       </li>
       {{ end }}

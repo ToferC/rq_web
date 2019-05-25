@@ -37,3 +37,13 @@ func createSchema(db *pg.DB) error {
 	}
 	return nil
 }
+
+func counter(ar []string) map[string]int {
+	m := map[string]int{}
+
+	for _, a := range ar {
+		m[a]++
+	}
+
+	return m
+}
