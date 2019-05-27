@@ -4,6 +4,7 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -182,6 +183,55 @@ func indexSpell(str string, spells []runequest.Spell) (int, error) {
 	return 0, err
 }
 
+func sortedSkills(skills map[string]*runequest.Skill) []*runequest.Skill {
+	skillArray := []*runequest.Skill{}
+
+	for _, v := range skills {
+		skillArray = append(skillArray, v)
+	}
+
+	total := func(s1, s2 *runequest.Skill) bool {
+		return s1.Total > s2.Total
+	}
+
+	By(total).Sort(skillArray)
+
+	return skillArray[:9]
+}
+
+// By is the type of a "less" function that defines the ordering of its Planet arguments.
+type By func(s1, s2 *runequest.Skill) bool
+
+// Sort is a method on the function type, By, that sorts the argument slice according to the function.
+func (by By) Sort(skills []*runequest.Skill) {
+	ss := &skillSorter{
+		skills: skills,
+		by:     by, // The Sort method's receiver is the function (closure) that defines the sort order.
+	}
+	sort.Sort(ss)
+}
+
+// skillSorter joins a By function and a slice of Planets to be sorted.
+type skillSorter struct {
+	skills []*runequest.Skill
+	by     func(p1, p2 *runequest.Skill) bool // Closure used in the Less method.
+}
+
+// Len is part of sort.Interface.
+func (s *skillSorter) Len() int {
+	return len(s.skills)
+}
+
+// Swap is part of sort.Interface.
+func (s *skillSorter) Swap(i, j int) {
+	s.skills[i], s.skills[j] = s.skills[j], s.skills[i]
+}
+
+// Less is part of sort.Interface. It is implemented by calling the "by" closure in the sorter.
+func (s *skillSorter) Less(i, j int) bool {
+	return s.by(s.skills[i], s.skills[j])
+}
+
 // Generate URL for next step of Character creation
 func generateCharacterCreationURL(cStep map[string]bool) string {
 
@@ -226,6 +276,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"generateCharacterCreationURL": generateCharacterCreationURL,
 		"formatStringArray":            formatStringArray,
 		"formatIntArray":               formatIntArray,
+		"sortedSkills":                 sortedSkills,
 	}
 
 	baseTemplate := "templates/layout.html"

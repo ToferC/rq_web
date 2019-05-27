@@ -11,205 +11,367 @@
 {{ $IsAuthor := .IsAuthor }}
 {{ $IsAdmin := .IsAdmin }}
 
-      <div class="container">
-        <hr>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <h3>{{ $encounter.Name }} {{ if $IsAuthor }}
-                    <a class="btn btn-sm btn-primary" href="/modify_encounter/{{ $encounter.Slug }}">Edit</a>
-                    <a class="btn btn-sm btn-danger" href="/delete_encounter/{{ $encounter.Slug }}">Delete</a>
-                    {{ end }}</h3>
-            <hr>
-            <p>{{ $encounter.Description }}</p>
-            <hr>
+<div class="container">
+  
+      <h3>
+        {{ $encounter.Name }} {{ if $IsAuthor }}
+        <a
+          class="btn btn-sm btn-primary"
+          href="/modify_encounter/{{ $encounter.Slug }}"
+          >Edit</a>
+        <a
+          class="btn btn-sm btn-danger"
+          href="/delete_encounter/{{ $encounter.Slug }}"
+          >Delete</a>
+        {{ end }}
+      </h3>
+      <hr>
+      <p>{{ $encounter.Description }}</p>
+      <hr>
+</div>
 
-          </div>
-        <div class="row">
-            <form class="form-inline">
+  {{ range $fac, $characters := $factions }}
+    <div class="row">
+        <form>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <h4>{{ $fac }}</h4>
 
-            <div class="col-sm-12 col-md-12 col-lg-12">
-              
-                {{ range $fac, $characters := $factions }}
-                <h4>{{ $fac }}</h4>
-                {{ range $c := $characters }}
-                <h5>{{ $c.Character.Name }} of {{ $c.Character.Homeland.Name }}</h5>
-                <p>{{ $c.Character.Occupation.Name }} of {{ $c.Character.Cult.Name }}</p>
-            </div>
+          <ul class="nav nav-tabs" id="characterTabs-{{$fac}}" role="tablist">
+            {{ range $i, $c := $characters }}
+            <li class="nav-item">
+              <a
+                class="nav-link {{ if eq $i 0 }}active{{ end }}"
+                id="{{ $fac }}-{{ $c.Slug }}-{{ $i }}-tab"
+                data-toggle="tab"
+                role="tab"
+                href="#{{ $fac }}-{{ $c.Slug }}-{{ $i }}"
+                aria-controls="{{ $fac }}-{{ $c.Slug }}-{{ $i }}"
+                {{ if eq $i 0 }}aria-selected="true" {{ else }}aria-selected="false"
+                {{ end }}
+                >{{ $c.Character.Name }}</a
+              >
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+    </div>
 
-                <div class="col-md-4 col-sm-4 col-lg-4">
-                        
+          <div class="tab-content" id="{{ $fac }}-characterTab">
+                {{ range $i, $c := $characters }}
+            <div class="tab-pane fade {{ if eq $i 0 }}show active{{ end }}"
+              id="{{ $fac }}-{{ $c.Slug }}-{{ $i }}"
+              role="tabpanel"
+              aria-labelledby="{{ $fac }}-{{ $c.Slug }}-{{ $i }}">
+
+            <div id="character-info-container">
+
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <h5>
+                    {{ $c.Character.Name }} of {{ $c.Character.Homeland.Name }}
+                    </h5>
+                    <p>
+                    {{ $c.Character.Occupation.Name }} of
+                    {{ $c.Character.Clan }} Clan, {{ $c.Character.Tribe}} Tribe.
+                    </p>
                 </div>
 
-                <div class="col-md-12 col-sm-12 col-lg-12">
-
-                <table class="table table-sm table-striped">
-                        <thead>
-                                <td style="text-align:center"><strong>CHA</strong></td>
-                                <td style="text-align:center"><strong>DEX</strong></td>
-                                <td style="text-align:center"><strong>INT</strong></td>
-                                <td style="text-align:center"><strong>POW</strong></td>
-                                <td style="text-align:center"><strong>SIZ</strong></td>
-                                <td style="text-align:center"><strong>CON</strong></td>
-                                <td style="text-align:center"><strong>STR</strong></td>
-      
-                        </thead>
-                        <tr>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "CHA").Total }}</td>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "DEX").Total }}</td>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "INT").Total }}</td>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "POW").Total }}</td>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "SIZ").Total }}</td>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "CON").Total }}</td>
-                                    <td style="text-align:center">{{ (index $c.Character.Statistics "STR").Total }}</td>
-                        </tr>
-                    </table>
-                    
-                    <h5>Attributes</h5>
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            {{ range $a := $c.Character.Attributes }}
-                            <td><strong>{{ $a.Name }}</strong></td>
-                            {{ end }}
-                        </thead>
-                    <tr>
-                        {{ range $a := $c.Character.Attributes }}
-                        {{ if ne $a.Text ""}}
-                        <td style="text-align:center">{{ $a.Text }}</td>
-                        {{ else }}
-                        <td style="text-align:center">{{ $a.Total }}</td>
-                        {{ end }}
-                        {{ end }}
-                    </tr>
-                </table>
-
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <td><strong>HP</strong></td>
-                        <td><strong>MP</strong></td>
-                        <td><strong>RP</strong></td>
-                        <td><strong>Move</strong></td>
-                        <td><strong>Dodge</strong></td>
-
-                    </thead>
-                    <tr>
-
-                            <td>                            
-                                    <span {{ if lt $c.Character.CurrentHP 3 }}style="color:red"{{end}}>{{ $c.Character.CurrentHP }}/{{ $c.Character.Attributes.HP.Max }}</span>
-                                </td>
-                  
-                          <td><div class="input-group">
-                                    <input type="number" class="form-control" aria-describedby="MP-addon" name="MP" value ="{{ $c.Character.CurrentMP }}">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="MP-addon">/{{ $c.Character.Attributes.MP.Max }}</span>
-                                      </div>
-                          </div></td>
-                  
-                          <td><div class="input-group">
-                                    <input type="number" class="form-control" aria-describedby="RP-addon" name="RP" value ="{{ $c.Character.CurrentRP }}">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="RP-addon">/{{ $c.Character.Cult.NumRunePoints }}</span>
-                                      </div>
-                          </div></td>
-                          <td style="text-align:center">8</td>
-                          <td style="text-align:center">{{ (index $c.Character.Skills "Dodge") }}</td>
-                    </tr>
-                </table>
-
-                <h5>Hit Locations</h5>
-
-                <table>
-                    <thead>
-                        {{ range $s := $c.Character.HitLocationMap }}
-                        {{ range $k, $v := $c.Character.HitLocations }}
-                        {{ if eq $s $k }}
-                            <td style="text-align:center">{{ formatIntArray $v.HitLoc }}<br><strong>{{ $v.Name }} A{{ $v.Armor }}</strong></td>
-                        {{ end }} <!-- END if -->
-                        {{ end }}
-                        {{ end }} <!-- END map -->
-                    </thead>
-                  <tr>
-                      {{ range $s := $c.Character.HitLocationMap }}
-                        {{ range $k, $v := $c.Character.HitLocations }}
-                        {{ if eq $s $k }}
-                  <td style="text-align:center">
-                  {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-                  <div class="input-group mb-3">
-                        <input type="number" class="form-control input-sm" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">
-                    <div class="input-group-append">
-                            <div class="input-group-text input-sm">/{{ $v.Max }}</div>
-                        </div>         
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <h5>Cults</h5>
+                    <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="RP-addon">{{ $c.Character.Cult.Rank }} of {{ $c.Character.Cult.Name }}</span>
+                            </div>
+                            <input type="number" class="form-control" aria-describedby="RP-addon" name="RP" value ="{{ $c.Character.CurrentRP }}">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="RP-addon">/{{ $c.Character.Cult.NumRunePoints }} RP</span>
+                              </div>
                   </div>
-                  {{ else }}
-                  {{ $v.Value }} /{{ $v.Max}}
-                  {{ end }}</td>                
-              {{ end }} <!-- END if -->
-              {{ end }}
-              {{ end }} <!-- END map -->
-                  </tr>
-                </table>
+      
+                  {{ range $ec := $c.Character.ExtraCults }}
+                  <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="RP-addon">RP ({{ $ec.Name }})</span>
+                          </div>
+                          <input type="number" class="form-control" aria-describedby="RP-addon" name="RP-{{ $ec.Name }}" value ="{{ $ec.CurrentRunePoints }}">
+                          <div class="input-group-append">
+                              <span class="input-group-text" id="RP-addon">/{{ $ec.RunePoints }}</span>
+                            </div>
+                </div>
+                  {{ end }}
+                </div>
+            </div> <!-- END Row -->
+              
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                        <h5>Characteristics</h5>
+                        <table class="table table-sm table-striped">
+                            {{ range $k, $stat := $c.Character.Statistics }}
+                            <tr title="Base: {{ $stat.Base }}
+                            Rune Bonus: {{ $stat.RuneBonus }}
+                            {{ range $u := $stat.Updates }}
+                            {{ $u.Event }}: {{ $u.Value }} ({{ $u.Date }})
+                            {{end}}">
+                                <td>{{ $stat.Name }}</td>
+                                <td style="text-align:center">{{ $stat.Total }}</td>
+                            </tr>
+                                {{ end }}
+                            <tr>
+                                <td>Damage Bonus</td>
+                                <td style="text-align:center">{{ (index $c.Character.Attributes "DB").Text }}</td>
+                            </tr>
+                            <tr>
+                                <td>SIZ SR</td>
+                                <td style="text-align:center">{{ (index $c.Character.Attributes "SIZSR").Total }}</td>
+                            </tr>
+                            <tr>
+                                <td>DEX SR</td>
+                                <td style="text-align:center">{{ (index $c.Character.Attributes "DEXSR").Total }}</td>
+                            </tr>
+                        </table>
+                </div>
 
-                {{ if gt (len $c.Character.MeleeAttacks) 0 }}
-        <h5>Melee Attacks</h5>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                        <h5>Hit Locations</h5>
+                            <table class="table table-sm table-striped">
+                                <tr>
+                                    <th style="width: 30%; text-align:center">Location</th>
+                                    <th style="width: 25%; text-align:center"></th>
+                                    <th style="width: 15%; text-align:center">Armor</th>
+                                    <th style="width: 30%; text-align:center">HP</th>
+                                </tr>
+                          
+                            {{ range $s := $c.Character.HitLocationMap }}
+                            {{ range $k, $v := $c.Character.HitLocations }}
+                            {{ if eq $s $k }}
+                            <tr style="height:16px; line-height:16px">
+                                <td style="text-align:center">{{ $v.Name }}</td>
+                                <td {{ if $v.Disabled }}style="color:red"{{end}}>{{ formatIntArray $v.HitLoc }}</td>
+                                <td style="text-align:center">{{ $v.Armor }}</td>
+                                {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+                                <td>
+                                    <div class="form-group">
+                                        <input style="font-size: 18px; height:20px; line-height: 24px; text-align:center" type="number" class="form-control input-sm" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">          
+                                    </div>
+                                </td>
+                                {{ else }}
+                                <td style="text-align:center">{{ $v.Value }}</td>
+                                {{ end }}      
+                            </tr>
+                              
+                            {{ end }} <!-- END if -->
+                            {{ end }}
+                            {{ end }} <!-- END map -->
+                            </table>
+                </div>
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <h5>Hit Points</h5>
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="HP-addon">HP</span>
+                                </div>
+                                <input {{ if lt $c.Character.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $c.Character.CurrentHP }}" disabled>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="HP-addon">/{{ $c.Character.Attributes.HP.Max }}</span>
+                                  </div>
+                      </div>  
+                      <br>
+                      <h5>Magic Points</h5>
+              
+                      <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="MP-addon">MP</span>
+                                </div>
+                                <input type="number" class="form-control" aria-describedby="MP-addon" name="MP" value ="{{ $c.Character.CurrentMP }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="MP-addon">/{{ $c.Character.Attributes.MP.Max }}</span>
+                                  </div>
+                      </div>
+                      <br>
+
+                      <h5>Runes</h5>
         <table class="table table-sm table-striped">
-          <tr>
-            <th>Attack</th>
-            <th>Skill</th>
-            <th>Damage</th>
-            <th>SR</th>
-            <th>HP</th>
-          </tr>
-        {{ range $k, $v := $c.Character.MeleeAttacks }}
-        <tr>
-          <td>{{ $k }}</td>
-          <td style="text-align:center">{{ $v.Skill.Total }}%</td>
-          <td style="text-align:center">{{ $v.DamageString }}</td>
-          <td style="text-align:center">{{ $v.StrikeRank }}</td>
-          <td>
-          <div class="input-group">
-            <input class="col-6" {{ if lt $v.Weapon.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="{{ $k }}-HP" name="{{ $k }}-HP" value ="{{ $v.Weapon.CurrentHP }}">
-            <div class="input-group-append">
-              <span class="input-group-text" id="{{ $k }}-HP-addon">/{{ $v.Weapon.HP }}</span>
-            </div>
-          </div>
-        </td>
+        {{ range $r := $c.Character.ElementalRunes }}
+        {{ if gt $r.Total 60 }}
+        <tr title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+              <td>{{ $r.Name }}</td>
+            <td style="text-align:center">{{ $r.Total }}%</td>
         </tr>
+        {{ end }} <!-- END gt loop -->
+        {{ end }}
+
+        {{ range $r := $c.Character.PowerRunes }}
+        {{ if gt $r.Total 60 }}
+        <tr title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+            
+              <td>{{ $r.Name }}</td>
+            <td style="text-align:center">{{ $r.Total }}%</td>
+            
+        </tr>
+        {{ end }} <!-- END ne loop -->
+        {{ end }}
+
+        {{ range $r := $c.Character.ConditionRunes }}
+        {{ if gt $r.Total 0 }}
+        <tr title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+            
+              <td>{{ $r.Name }}</td>
+            <td style="text-align:center">{{ $r.Total }}%</td>
+            
+        </tr>
+        {{ end }} <!-- END if gt 0 loop -->
         {{ end }}
         </table>
-        {{ end }}
+        </div> <!-- END Column -->
+        </div> <!-- END Row -->
 
-        {{ if gt (len $c.Character.RangedAttacks) 0 }}
-        <h5>Ranged Attacks</h5>
-        <table class="table table-sm table-striped">
-                <tr>
-            <th>Attack</th>
-            <th>Skill</th>
-            <th>Damage</th>
-            <th>SR</th>
-            <th>HP</th>
-            <th>Range</th>
-          </tr>
-        {{ range $k, $v := $c.Character.RangedAttacks }}
-        <tr>
-          <td>{{ $k }}</td>
-          <td style="text-align:center">{{ $v.Skill.Total }}%</td>
-          <td style="text-align:center">{{ $v.DamageString }}</td>
-          <td style="text-align:center">{{ $v.StrikeRank }}</td>
-          <td style="text-align:center">{{ $v.Weapon.HP }}</td>
-          <td style="text-align:center">{{ $v.Weapon.Range }}m</td>
-        </tr>
-        {{ end }}
-        </table>
-        {{ end }}
-        <hr style="height:10px">
-        {{ end }} <!-- END Characters -->
-              <hr>
-              {{ end }} <!-- END faction -->
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <h5>Skills</h5>
+                    <table class="table table-sm table-striped">
+                            {{ range $skill := (sortedSkills $c.Character.Skills) }}
+                            <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
+                            Base: {{ $skill.Base }}%
+                            History: {{ $skill.CreationBonusValue }}%
+                            Category: {{ $skill.CategoryValue }}%
+                            Homeland: {{ $skill.HomelandValue }}%
+                            Occupation: {{ $skill.OccupationValue }}%
+                            Cult: {{ $skill.CultValue }}%
+                            {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
+                            {{end}}">
+                
+                                <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }})</td>
+                                <td style="text-align:center">{{ $skill.Total }}%</td>
+                            </tr>
+                            {{ end }}
+                        </table>
 
+                </div>
 
-              </div> <!-- End Character Column -->
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <h5>Magic</h5>
+                    {{ if gt (len $c.Character.SpiritMagic) 0 }}
+                    <h5>Spirit Magic</h5>
+                    <table class="table table-sm table-striped">
+                    {{ range $spell := $c.Character.SpiritMagic }}
+                    <tr>
+                            <td>{{ $spell.Name }}</td>
+                            <td style="text-align:center">{{ $spell.Cost }}</td>  
+                        </tr>          {{end}}
+                    </table>
+                    {{ else }}
+                    <h5>Spirit Magic: None</h5>
+                    {{ end }}
 
-            </form>
-          </div> <!-- END outer ROW -->
-        </div> <!-- END container -->
+                    {{ if gt (len $c.Character.RuneSpells) 0 }}
+                    <h5>Rune Spells</h5>
+                    
+                    <table class="table table-sm table-striped">
 
-{{ end }} <!-- end content -->
+                    {{ range $spell := $c.Character.RuneSpells }}
+                    <tr>
+                        <td>{{ $spell.Name }}</td>
+                        <td style="text-align:center">{{ $spell.Cost }}</td>  
+                    </tr>
+                    {{end}}
+                    </table>
+                    {{ else }}
+                    <h5>Rune Spells: None</h5>
+                    {{ end }}
+
+                </div>
+
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <h5>Weapons</h5>
+                    {{ if gt (len $c.Character.MeleeAttacks) 0 }}
+                    <table class="table table-sm table-striped">
+                      <tr>
+                        <th>Attack</th>
+                        <th>Skill</th>
+                        <th>Damage</th>
+                        <th>SR</th>
+                        <th>HP</th>
+                      </tr>
+                      {{ range $k, $v := $c.Character.MeleeAttacks }}
+                      <tr>
+                        <td>{{ $k }}</td>
+                        <td style="text-align:center">{{ $v.Skill.Total }}%</td>
+                        <td style="text-align:center">{{ $v.DamageString }}</td>
+                        <td style="text-align:center">{{ $v.StrikeRank }}</td>
+                        <td>
+                          <div class="input-group">
+                            <input
+                              class="col-6"
+                              {{ if lt $v.Weapon.CurrentHP 3 }}style="color:red" {{end}}
+                              type="number"
+                              class="form-control"
+                              aria-describedby="{{ $k }}-HP"
+                              name="{{ $k }}-HP"
+                              value="{{ $v.Weapon.CurrentHP }}"
+                            />
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="{{ $k }}-HP-addon"
+                                >/{{ $v.Weapon.HP }}</span
+                              >
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {{  end }} <!-- END if gt MeleeAttacks-->
+                    </table>
+      
+                    {{ end }} <!-- END MeleeAttacks -->
+      
+                    {{ if gt (len $c.Character.RangedAttacks) 0 }}
+                    <table class="table table-sm table-striped">
+                      <tr>
+                        <th>Attack</th>
+                        <th>Skill</th>
+                        <th>Damage</th>
+                        <th>SR</th>
+                        <th>HP</th>
+                        <th>Range</th>
+                      </tr>
+                      {{ range $k, $v := $c.Character.RangedAttacks }}
+                      <tr>
+                        <td>{{ $k }}</td>
+                        <td style="text-align:center">{{ $v.Skill.Total }}%</td>
+                        <td style="text-align:center">{{ $v.DamageString }}</td>
+                        <td style="text-align:center">{{ $v.StrikeRank }}</td>
+                        <td style="text-align:center">{{ $v.Weapon.HP }}</td>
+                        <td style="text-align:center">{{ $v.Weapon.Range }}m</td>
+                      </tr>
+                      {{   end }} <!-- END Ranged Attacks -->
+                    </table>
+      
+                    {{ end }} <!-- END if gt RangedAttacks -->
+                </div>
+
+            </div> <!-- END bottom row -->
+            
+            </div> <!-- END info container -->
+            </div> <!-- End Tab pane-->
+            {{ end }} <!-- END Characters -->
+        </div> <!-- END Tab content -->
+          <hr><hr>
+          {{ end }} <!-- END faction -->
+      </form>
+
+{{ end }}
+<!-- end content -->
