@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
 )
@@ -258,6 +259,10 @@ func generateCharacterCreationURL(cStep map[string]bool) string {
 	return url
 }
 
+func slugify(st string) string {
+	return slug.Make(st)
+}
+
 // Render combines templates, funcs and renders all Web pages in the app
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
@@ -277,6 +282,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"formatStringArray":            formatStringArray,
 		"formatIntArray":               formatIntArray,
 		"sortedSkills":                 sortedSkills,
+		"slugify":                      slugify,
 	}
 
 	baseTemplate := "templates/layout.html"
