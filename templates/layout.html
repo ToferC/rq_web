@@ -159,6 +159,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+{{ if .Notes }}
 window.onload = async function() {
   var notes = document.getElementById('Notes')
     notes.style.color = "white";
@@ -167,6 +168,7 @@ window.onload = async function() {
     notes.style.color = "black";
     notes.style.background = "white";
   };
+  {{ end }}
 
 </script>
 

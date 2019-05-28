@@ -58,6 +58,7 @@
 
           <div class="tab-content" id="{{ slugify $fac }}-characterTab">
                 {{ range $i, $c := $characters }}
+                {{ $charHP := "{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP" }}
             <div class="tab-pane fade {{ if eq $i 0 }}show active{{ end }}"
               id="{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}"
               role="tabpanel"
@@ -67,6 +68,7 @@
 
             <div class="row">
                 <div class="col-sm-6 col-md-6 col-lg-6">
+                  <br>
                     <h5>
                     {{ $c.Character.Name }} of {{ $c.Character.Homeland.Name }}
                     </h5>
@@ -77,6 +79,7 @@
                 </div>
 
                 <div class="col-sm-6 col-md-6 col-lg-6">
+                  <br>
                     <h5>Cults</h5>
                     <div class="input-group">
                             <div class="input-group-prepend">
@@ -144,14 +147,21 @@
                             {{ range $s := $c.Character.HitLocationMap }}
                             {{ range $k, $v := $c.Character.HitLocations }}
                             {{ if eq $s $k }}
-                            <tr style="height:16px; line-height:16px">
-                                <td style="text-align:center">{{ $v.Name }}</td>
+                            <tr>
+                                <td style="text-align:center {{ if $v.Disabled }}color:red{{end}}">{{ $v.Name }}</td>
                                 <td {{ if $v.Disabled }}style="color:red"{{end}}>{{ formatIntArray $v.HitLoc }}</td>
                                 <td style="text-align:center">{{ $v.Armor }}</td>
                                 {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
                                 <td>
                                     <div class="form-group">
-                                        <input style="font-size: 18px; height:20px; line-height: 24px; text-align:center" type="number" class="form-control input-sm" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">          
+                                        <input 
+                                          id="{{ slugify $fac }}-{{ $c.Slug }}-{{ $k }}-{{ $i }}-HP"
+                                          style="font-size: 14px; height:24px; line-height: 20px; text-align:center" 
+                                          type="number" class="form-control input-sm" 
+                                          aria-describedby="{{ $k }}-HP-addon" 
+                                          name="{{ $k }}-HP" 
+                                          onkeypress="updateHP('{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP', {{$v.Max}}, document.getElementById('{{ slugify $fac }}-{{ $c.Slug }}-{{ $k }}-{{ $i }}-HP'.value))" 
+                                          value ="{{ $v.Value }}">          
                                     </div>
                                 </td>
                                 {{ else }}
@@ -171,7 +181,12 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="HP-addon">HP</span>
                                 </div>
-                                <input {{ if lt $c.Character.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $c.Character.CurrentHP }}" disabled>
+                                <span 
+                                  {{ if lt $c.Character.CurrentHP 3 }}style="color:red"{{end}} 
+                                  id="{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP"
+                                  class="form-control" 
+                                  aria-describedby="HP-addon" 
+                                  name="HP">{{ $c.Character.CurrentHP }}</span>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="HP-addon">/{{ $c.Character.Attributes.HP.Max }}</span>
                                   </div>
@@ -372,6 +387,15 @@
           <hr><hr>
           {{ end }} <!-- END faction -->
       </form>
+
+      <script type="text/javascript">
+      function updateHP(cID, max, val) {
+        console.log(cID, max)
+        var target = document.getElementById(cID);
+        x = max - val
+        target.value = target.value - x;
+      }
+      </script>
 
 {{ end }}
 <!-- end content -->
