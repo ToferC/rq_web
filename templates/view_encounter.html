@@ -155,13 +155,14 @@
                                 <td>
                                     <div class="form-group">
                                         <input 
-                                          id="{{ slugify $fac }}-{{ $c.Slug }}-{{ $k }}-{{ $i }}-HP"
+                                          id="HP-tracker"
                                           style="font-size: 14px; height:24px; line-height: 20px; text-align:center" 
                                           type="number" class="form-control input-sm" 
                                           aria-describedby="{{ $k }}-HP-addon" 
                                           name="{{ $k }}-HP" 
-                                          onkeypress="updateHP('{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP', {{$v.Max}}, document.getElementById('{{ slugify $fac }}-{{ $c.Slug }}-{{ $k }}-{{ $i }}-HP'.value))" 
-                                          value ="{{ $v.Value }}">          
+                                          onchange="updateHP.call(this, '{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP', {{$v.Max}})" 
+                                          value="{{ $v.Value }}"
+                                          data-previous="{{ $v.Value }}">
                                     </div>
                                 </td>
                                 {{ else }}
@@ -181,12 +182,14 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="HP-addon">HP</span>
                                 </div>
-                                <span 
+                                <input 
                                   {{ if lt $c.Character.CurrentHP 3 }}style="color:red"{{end}} 
                                   id="{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP"
                                   class="form-control" 
                                   aria-describedby="HP-addon" 
-                                  name="HP">{{ $c.Character.CurrentHP }}</span>
+                                  name="{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP"
+                                  value="{{ $c.Character.CurrentHP }}"
+                                  disabled>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="HP-addon">/{{ $c.Character.Attributes.HP.Max }}</span>
                                   </div>
@@ -389,11 +392,45 @@
       </form>
 
       <script type="text/javascript">
-      function updateHP(cID, max, val) {
-        console.log(cID, max)
+
+      function updateHP(cID, max) {
+
+        if (this.value > max) {
+          this.value = max
+        };
+
+        if (this.value < (-max * 2)) {
+          this.value = -max * 2
+        };
+
         var target = document.getElementById(cID);
-        x = max - val
-        target.value = target.value - x;
+        var targetVal = parseInt(target.value)
+        var x = 0;
+        var previous = parseInt(this.dataset.previous)
+
+        console.log(this.value, previous)
+        
+        if (this.value > previous) {
+          x = this.value - previous
+          target.value = targetVal + x
+          this.dataset.previous = this.value
+        };
+
+        if (this.value < previous) {
+          x = this.value - previous
+          target.value = targetVal + x
+          this.dataset.previous = this.value
+        };
+
+        if (this.value < 1) {
+          this.style.color = "red"
+          this.parentElement.style.background = "red"
+        }
+
+        if (target.value < 1) {
+          target.style.color = "red"
+          target.parentElement.style.color = "red"
+        };
       }
       </script>
 
