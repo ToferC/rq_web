@@ -148,7 +148,7 @@
                             {{ range $k, $v := $c.Character.HitLocations }}
                             {{ if eq $s $k }}
                             <tr>
-                                <td style="text-align:center {{ if $v.Disabled }}color:red{{end}}">{{ $v.Name }}</td>
+                                <td style="text-align:center">{{ $v.Name }}</td>
                                 <td {{ if $v.Disabled }}style="color:red"{{end}}>{{ formatIntArray $v.HitLoc }}</td>
                                 <td style="text-align:center">{{ $v.Armor }}</td>
                                 {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
@@ -160,7 +160,7 @@
                                           type="number" class="form-control input-sm" 
                                           aria-describedby="{{ $k }}-HP-addon" 
                                           name="{{ $k }}-HP" 
-                                          onchange="updateHP.call(this, '{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP', {{$v.Max}})" 
+                                          onchange="updateHP.call(this, '{{ slugify $fac }}-{{ $c.Slug }}-{{ $i }}-HP', '{{$v.Max}}')" 
                                           value="{{ $v.Value }}"
                                           data-previous="{{ $v.Value }}">
                                     </div>
