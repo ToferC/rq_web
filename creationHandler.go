@@ -251,6 +251,8 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		// Update CreationSteps
 		c.CreationSteps["Base Choices"] = true
 
+		c.Role = "Player Character"
+
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			log.Panic(err)

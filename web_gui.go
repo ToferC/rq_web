@@ -37,7 +37,6 @@ type WebUser struct {
 type WebChar struct {
 	User            *models.User
 	CharacterModel  *models.CharacterModel
-	CreatureModel   *models.CreatureModel
 	HomelandModel   *models.HomelandModel
 	OccupationModel *models.OccupationModel
 	CultModel       *models.CultModel
@@ -51,7 +50,6 @@ type WebChar struct {
 	Wounds          map[string][]int
 	// IndexModels
 	CharacterModels   []*models.CharacterModel
-	CreatureModels    []*models.CreatureModel
 	HomelandModels    map[string]*models.HomelandModel
 	OccupationModels  map[string]*models.OccupationModel
 	CultModels        map[string]*models.CultModel
@@ -63,6 +61,7 @@ type WebChar struct {
 	Passions          []string
 	CategoryOrder     []string
 	WeaponCategories  []string
+	Roles             []string
 	BaseWeapons       []*runequest.Weapon
 	MeleeAttacks      map[string]*runequest.Attack
 	RangedAttacks     map[string]*runequest.Attack

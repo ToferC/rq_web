@@ -230,6 +230,9 @@ func main() {
 	r.HandleFunc("/modify_encounter/{slug}", ModifyEncounterHandler)
 	r.HandleFunc("/delete_encounter/{slug}", DeleteEncounterHandler)
 
+	r.HandleFunc("/add_creature/", NewCreatureHandler)
+	r.HandleFunc("/modify_creature/{id}", ModifyCreatureHandler)
+
 	// Admin handlers
 	r.HandleFunc("/user_index/", UserIndexHandler)
 

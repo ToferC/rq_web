@@ -43,12 +43,9 @@
                 <input type="text" class="form-control" aria-describedby="name-addon" name="Name" placeholder="Enter Name Here" required>
               </div><br>
 
-              <div class="input-group">
-                  <div class="input-group-prepend">
-                <span class="input-group-text" for="Description">Description</span>
-                </div>
-                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
-              </div>
+              <label class="input-group-text" for="Description">Description</label>
+              <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" placeholder="Enter description"></textarea>
+
 
               <hr>
               <h4>Character Portrait</h4>

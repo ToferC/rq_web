@@ -10,7 +10,7 @@
   version = "v0.39.0"
 
 [[projects]]
-  digest = "1:495d57b9444476dbdcad8420c73a84b5b72e7e058b011b17e218e759c16f66fd"
+  digest = "1:7c7cf7a952ecca58eac5bb9c515f27cf6f804d19c865de29be088d0ed9acfbee"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -40,6 +40,7 @@
     "private/protocol",
     "private/protocol/eventstream",
     "private/protocol/eventstream/eventstreamapi",
+    "private/protocol/json/jsonutil",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
@@ -51,8 +52,8 @@
     "service/sts",
   ]
   pruneopts = "UT"
-  revision = "0db84dcbcc56669065730700b054eb6d1438a0f7"
-  version = "v1.19.33"
+  revision = "5312c8dac9067d339c4e68d7e0dd5507b2f01849"
+  version = "v1.19.41"
 
 [[projects]]
   digest = "1:08333921d65e5f396cfcb4f97a3edd22c17b3d353f8c8849def9acabeb209730"
@@ -140,6 +141,14 @@
   version = "v1.1.3"
 
 [[projects]]
+  digest = "1:e46ef3b65e25f610b7151015e2b782af1aad6f8bb8ac2edb5bb90c1b94e92524"
+  name = "github.com/gosimple/slug"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e78d39397ba41d2c33d9615044ef93eca8a309d8"
+  version = "v1.5.0"
+
+[[projects]]
   digest = "1:67474f760e9ac3799f740db2c489e6423a4cde45520673ec123ac831ad849cb8"
   name = "github.com/hashicorp/golang-lru"
   packages = ["simplelru"]
@@ -171,6 +180,14 @@
   version = "v1.3.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:e6a29574542c00bb18adb1bfbe629ff88c468c2af2e2e953d3e58eda07165086"
+  name = "github.com/rainycape/unidecode"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "cb7f23ec59bec0d61b19c56cd88cee3d0cc1870c"
+
+[[projects]]
   digest = "1:f010b8db0f48966b7f0c8376a70de58ab57dac328a7cf13cdea637addfa24b20"
   name = "github.com/thewhitetulip/Tasks"
   packages = ["sessions"]
@@ -180,14 +197,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e46f2236d81e5e5455960d2cbd89046c6937b65e3718c0f4caec9a4ab9180453"
+  digest = "1:f41631c0acefa637320972bad4c29f888d528e74e2b0ebf2a6526649e525938b"
   name = "github.com/toferc/runequest"
   packages = ["."]
   pruneopts = "UT"
-  revision = "893cefef3bfbb00a89cefa96cbdae7afd585a5ca"
+  revision = "7175277521ec7f5edbd5065ebd62afea3fef8900"
 
 [[projects]]
-  digest = "1:6a0fd720abef071f9c9821249e2a7ee87a2e90fe7e45cef8fe413e6b5287363a"
+  digest = "1:74055050ea547bb04600be79cc501965cb3de8988018262f2ca430f0a0b48ec3"
   name = "go.opencensus.io"
   packages = [
     ".",
@@ -208,8 +225,8 @@
     "trace/tracestate",
   ]
   pruneopts = "UT"
-  revision = "df6e2001952312404b06f5f6f03fcb4aec1648e5"
-  version = "v0.21.0"
+  revision = "9c377598961b706d1542bd2d84d538b5094d596e"
+  version = "v0.22.0"
 
 [[projects]]
   branch = "master"
@@ -221,7 +238,7 @@
     "pbkdf2",
   ]
   pruneopts = "UT"
-  revision = "22d7a77e9e5f409e934ed268692e56707cd169e5"
+  revision = "20be4c3c3ed52bfccdb2d59a412ee1a936d175a7"
 
 [[projects]]
   branch = "master"
@@ -238,11 +255,11 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "3ec19112720433827bbce8be9342797f5a6aaaf9"
+  revision = "f3200d17e092c607f615320ecaad13d87ad9a2b3"
 
 [[projects]]
   branch = "master"
-  digest = "1:85a6bd7dc73d56e1208ebf9a904516a92aec6e9a7cebff5fef2a1ab24c01a308"
+  digest = "1:7cba983d19f4aa6a154d73268dcc67a66bcc24bd7ee1c1b09d448a721dea0d9f"
   name = "golang.org/x/oauth2"
   packages = [
     ".",
@@ -252,15 +269,15 @@
     "jwt",
   ]
   pruneopts = "UT"
-  revision = "950ef44c6e079baf075030377d90bf0c7e4b7b7a"
+  revision = "aaccbc9213b0974828f81aaac109d194880e3014"
 
 [[projects]]
   branch = "master"
-  digest = "1:6ed9319f79a63e30779042ef237f81770df4091866e43f84a643257384b0aefc"
+  digest = "1:668e8c66b8895d69391429b0f64a72c35603c94f364c94d4e5fab5053d57a0b6"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "ad400b1274690a55531a013560dc08706088f82b"
+  revision = "ad28b68e88f12448a1685d038ffea87bbbb34148"
 
 [[projects]]
   digest = "1:8d8faad6b12a3a4c819a3f9618cb6ee1fa1cfc33253abeeea8b55336721e3405"
@@ -330,10 +347,10 @@
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "bb713bdc0e5239f2b68e560efbe1c701a6fe78f9"
+  revision = "fb225487d10142b5bcc35abfc6cb9a0609614976"
 
 [[projects]]
-  digest = "1:707c3a5d10ed430ea767d73df122d9eb3dfb6312bbacc9f2e39204390686d1d0"
+  digest = "1:c69a4c19c4f241e6b75ad65c5e7a1c4eec5705ae504624df4eb6fb659c2df46c"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -370,8 +387,8 @@
     "tap",
   ]
   pruneopts = "UT"
-  revision = "25c4f928eaa6d96443009bd842389fb4fa48664e"
-  version = "v1.20.1"
+  revision = "869adfc8d5a43efc0d05780ad109106f457f51e4"
+  version = "v1.21.0"
 
 [[projects]]
   digest = "1:999d566ad1ae4303c456af5a155f7b42401cca4fd33552567ed9dd997b107a08"
@@ -396,6 +413,7 @@
     "github.com/gorilla/mux",
     "github.com/gorilla/schema",
     "github.com/gorilla/sessions",
+    "github.com/gosimple/slug",
     "github.com/joho/godotenv",
     "github.com/thewhitetulip/Tasks/sessions",
     "github.com/toferc/runequest",

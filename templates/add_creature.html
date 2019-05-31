@@ -1,0 +1,433 @@
+{{ define "title"}}
+
+<title>Add Creature</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character}}
+{{ $ID := .CharacterModel.ID }}
+{{ $statistics := $character.Statistics }}
+{{ $counter := .Counter }}
+{{ $passions := .Passions }}
+{{ $skills := .Skills }}
+{{ $spiritmagic := .SpiritMagic }}
+{{ $runespells := .RuneSpells }}
+{{ $cults := .CultModels }}
+
+<div class="container">
+  <hr>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <form action="" method="POST" enctype="multipart/form-data">
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="name-addon">Name</span>
+          </div>
+          <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value="{{ $character.Name }}">
+        </div>
+        <hr>
+        
+            <label class="input-group-text" for="Description">Description</label>
+          <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value="{{ $character.Description }}">{{ $character.Description }}</textarea>
+
+        <hr>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" for="Cult">Cult</span>
+          </div>
+          <select type="text" class="form-control" id="Cult" name="CStr">
+            
+            {{ range $k, $v := $cults }}
+                <option value={{ $v.ID }}>{{ $v.Cult.Name }}</option>
+            {{ end }}
+          </select>
+          </div>
+
+        <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" for="Rank">Cult Rank</span>
+        </div>
+        <select type="text" class="form-control" id="Rank" name="Rank">
+          
+          <option>Initiate</option>
+          <option>Rune Priest</option>
+          <option>God Talker</option>
+          <option>Rune Lord</option>
+          
+        </select>
+        </div>
+
+        <br>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="rp-addon">Rune Points</span>
+          </div>
+          <input type="number" class="form-control" aria-describedby="rp-addon" name="RunePoints" value="{{ $character.Cult.NumRunePoints }}">
+        </div>
+
+        <hr>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" for="Role">Role</span>
+          </div>
+          <select type="text" class="form-control" id="Role" name="Role">
+            <option>Non-Player Character</option>
+            <option>Animal</option>
+            <option>Chaos</option>
+            <option>Creature</option>
+            <option>Demon</option>
+            <option>Elemental</option>
+            <option>Spirit</option>
+          </select>
+        </div>
+
+        <hr>
+
+
+
+        <p>Image</p>
+        <div class="input-group">
+          <div class="custom-file">
+            <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+            <label class="custom-file-label" for="inputGroupFile">Update Image</label>
+          </div>
+        </div>
+        <hr>
+
+        <h4>Passions</h4>
+            <p>Add new passions.</p>
+
+            {{ range $m := $counter }}
+            <!-- Passions loop -->
+
+            <label for="Passion-{{$m}}-CoreString">Passion {{ $m }}</label>
+            <select type="text" class="form-control" id="Passion-{{$m}}-CoreString" name="Passion-{{$m}}-CoreString">
+                <option></option>
+                {{ range $passions }}
+                <option>{{ . }}</option>
+                {{ end }}
+            </select>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{$m}}-UserString-addon">Input</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Passion-{{$m}}-UserString-addon" name="Passion-{{$m}}-UserString"
+                    value="">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Passion-{{$m}}-Base-addon">Passion Base</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="Passion-{{$m}}-Base-addon" name="Passion-{{$m}}-Base"
+                    value="60">
+            </div>
+
+            {{ end }}
+      
+      <hr>
+
+        <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox"
+          {{if .CharacterModel.Open }} checked{{ end }}>
+
+        <hr>
+        <button class="btn btn-primary" type="submit" value="Save">Save</button>
+
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <h4>Stats</h4>
+      {{ range $k, $stat := $statistics }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span {{ if $stat.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="10">
+      </div>
+      {{ end }}
+
+      <hr>
+
+      <h4>Elemental Runes</h4>
+      {{ range $k, $v := $character.ElementalRunes }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span {{ if $v.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+      </div>
+      {{ end }}
+
+      <hr>
+
+      <h4>Power/Form Runes</h4>
+      {{ range $k, $v := $character.PowerRunes }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span {{ if $v.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+      </div>
+      {{ end }}
+
+      <hr>
+
+      <h4>Condition Runes</h4>
+      {{ range $k, $v := $character.ConditionRunes }}
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span {{ if $v.ExperienceCheck }}style="color:blue"{{ end }}class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
+        </div>
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+      </div>
+      {{ end }}
+
+      <hr>
+
+      <h5>Powers & Abilities </h5>
+
+      {{ range $m := $counter }}
+      <div class="input-group">
+          <div class="input-group-prepend">
+              <span class="input-group-text" id="Power-{{$m}}-Name-addon">Name</span>
+          </div>
+          <input type="text" class="form-control" aria-describedby="Power-{{$m}}-Name-addon" name="Power-{{$m}}-Name" value="">
+      </div>
+
+      <label class="input-group-text" for="Power-{{$m}}-Description">Description</label>
+      <textarea class="form-control" aria-describedby="description-addon" name="Power-{{$m}}-Description" rows="4" placeholder="Enter description"></textarea>
+      <br>
+      {{ end }}
+
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <h4>Skills</h4>
+            <p>Add new skills.</p>
+
+            {{ range $m := $counter }} <!-- Skill loop - normally 3 to 4 -->
+              
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-CoreString-addon">Skill</span>
+                </div>
+                  <select type="text" class="form-control" id="Skill-{{$m}}-CoreString" name="Skill-{{$m}}-CoreString">
+                    <option></option>
+                    {{ range $s := $skills }}
+                    <option>{{ $s.CoreString }}</option>
+                      {{ end }}
+                  </select>
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="Skill-{{$m}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Skill-{{$m}}-UserString-addon" name="Skill-{{$m}}-UserString" value ="">
+              </div>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{$m}}-Value-addon">+</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Skill-{{$m}}-Value-addon" name="Skill-{{$m}}-Value" value ="0">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="Skill-{{$m}}-Value-addon">%</span>
+                      </div>
+                </div>
+                <hr>
+                {{ end }} <!-- End Skill Loop -->
+
+                <h4>Rune Spells</h4>
+
+            {{ range $n := $counter }}
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="RuneSpell-{{ $n }}-addon">Rune Spell</span>
+                </div>
+                <select type="text" class="form-control" id="RuneSpell-{{ $n }}" name="RuneSpell-{{ $n }}">
+                    <option></option>
+                    {{ range $m, $rs := $runespells }}
+                    {{ if eq $rs.UserString "" }}
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts)</option>
+                    {{ else }}
+                    <option value="{{ $m }}">{{ $rs.CoreString }} ({{ $rs.Cost }}pts) ({{ $rs.UserString }})</option>
+                    {{ end }}
+                    {{ end }}
+                </select>
+            </div>
+
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="RuneSpell-{{$n}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="RuneSpell-{{$n}}-UserString-addon" name="RuneSpell-{{$n}}-UserString"
+                    value="">
+            </div>
+
+            <hr>
+            {{ end }}
+
+
+
+            <h4>Spirit Magic Spells</h4>
+
+            {{ range $n := $counter }}
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="SpiritMagic-{{ $n }}-addon">Spirit Magic</span>
+                </div>
+                <select type="text" class="form-control" id="SpiritMagic-{{ $n }}" name="SpiritMagic-{{ $n }}">
+                    <option></option>
+                    {{ range $m, $sm := $spiritmagic }}
+                    {{ if eq $sm.UserString "" }}
+                    <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}}</option>
+                    {{ else }}
+                    <option value="{{ $m }}">{{ $sm.CoreString }} {{ if $sm.Variable }}(var){{else}}({{ $sm.Cost }}pts){{end}} ({{ $sm.UserString }})</option>
+                    {{ end }}
+                    {{ end }}
+                </select>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">Level</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="SpiritMagic-{{$n}}-Cost-addon" name="SpiritMagic-{{$n}}-Cost"
+                    value="0">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-Cost-addon">pts</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="SpiritMagic-{{$n}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="SpiritMagic-{{$n}}-UserString-addon" name="SpiritMagic-{{$n}}-UserString"
+                    value="">
+            </div>
+
+
+            <hr>
+            {{ end }}
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+
+        <h4>Melee Attacks</h4>
+        {{ range $k := $counter }}
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $k }}-Name-addon">Name</span>
+            </div>
+            <input type="text" class="form-control" aria-describedby="{{ $k }}-Name-addon" name="{{ $k }}-Name" value ="">
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $k }}-Num-addon"># Dice</span>
+            </div>
+            <input type="number" class="form-control" aria-describedby="{{ $k }}-Num-addon" name="{{ $k }}-Num" value ="1">
+          </div> 
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Role">Die-Type</span>
+              </div>
+              <select type="number" class="form-control" id="Die-Type" name="Die-Type">
+                <option value="4">d4</option>
+                <option value="6">d6</option>
+                <option value="8">d8</option>
+                <option value="10">d10</option>
+                <option value="3">d3</option>
+                <option value="2">d2</option>
+                <option value="0">Special</option>
+              </select>
+            </div>
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="{{ $k }}-SR-addon">SR</span>
+              </div>
+              <input type="number" class="form-control" aria-describedby="{{ $k }}-SR-addon" name="{{ $k }}-SR" value ="2">
+            </div>  
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="{{ $k }}-Special-addon">Special</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="{{ $k }}-Special-addon" name="{{ $k }}-Special" value ="">
+              </div>
+         
+          <hr>
+        {{ end }}
+      
+
+      <h4>Hit Locations</h4>
+        {{ range $s := $character.HitLocationMap }}
+        {{ range $k, $v := $character.HitLocations }}
+        {{ if eq $s $k }}
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $k }}-HL-Name-addon">Name</span>
+            </div>
+            <input type="text" class="form-control" aria-describedby="{{ $k }}-HL-Name-addon" name="{{ $k }}-HL-Name" value ="{{ $v.Name }}">
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $k }}-Start-addon">Start</span>
+            </div>
+            <input type="number" class="form-control" aria-describedby="{{ $k }}-Start-addon" name="{{ $k }}-Start" value ="{{ index $v.HitLoc 0 }}">
+          </div> 
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $k }}-End-addon">End</span>
+            </div>
+            <input type="number" class="form-control" aria-describedby="{{ $k }}-End-addon" name="{{ $k }}-End" value ="{{ index $v.HitLoc (subtract (len $v.HitLoc) 1) }}">
+          </div>
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="{{ $k }}-HP-addon">Base HP</span>
+              </div>
+              <input type="number" class="form-control" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">
+            </div> 
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="{{ $k }}-Armor-addon">Armor</span>
+              </div>
+              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
+            </div>  
+         
+          <hr>
+        {{ end }} <!-- END if -->
+        {{ end }}
+        {{ end }} <!-- END map -->
+
+      <hr>
+
+    </div> <!-- End Column -->
+
+  </div>
+  </form>
+  {{end}}

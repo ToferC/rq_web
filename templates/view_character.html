@@ -405,7 +405,7 @@ th {
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="HP-addon">HP</span>
                       </div>
-                      <input {{ if lt $character.CurrentHP 3 }}style="color:red"{{end}} type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $character.CurrentHP }}" disabled>
+                      <input id="HP" type="number" class="form-control" aria-describedby="HP-addon" name="HP" value ="{{ $character.CurrentHP }}" disabled>
                       <div class="input-group-append">
                           <span class="input-group-text" id="HP-addon">/{{ $character.Attributes.HP.Max }}</span>
                         </div>
@@ -415,7 +415,7 @@ th {
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="MP-addon">MP</span>
                       </div>
-                      <input type="number" class="form-control" aria-describedby="MP-addon" name="MP" value ="{{ $character.CurrentMP }}">
+                      <input type="number" min=0 id="MP" class="form-control" aria-describedby="MP-addon" name="MP" value ="{{ $character.CurrentMP }}">
                       <div class="input-group-append">
                           <span class="input-group-text" id="MP-addon">/{{ $character.Attributes.MP.Max }}</span>
                         </div>
@@ -425,7 +425,7 @@ th {
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="RP-addon">RP ({{ $character.Cult.Name }})</span>
                       </div>
-                      <input type="number" class="form-control" aria-describedby="RP-addon" name="RP" value ="{{ $character.CurrentRP }}">
+                      <input type="number" min=0 class="form-control" aria-describedby="RP-addon" name="RP" value ="{{ $character.CurrentRP }}">
                       <div class="input-group-append">
                           <span class="input-group-text" id="RP-addon">/{{ $character.Cult.NumRunePoints }}</span>
                         </div>
@@ -470,7 +470,16 @@ th {
                   {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
                   <td>
                       <div class="form-group">
-                          <input type="number" class="form-control input-sm" aria-describedby="{{ $k }}-HP-addon" name="{{ $k }}-HP" value ="{{ $v.Value }}">          
+                          <input
+                            type="number" 
+                            class="form-control input-sm" 
+                            aria-describedby="{{ $k }}-HP-addon" 
+                            name="{{ $k }}-HP"
+                            value ="{{ $v.Value }}" 
+                            max="{{ $v.Max }}"
+                            min="{{ multiply $v.Max -2}}"
+                            onchange="updateHP.call(this, 'HP', '{{$v.Max}}')" 
+                            data-previous="{{ $v.Value }}">        
                       </div>
                   </td>
                   {{ else }}
@@ -506,5 +515,57 @@ th {
       </div> <!-- END Row-->
 
       </div>
+
+      <script type="text/javascript">
+
+        const selectMP = document.getElementById('MP')
+  
+        selectMP.addEventListener('change', (e) => {
+          if (e.target.value < 1) {
+            e.target.style.backgroundColor = "orange";
+          } else {
+            e.target.style.backgroundColor = "white";
+          }
+        });
+  
+        function updateHP(cID, max) {
+  
+          if (this.value > max) {
+            this.value = max
+          };
+  
+          if (this.value < (-max * 2)) {
+            this.value = -max * 2
+          };
+  
+          var target = document.getElementById(cID);
+          var targetVal = parseInt(target.value)
+          var x = 0;
+          var previous = parseInt(this.dataset.previous)
+          
+            x = this.value - previous
+            target.value = targetVal + x
+            this.dataset.previous = this.value
+      
+  
+          if (this.value < -1*max) {
+            this.style.backgroundColor = "red"
+          } else if (this.value < 1) {
+            this.style.backgroundColor = "orange"
+          } else if (this.value < max) {
+            this.style.backgroundColor = "yellow"
+          } else {
+            this.style.backgroundColor = "white"
+          }
+  
+          if (target.value < 1) {
+          target.style.backgroundColor = "red";
+        } else if (target.value < 5) {
+          target.style.backgroundColor = "orange"
+        } else {
+          target.style.backgroundColor = "white";
+        };
+        }
+        </script>
 
 {{end}}

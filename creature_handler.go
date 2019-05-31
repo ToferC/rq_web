@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -17,48 +16,7 @@ import (
 	"github.com/toferc/runequest"
 )
 
-// CreatureIndexHandler renders the basic creature roster page
-func CreatureIndexHandler(w http.ResponseWriter, req *http.Request) {
-
-	session, err := sessions.Store.Get(req, "session")
-
-	if err != nil {
-		log.Println("error identifying session")
-		Render(w, "templates/login.html", nil)
-		return
-		// in case of error
-	}
-
-	// Prep for user authentication
-	sessionMap := getUserSessionValues(session)
-
-	username := sessionMap["username"]
-	loggedIn := sessionMap["loggedin"]
-	isAdmin := sessionMap["isAdmin"]
-
-	creatures, err := database.ListCreatureModels(db)
-	if err != nil {
-		panic(err)
-	}
-
-	for _, cm := range creatures {
-		if cm.Image == nil {
-			cm.Image = new(models.Image)
-			cm.Image.Path = DefaultCreaturePortrait
-		}
-	}
-
-	wc := WebChar{
-		SessionUser:    username,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		CreatureModels: creatures,
-	}
-
-	Render(w, "templates/roster.html", wc)
-}
-
-// CreatureHandler renders a creature in a Web page
+// CreatureHandler renders a character in a Web page
 func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -91,10 +49,10 @@ func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	cm, err := database.PKLoadCreatureModel(db, int64(id))
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("Unable to load CreatureModel")
+		fmt.Println("Unable to load CharacterModel")
 	}
 
 	fmt.Println(cm)
@@ -105,7 +63,7 @@ func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
-	c := cm.Creature
+	c := cm.Character
 
 	// Always create 4 empty equipment slots.
 	for i := 0; i < 4; i++ {
@@ -116,25 +74,25 @@ func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	if cm.Image == nil {
 		cm.Image = new(models.Image)
-		cm.Image.Path = DefaultCreaturePortrait
+		cm.Image.Path = DefaultCharacterPortrait
 	}
 
 	//c.DetermineSkillCategoryValues()
 
 	wc := WebChar{
-		CreatureModel: cm,
-		IsAuthor:      IsAuthor,
-		IsLoggedIn:    loggedIn,
-		SessionUser:   username,
-		IsAdmin:       isAdmin,
-		Counter:       numToArray(10),
-		Flashes:       flashes,
+		CharacterModel: cm,
+		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
+		SessionUser:    username,
+		IsAdmin:        isAdmin,
+		Counter:        numToArray(10),
+		Flashes:        flashes,
 	}
 
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/view_creature.html", wc)
+		Render(w, "templates/view_character.html", wc)
 
 	}
 
@@ -305,7 +263,7 @@ func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 			v.Weapon.CurrentHP = hp
 		}
 
-		err = database.UpdateCreatureModel(db, cm)
+		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
 		} else {
@@ -314,14 +272,14 @@ func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(c)
 
-		url := fmt.Sprintf("/view_creature/%d#gameplay", cm.ID)
+		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 
 }
 
-// NewCreatureHandler renders a creature in a Web page
+// NewCreatureHandler renders a character in a Web page
 func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -344,22 +302,6 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cm := models.CreatureModel{}
-
-	//c := runequest.NewCreature("Default")
-	c := &runequest.Creature{}
-
-	//vars := mux.Vars(req)
-
-	// Assign additional empty HitLocations to populate form
-
-	for i := 0; i < 10; i++ {
-		t := runequest.HitLocation{
-			Name: "",
-		}
-		c.HitLocations["z"+string(i)] = &t
-	}
-
 	author, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
@@ -368,17 +310,51 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(author)
 
-	cm = models.CreatureModel{
-		Creature: c,
-		Author:   author,
+	cm := models.CharacterModel{}
+
+	c := runequest.NewCharacter("Default")
+
+	cm.Character = c
+
+	// Set 10 skills
+	for i := 0; i < 10; i++ {
+		s := runequest.Skill{
+			Name:       "",
+			CoreString: "",
+			UserString: "",
+			Base:       0,
+			Value:      0,
+		}
+		c.Skills["z"+string(i)] = &s
+	}
+
+	// Assign additional empty HitLocations to populate form
+	for i := 0; i < 4; i++ {
+		t := runequest.HitLocation{
+			Name:   "",
+			HitLoc: []int{0},
+		}
+		c.HitLocationMap = append(c.HitLocationMap, "z"+string(i))
+		c.HitLocations["z"+string(i)] = &t
+	}
+
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
 	}
 
 	wc := WebChar{
-		CreatureModel: &cm,
-		SessionUser:   username,
-		IsLoggedIn:    loggedIn,
-		IsAdmin:       isAdmin,
-		Counter:       []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		CharacterModel: &cm,
+		SessionUser:    username,
+		Counter:        numToArray(4),
+		BigCounter:     numToArray(7),
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		Passions:       runequest.PassionTypes,
+		Skills:         runequest.Skills,
+		SpiritMagic:    runequest.SpiritMagicSpells,
+		RuneSpells:     runequest.RuneSpells,
+		CultModels:     cults,
 	}
 
 	if req.Method == "GET" {
@@ -395,7 +371,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		c := &runequest.Creature{}
+		c := &runequest.Character{}
 
 		c.Description = req.FormValue("Description")
 
@@ -445,7 +421,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(newHL)
 		c.HitLocations = newHL
 
-		cm.Creature = c
+		cm.Character = c
 
 		// Insert power into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -494,20 +470,20 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(c)
 
-		err = database.SaveCreatureModel(db, &cm)
+		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			log.Panic(err)
 		} else {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/view_creature/%d", cm.ID)
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }
 
-// ModifyCreatureHandler renders a creature in a Web page
+// ModifyCreatureHandler renders a character in a Web page
 func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Get session values or redirect to Login
@@ -540,8 +516,8 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	// Load CreatureModel
-	cm, err := database.PKLoadCreatureModel(db, int64(id))
+	// Load CharacterModel
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -555,7 +531,7 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	c := cm.Creature
+	c := cm.Character
 
 	// Assign additional empty HitLocations to populate form
 	/*
@@ -571,22 +547,22 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	if cm.Image == nil {
 		cm.Image = new(models.Image)
-		cm.Image.Path = DefaultCreaturePortrait
+		cm.Image.Path = DefaultCharacterPortrait
 	}
 
 	wc := WebChar{
-		CreatureModel: cm,
-		SessionUser:   username,
-		IsAuthor:      IsAuthor,
-		IsLoggedIn:    loggedIn,
-		IsAdmin:       isAdmin,
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 	}
 
 	if req.Method == "GET" {
 
 		// Render page
 
-		Render(w, "templates/modify_creature.html", wc)
+		Render(w, "templates/modify_character.html", wc)
 
 	}
 
@@ -675,7 +651,7 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 
-			// Remove Creature skill is zeroed out
+			// Remove Character skill is zeroed out
 			if s.Total < 1 {
 				delete(c.Skills, k)
 			}
@@ -851,331 +827,21 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
-			cm.Image.Path = DefaultCreaturePortrait
+			cm.Image.Path = DefaultCharacterPortrait
 		}
 
-		err = database.UpdateCreatureModel(db, cm)
+		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
 		} else {
 			fmt.Println("Saved")
 		}
 
-		session.AddFlash("Creature Updated with "+eventString, "message")
+		session.AddFlash("Character Updated with "+eventString, "message")
 		session.Save(req, w)
 
-		url := fmt.Sprintf("/view_creature/%d", cm.ID)
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
-	}
-}
-
-// AddCreatureContentHandler renders a creature in a Web page
-func AddCreatureContentHandler(w http.ResponseWriter, req *http.Request) {
-
-	session, err := sessions.Store.Get(req, "session")
-
-	if err != nil {
-		log.Println("error identifying session")
-		Render(w, "templates/login.html", nil)
-		return
-		// in case of error
-	}
-
-	// Prep for user authentication
-	sessionMap := getUserSessionValues(session)
-
-	username := sessionMap["username"]
-	loggedIn := sessionMap["loggedin"]
-	isAdmin := sessionMap["isAdmin"]
-
-	if username == "" {
-		http.Redirect(w, req, "/", 302)
-	}
-
-	vars := mux.Vars(req)
-	pk := vars["id"]
-
-	if len(pk) == 0 {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	cm, err := database.PKLoadCreatureModel(db, int64(id))
-	if err != nil {
-		fmt.Println(err)
-		fmt.Println("Unable to load CreatureModel")
-	}
-
-	c := cm.Creature
-
-	IsAuthor := false
-
-	if username == cm.Author.UserName {
-		IsAuthor = true
-	}
-
-	wc := WebChar{
-		CreatureModel: cm,
-		SessionUser:   username,
-		IsLoggedIn:    loggedIn,
-		IsAdmin:       isAdmin,
-		IsAuthor:      IsAuthor,
-		Counter:       numToArray(3),
-		Passions:      runequest.PassionTypes,
-		Skills:        runequest.Skills,
-		SpiritMagic:   runequest.SpiritMagicSpells,
-		RuneSpells:    runequest.RuneSpells,
-	}
-
-	if req.Method == "GET" {
-
-		// Render page
-		Render(w, "templates/add_creature_content.html", wc)
-
-	}
-
-	if req.Method == "POST" {
-
-		err := req.ParseMultipartForm(MaxMemory)
-		if err != nil {
-			panic(err)
-		}
-
-		event := req.FormValue("Event")
-
-		// Add Skills
-		for i := 1; i < 4; i++ {
-			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
-			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
-
-			valueStr := req.FormValue(fmt.Sprintf("Skill-%d-Value", i))
-			value, err := strconv.Atoi(valueStr)
-			if err != nil {
-				value = 0
-			}
-
-			// Skill exists in Creature, modify it via pointer
-			if coreString != "" {
-				// Determine if skill already exists in c.Skills
-
-				bs := runequest.Skills[coreString]
-
-				sk := &runequest.Skill{
-					CoreString: bs.CoreString,
-					UserString: bs.UserString,
-					Category:   bs.Category,
-					Base:       bs.Base,
-					UserChoice: bs.UserChoice,
-					Updates:    []*runequest.Update{},
-				}
-
-				if userString != "" {
-					sk.UserString = userString
-				}
-
-				sk.GenerateName()
-
-				// Add Skill to Creature
-				fmt.Println("Add Skill to creature: " + sk.Name)
-				c.Skills[sk.Name] = sk
-				c.Skills[sk.Name].UpdateSkill()
-
-				t := time.Now()
-				tString := t.Format("2006-01-02 15:04:05")
-
-				update := &runequest.Update{
-					Date:  tString,
-					Event: event,
-					Value: value,
-				}
-
-				c.Skills[sk.Name].Updates = append(c.Skills[sk.Name].Updates, update)
-
-				c.Skills[sk.Name].UpdateSkill()
-
-				fmt.Println("Updated Creature Skill: " + event)
-			}
-		}
-
-		// Add passions
-		for i := 1; i < 4; i++ {
-
-			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
-
-			if coreString != "" {
-
-				p := runequest.Ability{
-					Type:       "Passion",
-					CoreString: coreString,
-				}
-
-				str := fmt.Sprintf("Passion-%d-Base", i)
-				base, err := strconv.Atoi(req.FormValue(str))
-				if err != nil {
-					base = 0
-				}
-				p.Base = base
-
-				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-
-				if userString != "" {
-					p.UserChoice = true
-					p.UserString = userString
-				}
-
-				//c.ModifyAbility(p)
-				p.UpdateAbility()
-			}
-		}
-
-		// Rune Magic
-		for i := 1; i < 4; i++ {
-			str := req.FormValue(fmt.Sprintf("RuneSpell-%d", i))
-			spec := req.FormValue(fmt.Sprintf("RuneSpell-%d-UserString", i))
-			if str != "" {
-				index, err := strconv.Atoi(str)
-				if err != nil {
-					index = 0
-					fmt.Println("Spell Not found")
-				}
-				baseSpell := runequest.RuneSpells[index]
-
-				s := baseSpell
-				if spec != "" {
-					s.UserString = spec
-				}
-				s.GenerateName()
-				c.RuneSpells[s.Name] = &s
-			}
-		}
-
-		// Spirit Magic
-		for i := 1; i < 6; i++ {
-			str := req.FormValue(fmt.Sprintf("SpiritMagic-%d", i))
-			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%d-UserString", i))
-			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%d-Cost", i))
-
-			if str != "" {
-
-				index, err := strconv.Atoi(str)
-				if err != nil {
-					index = 0
-					fmt.Println("Spell Not found")
-				}
-
-				cost, err := strconv.Atoi(cString)
-				if err != nil {
-					cost = 1
-					fmt.Println("Non-number entered")
-				}
-
-				baseSpell := runequest.SpiritMagicSpells[index]
-
-				s := &runequest.Spell{
-					Name:       baseSpell.Name,
-					CoreString: baseSpell.CoreString,
-					UserString: baseSpell.UserString,
-					Cost:       cost,
-					Domain:     baseSpell.Domain,
-				}
-
-				if spec != "" {
-					s.UserString = spec
-				}
-
-				s.GenerateName()
-				c.SpiritMagic[s.Name] = s
-			}
-		}
-
-		err = database.UpdateCreatureModel(db, cm)
-		if err != nil {
-			log.Panic(err)
-		} else {
-			fmt.Println("Saved")
-		}
-
-		url := fmt.Sprintf("/view_creature/%d", cm.ID)
-
-		http.Redirect(w, req, url, http.StatusSeeOther)
-	}
-}
-
-// DeleteCreatureHandler renders a creature in a Web page
-func DeleteCreatureHandler(w http.ResponseWriter, req *http.Request) {
-
-	session, err := sessions.Store.Get(req, "session")
-
-	if err != nil {
-		log.Println("error identifying session")
-		Render(w, "templates/login.html", nil)
-		return
-		// in case of error
-	}
-
-	// Prep for user authentication
-	sessionMap := getUserSessionValues(session)
-
-	username := sessionMap["username"]
-	loggedIn := sessionMap["loggedin"]
-	isAdmin := sessionMap["isAdmin"]
-
-	vars := mux.Vars(req)
-	pk := vars["id"]
-
-	if len(pk) == 0 {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	cm, err := database.PKLoadCreatureModel(db, int64(id))
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Validate that User == Author
-	IsAuthor := false
-
-	if username == cm.Author.UserName || isAdmin == "true" {
-		IsAuthor = true
-	} else {
-		http.Redirect(w, req, "/", 302)
-	}
-
-	if cm.Image == nil {
-		cm.Image = new(models.Image)
-		cm.Image.Path = DefaultCreaturePortrait
-	}
-
-	wc := WebChar{
-		CreatureModel: cm,
-		SessionUser:   username,
-		IsAuthor:      IsAuthor,
-		IsLoggedIn:    loggedIn,
-		IsAdmin:       isAdmin,
-	}
-
-	if req.Method == "GET" {
-
-		// Render page
-		Render(w, "templates/delete_creature.html", wc)
-
-	}
-
-	if req.Method == "POST" {
-
-		database.DeleteCreatureModel(db, cm.ID)
-
-		fmt.Println("Deleted ", cm.Creature.Name)
-		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 }

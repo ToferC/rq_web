@@ -23,6 +23,7 @@ type Weapon struct {
 	SR        int
 	Type      string
 	Range     int
+	Special   string
 }
 
 // BaseWeapons is an array of runequest weapons

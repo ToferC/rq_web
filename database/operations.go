@@ -18,7 +18,6 @@ func InitDB(db *pg.DB) error {
 func createSchema(db *pg.DB) error {
 	for _, model := range []interface{}{
 		(*models.CharacterModel)(nil),
-		(*models.CreatureModel)(nil),
 		(*models.HomelandModel)(nil),
 		(*models.OccupationModel)(nil),
 		(*models.CultModel)(nil),
