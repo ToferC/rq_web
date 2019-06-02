@@ -228,6 +228,21 @@
 
                 <hr>
 
+                <h5>Powers & Abilities </h5>
+
+      {{ range $m := $counter }}
+      <div class="input-group">
+          <div class="input-group-prepend">
+              <span class="input-group-text" id="Power-{{$m}}-Name-addon">Name</span>
+          </div>
+          <input type="text" class="form-control" aria-describedby="Power-{{$m}}-Name-addon" name="Power-{{$m}}-Name" value="">
+      </div>
+
+      <label class="input-group-text" for="Power-{{$m}}-Description">Description</label>
+      <textarea class="form-control" aria-describedby="description-addon" name="Power-{{$m}}-Description" rows="4" placeholder="Enter description"></textarea>
+      <br>
+      {{ end }}
+
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
         </form>
 

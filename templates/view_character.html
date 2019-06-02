@@ -71,9 +71,11 @@ th {
             <h5>Description</h5>
             <p>{{ sliceString $character.Description 77 }}</p>
             <hr>
+            {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p>Standard of Living: {{ $character.StandardofLiving }}</p>
             <p>Ransom: {{ $character.Ransom }} Lunars</p>
             <hr>
+            {{ end }}
             
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               {{ if not $character.CreationSteps.Complete }}
@@ -390,9 +392,20 @@ th {
       </div> <!-- END row -->
 
       <div class="row">
-        {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
         <div class="col-lg-4">
 
+          {{ if gt (len $character.Powers) 0 }}
+          <h5>Powers</h5>
+          <ul>
+            {{ range $v := $character.Powers }}
+              <li><strong>{{ $v.Name }}: </strong>
+              {{ $v.Description }}</li>
+            {{ end }}
+          </ul>
+          <hr>
+          {{ end }}
+          
+          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             <h5>In Play {{ if $IsAuthor }}
                 <button class="btn btn-sm btn-success" type="submit" value="Save Character State">Save</button>
                 {{ if not (or (gt (len $character.MeleeAttacks) 0) (gt (len $character.RangedAttacks) 0)) }}
@@ -442,9 +455,9 @@ th {
           </div>
             {{ end }}
             <hr>
+            {{ end }} <!-- END in play IF -->
             
           </div><!-- End Column 4 -->
-          {{ end }} <!-- END in play IF -->
 
           <div class="col-lg-4">
               <h5>Hit Locations {{ if $IsAuthor }}
