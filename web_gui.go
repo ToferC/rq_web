@@ -161,10 +161,12 @@ func formatIntArray(a []int) string {
 	text := strconv.Itoa(a[0])
 	end := len(a)
 
-	for i, t := range a {
-		if i+1 == end {
-			str := strconv.Itoa(t)
-			text += "-" + str
+	if len(a) > 1 {
+		for i, t := range a {
+			if i+1 == end {
+				str := strconv.Itoa(t)
+				text += "-" + str
+			}
 		}
 	}
 	return text

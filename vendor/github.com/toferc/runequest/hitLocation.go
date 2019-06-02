@@ -17,9 +17,13 @@ type HitLocation struct {
 	Maimed   bool
 }
 
-// HitLocationMap is the set order for Hit Locations
-var HitLocationMap = []string{
-	"Head", "L Arm", "R Arm", "Chest", "Abdomen", "L Leg", "R Leg",
+// GenerateHitLocationMap takes a HitLocation map and generates an array of strings
+func GenerateHitLocationMap(hlForm map[string]*HitLocation) []string {
+	m := []string{}
+	for k := range hlForm {
+		m = append(m, k)
+	}
+	return m
 }
 
 // Strings
@@ -38,37 +42,24 @@ func (l HitLocation) String() string {
 	return text
 }
 
-// FillWounds creates the array of empty wound boxes
-func (l *HitLocation) FillWounds() {
-	for i := 0; i < l.Value; i++ {
-		l.Wounds = append(l.Wounds, false)
-	}
+// LocationForms is a map of standard hit locations
+var LocationForms = map[string]map[string]*HitLocation{
+	"Humanoids":           HumanoidLocations,
+	"Centaurs":            CentaurLocations,
+	"Dragons/Manticores":  DragonHitLocations,
+	"Four-Legged Animals": FourLeggedAnimalsHitLocations,
 }
 
-// CountWounds returns the number of wounds based on the bool Kill & Shock slices
-func (l *HitLocation) CountWounds() int {
-
-	var hp int
-
-	for _, box := range l.Wounds {
-		if box {
-			hp++
-		}
-	}
-
-	return hp
-}
-
-// Locations is a base map of hit locations
-var Locations = map[string]*HitLocation{
-	"L Leg": &HitLocation{
-		Name:   "L Leg",
-		HitLoc: []int{5, 6, 7, 8},
-		Base:   0,
-	},
+// HumanoidLocations is a base map of hit locations
+var HumanoidLocations = map[string]*HitLocation{
 	"R Leg": &HitLocation{
 		Name:   "R Leg",
 		HitLoc: []int{1, 2, 3, 4},
+		Base:   0,
+	},
+	"L Leg": &HitLocation{
+		Name:   "L Leg",
+		HitLoc: []int{5, 6, 7, 8},
 		Base:   0,
 	},
 	"Abdomen": &HitLocation{
@@ -89,6 +80,153 @@ var Locations = map[string]*HitLocation{
 	"R Arm": &HitLocation{
 		Name:   "R Arm",
 		HitLoc: []int{13, 14, 15},
+		Base:   -1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{19, 20},
+		Base:   0,
+	},
+}
+
+// FourLeggedAnimalsHitLocations is a base map of hit locations
+var FourLeggedAnimalsHitLocations = map[string]*HitLocation{
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{3, 4},
+		Base:   0,
+	},
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1, 2},
+		Base:   0,
+	},
+	"Hindquarters": &HitLocation{
+		Name:   "Hindquarters",
+		HitLoc: []int{5, 6, 7},
+		Base:   1,
+	},
+	"Forequarters": &HitLocation{
+		Name:   "Forequarters",
+		HitLoc: []int{8, 9, 10},
+		Base:   1,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{11, 12, 13},
+		Base:   0,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{14, 15, 16},
+		Base:   0,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{17, 18, 19, 20},
+		Base:   0,
+	},
+}
+
+// DragonHitLocations is a base map of hit locations
+var DragonHitLocations = map[string]*HitLocation{
+	"Tail": &HitLocation{
+		Name:   "Tail",
+		HitLoc: []int{1, 2},
+		Base:   0,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{5, 6},
+		Base:   0,
+	},
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{3, 4},
+		Base:   0,
+	},
+	"Hindquarters": &HitLocation{
+		Name:   "Hindquarters",
+		HitLoc: []int{7, 8},
+		Base:   1,
+	},
+	"Forequarters": &HitLocation{
+		Name:   "Forequarters",
+		HitLoc: []int{9, 10},
+		Base:   1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{11, 12},
+		Base:   -1,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{13, 14},
+		Base:   -1,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{15, 16},
+		Base:   0,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{17, 18},
+		Base:   0,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{19, 20},
+		Base:   0,
+	},
+}
+
+// CentaurLocations is a base map of hit locations
+var CentaurLocations = map[string]*HitLocation{
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1, 2},
+		Base:   -1,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{3, 4},
+		Base:   -1,
+	},
+	"Hindquarters": &HitLocation{
+		Name:   "Hindquarters",
+		HitLoc: []int{5, 6},
+		Base:   1,
+	},
+	"Forequarters": &HitLocation{
+		Name:   "Forequarters",
+		HitLoc: []int{7, 8},
+		Base:   1,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{9, 10},
+		Base:   -1,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{11, 12},
+		Base:   -1,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{13, 14},
+		Base:   1,
+	},
+	"R Arm": &HitLocation{
+		Name:   "R Arm",
+		HitLoc: []int{15, 16},
+		Base:   -1,
+	},
+	"L Arm": &HitLocation{
+		Name:   "L Arm",
+		HitLoc: []int{17, 18},
 		Base:   -1,
 	},
 	"Head": &HitLocation{

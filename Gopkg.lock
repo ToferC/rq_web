@@ -197,11 +197,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f41631c0acefa637320972bad4c29f888d528e74e2b0ebf2a6526649e525938b"
+  digest = "1:8b38fac4b78403862359e1d595466412b906094b22c9f91df255131e6f18d109"
   name = "github.com/toferc/runequest"
   packages = ["."]
   pruneopts = "UT"
-  revision = "7175277521ec7f5edbd5065ebd62afea3fef8900"
+  revision = "019177563c2efa1ada1ed4125287a318a9ecb867"
 
 [[projects]]
   digest = "1:74055050ea547bb04600be79cc501965cb3de8988018262f2ca430f0a0b48ec3"
@@ -273,11 +273,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:668e8c66b8895d69391429b0f64a72c35603c94f364c94d4e5fab5053d57a0b6"
+  digest = "1:8f5108406bc43c7669b0d67d282e40d05c9f268615fcaf8c1f0f76965aa3f09f"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "ad28b68e88f12448a1685d038ffea87bbbb34148"
+  revision = "4c4f7f33c9ed00de01c4c741d2177abfcfe19307"
 
 [[projects]]
   digest = "1:8d8faad6b12a3a4c819a3f9618cb6ee1fa1cfc33253abeeea8b55336721e3405"

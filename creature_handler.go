@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
+	"github.com/gosimple/slug"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
 	"github.com/toferc/rq_web/models"
@@ -310,37 +311,53 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(author)
 
-	cm := models.CharacterModel{}
+	cm := models.CharacterModel{
+		Author: author,
+	}
 
-	c := runequest.NewCharacter("Default")
+	c := runequest.NewCharacter("")
 
 	cm.Character = c
 
-	// Set 10 skills
-	for i := 0; i < 10; i++ {
+	// Set 6 skills
+	for i := 0; i < 6; i++ {
 		s := runequest.Skill{
 			Name:       "",
 			CoreString: "",
 			UserString: "",
 			Base:       0,
 			Value:      0,
+			Category:   "Agility",
 		}
-		c.Skills["z"+string(i)] = &s
-	}
-
-	// Assign additional empty HitLocations to populate form
-	for i := 0; i < 4; i++ {
-		t := runequest.HitLocation{
-			Name:   "",
-			HitLoc: []int{0},
-		}
-		c.HitLocationMap = append(c.HitLocationMap, "z"+string(i))
-		c.HitLocations["z"+string(i)] = &t
+		c.Skills[fmt.Sprintf("z-%d", i)] = &s
 	}
 
 	cults, err := database.ListCultModels(db)
 	if err != nil {
 		panic(err)
+	}
+
+	// Add extra runespells
+	for i := 1; i < 6; i++ {
+		trs := &runequest.Spell{
+			Name:       "",
+			CoreString: "",
+			UserString: "",
+			Cost:       0,
+		}
+		c.RuneSpells["zzNewRS-"+string(i)] = trs
+	}
+
+	// Add extra spirit magic
+	for i := 1; i < 6; i++ {
+		tsm := &runequest.Spell{
+			Name:       "",
+			CoreString: "",
+			UserString: "",
+			Cost:       0,
+		}
+		tsm.Name = createName(tsm.CoreString, tsm.UserString)
+		c.SpiritMagic["zzNewSM-"+string(i)] = tsm
 	}
 
 	wc := WebChar{
@@ -355,6 +372,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		SpiritMagic:    runequest.SpiritMagicSpells,
 		RuneSpells:     runequest.RuneSpells,
 		CultModels:     cults,
+		CategoryOrder:  runequest.CategoryOrder,
 	}
 
 	if req.Method == "GET" {
@@ -371,57 +389,390 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		c := &runequest.Character{}
-
-		c.Description = req.FormValue("Description")
-
-		for _, st := range runequest.StatMap {
-			c.Statistics[st].Base, _ = strconv.Atoi(req.FormValue(st))
+		err = decoder.Decode(c, req.PostForm)
+		if err != nil {
+			panic(err)
 		}
 
-		for _, sk := range c.Skills {
-			sk.Value, _ = strconv.Atoi(req.FormValue(sk.Name))
-			if sk.UserChoice {
-				sk.UserString = req.FormValue(fmt.Sprintf("%s-Spec", sk.Name))
+		cm.Slug = slug.Make(fmt.Sprintf("%s-%s", username, c.Name))
+
+		for _, st := range runequest.StatMap {
+			num, err := strconv.Atoi(req.FormValue(st))
+			if err != nil {
+				num = 10
+			}
+			if num > 0 {
+				c.Statistics[st].Base = num
+				c.Statistics[st].Max = num
 			}
 		}
 
-		// Hit locations - need to add new map or amend old one
+		// Add Skills
+		newSkills := map[string]*runequest.Skill{}
 
-		newHL := map[string]*runequest.HitLocation{}
+		for k := range c.Skills {
+			str := fmt.Sprintf("Skill-%s-", k)
 
-		for i := range c.HitLocations {
+			coreString := req.FormValue(str + "CoreString")
+			val, err := strconv.Atoi(req.FormValue(str + "Value"))
+			if err != nil {
+				val = 0
+			}
 
-			name := req.FormValue(fmt.Sprintf("%s-Name", i))
+			if coreString != "" && val > 0 {
 
-			if name != "" {
-
-				max, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Max", i)))
-				armor, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Armor", i)))
-
-				fmt.Println(name, max, armor)
-
-				newHL[name] = &runequest.HitLocation{
-					Name:   name,
-					Max:    max,
-					Armor:  armor,
-					HitLoc: []int{},
+				sk := &runequest.Skill{
+					CoreString: coreString,
+					Category:   req.FormValue(str + "Category"),
+					Value:      val,
+					Total:      val,
 				}
 
-				newHL[name].FillWounds()
+				userString := req.FormValue(str + "UserString")
+				if userString != "" {
+					sk.UserString = userString
+				}
 
-				for j := 1; j < 11; j++ {
-					if req.FormValue(fmt.Sprintf("%s-%d-loc", i, j)) != "" {
-						newHL[name].HitLoc = append(newHL[name].HitLoc, j)
+				sk.GenerateName()
+				sk.UpdateSkill()
+				newSkills[sk.Name] = sk
+			}
+		}
+
+		// Update skills
+		c.Skills = newSkills
+
+		// Add passions
+		for i := 1; i < 6; i++ {
+
+			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
+			userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+
+			str := fmt.Sprintf("Passion-%d-Base", i)
+			base, err := strconv.Atoi(req.FormValue(str))
+			if err != nil {
+				base = 0
+			}
+
+			if coreString != "" && base > 0 {
+
+				targetString := createName(coreString, userString)
+
+				// No ability
+				a := &runequest.Ability{
+					Type:       "Passion",
+					CoreString: coreString,
+					Base:       base,
+					Total:      base,
+				}
+
+				if userString != "" {
+					a.UserString = userString
+				}
+
+				a.UpdateAbility()
+
+				c.Abilities[targetString] = a
+
+			}
+		}
+
+		// Update Elemental Runes
+		for k, v := range c.ElementalRunes {
+			val, err := strconv.Atoi(req.FormValue(k))
+			if err != nil {
+				val = 0
+			}
+
+			if val > 0 {
+				v.Base = val
+				v.Total = val
+				v.UpdateAbility()
+			}
+		}
+
+		// Update Power Runes
+		for k, v := range c.PowerRunes {
+			val, err := strconv.Atoi(req.FormValue(k))
+			if err != nil {
+				val = 0
+			}
+
+			if val > 0 {
+				v.Base = val
+				v.Total = val
+				v.UpdateAbility()
+			}
+		}
+
+		// Update Condition Runes
+		for k, v := range c.ConditionRunes {
+			val, err := strconv.Atoi(req.FormValue(k))
+			if err != nil {
+				val = 0
+			}
+
+			if val > 0 {
+				v.Base = val
+				v.Total = val
+				v.UpdateAbility()
+			}
+		}
+
+		// Update Character
+		c.CurrentHP = c.Attributes["HP"].Max
+		c.CurrentMP = c.Attributes["MP"].Max
+		c.CurrentRP = c.Cult.NumRunePoints
+
+		form := req.FormValue("Hit-Location-Form")
+
+		c.LocationForm = form
+		c.HitLocations = runequest.LocationForms[form]
+		c.HitLocationMap = runequest.GenerateHitLocationMap(c.HitLocations)
+
+		armorStr := req.FormValue("Armor")
+		armor, err := strconv.Atoi(armorStr)
+		if err != nil {
+			armor = 0
+		}
+		for _, v := range c.HitLocations {
+			v.Armor = armor
+			v.Value = v.Max
+		}
+
+		fmt.Println(c.HitLocations)
+
+		c.UpdateCharacter()
+
+		// Update Powers
+		c.Powers = map[string]*runequest.Power{}
+
+		for _, n := range numToArray(7) {
+			str := fmt.Sprintf("Power-%d-", n)
+			name := req.FormValue(str + "Name")
+			if name != "" {
+				c.Powers[name] = &runequest.Power{
+					Name:        name,
+					Description: req.FormValue(str + "Description"),
+				}
+			}
+		}
+
+		meleeAttacks := map[string]*runequest.Attack{}
+		rangedAttacks := map[string]*runequest.Attack{}
+
+		// Melee Weapons & Attacks
+		for _, i := range numToArray(7) {
+			attackName := req.FormValue(fmt.Sprintf("Attack-%d-Name", i))
+			attackType := req.FormValue(fmt.Sprintf("Attack-%d-Type", i))
+			special := req.FormValue(fmt.Sprintf("Attack-%d-Special", i))
+
+			skillString := req.FormValue(fmt.Sprintf("Attack-%d-Skill", i))
+
+			skillVal, err := strconv.Atoi(skillString)
+			if err != nil {
+				skillVal = 0
+			}
+
+			numDiceStr := req.FormValue(fmt.Sprintf("Attack-%d-Num", i))
+			numDiceVal, err := strconv.Atoi(numDiceStr)
+			if err != nil {
+				numDiceVal = 0
+			}
+
+			dieType := req.FormValue(fmt.Sprintf("Attack-%d-Die-Type", i))
+			dieVal, err := strconv.Atoi(dieType)
+			if err != nil {
+				dieVal = 0
+			}
+
+			modStr := req.FormValue(fmt.Sprintf("Attack-%d-Mod", i))
+			modVal, err := strconv.Atoi(modStr)
+			if err != nil {
+				modVal = 0
+			}
+
+			hpStr := req.FormValue(fmt.Sprintf("Attack-%d-HP", i))
+			hpVal, err := strconv.Atoi(hpStr)
+			if err != nil {
+				hpVal = 0
+			}
+
+			srStr := req.FormValue(fmt.Sprintf("Attack-%d-SR", i))
+			srVal, err := strconv.Atoi(srStr)
+			if err != nil {
+				srVal = 0
+			}
+
+			rangeStr := req.FormValue(fmt.Sprintf("Attack-%d-Range", i))
+			rangeVal, err := strconv.Atoi(rangeStr)
+			if err != nil {
+				rangeVal = 0
+			}
+
+			if attackName != "" && skillVal > 0 {
+
+				damageString := ""
+				damageString += fmt.Sprintf("%dd%d", numDiceVal, dieVal)
+
+				if modVal > 0 {
+					damageString += fmt.Sprintf("+%d", modVal)
+				}
+
+				// Create Weapon Skill
+				sk := &runequest.Skill{
+					CoreString: attackName,
+					Value:      skillVal,
+					Category:   attackType,
+				}
+
+				c.Skills[attackName] = sk
+
+				if attackType == "Ranged" {
+
+					rangedAttacks[attackName] = &runequest.Attack{
+						Name:         attackName,
+						Skill:        c.Skills[attackName],
+						DamageString: damageString,
+						StrikeRank:   c.Attributes["DEXSR"].Base,
+						Weapon: &runequest.Weapon{
+							Name:      attackName,
+							Type:      attackType,
+							SR:        srVal,
+							STRDamage: false,
+							Range:     rangeVal,
+							Damage:    damageString,
+							HP:        hpVal,
+							CurrentHP: hpVal,
+							Special:   special,
+						},
+					}
+				} else {
+
+					dbString := ""
+
+					if c.Attributes["DB"].Text != "-" {
+						dbString = c.Attributes["DB"].Text
+					}
+
+					meleeAttacks[attackName] = &runequest.Attack{
+						Name:         attackName,
+						Skill:        c.Skills[attackName],
+						DamageString: damageString + dbString,
+						StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + srVal,
+						Weapon: &runequest.Weapon{
+							Name:      attackName,
+							Type:      attackType,
+							SR:        srVal,
+							STRDamage: true,
+							Damage:    damageString,
+							HP:        hpVal,
+							CurrentHP: hpVal,
+							Special:   special,
+						},
 					}
 				}
 			}
 		}
 
-		fmt.Println(newHL)
-		c.HitLocations = newHL
+		c.MeleeAttacks = meleeAttacks
+		c.RangedAttacks = rangedAttacks
 
-		cm.Character = c
+		tempRuneSpells := map[string]*runequest.Spell{}
+
+		for k, v := range c.RuneSpells {
+			str := req.FormValue(fmt.Sprintf("RuneSpell-%s", k))
+			spec := req.FormValue(fmt.Sprintf("RuneSpell-%s-UserString", k))
+
+			fmt.Println(str, spec)
+
+			switch {
+			case str == "":
+				fmt.Println("No spell")
+				continue
+
+			case v.CoreString != str || v.UserString != spec:
+				// Spell has changed or is new
+				fmt.Printf("New spell: %s - %s", str, spec)
+				// Get info from runequest.RuneSpells
+				index, err := indexSpell(str, runequest.RuneSpells)
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+
+				baseSpell := runequest.RuneSpells[index]
+
+				s := &runequest.Spell{
+					Name:       baseSpell.Name,
+					CoreString: baseSpell.CoreString,
+					UserString: baseSpell.UserString,
+					Cost:       baseSpell.Cost,
+					Domain:     baseSpell.Domain,
+				}
+
+				if spec != "" {
+					s.UserString = spec
+				}
+
+				s.GenerateName()
+				tempRuneSpells[s.Name] = s
+			}
+		}
+
+		c.RuneSpells = tempRuneSpells
+
+		// Spirit Magic
+
+		tempSpiritMagic := map[string]*runequest.Spell{}
+
+		for k, v := range c.SpiritMagic {
+			str := req.FormValue(fmt.Sprintf("SpiritMagic-%s", k))
+			spec := req.FormValue(fmt.Sprintf("SpiritMagic-%s-UserString", k))
+			cString := req.FormValue(fmt.Sprintf("SpiritMagic-%s-Cost", k))
+
+			cost, err := strconv.Atoi(cString)
+			if err != nil {
+				cost = 1
+				fmt.Println("Non-number entered")
+			}
+
+			switch {
+			case str == "":
+				fmt.Println("No spell")
+				continue
+
+			case v.CoreString != str || v.UserString != spec || v.Cost != cost:
+				// Spell has changed or is new
+				fmt.Printf("NEW Spell: %s - %s", str, spec)
+
+				// Get info from runequest.RuneSpells
+				index, err := indexSpell(str, runequest.SpiritMagicSpells)
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+
+				baseSpell := runequest.SpiritMagicSpells[index]
+
+				s := &runequest.Spell{
+					Name:       baseSpell.Name,
+					CoreString: baseSpell.CoreString,
+					UserString: baseSpell.UserString,
+					Cost:       cost,
+					Domain:     baseSpell.Domain,
+				}
+
+				if spec != "" {
+					s.UserString = spec
+				}
+
+				s.GenerateName()
+				tempSpiritMagic[s.Name] = s
+			}
+		}
+
+		c.SpiritMagic = tempSpiritMagic
 
 		// Insert power into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -467,6 +818,8 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
 		}
+
+		c.CreationSteps["Complete"] = true
 
 		fmt.Println(c)
 

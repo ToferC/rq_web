@@ -40,6 +40,7 @@ type Character struct {
 	RuneSpells       map[string]*Spell
 	SpiritMagic      map[string]*Spell
 	Powers           map[string]*Power
+	LocationForm     string
 	HitLocations     map[string]*HitLocation
 	HitLocationMap   []string
 	MeleeAttacks     map[string]*Attack
@@ -85,8 +86,9 @@ func (c *Character) UpdateCharacter() {
 	c.UpdateAttributes()
 
 	if len(c.HitLocations) == 0 {
-		c.HitLocationMap = HitLocationMap
-		c.HitLocations = Locations
+		hlForms := LocationForms[c.LocationForm]
+		c.HitLocationMap = GenerateHitLocationMap(hlForms)
+		c.HitLocations = hlForms
 	}
 }
 

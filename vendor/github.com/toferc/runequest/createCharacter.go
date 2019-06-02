@@ -15,8 +15,9 @@ func NewCharacter(name string) *Character {
 		Homeland:       &Homeland{},
 		Occupation:     &Occupation{},
 		Cult:           &Cult{},
-		HitLocations:   Locations,
-		HitLocationMap: HitLocationMap,
+		LocationForm:   "Humanoids",
+		HitLocations:   LocationForms["Humanoids"],
+		HitLocationMap: GenerateHitLocationMap(LocationForms["Humanoid"]),
 		CreationSteps:  CreationStatus,
 
 		MeleeAttacks:  map[string]*Attack{},

@@ -170,8 +170,6 @@ func main() {
 	r.HandleFunc("/users/", UserIndexHandler)
 
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
-	r.HandleFunc("/summary_view_character/{id}", SummaryCharacterHandler)
-	r.HandleFunc("/new/", NewCharacterHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
 	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 

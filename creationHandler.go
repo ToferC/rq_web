@@ -707,6 +707,10 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		c.Statistics[target2].RuneBonus = 1
 		c.Statistics[target2].Max++
 
+		c.LocationForm = "Humanoids"
+		c.HitLocations = runequest.LocationForms["Humanoids"]
+		c.HitLocationMap = runequest.GenerateHitLocationMap(c.HitLocations)
+
 		c.SetAttributes()
 
 		// Update Character
@@ -2042,13 +2046,6 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 				armor = v.Armor
 			}
 			v.Armor = armor
-
-			str = req.FormValue(fmt.Sprintf("%s-HP-Max", k))
-			max, err := strconv.Atoi(str)
-			if err != nil {
-				max = v.Max
-			}
-			v.Max = max
 		}
 
 		// Update CreationSteps
