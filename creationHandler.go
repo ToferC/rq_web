@@ -709,7 +709,7 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.LocationForm = "Humanoids"
 		c.HitLocations = runequest.LocationForms["Humanoids"]
-		c.HitLocationMap = runequest.GenerateHitLocationMap(c.HitLocations)
+		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
 
 		c.SetAttributes()
 

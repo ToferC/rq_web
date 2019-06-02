@@ -45,6 +45,7 @@ th {
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h4>{{ $character.Name }}</h4>
             <br>
+            {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p><strong>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</strong></p>
               {{ if $character.ExtraCults }}
               {{ range $ec := $character.ExtraCults }}
@@ -53,6 +54,9 @@ th {
               {{ end }}
               {{ if ne $character.Clan "" }}{{ $character.Clan }} Clan | {{end}}{{ if ne $character.Tribe "" }}{{ $character.Tribe }} Tribe
             {{ end }}</h5>
+            {{ else }}
+            <p><strong>{{ $character.Role }}</strong></p>
+            {{ end }}
             
 
           <img class ="card-img-top" data-src="" alt="Thumbnail"
@@ -126,10 +130,6 @@ th {
         </tr>
         {{ end }} <!-- END gt loop -->
         {{ end }}
-        </table>
-
-      <h5>Power/Form Runes</h5>
-      <table class="table table-sm table-striped">
 
         {{ range $r := $character.PowerRunes }}
         {{ if and (ne $r.Total 50) (ne $r.Total 0) }}
@@ -148,11 +148,6 @@ th {
         </tr>
         {{ end }} <!-- END ne loop -->
         {{ end }}
-        </table>
-
-        {{ if gt (len $character.ConditionRunes) 0 }}
-        <h5>Condition Runes</h5>
-      <table class="table table-sm table-striped">
 
         {{ range $r := $character.ConditionRunes }}
         {{ if gt $r.Total 0 }}
@@ -172,7 +167,6 @@ th {
         {{ end }} <!-- END if gt 0 loop -->
         {{ end }}
         </table>
-        {{ end }} <!-- END if len loop -->
 
         {{ if gt (len $character.RuneSpells) 0 }}
         <h5>Rune Spells</h5>
@@ -332,7 +326,12 @@ th {
 
         {{ if gt (len $character.MeleeAttacks) 0 }}
         <h5>Melee Attacks {{ if $IsAuthor }}
+            {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <a class="btn btn-sm btn-primary" href="/equip_weapons_armor/{{ $ID }}">Weapons & Armor</a>
+            {{ else }}
+            <a class="btn btn-sm btn-primary" href="#">Edit Attacks</a>
+
+            {{ end }}
             {{ end }}</h5>
         <table class="table table-sm table-striped">
           <tr>

@@ -69,13 +69,19 @@
             <div class="row">
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <br>
+                  {{ if or (eq $c.Character.Role "Player Character") (eq $c.Character.Role "") }}
                     <h5>
+
                     {{ $c.Character.Name }} of {{ $c.Character.Homeland.Name }}
                     </h5>
                     <p>
                     {{ $c.Character.Occupation.Name }} of
                     {{ $c.Character.Clan }} Clan, {{ $c.Character.Tribe}} Tribe.
                     </p>
+                    {{ else }}
+                      <h5>{{ $c.Character.Name }}</h5>
+                      <p>{{ $c.Character.Role }}</p>
+                    {{ end }}
                 </div>
 
                 <div class="col-sm-6 col-md-6 col-lg-6">

@@ -1,6 +1,9 @@
 package runequest
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // HitLocation represents a body area that can take damage
 type HitLocation struct {
@@ -15,15 +18,6 @@ type HitLocation struct {
 	Armor    int
 	Disabled bool
 	Maimed   bool
-}
-
-// GenerateHitLocationMap takes a HitLocation map and generates an array of strings
-func GenerateHitLocationMap(hlForm map[string]*HitLocation) []string {
-	m := []string{}
-	for k := range hlForm {
-		m = append(m, k)
-	}
-	return m
 }
 
 // Strings
@@ -48,6 +42,9 @@ var LocationForms = map[string]map[string]*HitLocation{
 	"Centaurs":            CentaurLocations,
 	"Dragons/Manticores":  DragonHitLocations,
 	"Four-Legged Animals": FourLeggedAnimalsHitLocations,
+	"Serpents":            SerpentLocations,
+	"Birds, Flying":       BirdsFlyingHitLocations,
+	"Birds, Running":      BirdsRunningHitLocations,
 }
 
 // HumanoidLocations is a base map of hit locations
@@ -80,6 +77,74 @@ var HumanoidLocations = map[string]*HitLocation{
 	"R Arm": &HitLocation{
 		Name:   "R Arm",
 		HitLoc: []int{13, 14, 15},
+		Base:   -1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{19, 20},
+		Base:   0,
+	},
+}
+
+// SerpentLocations is a base map of hit locations
+var SerpentLocations = map[string]*HitLocation{
+	"Tail": &HitLocation{
+		Name:   "Tail",
+		HitLoc: []int{1, 2, 3, 4, 5, 6},
+		Base:   0,
+	},
+	"Body": &HitLocation{
+		Name:   "Body",
+		HitLoc: []int{7, 8, 9, 10, 11, 12, 13, 14},
+		Base:   1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{15, 16, 17, 18, 19, 20},
+		Base:   0,
+	},
+}
+
+// HumanoidWingedLocations is a base map of hit locations
+var HumanoidWingedLocations = map[string]*HitLocation{
+	"R Leg": &HitLocation{
+		Name:   "R Leg",
+		HitLoc: []int{1, 2, 3},
+		Base:   0,
+	},
+	"L Leg": &HitLocation{
+		Name:   "L Leg",
+		HitLoc: []int{4, 5, 6},
+		Base:   0,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{7, 8, 9},
+		Base:   0,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{10},
+		Base:   1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{11, 12},
+		Base:   -1,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{13, 14},
+		Base:   -1,
+	},
+	"R Arm": &HitLocation{
+		Name:   "R Arm",
+		HitLoc: []int{15, 16},
+		Base:   -1,
+	},
+	"L Arm": &HitLocation{
+		Name:   "L Arm",
+		HitLoc: []int{17, 18},
 		Base:   -1,
 	},
 	"Head": &HitLocation{
@@ -124,6 +189,89 @@ var FourLeggedAnimalsHitLocations = map[string]*HitLocation{
 	"Head": &HitLocation{
 		Name:   "Head",
 		HitLoc: []int{17, 18, 19, 20},
+		Base:   0,
+	},
+}
+
+// BirdsFlyingHitLocations is a base map of hit locations
+var BirdsFlyingHitLocations = map[string]*HitLocation{
+	"Tail": &HitLocation{
+		Name:   "Tail",
+		HitLoc: []int{1},
+		Base:   -2,
+	},
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{2, 3, 4},
+		Base:   -1,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{5, 6, 7},
+		Base:   -1,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{8, 9},
+		Base:   0,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{10, 11, 12},
+		Base:   1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{13, 14},
+		Base:   0,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{15, 16},
+		Base:   0,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{17, 18, 19, 20},
+		Base:   0,
+	},
+}
+
+// BirdsRunningHitLocations is a base map of hit locations
+var BirdsRunningHitLocations = map[string]*HitLocation{
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1, 2, 3, 4},
+		Base:   0,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{5, 6, 7, 8},
+		Base:   0,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{9, 10},
+		Base:   0,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{11, 12, 13},
+		Base:   1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{14, 15},
+		Base:   -1,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{16, 17},
+		Base:   -1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{18, 19, 20},
 		Base:   0,
 	},
 }
@@ -236,5 +384,58 @@ var CentaurLocations = map[string]*HitLocation{
 	},
 }
 
-// HPPerLocation is the base wound map
-var HPPerLocation = []int{2, 3, 4, 5, 6, 7}
+// SortLocations HitLocations
+func SortLocations(locations map[string]*HitLocation) []string {
+	locationArray := []*HitLocation{}
+
+	for _, v := range locations {
+		locationArray = append(locationArray, v)
+	}
+
+	hitloc := func(hl1, hl2 *HitLocation) bool {
+		return hl1.HitLoc[0] > hl2.HitLoc[0]
+	}
+
+	ByHL(hitloc).SortHL(locationArray)
+
+	stringArray := []string{}
+
+	for _, l := range locationArray {
+		stringArray = append(stringArray, l.Name)
+	}
+
+	return stringArray
+}
+
+// ByHL is the type of a "less" function that defines the ordering of its HitLoc[0] arguments.
+type ByHL func(hl1, hl2 *HitLocation) bool
+
+// SortHL is a method on the function type, By, that sorts the argument slice according to the function.
+func (by ByHL) SortHL(locations []*HitLocation) {
+	ls := &locationsorter{
+		locations: locations,
+		by:        by, // The Sort method's receiver is the function (closure) that defines the sort order.
+	}
+	sort.Sort(ls)
+}
+
+// locationsorter joins a By function and a slice of Planets to be sorted.
+type locationsorter struct {
+	locations []*HitLocation
+	by        func(hl1, hl2 *HitLocation) bool // Closure used in the Less method.
+}
+
+// Len is part of sort.Interface.
+func (hl *locationsorter) Len() int {
+	return len(hl.locations)
+}
+
+// Swap is part of sort.Interface.
+func (hl *locationsorter) Swap(i, j int) {
+	hl.locations[i], hl.locations[j] = hl.locations[j], hl.locations[i]
+}
+
+// Less is part of sort.Interface. It is implemented by calling the "by" closure in the sorter.
+func (hl *locationsorter) Less(i, j int) bool {
+	return hl.by(hl.locations[i], hl.locations[j])
+}

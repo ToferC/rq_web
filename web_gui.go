@@ -198,6 +198,10 @@ func sortedSkills(skills map[string]*runequest.Skill) []*runequest.Skill {
 
 	By(total).Sort(skillArray)
 
+	if len(skillArray) < 9 {
+		return skillArray
+	}
+
 	return skillArray[:9]
 }
 

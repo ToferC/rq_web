@@ -197,11 +197,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8b38fac4b78403862359e1d595466412b906094b22c9f91df255131e6f18d109"
+  digest = "1:a11e7c13e7f3cd13fd36a1334c694d615ffadd3902e468d9384864e679ed4ef9"
   name = "github.com/toferc/runequest"
   packages = ["."]
   pruneopts = "UT"
-  revision = "019177563c2efa1ada1ed4125287a318a9ecb867"
+  revision = "d99b03bdc2b00e0c9f9a408e662fef0bd82404c5"
 
 [[projects]]
   digest = "1:74055050ea547bb04600be79cc501965cb3de8988018262f2ca430f0a0b48ec3"

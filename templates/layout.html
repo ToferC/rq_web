@@ -79,14 +79,16 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Add Content
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/add_homeland/">Add Homeland</a>
-          <a class="dropdown-item" href="/add_occupation/">Add Occupation</a>
-          <a class="dropdown-item" href="/add_cult/">Add Cult</a>
-          <a class="dropdown-item" href="/add_faction/">Add Faction</a>
-          <a class="dropdown-item" href="/add_encounter/">Add Encounter</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="/add_homeland/">Add Homeland</a></li>
+          <li><a class="dropdown-item" href="/add_occupation/">Add Occupation</a></li>
+          <li><a class="dropdown-item" href="/add_cult/">Add Cult</a></li>
+          <li class="divider"></li>
+          <li><a class="dropdown-item" href="/add_creature/">Add Creature or NPC</a></li>
+          <li><a class="dropdown-item" href="/add_faction/">Add Faction</a></li>
+          <li><a class="dropdown-item" href="/add_encounter/">Add Encounter</a></li>
 
-        </div>
+        </ul>
       </li>
       {{ end }}
       {{ if eq .IsAdmin "true" }}

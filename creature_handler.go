@@ -520,15 +520,18 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Update Character
-		c.CurrentHP = c.Attributes["HP"].Max
-		c.CurrentMP = c.Attributes["MP"].Max
-		c.CurrentRP = c.Cult.NumRunePoints
 
 		form := req.FormValue("Hit-Location-Form")
 
 		c.LocationForm = form
 		c.HitLocations = runequest.LocationForms[form]
-		c.HitLocationMap = runequest.GenerateHitLocationMap(c.HitLocations)
+		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
+
+		c.SetAttributes()
+
+		c.CurrentHP = c.Attributes["HP"].Max
+		c.CurrentMP = c.Attributes["MP"].Max
+		c.CurrentRP = c.Cult.NumRunePoints
 
 		armorStr := req.FormValue("Armor")
 		armor, err := strconv.Atoi(armorStr)

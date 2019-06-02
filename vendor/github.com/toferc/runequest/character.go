@@ -87,7 +87,7 @@ func (c *Character) UpdateCharacter() {
 
 	if len(c.HitLocations) == 0 {
 		hlForms := LocationForms[c.LocationForm]
-		c.HitLocationMap = GenerateHitLocationMap(hlForms)
+		c.HitLocationMap = SortLocations(hlForms)
 		c.HitLocations = hlForms
 	}
 }
