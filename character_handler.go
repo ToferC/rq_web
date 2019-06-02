@@ -1024,6 +1024,15 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 		c.SpiritMagic["zzNewSM-"+string(i)] = tsm
 	}
 
+	// Add extra Powers
+	for i := 1; i < 6; i++ {
+		tp := &runequest.Power{
+			Name:        "",
+			Description: "",
+		}
+		c.Powers[fmt.Sprintf("zzNewPow-%d", i)] = tp
+	}
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
@@ -1221,6 +1230,27 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.SpiritMagic = tempSpiritMagic
+
+		// Update Powers
+
+		tempPowers := map[string]*runequest.Power{}
+
+		for k := range c.Powers {
+			name := req.FormValue(fmt.Sprintf("Power-%s-Name", k))
+			desc := req.FormValue(fmt.Sprintf("Power-%s-Description", k))
+
+			if name != "" {
+				p := &runequest.Power{
+					Name:        name,
+					Description: desc,
+				}
+				tempPowers[name] = p
+			}
+		}
+
+		c.Powers = tempPowers
+
+		// Update CM
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
