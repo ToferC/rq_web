@@ -159,6 +159,7 @@ func main() {
 	r.HandleFunc("/about/", AboutHandler)
 	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
 	r.HandleFunc("/add_to_user_roster/{id}", AddToUserRosterHandler)
+	r.HandleFunc("/duplicate_character/{id}", DuplicateCharacterHandler)
 
 	r.HandleFunc("/signup/", SignUpFunc)
 	r.HandleFunc("/login/", LoginFunc)
