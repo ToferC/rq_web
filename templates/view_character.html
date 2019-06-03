@@ -69,7 +69,7 @@ th {
 
             <form action="" method="POST">
             <h5>Description</h5>
-            <p>{{ sliceString $character.Description 77 }}</p>
+            <p>{{ $character.Description }}</p>
             <hr>
             {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p>Standard of Living: {{ $character.StandardofLiving }}</p>
@@ -84,7 +84,7 @@ th {
               <a class="btn btn-sm btn-primary" href="/modify/{{ $ID }}">Edit</a>
               <button class="btn btn-sm btn-success" type="submit" value="Save Character State">Save</button>
               <a class="btn btn-sm btn-info" href="/edit_magic/{{ $ID }}">Magic</a>
-              <a class="btn btn-sm btn-dark" href="/duplicate_character/{{ $ID }}">Duplicate</a>
+              <a class="btn btn-sm btn-primary" href="/duplicate_character/{{ $ID }}">Duplicate</a>
 
               {{ end }}
               <a class="btn btn-sm btn-danger" href="/delete/{{ $ID }}">Delete</a>

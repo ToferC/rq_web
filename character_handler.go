@@ -502,6 +502,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				stat.Updates = append(stat.Updates, update)
 
 				stat.ExperienceCheck = false
+				stat.Max += modVal
 			}
 
 			stat.UpdateStatistic()
@@ -1025,6 +1026,10 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Add extra Powers
+	if c.Powers == nil {
+		c.Powers = map[string]*runequest.Power{}
+	}
+
 	for i := 1; i < 6; i++ {
 		tp := &runequest.Power{
 			Name:        "",
