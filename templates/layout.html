@@ -39,14 +39,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/">Open Roster <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/user_roster/">My Characters<span class="sr-only">(current)</span></a>
       </li>
       {{ if ne $user "" }}
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             My Content</a>
             <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
-               <a class="dropdown-item" href="/user_roster/">Characters</span></a>
                <a class="dropdown-item" href="/user_faction_index/">Factions</span></a>
                <a class="dropdown-item" href="/user_encounter_index/">Encounters</span></a>
             </div>
