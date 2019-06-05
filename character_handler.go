@@ -607,19 +607,22 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					v.UpdateAbility()
 					v.ExperienceCheck = false
 
-					opposed := c.PowerRunes[v.OpposedAbility]
+					if v.OpposedAbility != "" {
 
-					// Update opposed Power Rune if needed
-					if v.Total+opposed.Total > 100 {
+						opposed := c.PowerRunes[v.OpposedAbility]
 
-						opposedUpdate := CreateUpdate(eventString, -modVal)
+						// Update opposed Power Rune if needed
+						if v.Total+opposed.Total > 100 {
 
-						if opposed.Updates == nil {
-							opposed.Updates = []*runequest.Update{}
+							opposedUpdate := CreateUpdate(eventString, -modVal)
+
+							if opposed.Updates == nil {
+								opposed.Updates = []*runequest.Update{}
+							}
+							opposed.Updates = append(opposed.Updates, opposedUpdate)
+							opposed.UpdateAbility()
+							triggered = append(triggered, opposed.Name)
 						}
-						opposed.Updates = append(opposed.Updates, opposedUpdate)
-						opposed.UpdateAbility()
-						triggered = append(triggered, opposed.Name)
 					}
 				}
 			}

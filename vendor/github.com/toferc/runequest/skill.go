@@ -22,6 +22,7 @@ type Skill struct {
 	Min                int
 	Max                int
 	ExperienceCheck    bool
+	IsBase             bool
 }
 
 // SkillChoice is a choice between 2 or more skills
