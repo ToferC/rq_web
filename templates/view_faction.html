@@ -8,58 +8,442 @@
 
 {{ $faction := .Faction }}
 {{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
 {{ $chars := .FactionCharacters }}
 
       <div class="container">
-        <hr>
-        <div class="row">
-          <div class="col-sm-4 col-md-4 col-lg-4">
-            <h3>{{ $faction.Name }}</h3>
-            <p>Author: {{ $faction.Author.UserName }}</p>
+            <h3>{{ $faction.Name }} - {{ $faction.Author.UserName }} {{ if $IsAuthor }}
+            <a class="btn btn-sm btn-primary" href="/modify_faction/{{ $faction.Slug }}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="/delete_faction/{{ $faction.Slug }}">Delete</a>
+            {{ end }}</h3>
             <hr>
             <p>{{ $faction.Description }}</p>
             <hr>
-            <p>{{ if $faction.Open }}Open Faction{{ else }}Closed Faction{{end}}</p>
-            {{ if $IsAuthor }}
-            <hr>
-            <a class="btn btn-sm btn-primary" href="/modify_faction/{{ $faction.Slug }}">Edit</a>
-            <a class="btn btn-sm btn-danger" href="/delete_faction/{{ $faction.Slug }}">Delete</a>
-            {{ end }}
-            <hr>
-
           </div>
 
-            <div class="col-sm-8 col-md-8 col-lg-8">
+    <div class="row">
+        <form>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+
+          <ul class="nav nav-tabs" id="characterTabs" role="tablist">
+            {{ range $i, $c := $chars }}
+            <li class="nav-item">
+              <a
+                class="nav-link {{ if eq $i 0 }}active{{ end }}"
+                id="{{ $c.Slug }}-{{ $i }}-tab"
+                data-toggle="tab"
+                role="tab"
+                href="#{{ $c.Slug }}-{{ $i }}"
+                aria-controls="{{ $c.Slug }}-{{ $i }}"
+                {{ if eq $i 0 }}aria-selected="true" {{ else }}aria-selected="false"
+                {{ end }}
+                >{{ $c.Character.Name }}</a
+              >
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+    </div>
+
+          <div class="tab-content" id="characterTab">
+                {{ range $i, $c := $chars }}
+                {{ $charHP := "{{ $c.Slug }}-{{ $i }}-HP" }}
+            <div class="tab-pane fade {{ if eq $i 0 }}show active{{ end }}"
+              id="{{ $c.Slug }}-{{ $i }}"
+              role="tabpanel"
+              aria-labelledby="{{ $c.Slug }}-{{ $i }}">
+
+            <div id="character-info-container">
+
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                  <br>
+                  {{ if or (eq $c.Character.Role "Player Character") (eq $c.Character.Role "") }}
+                    <h5>
+
+                    {{ $c.Character.Name }} of {{ $c.Character.Homeland.Name }}
+                    </h5>
+                    <p>
+                    {{ $c.Character.Occupation.Name }} of
+                    {{ $c.Character.Clan }} Clan, {{ $c.Character.Tribe}} Tribe.  [<a href="/view_character/{{ $c.ID }}">View</a>]
+                    </p>
+                    {{ else }}
+                      <h5>{{ $c.Character.Name }}
+</h5>
+                      <p>{{ $c.Character.Role }}  [<a href="/view_character/{{ $c.ID }}">View</a>]</p>
+                    {{ end }}
+                </div>
               
-                <h4>Characters</h4>
-                
-              
-                <table class="table table-striped">
-                    <thead>
-                        <td><strong>Name</strong></td>
-                        <td><strong>Homeland</strong></td>
-                        <td><strong>Occupation</strong></td>
-                        <td><strong>Cult</strong></td>
-                        <td><strong>Link</strong></td>
-                    </thead>
-                    {{ range $c := $chars }}
-                  <tr>
-                      <td>{{ $c.Character.Name }}</td>
-                      <td>{{ $c.Character.Homeland.Name }}</td>
-                      <td>{{ $c.Character.Occupation.Name }}</td>
-                      <td>{{ $c.Character.Cult.Name }}</td>
-                      <td><a href="/view_character/{{ $c.ID }}">Link</a></td>
-                  </tr>
+
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                  <br>
+                    <h5>Cults</h5>
+                    <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="RP-addon">{{ $c.Character.Cult.Rank }} of {{ $c.Character.Cult.Name }}</span>
+                            </div>
+                            <input type="number" min=0 id="counter" class="form-control" aria-describedby="RP-addon" name="RP" value ="{{ $c.Character.CurrentRP }}">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="RP-addon">/{{ $c.Character.Cult.NumRunePoints }} RP</span>
+                              </div>
+                  </div>
+      
+                  {{ range $ec := $c.Character.ExtraCults }}
+                  <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="RP-addon">RP ({{ $ec.Name }})</span>
+                          </div>
+                          <input type="number" id="counter" min=0 class="form-control" aria-describedby="RP-addon" name="RP-{{ $ec.Name }}" value ="{{ $ec.CurrentRunePoints }}">
+                          <div class="input-group-append">
+                              <span class="input-group-text" id="RP-addon">/{{ $ec.RunePoints }}</span>
+                            </div>
+                </div>
                   {{ end }}
-              </table>
+                </div>
+            </div> <!-- END Row -->
               
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                        <h5>Characteristics</h5>
+                        <table class="table table-sm table-striped">
+                            {{ range $k, $stat := $c.Character.Statistics }}
+                            <tr title="Base: {{ $stat.Base }}
+                            Rune Bonus: {{ $stat.RuneBonus }}
+                            {{ range $u := $stat.Updates }}
+                            {{ $u.Event }}: {{ $u.Value }} ({{ $u.Date }})
+                            {{end}}">
+                                <td>{{ $stat.Name }}</td>
+                                <td style="text-align:center">{{ $stat.Total }}</td>
+                            </tr>
+                                {{ end }}
+                            <tr>
+                                <td>Damage Bonus</td>
+                                <td style="text-align:center">{{ (index $c.Character.Attributes "DB").Text }}</td>
+                            </tr>
+                            <tr>
+                                <td>SIZ SR</td>
+                                <td style="text-align:center">{{ (index $c.Character.Attributes "SIZSR").Total }}</td>
+                            </tr>
+                            <tr>
+                                <td>DEX SR</td>
+                                <td style="text-align:center">{{ (index $c.Character.Attributes "DEXSR").Total }}</td>
+                            </tr>
+                        </table>
+                </div>
 
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                        <h5>Hit Locations</h5>
+                            <table class="table table-sm table-striped">
+                                <tr>
+                                    <th style="width: 30%; text-align:center">Location</th>
+                                    <th style="width: 25%; text-align:center"></th>
+                                    <th style="width: 15%; text-align:center">Armor</th>
+                                    <th style="width: 30%; text-align:center">HP</th>
+                                </tr>
+                          
+                            {{ range $s := $c.Character.HitLocationMap }}
+                            {{ range $k, $v := $c.Character.HitLocations }}
+                            {{ if eq $s $k }}
+                            <tr>
+                                <td style="text-align:center">{{ $v.Name }}</td>
+                                <td {{ if $v.Disabled }}style="color:red"{{end}}>{{ formatIntArray $v.HitLoc }}</td>
+                                <td style="text-align:center">{{ $v.Armor }}</td>
+                                {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+                                <td>
+                                    <div class="form-group">
+                                        <input 
+                                          id="HP-tracker"
+                                          style="font-size: 14px; height:24px; line-height: 20px; text-align:center" 
+                                          type="number" class="form-control input-sm" 
+                                          aria-describedby="{{ $k }}-HP-addon" 
+                                          name="{{ $k }}-HP" 
+                                          onchange="updateHP.call(this, '{{ $c.Slug }}-{{ $i }}-HP', '{{$v.Max}}')" 
+                                          value="{{ $v.Value }}"
+                                          max="{{ $v.Max }}"
+                                          min="{{ multiply $v.Max -2}}"
+                                          data-previous="{{ $v.Value }}">
+                                    </div>
+                                </td>
+                                {{ else }}
+                                <td style="text-align:center">{{ $v.Value }}</td>
+                                {{ end }}      
+                            </tr>
+                              
+                            {{ end }} <!-- END if -->
+                            {{ end }}
+                            {{ end }} <!-- END map -->
+                            </table>
+                </div>
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <h5>Hit Points</h5>
+                        <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="HP-addon">HP</span>
+                                </div>
+                                <input 
+                                  {{ if lt $c.Character.CurrentHP 3 }}style="color:red"{{end}} 
+                                  id="{{ $c.Slug }}-{{ $i }}-HP"
+                                  class="form-control" 
+                                  aria-describedby="HP-addon" 
+                                  name="{{ $c.Slug }}-{{ $i }}-HP"
+                                  value="{{ $c.Character.CurrentHP }}"
+                                  disabled>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="HP-addon">/{{ $c.Character.Attributes.HP.Max }}</span>
+                                  </div>
+                      </div>  
+                      <br>
+                      <h5>Magic Points</h5>
               
+                      <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="MP-addon">MP</span>
+                                </div>
+                                <input type="number" id="counter-MP" min=0 class="form-control" aria-describedby="MP-addon" name="MP" value ="{{ $c.Character.CurrentMP }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="MP-addon">/{{ $c.Character.Attributes.MP.Max }}</span>
+                                  </div>
+                      </div>
+                      <br>
 
-              </div> <!-- End Character Column -->
+                      <h5>Runes</h5>
+        <table class="table table-sm table-striped">
+        {{ range $r := $c.Character.ElementalRunes }}
+        {{ if gt $r.Total 60 }}
+        <tr title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+              <td>{{ $r.Name }}</td>
+            <td style="text-align:center">{{ $r.Total }}%</td>
+        </tr>
+        {{ end }} <!-- END gt loop -->
+        {{ end }}
 
+        {{ range $r := $c.Character.PowerRunes }}
+        {{ if gt $r.Total 60 }}
+        <tr title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+            
+              <td>{{ $r.Name }}</td>
+            <td style="text-align:center">{{ $r.Total }}%</td>
+            
+        </tr>
+        {{ end }} <!-- END ne loop -->
+        {{ end }}
+
+        {{ range $r := $c.Character.ConditionRunes }}
+        {{ if gt $r.Total 0 }}
+        <tr title="{{ $r.Name }}
+        Base: {{ $r.Base }}
+        Homeland: {{ $r.HomelandValue }}%
+        Occupation: {{ $r.OccupationValue }}%
+        Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
+        {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+            
+              <td>{{ $r.Name }}</td>
+            <td style="text-align:center">{{ $r.Total }}%</td>
+            
+        </tr>
+        {{ end }} <!-- END if gt 0 loop -->
+        {{ end }}
+        </table>
+        </div> <!-- END Column -->
+        </div> <!-- END Row -->
+
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <h5>Skills</h5>
+                    <table class="table table-sm table-striped">
+                            {{ range $skill := (sortedSkills $c.Character.Skills) }}
+                            <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
+                            Base: {{ $skill.Base }}%
+                            History: {{ $skill.CreationBonusValue }}%
+                            Category: {{ $skill.CategoryValue }}%
+                            Homeland: {{ $skill.HomelandValue }}%
+                            Occupation: {{ $skill.OccupationValue }}%
+                            Cult: {{ $skill.CultValue }}%
+                            {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
+                            {{end}}">
+                
+                                <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }})</td>
+                                <td style="text-align:center">{{ $skill.Total }}%</td>
+                            </tr>
+                            {{ end }}
+                        </table>
+
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <h5>Magic</h5>
+                    {{ if gt (len $c.Character.SpiritMagic) 0 }}
+                    <h5>Spirit Magic</h5>
+                    <table class="table table-sm table-striped">
+                    {{ range $spell := $c.Character.SpiritMagic }}
+                    <tr>
+                            <td>{{ $spell.Name }}</td>
+                            <td style="text-align:center">{{ $spell.Cost }}</td>  
+                        </tr>          {{end}}
+                    </table>
+                    {{ else }}
+                    <h5>Spirit Magic: None</h5>
+                    {{ end }}
+
+                    {{ if gt (len $c.Character.RuneSpells) 0 }}
+                    <h5>Rune Spells</h5>
+                    
+                    <table class="table table-sm table-striped">
+
+                    {{ range $spell := $c.Character.RuneSpells }}
+                    <tr>
+                        <td>{{ $spell.Name }}</td>
+                        <td style="text-align:center">{{ $spell.Cost }}</td>  
+                    </tr>
+                    {{end}}
+                    </table>
+                    {{ else }}
+                    <h5>Rune Spells: None</h5>
+                    {{ end }}
+
+                </div>
+
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <h5>Weapons</h5>
+                    {{ if gt (len $c.Character.MeleeAttacks) 0 }}
+                    <table class="table table-sm table-striped">
+                      <tr>
+                        <th>Attack</th>
+                        <th>Skill</th>
+                        <th>Damage</th>
+                        <th>SR</th>
+                        <th>HP</th>
+                      </tr>
+                      {{ range $k, $v := $c.Character.MeleeAttacks }}
+                      <tr>
+                        <td>{{ $k }}</td>
+                        <td style="text-align:center">{{ $v.Skill.Total }}%</td>
+                        <td style="text-align:center">{{ $v.DamageString }}</td>
+                        <td style="text-align:center">{{ $v.StrikeRank }}</td>
+                        <td>
+                          <div class="input-group">
+                            <input
+                              id="counter"
+                              class="col-6"
+                              {{ if lt $v.Weapon.CurrentHP 3 }}style="color:red" {{end}}
+                              type="number"
+                              class="form-control"
+                              aria-describedby="{{ $k }}-HP"
+                              name="{{ $k }}-HP"
+                              value="{{ $v.Weapon.CurrentHP }}"
+                            />
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="{{ $k }}-HP-addon"
+                                >/{{ $v.Weapon.HP }}</span
+                              >
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {{  end }} <!-- END if gt MeleeAttacks-->
+                    </table>
+      
+                    {{ end }} <!-- END MeleeAttacks -->
+      
+                    {{ if gt (len $c.Character.RangedAttacks) 0 }}
+                    <table class="table table-sm table-striped">
+                      <tr>
+                        <th>Attack</th>
+                        <th>Skill</th>
+                        <th>Damage</th>
+                        <th>SR</th>
+                        <th>HP</th>
+                        <th>Range</th>
+                      </tr>
+                      {{ range $k, $v := $c.Character.RangedAttacks }}
+                      <tr>
+                        <td>{{ $k }}</td>
+                        <td style="text-align:center">{{ $v.Skill.Total }}%</td>
+                        <td style="text-align:center">{{ $v.DamageString }}</td>
+                        <td style="text-align:center">{{ $v.StrikeRank }}</td>
+                        <td style="text-align:center">{{ $v.Weapon.HP }}</td>
+                        <td style="text-align:center">{{ $v.Weapon.Range }}m</td>
+                      </tr>
+                      {{   end }} <!-- END Ranged Attacks -->
+                    </table>
+      
+                    {{ end }} <!-- END if gt RangedAttacks -->
+                </div>
+
+            </div> <!-- END bottom row -->
+            
+            </div> <!-- END info container -->
+            </div>
+            {{ end }} <!-- END Characters -->
+            </div> <!-- End Tab pane-->
+        </div> <!-- END Tab content -->
+          
             </form>
-          </div> <!-- END outer ROW -->
-        </div> <!-- END container -->
 
-{{ end }} <!-- end content -->
+        <script type="text/javascript">
+
+      const selectMP = document.getElementById('counter-MP')
+
+      selectMP.addEventListener('change', (e) => {
+        if (e.target.value < 1) {
+          e.target.style.backgroundColor = "orange";
+        } else if (e.target.value < 5) {
+          e.target.style.backgroundColor = "yellow"
+        } else {
+          e.target.style.backgroundColor = "white";
+        }
+      });
+
+      function updateHP(cID, max) {
+
+        if (this.value > max) {
+          this.value = max
+        };
+
+        if (this.value < (-max * 2)) {
+          this.value = -max * 2
+        };
+
+        var target = document.getElementById(cID);
+        var targetVal = parseInt(target.value)
+        var x = 0;
+        var previous = parseInt(this.dataset.previous)
+        
+          x = this.value - previous
+          target.value = targetVal + x
+          this.dataset.previous = this.value
+    
+
+        if (this.value < -1*max) {
+          this.style.backgroundColor = "red"
+        } else if (this.value < 1) {
+          this.style.backgroundColor = "orange"
+        } else if (this.value < max) {
+          this.style.backgroundColor = "yellow"
+        } else {
+          this.style.backgroundColor = "white"
+        }
+
+        if (target.value < 1) {
+          target.style.backgroundColor = "red";
+        } else if (target.value < 5) {
+          target.style.backgroundColor = "orange"
+        } else {
+          target.style.backgroundColor = "white";
+        };
+      }
+      </script>
+
+{{ end }}
+<!-- end content -->
