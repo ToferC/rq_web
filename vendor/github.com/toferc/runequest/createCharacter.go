@@ -27,7 +27,7 @@ func NewCharacter(name string) *Character {
 	}
 
 	// Skills is a map of regular skills in Runequest
-	c.Skills = map[string]*Skill{}
+	c.Skills = Skills
 
 	//c.Skills["Dodge"].Base = c.Statistics["DEX"].Value * 2
 	//c.Skills["Jump"].Base = c.Statistics["DEX"].Value * 3

@@ -38,6 +38,9 @@ th {
 {{ $IsAuthor := .IsAuthor }}
 {{ $IsAdmin := .IsAdmin }}
 {{ $author := .CharacterModel.Author }}
+{{ $baseSkills := index (splitSkills $character.Skills) 0 }}
+{{ $secondarySkills := index (splitSkills $character.Skills) 1 }}
+{{ $primarySkills := index (splitSkills $character.Skills) 2 }}
 
       <div class="container">
         <hr>
@@ -200,12 +203,14 @@ th {
           <li class="nav-item">
             <a class="nav-link" id="secondary-skills" data-toggle="tab" href="#secondary" aria-controls="secondary" aria-selected="false">Secondary</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" id="base-skills" data-toggle="tab" href="#base" aria-controls="base" aria-selected="false">Base</a>
+          </li>
         </ul>
         <div class="tab-content" id="SkillTab">
           <div class="tab-pane fade show active" id="primary" role="tabpanel" aria-labelledby="primary-tab">
             <table class="table table-sm table-striped">
-                {{ range $skill := $character.Skills }}
-                {{ if gt $skill.Total 40 }}
+                {{ range $skill := $primarySkills }}
                 <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
                 Base: {{ $skill.Base }}%
                 History: {{ $skill.CreationBonusValue }}%
@@ -223,14 +228,12 @@ th {
                     <td style="text-align:center">{{ $skill.Total }}%</td>
                 </tr>
                 {{ end }}
-                {{ end }}
             </table>
           </div>
 
-          <div class="tab-pane fade" id="secondary" role="tabpanel" aria-labelledby="primary-tab">
+          <div class="tab-pane fade" id="secondary" role="tabpanel" aria-labelledby="secondary-tab">
               <table class="table table-sm table-striped">
-                  {{ range $skill := $character.Skills }}
-                  {{ if lt $skill.Total 41 }}
+                  {{ range $skill := $secondarySkills }}
                   <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
                   Base: {{ $skill.Base }}%
                   History: {{ $skill.CreationBonusValue }}%
@@ -248,6 +251,28 @@ th {
                       <td style="text-align:center">{{ $skill.Total }}%</td>
                   </tr>
                   {{ end }}
+              </table>
+            </div>
+
+            <div class="tab-pane fade" id="base" role="tabpanel" aria-labelledby="base-tab">
+              <table class="table table-sm table-striped">
+                  {{ range $skill := $baseSkills }}
+                  <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
+                  Base: {{ $skill.Base }}%
+                  History: {{ $skill.CreationBonusValue }}%
+                  Category: {{ $skill.CategoryValue }}%
+                  Homeland: {{ $skill.HomelandValue }}%
+                  Occupation: {{ $skill.OccupationValue }}%
+                  Cult: {{ $skill.CultValue }}%
+                  {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
+                  {{end}}">
+      
+                      <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}) {{ if $IsAuthor }}
+                              <input type="checkbox" name="{{ $skill.Name }}-XP" value="{{ $skill.ExperienceCheck }}" id="checkbox" {{ if $skill.ExperienceCheck }}checked{{end}}>
+                              {{ end }}
+                      </td>
+                      <td style="text-align:center">{{ $skill.Total }}%</td>
+                  </tr>
                   {{ end }}
               </table>
             </div>

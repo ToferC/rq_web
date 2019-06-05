@@ -21,13 +21,19 @@ type Attribute struct {
 // SetAttributes determines initial derived stats for the character
 func (c *Character) SetAttributes() {
 
-	mp := c.DetermineMagicPoints()
-	hp := c.DetermineHitPoints()
-	hr := c.DetermineHealingRate()
-	db := c.DetermineDamageBonus()
-	sd := c.DetermineSpiritDamage()
-	dx := c.DetermineDexStrikeRank()
-	sz := c.DetermineSizStrikeRank()
+	var hp, hr, sz, db, dx, sd, mp *Attribute
+
+	mp = c.DetermineMagicPoints()
+	if c.Statistics["CON"].Base > 0 && c.Statistics["SIZ"].Base > 0 {
+		hp = c.DetermineHitPoints()
+		hr = c.DetermineHealingRate()
+		sz = c.DetermineSizStrikeRank()
+		db = c.DetermineDamageBonus()
+	}
+	sd = c.DetermineSpiritDamage()
+	if c.Statistics["DEX"].Base > 0 {
+		dx = c.DetermineDexStrikeRank()
+	}
 
 	c.Attributes = map[string]*Attribute{
 		"MP":    mp,

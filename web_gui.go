@@ -68,7 +68,7 @@ type WebChar struct {
 	StandardsOfLiving []string
 	PowerRunes        []string
 	ElementalRunes    []string
-	Skills            map[string]runequest.Skill
+	Skills            map[string]*runequest.Skill
 	SpiritMagic       []runequest.Spell
 	RuneSpells        []runequest.Spell
 	TotalSpiritMagic  []*runequest.Spell
@@ -238,6 +238,31 @@ func (s *skillSorter) Less(i, j int) bool {
 	return s.by(s.skills[i], s.skills[j])
 }
 
+func splitSkills(skills map[string]*runequest.Skill) []map[string]*runequest.Skill {
+	split := []map[string]*runequest.Skill{
+		map[string]*runequest.Skill{},
+		map[string]*runequest.Skill{},
+		map[string]*runequest.Skill{},
+	}
+
+	for k, v := range skills {
+		updates := 0
+		for _, u := range v.Updates {
+			updates += u.Value
+		}
+
+		switch {
+		case v.HomelandValue+v.OccupationValue+v.CultValue+updates == 0 || v.Base+v.CategoryValue == v.Total:
+			split[0][k] = v
+		case v.Total < 41:
+			split[1][k] = v
+		default:
+			split[2][k] = v
+		}
+	}
+	return split
+}
+
 // Generate URL for next step of Character creation
 func generateCharacterCreationURL(cStep map[string]bool) string {
 
@@ -287,6 +312,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"formatStringArray":            formatStringArray,
 		"formatIntArray":               formatIntArray,
 		"sortedSkills":                 sortedSkills,
+		"splitSkills":                  splitSkills,
 		"slugify":                      slugify,
 	}
 

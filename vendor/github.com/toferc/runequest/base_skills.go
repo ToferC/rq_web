@@ -1,105 +1,105 @@
 package runequest
 
-// Skills is a map of basic common skills in Runequest
-var Skills = map[string]Skill{
+// Skills is a map of basic common &Skills in Runequest
+var Skills = map[string]*Skill{
 	// Agility
-	"Boat": Skill{
+	"Boat": &Skill{
 		CoreString: "Boat",
 		Base:       5,
 		Category:   "Agility",
 	},
-	"Climb": Skill{
+	"Climb": &Skill{
 		CoreString: "Climb",
 		Base:       40,
 		Category:   "Agility",
 	},
-	"Dodge": Skill{
+	"Dodge": &Skill{
 		CoreString: "Dodge",
 		Base:       20,
 		Category:   "Agility",
 	},
-	"Drive": Skill{
+	"Drive": &Skill{
 		CoreString: "Drive",
 		UserChoice: true,
 		UserString: "Chariot",
 		Base:       5,
 		Category:   "Agility",
 	},
-	"Jump": Skill{
+	"Jump": &Skill{
 		CoreString: "Jump",
 		Base:       30,
 		Category:   "Agility",
 	},
-	"Ride": Skill{
+	"Ride": &Skill{
 		CoreString: "Ride",
 		UserChoice: true,
 		UserString: "Horse",
 		Base:       5,
 		Category:   "Agility",
 	},
-	"Swim": Skill{
+	"Swim": &Skill{
 		CoreString: "Swim",
 		Base:       15,
 		Category:   "Agility",
 	},
 
 	// Communication
-	"Act": Skill{
+	"Act": &Skill{
 		CoreString: "Act",
 		Base:       5,
 		Category:   "Communication",
 	},
-	"Art": Skill{
+	"Art": &Skill{
 		CoreString: "Art",
 		Base:       5,
 		Category:   "Communication",
 	},
-	"Bargain": Skill{
+	"Bargain": &Skill{
 		CoreString: "Bargain",
 		Base:       5,
 		Category:   "Communication",
 	},
-	"Charm": Skill{
+	"Charm": &Skill{
 		CoreString: "Charm",
 		Base:       15,
 		Category:   "Communication",
 	},
-	"Dance": Skill{
+	"Dance": &Skill{
 		CoreString: "Dance",
 		Base:       10,
 		Category:   "Communication",
 	},
-	"Disguise": Skill{
+	"Disguise": &Skill{
 		CoreString: "Disguise",
 		Base:       5,
 		Category:   "Communication",
 	},
-	"Fast Talk": Skill{
+	"Fast Talk": &Skill{
 		CoreString: "Fast Talk",
 		Base:       5,
 		Category:   "Communication",
 	},
-	"Intimidate": Skill{
+	"Intimidate": &Skill{
 		CoreString: "Intimidate",
 		Base:       15,
 		Category:   "Communication",
 	},
-	"Intrigue": Skill{
+	"Intrigue": &Skill{
 		CoreString: "Intrigue",
 		Base:       5,
 		Category:   "Communication",
 	},
-	"Orate": Skill{
+	"Orate": &Skill{
 		CoreString: "Orate",
 		Base:       10,
 		Category:   "Communication",
 	},
-	"Sing": Skill{
+	"Sing": &Skill{
 		CoreString: "Sing",
 		Base:       10,
 		Category:   "Communication",
 	},
-	"Speak": Skill{
+	"Speak": &Skill{
 		CoreString: "Speak",
 		UserChoice: true,
 		UserString: "Heortling",
@@ -107,197 +107,197 @@ var Skills = map[string]Skill{
 		Category:   "Communication",
 	},
 	// Knowledge
-	"Alchemy": Skill{
+	"Alchemy": &Skill{
 		CoreString: "Alchemy",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Animal Lore": Skill{
+	"Animal Lore": &Skill{
 		CoreString: "Animal Lore",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Battle": Skill{
+	"Battle": &Skill{
 		CoreString: "Battle",
 		Base:       10,
 		Category:   "Knowledge",
 	},
-	"Bureacracy": Skill{
+	"Bureacracy": &Skill{
 		CoreString: "Bureacracy",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Celestial Lore": Skill{
+	"Celestial Lore": &Skill{
 		CoreString: "Celestial Lore",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Cult Lore": Skill{
+	"Cult Lore": &Skill{
 		CoreString: "Cult Lore",
 		UserChoice: true,
 		UserString: "Orlanth",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Customs": Skill{
+	"Customs": &Skill{
 		CoreString: "Customs",
 		UserChoice: true,
 		UserString: "Heortling",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Elder Race Lore": Skill{
+	"Elder Race Lore": &Skill{
 		CoreString: "Elder Race Lore",
 		UserChoice: true,
 		UserString: "Elves",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Evaluate": Skill{
+	"Evaluate": &Skill{
 		CoreString: "Evaluate",
 		Base:       10,
 		Category:   "Knowledge",
 	},
-	"Farm": Skill{
+	"Farm": &Skill{
 		CoreString: "Farm",
 		Base:       10,
 		Category:   "Knowledge",
 	},
-	"First Aid": Skill{
+	"First Aid": &Skill{
 		CoreString: "First Aid",
 		Base:       10,
 		Category:   "Knowledge",
 	},
-	"Game": Skill{
+	"Game": &Skill{
 		CoreString: "Game",
 		Base:       15,
 		Category:   "Knowledge",
 	},
-	"Herd": Skill{
+	"Herd": &Skill{
 		CoreString: "Herd",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Homeland Lore": Skill{
+	"Homeland Lore": &Skill{
 		CoreString: "Homeland Lore",
 		UserChoice: true,
 		UserString: "Local",
 		Base:       30,
 		Category:   "Knowledge",
 	},
-	"Library Use": Skill{
+	"Library Use": &Skill{
 		CoreString: "Library Use",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Lore": Skill{
+	"Lore": &Skill{
 		CoreString: "Lore",
 		UserChoice: true,
 		UserString: "Local",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Manage Household": Skill{
+	"Manage Household": &Skill{
 		CoreString: "Manage Household",
 		Base:       10,
 		Category:   "Knowledge",
 	},
-	"Mineral Lore": Skill{
+	"Mineral Lore": &Skill{
 		CoreString: "Mineral Lore",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Peaceful Cut": Skill{
+	"Peaceful Cut": &Skill{
 		CoreString: "Peaceful Cut",
 		Base:       10,
 		Category:   "Knowledge",
 	},
-	"Plant Lore": Skill{
+	"Plant Lore": &Skill{
 		CoreString: "Plant Lore",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Read/Write": Skill{
+	"Read/Write": &Skill{
 		CoreString: "Read/Write",
 		UserChoice: true,
 		UserString: "Old Tarsh",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Shiphandling": Skill{
+	"Shiphandling": &Skill{
 		CoreString: "Shiphandling",
 		Base:       0,
 		Category:   "Knowledge",
 	},
-	"Survival": Skill{
+	"Survival": &Skill{
 		CoreString: "Survival",
 		Base:       15,
 		Category:   "Knowledge",
 	},
-	"Treat Disease": Skill{
+	"Treat Disease": &Skill{
 		CoreString: "Treat Disease",
 		Base:       5,
 		Category:   "Knowledge",
 	},
-	"Treat Poison": Skill{
+	"Treat Poison": &Skill{
 		CoreString: "Treat Poison",
 		Base:       5,
 		Category:   "Knowledge",
 	},
 	// Magic
-	"Meditate": Skill{
+	"Meditate": &Skill{
 		CoreString: "Meditate",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Prepare Corpse": Skill{
+	"Prepare Corpse": &Skill{
 		CoreString: "Prepare Corpse",
 		Base:       10,
 		Category:   "Magic",
 	},
-	"Sense Assassin": Skill{
+	"Sense Assassin": &Skill{
 		CoreString: "Sense Assassin",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Sense Chaos": Skill{
+	"Sense Chaos": &Skill{
 		CoreString: "Sense Chaos",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Sorcery": Skill{
+	"Sorcery": &Skill{
 		CoreString: "Sorcery",
 		UserChoice: true,
 		UserString: "Spell",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Spirit Combat": Skill{
+	"Spirit Combat": &Skill{
 		CoreString: "Spirit Combat",
 		Base:       20,
 		Category:   "Magic",
 	},
-	"Spirit Dance": Skill{
+	"Spirit Dance": &Skill{
 		CoreString: "Spirit Dance",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Spirit Lore": Skill{
+	"Spirit Lore": &Skill{
 		CoreString: "Spirit Lore",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Spirit Travel": Skill{
+	"Spirit Travel": &Skill{
 		CoreString: "Spirit Travel",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Understand Herd Beast": Skill{
+	"Understand Herd Beast": &Skill{
 		CoreString: "Understand Herd Beast",
 		Base:       0,
 		Category:   "Magic",
 	},
-	"Worship": Skill{
+	"Worship": &Skill{
 		CoreString: "Worship",
 		UserChoice: true,
 		UserString: "Orlanth",
@@ -306,261 +306,261 @@ var Skills = map[string]Skill{
 	},
 
 	// Manipulation
-	"Conceal": Skill{
+	"Conceal": &Skill{
 		CoreString: "Conceal",
 		Base:       5,
 		Category:   "Manipulation",
 	},
-	"Craft": Skill{
+	"Craft": &Skill{
 		CoreString: "Craft",
 		UserChoice: true,
 		UserString: "Arms",
 		Base:       10,
 		Category:   "Manipulation",
 	},
-	"Devise": Skill{
+	"Devise": &Skill{
 		CoreString: "Devise",
 		Base:       5,
 		Category:   "Manipulation",
 	},
-	"Play Instrument": Skill{
+	"Play Instrument": &Skill{
 		CoreString: "Play Instrument",
 		Base:       5,
 		Category:   "Manipulation",
 	},
-	"Sleight": Skill{
+	"Sleight": &Skill{
 		CoreString: "Sleight",
 		Base:       10,
 		Category:   "Manipulation",
 	},
 
 	// Melee Melees
-	"1H Axe": Skill{
+	"1H Axe": &Skill{
 		CoreString: "1H Axe",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"2H Axe": Skill{
+	"2H Axe": &Skill{
 		CoreString: "2H Axe",
 		Base:       5,
 		Category:   "Melee",
 	},
-	"Battle Axe": Skill{
+	"Battle Axe": &Skill{
 		CoreString: "Battle Axe",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"Broadsword": Skill{
+	"Broadsword": &Skill{
 		CoreString: "Broadsword",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"Dagger": Skill{
+	"Dagger": &Skill{
 		CoreString: "Dagger",
 		Base:       15,
 		Category:   "Melee",
 	},
-	"Fist": Skill{
+	"Fist": &Skill{
 		CoreString: "Fist",
 		Base:       25,
 		Category:   "Melee",
 	},
-	"Grapple": Skill{
+	"Grapple": &Skill{
 		CoreString: "Grapple",
 		Base:       25,
 		Category:   "Melee",
 	},
-	"1H Hammer": Skill{
+	"1H Hammer": &Skill{
 		CoreString: "1H Hammer",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"2H Hammer": Skill{
+	"2H Hammer": &Skill{
 		CoreString: "2H Hammer",
 		Base:       5,
 		Category:   "Melee",
 	},
-	"Kick": Skill{
+	"Kick": &Skill{
 		CoreString: "Kick",
 		Base:       15,
 		Category:   "Melee",
 	},
-	"Kopis": Skill{
+	"Kopis": &Skill{
 		CoreString: "Kopis",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"1H Mace": Skill{
+	"1H Mace": &Skill{
 		CoreString: "1H Mace",
 		Base:       15,
 		Category:   "Melee",
 	},
-	"2H Mace": Skill{
+	"2H Mace": &Skill{
 		CoreString: "2H Mace",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"Pike": Skill{
+	"Pike": &Skill{
 		CoreString: "Pike",
 		Base:       15,
 		Category:   "Melee",
 	},
-	"Quarterstaff": Skill{
+	"Quarterstaff": &Skill{
 		CoreString: "Quarterstaff",
 		Base:       15,
 		Category:   "Melee",
 	},
-	"Rapier": Skill{
+	"Rapier": &Skill{
 		CoreString: "Rapier",
 		Base:       5,
 		Category:   "Melee",
 	},
-	"Shortsword": Skill{
+	"Shortsword": &Skill{
 		CoreString: "Shortsword",
 		Base:       10,
 		Category:   "Melee",
 	},
-	"1H Spear": Skill{
+	"1H Spear": &Skill{
 		CoreString: "1H Spear",
 		Base:       05,
 		Category:   "Melee",
 	},
-	"2H Spear": Skill{
+	"2H Spear": &Skill{
 		CoreString: "2H Spear",
 		Base:       15,
 		Category:   "Melee",
 	},
-	"Lance": Skill{
+	"Lance": &Skill{
 		CoreString: "Lance",
 		Base:       5,
 		Category:   "Melee",
 	},
 
 	// Missile Weapons
-	"Arbalest": Skill{
+	"Arbalest": &Skill{
 		CoreString: "Arbalest",
 		Base:       10,
 		Category:   "Ranged",
 	},
-	"Axe, Throwing": Skill{
+	"Axe, Throwing": &Skill{
 		CoreString: "Axe, Throwing",
 		Base:       10,
 		Category:   "Ranged",
 	},
-	"Composite Bow": Skill{
+	"Composite Bow": &Skill{
 		CoreString: "Composite Bow",
 		Base:       5,
 		Category:   "Ranged",
 	},
-	"Crossbows": Skill{
+	"Crossbows": &Skill{
 		CoreString: "Crossbows",
 		Base:       25,
 		Category:   "Ranged",
 	},
-	"Dagger, Throwing": Skill{
+	"Dagger, Throwing": &Skill{
 		CoreString: "Dagger, Throwing",
 		Base:       5,
 		Category:   "Ranged",
 	},
-	"Elf Bow": Skill{
+	"Elf Bow": &Skill{
 		CoreString: "Elf Bow",
 		Base:       5,
 		Category:   "Ranged",
 	},
-	"Javelin": Skill{
+	"Javelin": &Skill{
 		CoreString: "Javelin",
 		Base:       10,
 		Category:   "Ranged",
 	},
-	"Pole Lasso": Skill{
+	"Pole Lasso": &Skill{
 		CoreString: "Pole Lasso",
 		Base:       5,
 		Category:   "Ranged",
 	},
-	"Rock": Skill{
+	"Rock": &Skill{
 		CoreString: "Rock",
 		Base:       15,
 		Category:   "Ranged",
 	},
-	"Self Bow": Skill{
+	"Self Bow": &Skill{
 		CoreString: "Self Bow",
 		Base:       5,
 		Category:   "Ranged",
 	},
-	"Sling": Skill{
+	"Sling": &Skill{
 		CoreString: "Sling",
 		Base:       5,
 		Category:   "Ranged",
 	},
-	"Staff Sling": Skill{
+	"Staff Sling": &Skill{
 		CoreString: "Staff Sling",
 		Base:       10,
 		Category:   "Ranged",
 	},
-	"Thrown Axe": Skill{
+	"Thrown Axe": &Skill{
 		CoreString: "Thrown Axe",
 		Base:       10,
 		Category:   "Ranged",
 	},
-	"Throwing Dagger": Skill{
+	"Throwing Dagger": &Skill{
 		CoreString: "Throwing Dagger",
 		Base:       10,
 		Category:   "Ranged",
 	},
 
 	// Shields
-	"Large Shield": Skill{
+	"Large Shield": &Skill{
 		CoreString: "Large Shield",
 		Base:       15,
 		Category:   "Shield",
 	},
-	"Medium Shield": Skill{
+	"Medium Shield": &Skill{
 		CoreString: "Medium Shield",
 		Base:       15,
 		Category:   "Shield",
 	},
-	"Small Shield": Skill{
+	"Small Shield": &Skill{
 		CoreString: "Small Shield",
 		Base:       15,
 		Category:   "Shield",
 	},
 
 	// Perception
-	"Insight": Skill{
+	"Insight": &Skill{
 		CoreString: "Insight",
 		UserChoice: true,
 		UserString: "Species",
 		Base:       20,
 		Category:   "Perception",
 	},
-	"Listen": Skill{
+	"Listen": &Skill{
 		CoreString: "Listen",
 		Base:       25,
 		Category:   "Perception",
 	},
-	"Scan": Skill{
+	"Scan": &Skill{
 		CoreString: "Scan",
 		Base:       25,
 		Category:   "Perception",
 	},
-	"Search": Skill{
+	"Search": &Skill{
 		CoreString: "Search",
 		Base:       25,
 		Category:   "Perception",
 	},
-	"Track": Skill{
+	"Track": &Skill{
 		CoreString: "Track",
 		Base:       5,
 		Category:   "Perception",
 	},
 
 	// Stealth
-	"Hide": Skill{
+	"Hide": &Skill{
 		CoreString: "Hide",
 		Base:       10,
 		Category:   "Stealth",
 	},
-	"Move Quietly": Skill{
+	"Move Quietly": &Skill{
 		CoreString: "Move Quietly",
 		Base:       10,
 		Category:   "Stealth",

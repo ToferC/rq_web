@@ -40,7 +40,11 @@ func (s *Skill) UpdateSkill() {
 		updates += u.Value
 	}
 
-	s.Total = s.Base + s.CategoryValue + s.HomelandValue + s.OccupationValue + s.CultValue + s.CreationBonusValue + s.InPlayXPValue + s.Value + updates
+	s.Total = s.Base + s.HomelandValue + s.OccupationValue + s.CultValue + s.CreationBonusValue + s.InPlayXPValue + s.Value + updates
+
+	if s.Total > 0 {
+		s.Total += s.CategoryValue
+	}
 }
 
 // GenerateName sets the skill map name
