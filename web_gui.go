@@ -245,6 +245,11 @@ func splitSkills(skills map[string]*runequest.Skill) []map[string]*runequest.Ski
 		map[string]*runequest.Skill{},
 	}
 
+	if len(skills) < 20 {
+		split[2] = skills
+		return split
+	}
+
 	for k, v := range skills {
 		updates := 0
 		for _, u := range v.Updates {
@@ -252,7 +257,7 @@ func splitSkills(skills map[string]*runequest.Skill) []map[string]*runequest.Ski
 		}
 
 		switch {
-		case v.HomelandValue+v.OccupationValue+v.CultValue+updates == 0 || v.Base+v.CategoryValue == v.Total:
+		case (v.HomelandValue+v.OccupationValue+v.CultValue+updates == 0 || v.Base+v.CategoryValue == v.Total) && v.Total < 41:
 			split[0][k] = v
 		case v.Total < 41:
 			split[1][k] = v
