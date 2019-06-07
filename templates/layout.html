@@ -38,19 +38,27 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/user_roster/">My Characters<span class="sr-only">(current)</span></a>
-      </li>
       {{ if ne $user "" }}
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             My Content</a>
             <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
+               <a class="dropdown-item" href="/user_roster/">Characters</span></a>
                <a class="dropdown-item" href="/user_faction_index/">Factions</span></a>
                <a class="dropdown-item" href="/user_encounter_index/">Encounters</span></a>
             </div>
           </li>
       {{ end }}
+
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Open Content</a>
+            <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
+               <a class="dropdown-item" href="/">Characters</span></a>
+               <a class="dropdown-item" href="/faction_index/">Factions</span></a>
+               <a class="dropdown-item" href="/encounter_index/">Encounters</span></a>
+            </div>
+          </li>
 
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,13 +70,7 @@
             </div>
           </li>
       <li>
-      
-        <li>
-            <a class="nav-link active" href="/faction_index/">Factions<span class="sr-only"></a>
-          </li>
-          <li>
-              <a class="nav-link active" href="/encounter_index/">Encounters<span class="sr-only"></a>
-            </li>
+
       <li>
         <a class="nav-link active" href="/cc1_choose_homeland/">Create Character<span class="sr-only"></a>
       </li>
@@ -82,11 +84,10 @@
           <li><a class="dropdown-item" href="/add_homeland/">Add Homeland</a></li>
           <li><a class="dropdown-item" href="/add_occupation/">Add Occupation</a></li>
           <li><a class="dropdown-item" href="/add_cult/">Add Cult</a></li>
-          <li class="divider"></li>
+          <li class="dropdown-item">-------</li>
           <li><a class="dropdown-item" href="/add_creature/">Add Creature or NPC</a></li>
           <li><a class="dropdown-item" href="/add_faction/">Add Faction</a></li>
           <li><a class="dropdown-item" href="/add_encounter/">Add Encounter</a></li>
-
         </ul>
       </li>
       {{ end }}

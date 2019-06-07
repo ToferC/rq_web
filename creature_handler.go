@@ -319,6 +319,8 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	cm.Character = c
 
+	c.Skills = map[string]*runequest.Skill{}
+
 	// Set 6 skills
 	for i := 0; i < 6; i++ {
 		s := runequest.Skill{

@@ -47,7 +47,6 @@ th {
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h4>{{ $character.Name }}</h4>
-            <br>
             {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p><strong>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</strong></p>
               {{ if $character.ExtraCults }}
