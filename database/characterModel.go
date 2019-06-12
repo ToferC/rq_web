@@ -48,7 +48,7 @@ func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
-	_, err := db.Query(&cms, `SELECT * FROM character_models`)
+	_, err := db.Query(&cms, `SELECT * FROM character_models ORDER BY created_at DESC;`)
 
 	if err != nil {
 		panic(err)
@@ -61,7 +61,9 @@ func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
-	_, err := db.Query(&cms, `SELECT * FROM character_models WHERE open = true`)
+	_, err := db.Query(&cms,
+		`SELECT * FROM character_models WHERE open = true 
+		ORDER BY created_at DESC;`)
 
 	if err != nil {
 		panic(err)
@@ -84,7 +86,8 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 func ListUserCharacterModels(db *pg.DB, username string) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
-	_, err := db.Query(&cms, `SELECT * FROM character_models WHERE author ->> 'UserName' = ?`, username)
+	_, err := db.Query(&cms,
+		`SELECT * FROM character_models WHERE author ->> 'UserName' = ? ORDER BY created_at DESC;`, username)
 
 	if err != nil {
 		panic(err)
