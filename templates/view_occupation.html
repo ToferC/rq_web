@@ -1,5 +1,10 @@
 {{ define "title"}}
 {{ $occupation := .OccupationModel.Occupation }}
+<meta property="og:image" content="https://s3.amazonaws.com/runequeset{{ .OccupationModel.Image.Path }}" />
+<meta property="og:site_name" content="Runequest Glorantha Character Creator" />
+<meta property="og:title" content="RQG: View Occupation {{ .OccupationModel.Occupation.Name }}" />
+<meta property="og:description" content="{{ sliceString .OccupationModel.Occupation.Description 144 }}" />
+<meta name="twitter:card" content="summary_large_image">
 
 <title>{{ $occupation.Name }}</title>
 
