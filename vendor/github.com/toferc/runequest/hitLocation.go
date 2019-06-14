@@ -38,13 +38,20 @@ func (l HitLocation) String() string {
 
 // LocationForms is a map of standard hit locations
 var LocationForms = map[string]map[string]*HitLocation{
-	"Humanoids":           HumanoidLocations,
-	"Centaurs":            CentaurLocations,
-	"Dragons/Manticores":  DragonHitLocations,
-	"Four-Legged Animals": FourLeggedAnimalsHitLocations,
-	"Serpents":            SerpentLocations,
-	"Birds, Flying":       BirdsFlyingHitLocations,
-	"Birds, Running":      BirdsRunningHitLocations,
+	"Humanoids":                   HumanoidLocations,
+	"Humanoids, Winged":           HumanoidWingedLocations,
+	"Centaurs":                    CentaurLocations,
+	"Dragons/Manticores":          DragonHitLocations,
+	"Four-Legged Animals":         FourLeggedAnimalsHitLocations,
+	"Four-Legged Animals, Winged": FourLeggedAnimalsWingedHitLocations,
+	"Serpents":                    SerpentLocations,
+	"Serpents, Winged":            SerpentWingedLocations,
+	"Birds, Flying":               BirdsFlyingHitLocations,
+	"Birds, Running":              BirdsRunningHitLocations,
+	"Beetles":                     BeetlesHitLocations,
+	"Wyverns":                     WyvernsHitLocations,
+	"Spiders, Giant":              SpidersGiantHitLocations,
+	"Mammoths/Mastodons":          MammothsHitLocations,
 }
 
 // HumanoidLocations is a base map of hit locations
@@ -105,6 +112,40 @@ var SerpentLocations = map[string]*HitLocation{
 	},
 }
 
+// SerpentWingedLocations is a base map of hit locations
+var SerpentWingedLocations = map[string]*HitLocation{
+	"Tail": &HitLocation{
+		Name:   "Tail",
+		HitLoc: []int{1, 2, 3, 4},
+		Base:   0,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{5, 6, 7, 8},
+		Base:   0,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{9, 10, 11, 12},
+		Base:   1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{13, 14},
+		Base:   -1,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{15, 16},
+		Base:   -1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{17, 18, 19, 20},
+		Base:   0,
+	},
+}
+
 // HumanoidWingedLocations is a base map of hit locations
 var HumanoidWingedLocations = map[string]*HitLocation{
 	"R Leg": &HitLocation{
@@ -156,14 +197,14 @@ var HumanoidWingedLocations = map[string]*HitLocation{
 
 // FourLeggedAnimalsHitLocations is a base map of hit locations
 var FourLeggedAnimalsHitLocations = map[string]*HitLocation{
-	"L Hind Leg": &HitLocation{
-		Name:   "L Hind Leg",
-		HitLoc: []int{3, 4},
-		Base:   0,
-	},
 	"R Hind Leg": &HitLocation{
 		Name:   "R Hind Leg",
 		HitLoc: []int{1, 2},
+		Base:   0,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{3, 4},
 		Base:   0,
 	},
 	"Hindquarters": &HitLocation{
@@ -185,6 +226,246 @@ var FourLeggedAnimalsHitLocations = map[string]*HitLocation{
 		Name:   "R Foreleg",
 		HitLoc: []int{14, 15, 16},
 		Base:   0,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{17, 18, 19, 20},
+		Base:   0,
+	},
+}
+
+// FourLeggedAnimalsWingedHitLocations is a base map of hit locations
+var FourLeggedAnimalsWingedHitLocations = map[string]*HitLocation{
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1, 2, 3},
+		Base:   0,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{4, 5, 6},
+		Base:   0,
+	},
+	"Hindquarters": &HitLocation{
+		Name:   "Hindquarters",
+		HitLoc: []int{7, 8, 9},
+		Base:   1,
+	},
+	"Forequarters": &HitLocation{
+		Name:   "Forequarters",
+		HitLoc: []int{10},
+		Base:   1,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{11, 12},
+		Base:   -1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{13, 14},
+		Base:   -1,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{15, 16},
+		Base:   0,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{17, 18},
+		Base:   0,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{19, 20},
+		Base:   0,
+	},
+}
+
+// MammothsHitLocations is a base map of hit locations
+var MammothsHitLocations = map[string]*HitLocation{
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1, 2},
+		Base:   -1,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{3, 4},
+		Base:   -1,
+	},
+	"Hindquarters": &HitLocation{
+		Name:   "Hindquarters",
+		HitLoc: []int{5, 6, 7},
+		Base:   1,
+	},
+	"Forequarters": &HitLocation{
+		Name:   "Forequarters",
+		HitLoc: []int{8, 9, 10},
+		Base:   1,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{11, 12, 13},
+		Base:   -1,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{14, 15, 16},
+		Base:   -1,
+	},
+	"Trunk": &HitLocation{
+		Name:   "Trunk",
+		HitLoc: []int{17},
+		Base:   -3,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{18, 19, 20},
+		Base:   1,
+	},
+}
+
+// BeetlesHitLocations is a base map of hit locations
+var BeetlesHitLocations = map[string]*HitLocation{
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1},
+		Base:   -1,
+	},
+	"R Center Leg": &HitLocation{
+		Name:   "R Center Leg",
+		HitLoc: []int{2},
+		Base:   -1,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{3},
+		Base:   -1,
+	},
+	"L Center Leg": &HitLocation{
+		Name:   "L Center Leg",
+		HitLoc: []int{4},
+		Base:   -1,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{5, 6, 7, 8},
+		Base:   3,
+	},
+	"Thorax": &HitLocation{
+		Name:   "Thorax",
+		HitLoc: []int{9, 10, 11, 12},
+		Base:   3,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{13, 14},
+		Base:   -1,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{15, 16},
+		Base:   -1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{17, 18, 19, 20},
+		Base:   2,
+	},
+}
+
+// SpidersGiantHitLocations is a base map of hit locations
+var SpidersGiantHitLocations = map[string]*HitLocation{
+	"R Hind Leg": &HitLocation{
+		Name:   "R Hind Leg",
+		HitLoc: []int{1},
+		Base:   -2,
+	},
+	"L Hind Leg": &HitLocation{
+		Name:   "L Hind Leg",
+		HitLoc: []int{2},
+		Base:   -2,
+	},
+	"R Center Rear Leg": &HitLocation{
+		Name:   "R Center Rear Leg",
+		HitLoc: []int{3},
+		Base:   -2,
+	},
+	"L Center Rear Leg": &HitLocation{
+		Name:   "L Center Rear Leg",
+		HitLoc: []int{4},
+		Base:   -2,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{5, 6, 7, 8},
+		Base:   1,
+	},
+	"R Center Front Leg": &HitLocation{
+		Name:   "R Center Front Leg",
+		HitLoc: []int{9, 10},
+		Base:   -2,
+	},
+	"L Center Front Leg": &HitLocation{
+		Name:   "L Center Front Leg",
+		HitLoc: []int{11, 12},
+		Base:   -2,
+	},
+	"R Foreleg": &HitLocation{
+		Name:   "R Foreleg",
+		HitLoc: []int{13, 14},
+		Base:   -2,
+	},
+	"L Foreleg": &HitLocation{
+		Name:   "L Foreleg",
+		HitLoc: []int{15, 16},
+		Base:   -2,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{17, 18, 19, 20},
+		Base:   1,
+	},
+}
+
+// WyvernsHitLocations is a base map of hit locations
+var WyvernsHitLocations = map[string]*HitLocation{
+	"Tail": &HitLocation{
+		Name:   "Tail",
+		HitLoc: []int{1},
+		Base:   0,
+	},
+	"R Leg": &HitLocation{
+		Name:   "R Leg",
+		HitLoc: []int{2, 3, 4},
+		Base:   0,
+	},
+	"L Leg": &HitLocation{
+		Name:   "L Leg",
+		HitLoc: []int{5, 6, 7},
+		Base:   0,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{8, 9},
+		Base:   0,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{10, 11, 12},
+		Base:   1,
+	},
+	"R Wing": &HitLocation{
+		Name:   "R Wing",
+		HitLoc: []int{13, 14},
+		Base:   -1,
+	},
+	"L Wing": &HitLocation{
+		Name:   "L Wing",
+		HitLoc: []int{15, 16},
+		Base:   -1,
 	},
 	"Head": &HitLocation{
 		Name:   "Head",

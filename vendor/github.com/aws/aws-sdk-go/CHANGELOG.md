@@ -1,3 +1,88 @@
+Release v1.20.0 (2019-06-13)
+===
+
+### Service Client Updates
+* `service/appmesh`: Updates service API and documentation
+* `service/ec2`: Updates service API
+  * G4 instances are Amazon EC2 instances based on NVIDIA T4 GPUs and are designed to provide cost-effective machine learning inference for applications, like image classification, object detection, recommender systems, automated speech recognition, and language translation. G4 instances are also a cost-effective platform for building and running graphics-intensive applications, such as remote graphics workstations, video transcoding, photo-realistic design, and game streaming in the cloud. To get started with G4 instances visit https://aws.amazon.com/ec2/instance-types/g4.
+* `service/elasticache`: Updates service API and documentation
+  * This release is to add support for reader endpoint for cluster-mode disabled Amazon ElastiCache for Redis clusters.
+* `service/guardduty`: Updates service API, documentation, and paginators
+  * Support for tagging functionality in Create and Get operations for Detector, IP Set, Threat Intel Set, and Finding Filter resources and 3 new tagging APIs: ListTagsForResource, TagResource, and UntagResource.
+
+### SDK Features
+
+* `aws/session`: Add support for chaining assume IAM role from shared config ([#2579](https://github.com/aws/aws-sdk-go/pull/2579))
+  * Adds support chaining assume role credentials from the shared config/credentials files. This change allows you to create an assume role chain of multiple levels of assumed IAM roles. The config profile the deepest in the chain must use static credentials, or `credential_source`. If the deepest profile doesn't have either of these the session will fail to load.
+  * Fixes the SDK's shared config credential source not assuming a role with environment and ECS credentials. EC2 credentials were already supported.
+  * Fix [#2528](https://github.com/aws/aws-sdk-go/issue/2528)
+  * Fix [#2385](https://github.com/aws/aws-sdk-go/issue/2385)
+
+### SDK Enhancements
+* `service/s3/s3manager/s3manageriface`: Add missing methods ([#2612](https://github.com/aws/aws-sdk-go/pull/2612))
+  * Adds the missing interface and methods from the `s3manager` Uploader, Downloader, and Batch Delete utilities.
+
+Release v1.19.49 (2019-06-12)
+===
+
+### Service Client Updates
+* `service/servicecatalog`: Updates service API and documentation
+  * This release adds a new field named Guidance to update provisioning artifact, this field can be set by the administrator to provide guidance to end users about which provisioning artifacts to use.
+
+Release v1.19.48 (2019-06-11)
+===
+
+### Service Client Updates
+* `service/sagemaker`: Updates service API and documentation
+  * The default TaskTimeLimitInSeconds of labeling job is increased to 8 hours. Batch Transform introduces a new DataProcessing field which supports input and output filtering and data joining. Training job increases the max allowed input channels from 8 to 20.
+
+Release v1.19.47 (2019-06-10)
+===
+
+### Service Client Updates
+* `service/codebuild`: Updates service API and documentation
+  * AWS CodeBuild adds support for source version on project level.
+* `service/codecommit`: Updates service API, documentation, and paginators
+  * This release adds two merge strategies for merging pull requests: squash and three-way. It also adds functionality for resolving merge conflicts, testing merge outcomes, and for merging branches using one of the three supported merge strategies.
+* `service/personalize`: Adds new service
+* `service/personalize-events`: Adds new service
+* `service/personalize-runtime`: Adds new service
+
+Release v1.19.46 (2019-06-07)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API and documentation
+  * Adds DNS entries and NLB ARNs to describe-vpc-endpoint-connections API response. Adds owner ID to describe-vpc-endpoints and create-vpc-endpoint API responses.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+
+Release v1.19.45 (2019-06-06)
+===
+
+### Service Client Updates
+* `service/dynamodb`: Updates service documentation
+  * Documentation updates for dynamodb
+* `service/ecs`: Updates service API and documentation
+  * This release of Amazon Elastic Container Service (Amazon ECS) introduces support for launching container instances using supported Amazon EC2 instance types that have increased elastic network interface density. Using these instance types and opting in to the awsvpcTrunking account setting provides increased elastic network interface (ENI) density on newly launched container instances which allows you to place more tasks on each container instance.
+* `service/email`: Updates service API and documentation
+  * You can now specify whether the Amazon Simple Email Service must deliver email over a connection that is encrypted using Transport Layer Security (TLS).
+* `service/guardduty`: Updates service API, documentation, paginators, and examples
+  * Improve FindingCriteria Condition field names, support long-typed conditions and deprecate old Condition field names.
+* `service/logs`: Updates service documentation
+  * Documentation updates for logs
+* `service/mediaconnect`: Updates service API and documentation
+* `service/organizations`: Updates service API, documentation, and paginators
+  * You can tag and untag accounts in your organization and view tags on an account in your organization.
+* `service/ssm`: Updates service API and documentation
+  * OpsCenter is a new Systems Manager capability that allows you to view, diagnose, and remediate, operational issues, aka OpsItems, related to various AWS resources by bringing together contextually relevant investigation information. New APIs to create, update, describe, and get OpsItems as well as OpsItems summary API.
+
+Release v1.19.44 (2019-06-05)
+===
+
+### Service Client Updates
+* `service/glue`: Updates service API and documentation
+  * Support specifying python version for Python shell jobs. A new parameter PythonVersion is added to the JobCommand data type.
+
 Release v1.19.43 (2019-06-04)
 ===
 

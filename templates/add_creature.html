@@ -16,6 +16,7 @@
 {{ $runespells := .RuneSpells }}
 {{ $cults := .CultModels }}
 {{ $category := .CategoryOrder }}
+{{ $hitLocationForms := .HitLocationForms }}
 
 <div class="container">
   <hr>
@@ -335,13 +336,9 @@
             <span class="input-group-text" for="Hit-Location-Form">Hit Location Form</span>
           </div>
           <select type="number" class="form-control" id="Hit-Location-Form" name="Hit-Location-Form">
-            <option>Humanoids</option>
-            <option>Centaurs</option>
-            <option>Dragons/Manticores</option>
-            <option>Four-Legged Animals</option>
-            <option>Birds, Flying</option>
-            <option>Birds, Running</option>
-            <option>Serpents</option>
+          {{ range $k, $v := $hitLocationForms }}
+            <option>{{ $k }}</option>
+          {{ end }}
           </select>
         </div>
         <br>

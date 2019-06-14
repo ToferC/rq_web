@@ -363,18 +363,19 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		CharacterModel: &cm,
-		SessionUser:    username,
-		Counter:        numToArray(4),
-		BigCounter:     numToArray(7),
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		Passions:       runequest.PassionTypes,
-		Skills:         runequest.Skills,
-		SpiritMagic:    runequest.SpiritMagicSpells,
-		RuneSpells:     runequest.RuneSpells,
-		CultModels:     cults,
-		CategoryOrder:  runequest.CategoryOrder,
+		CharacterModel:   &cm,
+		SessionUser:      username,
+		Counter:          numToArray(4),
+		BigCounter:       numToArray(7),
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		Passions:         runequest.PassionTypes,
+		Skills:           runequest.Skills,
+		SpiritMagic:      runequest.SpiritMagicSpells,
+		RuneSpells:       runequest.RuneSpells,
+		CultModels:       cults,
+		CategoryOrder:    runequest.CategoryOrder,
+		HitLocationForms: runequest.LocationForms,
 	}
 
 	if req.Method == "GET" {
