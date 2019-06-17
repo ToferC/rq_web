@@ -7,10 +7,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Runequest RPG">
+    <meta name="description" content="Runequest in Glorantha RPG Character Creator">
     <meta name="author" content="ToferC">
-    <meta property="og:title" content="Runequest Glorantha Character Creator" />
-    <link rel="icon" href="../../favicon.ico">
+    <meta property="og:title" content="Cradle of Heroes" />
+    <link rel="icon" href="https://runequeset.s3.amazonaws.com/media/oubourous.ico">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -28,9 +28,9 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       {{ if ne $user ""}}
-        <a class="navbar-brand" href="/">Runequest</a>
+        <a class="navbar-brand" href="/">The Cradle</a>
       {{ else }}
-        <a class="navbar-brand" href="/user_roster/">RuneQuest</a>
+        <a class="navbar-brand" href="/user_roster/">The Cradle of Heroes</a>
       {{ end }}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -139,11 +139,20 @@
 
 {{ if eq $user ""}}
       <hr>
-      <h4>Welcome to the Runequest Glorantha app [BETA]</h4>
-      <p>This unoffical app makes creating and managing characters in Runequest easy.</p> 
-      <p>Browse through the open characters, homelands, occupations and cults to get a feel for things</p>
-      <p>When you're ready to create your own content, register, select "Add Content" and Create Character to get started!</p>
-      <hr>
+      <h4>Welcome to the Cradle of Heroes</h4>
+      <p>Runequest is a roleplaying
+game created by <a href="https://www.chaosium.com/runequest-glorantha/">Chaosium</a>. This app
+allows players and game-masters to easily create and manage characters, creatures, races, homelands, occupations and cults in the game.</p>
+<p>Get started by <a href="/signup/">registering an account</a>, and signing in.</p>
+
+<p>Afer this, you can start creating a character, homeland, occupation or cult. When you
+create and save "building" content, like homelands, occupations and cults, they will be available for any elses use as well.</p>
+
+<p>The short video below gives an overview of the app. More detailed videos are available on the <a href="https://www.youtube.com/playlist?list=PL0xmTkOvLDzJAcCIYbVYciVSZDKwvH09P">YouTube channel</a>.</p>
+
+<hr>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/Lbf7bqYl9tM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<hr>
 {{ end }}
 
       {{template "content" .}}

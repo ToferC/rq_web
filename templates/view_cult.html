@@ -2,9 +2,9 @@
 
 <title>{{ .CultModel.Cult.Name }}</title>
 <meta property="og:image" content="https://s3.amazonaws.com/runequeset{{ .CultModel.Image.Path }}" />
-<meta property="og:site_name" content="Runequest Glorantha Character Creator" />
-<meta property="og:title" content="RQG: View Open Characters" />
-<meta property="og:description" content="Main roster page for the RQiG Character app" />
+<meta property="og:site_name" content="Cradle of Heroes" />
+<meta property="og:title" content="RQG: View Cult {{ .CultModel.Cult.Name }}" />
+<meta property="og:description" content="{{ sliceString .CultModel.Cult.Description 144 }}" />
 <meta name="twitter:card" content="summary_large_image">
 
 {{ end }}

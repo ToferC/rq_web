@@ -2,6 +2,11 @@
 {{ $homeland := .HomelandModel.Homeland }}
 
 <title>{{ $homeland.Name }}</title>
+<meta property="og:image" content="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}" />
+<meta property="og:site_name" content="Runequest Glorantha Character Creator" />
+<meta property="og:title" content="RQG: View Homeland {{ .HomelandModel.Homeland.Name }}" />
+<meta property="og:description" content="{{ sliceString .HomelandModel.Homeland.Description 144 }}" />
+<meta name="twitter:card" content="summary_large_image">
 
 {{ end }}
 
