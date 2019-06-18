@@ -68,7 +68,7 @@ func main() {
 		db = pg.Connect(options)
 
 		// Set Google Oauth Callback
-		callback = "https://rq-web.herokuapp.com/google/callback"
+		callback = "https://www.cradleofheroes.net/google/callback"
 
 	} else {
 		// Not production
