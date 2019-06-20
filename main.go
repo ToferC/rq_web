@@ -133,16 +133,6 @@ func main() {
 	}
 	stateConfig := gologin.DebugOnlyCookieConfig
 
-	// AddSlug to cms
-	/*
-		cms, _ := database.ListAllCharacterModels(db)
-
-		for _, cm := range cms {
-			cm.Slug = slug.Make(fmt.Sprintf("%s-%s", cm.Author.UserName, cm.Character.Name))
-			database.UpdateCharacterModel(db, cm)
-		}
-	*/
-
 	port := os.Getenv("PORT")
 
 	if port == "" {

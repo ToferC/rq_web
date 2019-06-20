@@ -667,7 +667,7 @@ var RuneSpells = []Spell{
 		Cost:        1,
 	},
 	Spell{
-		CoreString:  "Identify Secret",
+		CoreString:  "Identify Scent",
 		Description: "",
 		Domain:      "Rune",
 		Source:      "Magic",

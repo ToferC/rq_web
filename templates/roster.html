@@ -23,10 +23,9 @@
         <div class="row">
             <form action="" method="POST">
               <hr>
-                <h4>Find Characters</h4>
-                <p>Search using free text or choose your desired filters from the drop downs below.</p>
-                Free text search: 
-                <input type="text" id="search" placeholder="Type to search">
+                <h4>Search the Cradle</h4>
+                <p>Strange and wonderous people abound, start typing below to find your quarry: 
+                <input type="text" id="search" placeholder="I seek...">
                 <hr>
         </div>
 
@@ -96,6 +95,9 @@
               data-holder-rendered="true">
               <div class="card-body"></a>
                 <h5 id="name" class="card-title">{{ .Character.Name }}</h5>
+                {{ if .Character.CoreRunes }}
+                <h6>{{ range $r := .Character.CoreRunes }}{{ $r.Name }} {{ end }}</h6>
+                {{ end }}
                 {{ if or (eq .Character.Role "Player Character") (eq .Character.Role "") }}
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} {{if .Character.Occupation.Name }}| {{ .Character.Occupation.Name }}{{end}} {{ if .Character.Cult.Name }}| {{ .Character.Cult.Name }}{{ end }}</h6>
                   {{ else }}

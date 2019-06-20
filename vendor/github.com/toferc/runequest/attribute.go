@@ -106,34 +106,23 @@ func (c *Character) DetermineHitPoints() *Attribute {
 
 	pow := p.Total
 
-	fmt.Println("SIZ ", siz)
-	fmt.Println("POW ", pow)
-
 	con := c.Statistics["CON"]
 	con.UpdateStatistic()
-
-	fmt.Println("CON ", con.Total)
 
 	baseHP := con.Total
 
 	switch {
 	case siz < 5:
 		baseHP -= 2
-		fmt.Println("-2")
 	case siz < 9:
 		baseHP--
-		fmt.Println("-1")
 	case siz < 13:
-		fmt.Println("No change")
 	case siz < 17:
 		baseHP++
-		fmt.Println("+1")
 	case siz < 21:
 		baseHP += 2
-		fmt.Println("+2")
 	case siz < 25:
 		baseHP += 3
-		fmt.Println("+3")
 	case siz > 24:
 		baseHP += ((siz - 24) / 4) + 4
 	}
@@ -142,11 +131,8 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	case pow < 5:
 		baseHP--
 	case pow < 9:
-		fmt.Println("No change")
 	case pow < 13:
-		fmt.Println("No change")
 	case pow < 17:
-		fmt.Println("No change")
 	case pow < 21:
 		baseHP++
 	case pow < 25:

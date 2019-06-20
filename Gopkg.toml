@@ -26,8 +26,3 @@
 
 [metadata.heroku]
   root-package = "github.com/toferc/rq_web"
-
-
-[prune]
-  go-tests = true
-  unused-packages = true

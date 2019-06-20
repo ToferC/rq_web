@@ -209,52 +209,6 @@ func (c *Character) ModifyAbility(a Ability) {
 	a.UpdateAbility()
 }
 
-// ChooseRunes selects Runes for a Character
-func (c *Character) ChooseRunes() {
-
-	// Choose Rune Values
-	c.ModifyAbility(Ability{
-		CoreString: "Air",
-		Base:       60,
-	})
-
-	c.ModifyAbility(Ability{
-		CoreString: "Earth",
-		Base:       40,
-	})
-
-	c.ModifyAbility(Ability{
-		CoreString: "Fire/Sky",
-		Base:       20,
-	})
-
-	c.ModifyAbility(Ability{
-		CoreString: "Movement",
-		Value:      25,
-	})
-
-	c.ModifyAbility(Ability{
-		CoreString: "Man",
-		Value:      25,
-	})
-
-	// Add 50 more points
-	c.ModifyAbility(Ability{
-		CoreString: "Movement",
-		Value:      10,
-	})
-
-	c.ModifyAbility(Ability{
-		CoreString: "Air",
-		Value:      30,
-	})
-
-	c.ModifyAbility(Ability{
-		CoreString: "Earth",
-		Value:      10,
-	})
-}
-
 // Abilities is a map of the basic abilities in Runequest
 var Abilities = map[string]*Ability{
 	"Reputation": &Ability{

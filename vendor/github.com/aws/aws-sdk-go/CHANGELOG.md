@@ -1,3 +1,42 @@
+Release v1.20.4 (2019-06-19)
+===
+
+### Service Client Updates
+* `service/eks`: Updates service documentation
+
+Release v1.20.3 (2019-06-18)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API
+  * You can now launch new 12xlarge, 24xlarge, and metal instance sizes on the Amazon EC2 compute optimized C5 instance types featuring 2nd Gen Intel Xeon Scalable Processors.
+* `service/resourcegroupstaggingapi`: Updates service API, documentation, and paginators
+  * You can use tag policies to help standardize on tags across your organization's resources.
+
+Release v1.20.2 (2019-06-17)
+===
+
+### Service Client Updates
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/neptune`: Updates service API and documentation
+  * This release adds a feature to configure Amazon Neptune to publish audit logs to Amazon CloudWatch Logs.
+* `service/robomaker`: Updates service API and documentation
+* `service/servicecatalog`: Updates service API
+  * Restrict concurrent calls by a single customer account for CreatePortfolioShare and DeletePortfolioShare when sharing/unsharing to an Organization.
+
+Release v1.20.1 (2019-06-14)
+===
+
+### Service Client Updates
+* `service/appstream`: Updates service API
+  * Added 2 new values(WINDOWS_SERVER_2016, WINDOWS_SERVER_2019) for PlatformType enum.
+* `service/cloudfront`: Adds new service
+  * A new datatype in the CloudFront API, AliasICPRecordal, provides the ICP recordal status for CNAMEs associated with distributions. AWS services in China customers must file for an Internet Content Provider (ICP) recordal if they want to serve content publicly on an alternate domain name, also known as a CNAME, that they have added to CloudFront. The status value is returned in the CloudFront response; you cannot configure it yourself. The status is set to APPROVED for all CNAMEs (aliases) in regions outside of China.
+* `service/ec2`: Updates service API
+  * Correction to enumerations in EC2 client.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/personalize`: Updates service documentation
+
 Release v1.20.0 (2019-06-13)
 ===
 

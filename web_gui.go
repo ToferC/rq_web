@@ -187,6 +187,7 @@ func indexSpell(str string, spells []runequest.Spell) (int, error) {
 	return 0, err
 }
 
+// Skills Functions
 func sortedSkills(skills map[string]*runequest.Skill) []*runequest.Skill {
 	skillArray := []*runequest.Skill{}
 
@@ -270,6 +271,7 @@ func splitSkills(skills map[string]*runequest.Skill) []map[string]*runequest.Ski
 	return split
 }
 
+// Other Functions
 // Generate URL for next step of Character creation
 func generateCharacterCreationURL(cStep map[string]bool) string {
 

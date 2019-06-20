@@ -25,6 +25,7 @@ type Character struct {
 	// Elemental Runes
 	PowerRunes       map[string]*Ability
 	ConditionRunes   map[string]*Ability
+	CoreRunes        []*Ability
 	Statistics       map[string]*Statistic
 	Attributes       map[string]*Attribute
 	CurrentHP        int
@@ -84,6 +85,7 @@ func (c *Character) UpdateCharacter() {
 	// This can be optimized
 	c.SetAttributes()
 	c.UpdateAttributes()
+	c.IDCoreRunes()
 
 	if len(c.HitLocations) == 0 {
 		hlForms := LocationForms[c.LocationForm]

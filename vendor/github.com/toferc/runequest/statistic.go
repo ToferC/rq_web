@@ -23,7 +23,7 @@ func (s *Statistic) String() string {
 
 // StatMap gives default ordering for stats
 var StatMap = []string{
-	"STR", "DEX", "CON", "SIZ", "POW", "INT", "CHA"}
+	"STR", "CON", "SIZ", "DEX", "INT", "POW", "CHA"}
 
 // SpiritMap is a base map of stats for Spirits
 var SpiritMap = []string{

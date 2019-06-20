@@ -90539,8 +90539,14 @@ const (
 	// InstanceTypeC59xlarge is a InstanceType enum value
 	InstanceTypeC59xlarge = "c5.9xlarge"
 
+	// InstanceTypeC512xlarge is a InstanceType enum value
+	InstanceTypeC512xlarge = "c5.12xlarge"
+
 	// InstanceTypeC518xlarge is a InstanceType enum value
 	InstanceTypeC518xlarge = "c5.18xlarge"
+
+	// InstanceTypeC524xlarge is a InstanceType enum value
+	InstanceTypeC524xlarge = "c5.24xlarge"
 
 	// InstanceTypeC5dLarge is a InstanceType enum value
 	InstanceTypeC5dLarge = "c5d.large"
@@ -90601,27 +90607,6 @@ const (
 
 	// InstanceTypeG3sXlarge is a InstanceType enum value
 	InstanceTypeG3sXlarge = "g3s.xlarge"
-
-	// InstanceTypeG4dnXlarge is a InstanceType enum value
-	InstanceTypeG4dnXlarge = "g4dn.xlarge"
-
-	// InstanceTypeG4dn2xlarge is a InstanceType enum value
-	InstanceTypeG4dn2xlarge = "g4dn.2xlarge"
-
-	// InstanceTypeG4dn4xlarge is a InstanceType enum value
-	InstanceTypeG4dn4xlarge = "g4dn.4xlarge"
-
-	// InstanceTypeG4dn8xlarge is a InstanceType enum value
-	InstanceTypeG4dn8xlarge = "g4dn.8xlarge"
-
-	// InstanceTypeG4dn12xlarge is a InstanceType enum value
-	InstanceTypeG4dn12xlarge = "g4dn.12xlarge"
-
-	// InstanceTypeG4dn16xlarge is a InstanceType enum value
-	InstanceTypeG4dn16xlarge = "g4dn.16xlarge"
-
-	// InstanceTypeG4dnMetal is a InstanceType enum value
-	InstanceTypeG4dnMetal = "g4dn.metal"
 
 	// InstanceTypeCg14xlarge is a InstanceType enum value
 	InstanceTypeCg14xlarge = "cg1.4xlarge"
