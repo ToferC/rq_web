@@ -410,6 +410,9 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		c.DetermineSkillCategoryValues()
+		c.SetAttributes()
+
 		// Add Skills
 		newSkills := map[string]*runequest.Skill{}
 
@@ -424,11 +427,13 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 			if coreString != "" && val > 0 {
 
+				category := req.FormValue(str + "Category")
+
 				sk := &runequest.Skill{
 					CoreString: coreString,
-					Category:   req.FormValue(str + "Category"),
-					Value:      val,
-					Total:      val,
+					Category:   category,
+					Value:      val - c.SkillCategories[category].Value,
+					Total:      val - c.SkillCategories[category].Value,
 				}
 
 				userString := req.FormValue(str + "UserString")
@@ -530,8 +535,6 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		c.HitLocations = runequest.LocationForms[form]
 		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
 
-		c.SetAttributes()
-
 		c.CurrentHP = c.Attributes["HP"].Max
 		c.CurrentMP = c.Attributes["MP"].Max
 		c.CurrentRP = c.Cult.NumRunePoints
@@ -628,7 +631,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 				// Create Weapon Skill
 				sk := &runequest.Skill{
 					CoreString: attackName,
-					Value:      skillVal,
+					Value:      skillVal - c.SkillCategories[attackType].Value,
 					Category:   attackType,
 				}
 

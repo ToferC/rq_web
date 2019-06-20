@@ -131,6 +131,7 @@ func FactionHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:        loggedIn,
 		SessionUser:       username,
 		IsAdmin:           isAdmin,
+		StringArray:       runequest.StatMap,
 	}
 
 	// Render page

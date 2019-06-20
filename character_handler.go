@@ -171,6 +171,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:        isAdmin,
 		Counter:        numToArray(10),
 		Flashes:        flashes,
+		StringArray:    runequest.StatMap,
 	}
 
 	if req.Method == "GET" {

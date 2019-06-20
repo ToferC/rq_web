@@ -79,6 +79,7 @@ type WebChar struct {
 	MidCounter        []int
 	BigCounter        []int
 	RuneArray         []string
+	StringArray       []string
 	HitLocationForms  map[string]map[string]*runequest.HitLocation
 
 	Flashes []interface{}

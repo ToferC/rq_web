@@ -10,6 +10,7 @@
 {{ $IsAuthor := .IsAuthor }}
 {{ $IsAdmin := .IsAdmin }}
 {{ $chars := .FactionCharacters }}
+{{ $statOrder := .StringArray }}
 
       <div class="container">
             <h3>{{ $faction.Name }} - {{ $faction.Author.UserName }} {{ if $IsAuthor }}
@@ -82,7 +83,15 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="RP-addon">{{ $c.Character.Cult.Rank }} of {{ $c.Character.Cult.Name }}</span>
                             </div>
-                            <input type="number" min=0 id="counter" class="form-control" aria-describedby="RP-addon" name="RP" value ="{{ $c.Character.CurrentRP }}">
+                            <input 
+                              type="number" 
+                              min=0 
+                              id="counter" 
+                              class="form-control" 
+                              aria-describedby="RP-addon" 
+                              name="RP" 
+                              {{ if not $IsAuthor }}disabled{{end }}
+                              value ="{{ $c.Character.CurrentRP }}">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="RP-addon">/{{ $c.Character.Cult.NumRunePoints }} RP</span>
                               </div>
@@ -93,7 +102,15 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text" id="RP-addon">RP ({{ $ec.Name }})</span>
                           </div>
-                          <input type="number" id="counter" min=0 class="form-control" aria-describedby="RP-addon" name="RP-{{ $ec.Name }}" value ="{{ $ec.CurrentRunePoints }}">
+                          <input 
+                            type="number" 
+                            id="counter" 
+                            min=0 
+                            class="form-control" 
+                            aria-describedby="RP-addon" 
+                            name="RP-{{ $ec.Name }}" 
+                            {{ if not $IsAuthor }}disabled{{end }}
+                            value ="{{ $ec.CurrentRunePoints }}">
                           <div class="input-group-append">
                               <span class="input-group-text" id="RP-addon">/{{ $ec.RunePoints }}</span>
                             </div>
@@ -106,7 +123,9 @@
                 <div class="col-sm-3 col-md-3 col-lg-3">
                         <h5>Characteristics</h5>
                         <table class="table table-sm table-striped">
+                            {{ range $o := $statOrder }}
                             {{ range $k, $stat := $c.Character.Statistics }}
+                            {{ if eq $o $k }}
                             <tr title="Base: {{ $stat.Base }}
                             Rune Bonus: {{ $stat.RuneBonus }}
                             {{ range $u := $stat.Updates }}
@@ -115,6 +134,8 @@
                                 <td>{{ $stat.Name }}</td>
                                 <td style="text-align:center">{{ $stat.Total }}</td>
                             </tr>
+                                {{ end }}
+                                {{ end }}
                                 {{ end }}
                             <tr>
                                 <td>Damage Bonus</td>
@@ -200,7 +221,15 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="MP-addon">MP</span>
                                 </div>
-                                <input type="number" id="counter-MP" min=0 class="form-control" aria-describedby="MP-addon" name="MP" value ="{{ $c.Character.CurrentMP }}">
+                                <input 
+                                  type="number" 
+                                  id="counter-MP" 
+                                  min=0 
+                                  class="form-control" 
+                                  aria-describedby="MP-addon" 
+                                  name="MP"
+                                  {{ if not $IsAuthor }}disabled{{end }}
+                                  value ="{{ $c.Character.CurrentMP }}">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="MP-addon">/{{ $c.Character.Attributes.MP.Max }}</span>
                                   </div>
@@ -273,7 +302,7 @@
                             {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
                             {{end}}">
                 
-                                <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }})</td>
+                                <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}</td>
                                 <td style="text-align:center">{{ $skill.Total }}%</td>
                             </tr>
                             {{ end }}
@@ -332,6 +361,7 @@
                         <td style="text-align:center">{{ $v.DamageString }}</td>
                         <td style="text-align:center">{{ $v.StrikeRank }}</td>
                         <td>
+                          {{ if $IsAuthor }}
                           <div class="input-group">
                             <input
                               id="counter"
@@ -347,8 +377,13 @@
                               <span class="input-group-text" id="{{ $k }}-HP-addon"
                                 >/{{ $v.Weapon.HP }}</span
                               >
+                                
                             </div>
                           </div>
+                              {{ else }}
+                              {{ $v.Weapon.CurrentHP }} / {{ $v.Weapon.HP }}
+                              {{ end }}
+                              {{ $v.Weapon.Special }}
                         </td>
                       </tr>
                       {{  end }} <!-- END if gt MeleeAttacks-->
@@ -363,8 +398,8 @@
                         <th>Skill</th>
                         <th>Damage</th>
                         <th>SR</th>
-                        <th>HP</th>
                         <th>Range</th>
+                        <th>Special</th>
                       </tr>
                       {{ range $k, $v := $c.Character.RangedAttacks }}
                       <tr>
@@ -372,8 +407,8 @@
                         <td style="text-align:center">{{ $v.Skill.Total }}%</td>
                         <td style="text-align:center">{{ $v.DamageString }}</td>
                         <td style="text-align:center">{{ $v.StrikeRank }}</td>
-                        <td style="text-align:center">{{ $v.Weapon.HP }}</td>
                         <td style="text-align:center">{{ $v.Weapon.Range }}m</td>
+                        <td style="text-align:center">{{ $v.Weapon.Special }}</td>
                       </tr>
                       {{   end }} <!-- END Ranged Attacks -->
                     </table>
