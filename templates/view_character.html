@@ -57,7 +57,7 @@ th {
                   src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
                 >
                   {{ end }}
-                </h6>
+            </h6>
 
             {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p><strong>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</strong></p>
@@ -160,7 +160,7 @@ th {
         {{ end }}
 
         {{ range $r := $character.PowerRunes }}
-        {{ if and (gt $r.Total 50) (ne $r.Total 0) }}
+        {{ if and (ne $r.Total 50) (ne $r.Total 0) }}
         <tr title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%
