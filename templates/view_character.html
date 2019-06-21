@@ -160,7 +160,7 @@ th {
         {{ end }}
 
         {{ range $r := $character.PowerRunes }}
-        {{ if and (ne $r.Total 50) (ne $r.Total 0) }}
+        {{ if and (gt $r.Total 50) (ne $r.Total 0) }}
         <tr title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%
