@@ -82,12 +82,11 @@ th {
 
 
             <form action="" method="POST">
-            <h5>Description</h5>
-            {{ if $character.Description }}
-            <button class="btn btn-secondary btn-sm" data-toggle="collapse" type="button" data-target="#description">Show</button>
-            <div id="description" class="collapse"><p>{{ $character.Description }}</p></div>
+            <h5>Description</h5>{{ if gt (len $character.Description) 144 }}
+            <button class="btn btn-link btn-sm" data-toggle="collapse" type="button" data-target="#description">Show</button></h5>
+            <div id="description" class="collapse"><hr><p>{{ $character.Description }}</p></div>
             {{ else }}
-            <p>None</p>
+            <p>{{ $character.Description }}</p>
             {{ end }}
             <hr>
 
