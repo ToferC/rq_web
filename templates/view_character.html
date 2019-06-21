@@ -49,6 +49,16 @@ th {
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h4>{{ $character.Name }}</h4>
+
+            <h6>{{ range $r := $character.CoreRunes }}
+                <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 20px; height: 20px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                >
+                  {{ end }}
+                </h6>
+
             {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p><strong>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</strong></p>
               {{ if $character.ExtraCults }}
@@ -135,7 +145,13 @@ th {
         Occupation: {{ $r.OccupationValue }}%
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">
-              <td>{{ $r.Name }} {{ if $IsAuthor }}
+              <td>{{ $r.Name }} 
+              <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 18px; height: 18px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                >
+                {{ if $IsAuthor }}
                     <input type="checkbox" name="{{ $r.Name }}-XP" value="{{ $r.ExperienceCheck }}" id="checkbox" {{ if $r.ExperienceCheck }}checked{{end}}>
                     {{ end }}</td>
             <td style="text-align:center">{{ $r.Total }}%</td>
@@ -152,7 +168,13 @@ th {
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">
             
-              <td>{{ $r.Name }}{{ if $IsAuthor }}
+              <td>{{ $r.Name }} 
+              <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 18px; height: 18px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ $r.Name }}.png"
+                >
+                {{ if $IsAuthor }}
             <input type="checkbox" name="{{ $r.Name }}-XP" value="{{ $r.ExperienceCheck }}" id="checkbox" {{ if $r.ExperienceCheck }}checked{{end}}>
             {{ end }}</td>
             <td style="text-align:center">{{ $r.Total }}%</td>
@@ -170,7 +192,13 @@ th {
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">
             
-              <td>{{ $r.Name }}{{ if $IsAuthor }}
+              <td>{{ $r.Name }} 
+              <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 18px; height: 18px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                >
+                {{ if $IsAuthor }}
             <input type="checkbox" name="{{ $r.Name }}-XP" value="{{ $r.ExperienceCheck }}" id="checkbox" {{ if $r.ExperienceCheck }}checked{{end}}>
             {{ end }}</td>
             <td style="text-align:center">{{ $r.Total }}%</td>
