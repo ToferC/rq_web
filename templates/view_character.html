@@ -83,8 +83,14 @@ th {
 
             <form action="" method="POST">
             <h5>Description</h5>
-            <p>{{ $character.Description }}</p>
+            {{ if $character.Description }}
+            <button class="btn btn-secondary btn-sm" data-toggle="collapse" type="button" data-target="#description">Show</button>
+            <div id="description" class="collapse"><p>{{ $character.Description }}</p></div>
+            {{ else }}
+            <p>None</p>
+            {{ end }}
             <hr>
+
             {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
             <p>Standard of Living: {{ $character.StandardofLiving }}</p>
             <p>Ransom: {{ $character.Ransom }} Lunars</p>
