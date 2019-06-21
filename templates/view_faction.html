@@ -246,7 +246,13 @@
         Occupation: {{ $r.OccupationValue }}%
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">
-              <td>{{ $r.Name }}</td>
+              <td>{{ $r.Name }} 
+              <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 18px; height: 18px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                >
+                </td>
             <td style="text-align:center">{{ $r.Total }}%</td>
         </tr>
         {{ end }} <!-- END gt loop -->
@@ -261,7 +267,13 @@
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">
             
-              <td>{{ $r.Name }}</td>
+              <td>{{ $r.Name }} 
+              <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 18px; height: 18px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                >
+                </td>
             <td style="text-align:center">{{ $r.Total }}%</td>
             
         </tr>
@@ -277,7 +289,13 @@
         Cult: {{ $r.CultValue }}%{{ range $u := $r.Updates }}
         {{ $u.Event }}: {{ $u.Value }}%{{end}}">
             
-              <td>{{ $r.Name }}</td>
+              <td>{{ $r.Name }} 
+              <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 18px; height: 18px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                >
+                </td>
             <td style="text-align:center">{{ $r.Total }}%</td>
             
         </tr>
