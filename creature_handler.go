@@ -575,30 +575,13 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			attackName := req.FormValue(fmt.Sprintf("Attack-%d-Name", i))
 			attackType := req.FormValue(fmt.Sprintf("Attack-%d-Type", i))
 			special := req.FormValue(fmt.Sprintf("Attack-%d-Special", i))
+			damage := req.FormValue(fmt.Sprintf("Attack-%d-Damage", i))
 
 			skillString := req.FormValue(fmt.Sprintf("Attack-%d-Skill", i))
 
 			skillVal, err := strconv.Atoi(skillString)
 			if err != nil {
 				skillVal = 0
-			}
-
-			numDiceStr := req.FormValue(fmt.Sprintf("Attack-%d-Num", i))
-			numDiceVal, err := strconv.Atoi(numDiceStr)
-			if err != nil {
-				numDiceVal = 0
-			}
-
-			dieType := req.FormValue(fmt.Sprintf("Attack-%d-Die-Type", i))
-			dieVal, err := strconv.Atoi(dieType)
-			if err != nil {
-				dieVal = 0
-			}
-
-			modStr := req.FormValue(fmt.Sprintf("Attack-%d-Mod", i))
-			modVal, err := strconv.Atoi(modStr)
-			if err != nil {
-				modVal = 0
 			}
 
 			hpStr := req.FormValue(fmt.Sprintf("Attack-%d-HP", i))
@@ -621,13 +604,6 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 			if attackName != "" && skillVal > 0 {
 
-				damageString := ""
-				damageString += fmt.Sprintf("%dd%d", numDiceVal, dieVal)
-
-				if modVal > 0 {
-					damageString += fmt.Sprintf("+%d", modVal)
-				}
-
 				// Create Weapon Skill
 				sk := &runequest.Skill{
 					CoreString: attackName,
@@ -642,7 +618,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 					rangedAttacks[attackName] = &runequest.Attack{
 						Name:         attackName,
 						Skill:        c.Skills[attackName],
-						DamageString: damageString,
+						DamageString: damage,
 						StrikeRank:   c.Attributes["DEXSR"].Base,
 						Weapon: &runequest.Weapon{
 							Name:      attackName,
@@ -650,7 +626,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 							SR:        srVal,
 							STRDamage: false,
 							Range:     rangeVal,
-							Damage:    damageString,
+							Damage:    damage,
 							HP:        hpVal,
 							CurrentHP: hpVal,
 							Special:   special,
@@ -668,14 +644,14 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 					meleeAttacks[attackName] = &runequest.Attack{
 						Name:         attackName,
 						Skill:        c.Skills[attackName],
-						DamageString: damageString + dbString,
+						DamageString: damage + dbString,
 						StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + srVal,
 						Weapon: &runequest.Weapon{
 							Name:      attackName,
 							Type:      attackType,
 							SR:        srVal,
 							STRDamage: true,
-							Damage:    damageString,
+							Damage:    damage,
 							HP:        hpVal,
 							CurrentHP: hpVal,
 							Special:   special,

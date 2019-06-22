@@ -381,32 +381,10 @@
 
         <div class="input-group">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="Attack-{{ $k }}-Num-addon">Damage Dice</span>
+            <span class="input-group-text" id="Attack-{{ $k }}-Damage-addon">Damage</span>
           </div>
-          <input type="number" class="form-control" aria-describedby="Attack-{{ $k }}-Num-addon" name="Attack-{{ $k }}-Num" value="1">
-        </div> 
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" for="Attack-{{ $k }}-Die-Type">Die-Type</span>
-            </div>
-            <select type="number" class="form-control" id="Attack-{{ $k }}-Die-Type" name="Attack-{{ $k }}-Die-Type">
-              <option value="4">d4</option>
-              <option value="6">d6</option>
-              <option value="8">d8</option>
-              <option value="10">d10</option>
-              <option value="3">d3</option>
-              <option value="2">d2</option>
-              <option value="0">Special</option>
-            </select>
-          </div>
-
-          <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="Attack-{{ $k }}-Mod-addon">Damage Modifier</span>
-              </div>
-              <input type="number" class="form-control" aria-describedby="Attack-{{ $k }}-Mod-addon" name="Attack-{{ $k }}-Mod" value="1">
-            </div> 
+          <input type="text" class="form-control" aria-describedby="Attack-{{ $k }}-Damage-addon" name="Attack-{{ $k }}-Damage" placeholder="1d6+1" value="1d6+1">
+        </div>
 
           <div class="input-group">
               <div class="input-group-prepend">
