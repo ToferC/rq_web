@@ -120,6 +120,30 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// Create Custom Weapon Slot
+	cMelee := &runequest.Attack{
+		Skill: &runequest.Skill{},
+		Weapon: &runequest.Weapon{
+			Custom: true,
+			HP:     8,
+			SR:     3,
+			Damage: "1d6+1",
+		},
+	}
+	c.MeleeAttacks["Custom-Melee"] = cMelee
+
+	cRanged := &runequest.Attack{
+		Skill: &runequest.Skill{},
+		Weapon: &runequest.Weapon{
+			Custom: true,
+			Range:  50,
+			HP:     5,
+			SR:     1,
+			Damage: "1d6+1",
+		},
+	}
+	c.RangedAttacks["Custom-Ranged"] = cRanged
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
@@ -153,57 +177,170 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 
 		tempMelee := map[string]*runequest.Attack{}
 
-		for k := range c.MeleeAttacks {
-			weaponString := req.FormValue(fmt.Sprintf("Melee-Weapon-%s", k))
-			skillString := req.FormValue(fmt.Sprintf("Melee-Skill-%s", k))
+		for k, v := range c.MeleeAttacks {
 
-			if weaponString != "" && skillString != "" {
+			if !v.Weapon.Custom {
 
-				// Convert weapon name to index
-				weaponIndex := weaponsMap[weaponString]
+				// Regular Weapon from game
+				weaponString := req.FormValue(fmt.Sprintf("Melee-Weapon-%s", k))
+				skillString := req.FormValue(fmt.Sprintf("Melee-Skill-%s", k))
 
-				// Select weapon object from array
-				weapon := baseWeapons[weaponIndex]
+				if weaponString != "" && skillString != "" {
 
-				dbString := ""
+					// Convert weapon name to index
+					weaponIndex := weaponsMap[weaponString]
 
-				if c.Attributes["DB"].Text != "-" {
-					dbString = c.Attributes["DB"].Text
+					// Select weapon object from array
+					weapon := baseWeapons[weaponIndex]
+
+					dbString := ""
+
+					if c.Attributes["DB"].Text != "-" {
+						dbString = c.Attributes["DB"].Text
+					}
+
+					tempMelee[weapon.Name] = &runequest.Attack{
+						Name:         weapon.Name,
+						Skill:        c.Skills[skillString],
+						DamageString: weapon.Damage + dbString,
+						StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
+						Weapon:       weapon,
+					}
 				}
+			} else {
+				// Custom Weapon
+				name := req.FormValue(fmt.Sprintf("Custom-M-%s-Name", k))
+				skill := req.FormValue(fmt.Sprintf("Custom-M-%s-Skill", k))
 
-				tempMelee[weapon.Name] = &runequest.Attack{
-					Name:         weapon.Name,
-					Skill:        c.Skills[skillString],
-					DamageString: weapon.Damage + dbString,
-					StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
-					Weapon:       weapon,
+				if name != "" && skill != "" {
+
+					_, ok := weaponsMap[name]
+					if ok {
+						// Name is already in common weapons
+						name += " (custom)"
+					}
+
+					damage := req.FormValue(fmt.Sprintf("Custom-M-%s-Damage", k))
+					special := req.FormValue(fmt.Sprintf("Custom-M-%s-Special", k))
+
+					str := req.FormValue(fmt.Sprintf("Custom-M-%s-HP", k))
+					hp, err := strconv.Atoi(str)
+					if err != nil {
+						hp = 0
+					}
+
+					str = req.FormValue(fmt.Sprintf("Custom-M-%s-SR", k))
+					sr, err := strconv.Atoi(str)
+					if err != nil {
+						sr = 0
+					}
+
+					dbString := ""
+
+					if c.Attributes["DB"].Text != "-" {
+						dbString = c.Attributes["DB"].Text
+					}
+
+					tempMelee[name] = &runequest.Attack{
+						Name:         name,
+						Skill:        c.Skills[skill],
+						DamageString: damage + dbString,
+						StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + sr,
+						Weapon: &runequest.Weapon{
+							Name:      name,
+							Type:      "Melee",
+							STRDamage: true,
+							Damage:    damage,
+							HP:        hp,
+							CurrentHP: hp,
+							SR:        sr,
+							Special:   special,
+							Custom:    true,
+						},
+					}
 				}
 			}
 		}
 
 		c.MeleeAttacks = tempMelee
 
+		// Ranged Weapons & Attacks
 		tempRanged := map[string]*runequest.Attack{}
 
-		// Ranged Weapons & Attacks
+		for k, v := range c.RangedAttacks {
 
-		for k := range c.RangedAttacks {
-			weaponString := req.FormValue(fmt.Sprintf("Ranged-Weapon-%s", k))
-			skillString := req.FormValue(fmt.Sprintf("Ranged-Skill-%s", k))
+			if !v.Weapon.Custom {
+				// Regular Weapon
+				weaponString := req.FormValue(fmt.Sprintf("Ranged-Weapon-%s", k))
+				skillString := req.FormValue(fmt.Sprintf("Ranged-Skill-%s", k))
 
-			if weaponString != "" && skillString != "" {
+				if weaponString != "" && skillString != "" {
 
-				weaponIndex := weaponsMap[weaponString]
+					weaponIndex := weaponsMap[weaponString]
 
-				weapon := baseWeapons[weaponIndex]
+					weapon := baseWeapons[weaponIndex]
 
-				// Ranged weapon
-				tempRanged[weapon.Name] = &runequest.Attack{
-					Name:         weapon.Name,
-					Skill:        c.Skills[skillString],
-					DamageString: weapon.Damage,
-					StrikeRank:   c.Attributes["DEXSR"].Base,
-					Weapon:       weapon,
+					// Ranged weapon
+					tempRanged[weapon.Name] = &runequest.Attack{
+						Name:         weapon.Name,
+						Skill:        c.Skills[skillString],
+						DamageString: weapon.Damage,
+						StrikeRank:   c.Attributes["DEXSR"].Base,
+						Weapon:       weapon,
+					}
+				}
+			} else {
+				// Custom Weapon
+				name := req.FormValue(fmt.Sprintf("Custom-R-%s-Name", k))
+				skill := req.FormValue(fmt.Sprintf("Custom-R-%s-Skill", k))
+
+				if name != "" && skill != "" {
+
+					_, ok := weaponsMap[name]
+					if ok {
+						// Name is already in common weapons
+						name += " (custom)"
+					}
+
+					damage := req.FormValue(fmt.Sprintf("Custom-R-%s-Damage", k))
+					special := req.FormValue(fmt.Sprintf("Custom-R-%s-Special", k))
+
+					str := req.FormValue(fmt.Sprintf("Custom-R-%s-Range", k))
+					rangeM, err := strconv.Atoi(str)
+					if err != nil {
+						rangeM = 0
+					}
+
+					str = req.FormValue(fmt.Sprintf("Custom-R-%s-HP", k))
+					hp, err := strconv.Atoi(str)
+					if err != nil {
+						hp = 0
+					}
+
+					str = req.FormValue(fmt.Sprintf("Custom-R-%s-SR", k))
+					sr, err := strconv.Atoi(str)
+					if err != nil {
+						sr = 0
+					}
+
+					tempRanged[name] = &runequest.Attack{
+						Name:         name,
+						Skill:        c.Skills[skill],
+						DamageString: damage,
+						StrikeRank:   c.Attributes["DEXSR"].Base + sr,
+						Weapon: &runequest.Weapon{
+							Name:      name,
+							Type:      "Ranged",
+							STRDamage: false,
+							Damage:    damage,
+							Range:     rangeM,
+							HP:        hp,
+							CurrentHP: hp,
+							SR:        sr,
+							Special:   special,
+							Custom:    true,
+						},
+					}
 				}
 			}
 		}

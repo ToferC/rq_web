@@ -654,6 +654,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 							HP:        hpVal,
 							CurrentHP: hpVal,
 							Special:   special,
+							Custom:    true,
 						},
 					}
 				} else {
@@ -678,6 +679,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 							HP:        hpVal,
 							CurrentHP: hpVal,
 							Special:   special,
+							Custom:    true,
 						},
 					}
 				}

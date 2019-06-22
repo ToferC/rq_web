@@ -24,6 +24,7 @@ type Weapon struct {
 	Type      string
 	Range     int
 	Special   string
+	Custom    bool
 }
 
 // BaseWeapons is an array of runequest weapons

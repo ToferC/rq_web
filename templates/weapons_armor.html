@@ -51,6 +51,28 @@
         {{ end }}
 
             <hr>
+
+            <h4>Armor</h4>
+            <p>Set the armor rating for each of your hit locations.</p>
+        {{ range $s := $character.HitLocationMap }}
+        {{ range $k, $v := $character.HitLocations }}
+        {{ if eq $s $k }}
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="{{ $k }}-Armor-addon">{{ $v.Name }}</span>
+              </div>
+              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
+              <div class="input-group-append">
+                  <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
+                </div>
+            </div>  
+         
+        {{ end }} <!-- END if -->
+        {{ end }}
+        {{ end }} <!-- END map -->
+        <hr>
+
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
           <hr>
 
@@ -66,6 +88,7 @@
             <h4>Melee Attacks</h4>
 
             {{ range $m, $attack := $meleeattacks }}
+            {{ if not $attack.Weapon.Custom }}
             <div class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Melee-Skill-{{$m}}-addon">Skill</span>
@@ -103,6 +126,7 @@
               </div>
               
                 <hr>
+                {{ end }}
                 {{ end }} <!-- end range counter -->
 
             <hr>
@@ -110,6 +134,8 @@
             <h4>Ranged Attacks</h4>
 
             {{ range $m, $attack := $rangedattacks }}
+            {{ if not $attack.Weapon.Custom }}
+
             <div class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Ranged-Skill-{{$m}}-addon">Skill</span>
@@ -148,39 +174,157 @@
               
                 <hr>
                 {{ end }} <!-- end range counter -->
+                {{ end }}
             </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
 
+                <h4>Custom Melee Attacks</h4>
 
-            <h4>Armor</h4>
-            <p>Set the armor rating for each of your hit locations.</p>
-        {{ range $s := $character.HitLocationMap }}
-        {{ range $k, $v := $character.HitLocations }}
-        {{ if eq $s $k }}
-          <p>{{ $v.HitLoc }} <strong>{{ $v.Name }}</strong></p>
+                {{ range $m, $attack := $meleeattacks }}
+                {{ if $attack.Weapon.Custom }}
+      
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Custom-M-{{ $m }}-Name-addon">Name</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Custom-M-{{ $m }}-Name-addon" name="Custom-M-{{ $m }}-Name" placeholder="Weapon Name" value="{{ $attack.Name }}">
+                  </div>
+      
+                  <div class="input-group">
+                          <div class="input-group-prepend">
+                          <span class="input-group-text" id="Custom-M-{{$m}}-Skill-addon">Skill</span>
+                      </div>
+                        <select type="text" class="form-control" id="Custom-M-{{$m}}-Skill" name="Custom-M-{{$m}}-Skill">
+                        {{ if ne $attack.Skill.Name ""}}
+                          <option value="{{$attack.Skill.Name}}">{{$attack.Skill}}</option>
+                        {{ end }}
+                          <option></option>
+                          {{ range $s := $character.Skills }}
+                              {{ if or (eq $s.Category "Melee") (eq $s.Category "Shield")}}
+                              <option value="{{ $s.Name }}">{{ $s }}</option>
+                              {{ end }}
+                            {{ end }} <!-- END range $skills -->                      
+                        </select>
+                    </div>
+      
+      
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Custom-M-{{ $m }}-Damage-addon">Damage</span>
+                        </div>
+                        <input type="text" class="form-control" aria-describedby="Custom-M-{{ $m }}-Damage-addon" name="Custom-M-{{ $m }}-Damage" placeholder="1d6+1" value="{{ $attack.Weapon.Damage }}">
+                      </div>
+      
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="Custom-M-{{ $m }}-HP-addon">HP</span>
+                          </div>
+                          <input type="number" class="form-control" aria-describedby="Custom-M-{{ $m }}-HP-addon" name="Custom-M-{{ $m }}-HP" value ="{{ $attack.Weapon.HP }}">
+                        </div>  
+            
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Custom-M-{{ $m }}-SR-addon">SR</span>
+                        </div>
+                        <input type="number" class="form-control" aria-describedby="Custom-M-{{ $m }}-SR-addon" name="Custom-M-{{ $m }}-SR" value ="{{ $attack.Weapon.SR }}">
+                      </div> 
+            
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="Custom-M-{{ $m }}-Special-addon">Special</span>
+                          </div>
+                          <input type="text" class="form-control" aria-describedby="Custom-M-{{ $m }}-Special-addon" name="Custom-M-{{ $m }}-Special" placeholder="None" value ="{{ $attack.Weapon.Special }}">
+                        </div>
+                      
+                    
+                      <hr>
+                      {{ end }}
+                      {{ end }} <!-- end range counter -->
+      
+                      <hr>
 
-          <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="{{ $k }}-Armor-addon">Armor</span>
-              </div>
-              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
-              <div class="input-group-append">
-                  <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
-                </div>
-            </div>  
-         
-          <hr>
-        {{ end }} <!-- END if -->
-        {{ end }}
-        {{ end }} <!-- END map -->
+                      <h4>Custom Ranged Attacks</h4>
+
+                      {{ range $r, $attack := $rangedattacks }}
+                  
+                      {{ if $attack.Weapon.Custom }}
+      
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Custom-R-{{ $r }}-Name-addon">Name</span>
+                        </div>
+                        <input type="text" class="form-control" aria-describedby="Custom-R-{{ $r }}-Name-addon" name="Custom-R-{{ $r }}-Name" placeholder="Weapon Name" value="{{ $attack.Name }}">
+                      </div>
+        
+                      <div class="input-group">
+                              <div class="input-group-prepend">
+                              <span class="input-group-text" id="Custom-R-{{$r}}-Skill-addon">Skill</span>
+                          </div>
+                            <select type="text" class="form-control" id="Custom-R-{{$r}}-Skill" name="Custom-R-{{$r}}-Skill">
+                            {{ if ne $attack.Skill.Name ""}}
+                              <option value="{{$attack.Skill.Name}}">{{$attack.Skill}}</option>
+                            {{ end }}
+                              <option></option>
+                              {{ range $s := $character.Skills }}
+                                  {{ if eq $s.Category "Ranged" }}
+                                  <option value="{{ $s.Name }}">{{ $s }}</option>
+                                  {{ end }}
+                                {{ end }} <!-- END range $skills -->                      
+                            </select>
+                        </div>
+          
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="Custom-R-{{ $r }}-Damage-addon">Damage</span>
+                            </div>
+                            <input type="text" class="form-control" aria-describedby="Custom-R-{{ $r }}-Damage-addon" name="Custom-R-{{ $r }}-Damage" placeholder="1d6+1" value="{{ $attack.Weapon.Damage }}">
+                          </div>
+          
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" id="Custom-R-{{ $r }}-Range-addon">Range</span>
+                              </div>
+                              <input type="number" class="form-control" aria-describedby="Custom-R-{{ $r }}-Range-addon" name="Custom-R-{{ $r }}-Range" value="{{ $attack.Weapon.Range }}">
+                            </div> 
+      
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="Custom-R-{{ $r }}-HP-addon">HP</span>
+                                </div>
+                                <input type="number" class="form-control" aria-describedby="Custom-R-{{ $r }}-HP-addon" name="Custom-R-{{ $r }}-HP" value ="{{ $attack.Weapon.HP }}">
+                              </div>  
+                
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="Custom-R-{{ $r }}-SR-addon">SR</span>
+                            </div>
+                            <input type="number" class="form-control" aria-describedby="Custom-R-{{ $r }}-SR-addon" name="Custom-R-{{ $r }}-SR" value ="{{ $attack.Weapon.SR }}">
+                          </div> 
+                
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" id="Custom-R-{{ $r }}-Special-addon">Special</span>
+                              </div>
+                              <input type="text" class="form-control" aria-describedby="Custom-R-{{ $r }}-Special-addon" name="Custom-R-{{ $r }}-Special" placeholder="None" value ="{{ $attack.Weapon.Special }}">
+                            </div>
+                          
+                        
+                          <hr>
+                          {{ end }}
+                          {{ end }} <!-- end range counter -->
+      
+            
 
                 <button class="btn btn-primary" type="submit" value="Save">Complete Character</button>
-              </form>
 
           </div> <!-- END 9 Col -->
 
           </div> <!-- END outer ROW -->
+
+        </form>
+
+        </div> <!-- End bottom row -->
         </div> <!-- END container -->
 
 {{ end }} <!-- end content -->

@@ -1,3 +1,31 @@
+Release v1.20.6 (2019-06-21)
+===
+
+### Service Client Updates
+* `service/devicefarm`: Updates service documentation
+  * This release includes updated documentation about the default timeout value for test runs and remote access sessions. This release also includes miscellaneous bug fixes for the documentation.
+* `service/iam`: Updates service API, documentation, and examples
+  * We are making it easier for you to manage your permission guardrails i.e. service control policies by enabling you to retrieve the last timestamp when an AWS service was accessed within an account or AWS Organizations entity.
+* `service/kinesis-video-media`: Updates service documentation
+* `service/mediapackage`: Updates service API and documentation
+  * Added two new origin endpoint fields for configuring which SCTE-35 messages are treated as advertisements.
+
+Release v1.20.5 (2019-06-20)
+===
+
+### Service Client Updates
+* `service/acm-pca`: Updates service API and documentation
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/glue`: Updates service API, documentation, and paginators
+  * Starting today, you can now use workflows in AWS Glue to author directed acyclic graphs (DAGs) of Glue triggers, crawlers and jobs. Workflows enable orchestration of your ETL workloads by building dependencies between Glue entities (triggers, crawlers and jobs).  You can visually track status of the different nodes in the workflows on the console making it easier to monitor progress and troubleshoot issues. Also, you can share parameters across entities in the workflow.
+* `service/health`: Updates service API and documentation
+  * API improvements for the AWS Health service.
+* `service/iotevents-data`: Updates service API and documentation
+* `service/opsworks`: Updates service documentation
+  * Documentation updates for OpsWorks Stacks.
+* `service/rds`: Updates service API and documentation
+  * This release adds support for RDS storage autoscaling
+
 Release v1.20.4 (2019-06-19)
 ===
 
