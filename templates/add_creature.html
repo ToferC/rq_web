@@ -17,6 +17,7 @@
 {{ $cults := .CultModels }}
 {{ $category := .CategoryOrder }}
 {{ $hitLocationForms := .HitLocationForms }}
+{{ $statOrder := .StringArray }}
 
 <div class="container">
   <hr>
@@ -146,7 +147,9 @@
 
     <div class="col-sm-3 col-md-3 col-lg-3">
       <h4>Stats</h4>
+      {{ range $o := $statOrder }}
       {{ range $k, $stat := $statistics }}
+      {{ if eq $o $k }}
 
       <div class="input-group">
         <div class="input-group-prepend">
@@ -154,6 +157,8 @@
         </div>
         <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="10">
       </div>
+      {{ end }}
+      {{ end }}
       {{ end }}
 
       <hr>

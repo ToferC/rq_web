@@ -673,6 +673,7 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:        isAdmin,
 		IsAuthor:       IsAuthor,
 		RuneArray:      runeArray,
+		StringArray:    runequest.StatMap,
 	}
 
 	if req.Method == "GET" {

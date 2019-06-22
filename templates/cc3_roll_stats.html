@@ -9,6 +9,7 @@
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
+{{ $statOrder := .StringArray }}
 
       <div class="container">
         <hr>
@@ -46,7 +47,9 @@
             <p>Rolling d6's and re-rolling 1's</p>
             
             
+                {{ range $o := $statOrder }}
                 {{ range $k, $v := $character.Homeland.StatisticFrames }}
+                {{ if eq $k $o }}
                     <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="{{ $k }}-addon">{{ $k }} ({{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }})</span>
@@ -55,6 +58,8 @@
                 </div>
 
                 <hr>
+                {{ end }}
+                {{ end }}
                 {{ end }}
 
                 <input type="button" value="Re-roll" onclick="randomValue();" />

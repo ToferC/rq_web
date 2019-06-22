@@ -376,6 +376,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		CultModels:       cults,
 		CategoryOrder:    runequest.CategoryOrder,
 		HitLocationForms: runequest.LocationForms,
+		StringArray:      runequest.StatMap,
 	}
 
 	if req.Method == "GET" {

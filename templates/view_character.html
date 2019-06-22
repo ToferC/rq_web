@@ -389,12 +389,7 @@ th {
 
         {{ if gt (len $character.MeleeAttacks) 0 }}
         <h5>Melee Attacks {{ if $IsAuthor }}
-            {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
-            <a class="btn btn-sm btn-primary" href="/equip_weapons_armor/{{ $ID }}">Weapons & Armor</a>
-            {{ else }}
-            <a class="btn btn-sm btn-primary" href="#">Edit Attacks</a>
-
-            {{ end }}
+            <a class="btn btn-sm btn-primary" href="/equip_weapons_armor/{{ $ID }}">Attacks & Armor</a>          
             {{ end }}</h5>
         <table class="table table-sm table-striped">
           <tr>
