@@ -34,7 +34,38 @@
             <form action="" method="POST" enctype="multipart/form-data">
           <button class="btn btn-primary" type="submit" value="Save">Continue to Homeland</button>
           <hr>
-            <p>If you exit character creation, you'll be able to come back and finish later.</p>
+          <h4>Attributes</h4>
+              <table class="table table-sm table-striped">
+                <tr>
+                  <td>HP</td>
+                  <td><span id="HP" value="10"></span></td>
+                </tr>
+
+                <tr>
+                  <td>MP</td>
+                  <td><span id="MP" value="10"></span></td>
+                </tr>
+
+                <tr>
+                  <td>DB</td>
+                  <td><span id="DB" value="10"></span></td>
+                </tr>
+
+                <tr>
+                  <td>SIZ SR</td>
+                  <td><span id="SIZ SR" value="10"></span></td>
+                </tr>
+
+                <tr>
+                  <td>DEX SR</td>
+                  <td><span id="DEX SR" value="10"></span></td>
+                </tr>
+
+                <tr>
+                  <td>Spirit Dam</td>
+                  <td><span id="SM DB" value="10"></span></td>
+                </tr>
+            </table>
           <hr>
 
         </div> <!-- END outer column 3 -->
@@ -54,7 +85,15 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="{{ $k }}-addon">{{ $k }} ({{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }})</span>
                   </div>
-                  <input type="number" id="{{$k}}-roll" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="0" required>
+                  <input 
+                    type="number" 
+                    id="{{$k}}-roll" 
+                    class="form-control" 
+                    aria-describedby="{{ $k }}-addon" 
+                    name="{{ $k }}"
+                    onchange="updateAttributes();" 
+                    value="0" 
+                    required>
                 </div>
 
                 <hr>
@@ -95,24 +134,145 @@
 
   window.onload = randomValue();
 
+
   function rollDie(sides)
   {
     if(!sides) sides = 5;
     with(Math) return 2 + floor(random() * sides);
-  }
+  };
 
   function rollDice(number, sides)
   {
     var total = 0;
     while(number-- > 0) total += rollDie(sides);
     return total;
-  }
+  };
 
   function randomValue() {
     {{ range $k, $v := $character.Homeland.StatisticFrames }}
-      document.getElementById('{{ $k }}-roll').value = rollDice({{ $v.Dice }},5)+{{ $v.Modifier}};
+      document.getElementById('{{ $k }}-roll').value = rollDice({{ $v.Dice }},5)+{{ $v.Modifier}}
     {{ end }}
-      }
+    updateAttributes();
+      };
+
+  function updateAttributes() {
+    console.log("Updating Attributes")
+
+    pow = parseInt(document.getElementById('POW-roll').value);
+    dex = parseInt(document.getElementById('DEX-roll').value);
+    int = parseInt(document.getElementById('INT-roll').value);
+    con = parseInt(document.getElementById('CON-roll').value);
+    siz = parseInt(document.getElementById('SIZ-roll').value);
+    str = parseInt(document.getElementById('STR-roll').value);
+    con = parseInt(document.getElementById('CON-roll').value);
+    cha = parseInt(document.getElementById('CHA-roll').value);
+
+    var baseHP = con;
+    var healingRate = 0;
+    var db = siz + str;
+    dbText = "";
+    var smDB = pow + cha;
+    var dexSR = 0;
+    var sizSR = 0;
+    var mp = pow;
+
+
+    console.log(siz);
+    console.log(pow);
+
+    // Siz modifiers
+    switch (true) {
+      case (siz < 5):
+        baseHP -= 2;
+        break;
+      case (siz < 9):
+        baseHP--;
+        break;
+      case (siz < 13):
+        break;
+      case (siz < 17):
+        console.log("HP+1");
+        baseHP++;
+        break;
+      case (siz < 21):
+        baseHP += 2;
+        break;
+      case (siz < 25):
+        baseHP += 3;
+        break;
+      case (siz > 24):
+        baseHP += ((siz - 24) / 4) + 4;
+        break;
+    };
+
+    switch (true) {
+      case (siz < 7):
+        sizSR = 3
+        break;
+      case (siz < 15):
+        sizSR = 2
+        break;
+      case (siz < 22):
+        sizSR = 1
+        break;
+      case (siz > 21):
+        sizSR = 0
+        break;
+	};
+
+  // STR modifiers
+
+  switch (true) {
+	case db < 13:
+		dbText = "-1D4";
+    break;
+	case db < 25:
+		dbText = "-";
+    break;
+	case db < 33:
+		dbText = "+1D4";
+    break;
+	case db < 41:
+		dbText = "+1D6";
+    break;
+	case db < 57:
+		dbText = "+2D6";
+    break;
+	case db > 56:
+		dice = ((db - 56) / 16) + 2
+		dbText = "+"+dice+"d6";
+    break;
+	}
+
+    // Pow modifiers
+    switch (true) {
+      case (pow < 5):
+        baseHP--
+        break;
+      case (pow < 17):
+        break;
+      case (pow < 21):
+        console.log("HP+1");
+        baseHP++
+        break;
+      case (pow < 25):
+        baseHP += 2
+        break;
+      case (pow > 24):
+        baseHP += ((pow - 24) / 4) + 3
+        break;
+    };
+
+    console.log(con, baseHP)
+    document.getElementById("HP").innerHTML = baseHP;
+    document.getElementById("MP").innerHTML = mp;
+    document.getElementById("DB").innerHTML = dbText;
+    document.getElementById("SIZ SR").innerHTML = sizSR;
+    document.getElementById("DEX SR").innerHTML = dexSR;
+    document.getElementById("SM DB").innerHTML = smDB;
+
+
+  }
 
   </script>
 
