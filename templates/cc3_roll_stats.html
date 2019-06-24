@@ -32,46 +32,13 @@
             <hr>
 
             <form action="" method="POST" enctype="multipart/form-data">
-          <button class="btn btn-primary" type="submit" value="Save">Continue to Homeland</button>
-          <hr>
-          <h4>Attributes</h4>
-              <table class="table table-sm table-striped">
-                <tr>
-                  <td>HP</td>
-                  <td><span id="HP" value="10"></span></td>
-                </tr>
-
-                <tr>
-                  <td>MP</td>
-                  <td><span id="MP" value="10"></span></td>
-                </tr>
-
-                <tr>
-                  <td>DB</td>
-                  <td><span id="DB" value="10"></span></td>
-                </tr>
-
-                <tr>
-                  <td>SIZ SR</td>
-                  <td><span id="SIZ SR" value="10"></span></td>
-                </tr>
-
-                <tr>
-                  <td>DEX SR</td>
-                  <td><span id="DEX SR" value="10"></span></td>
-                </tr>
-
-                <tr>
-                  <td>Spirit Dam</td>
-                  <td><span id="SM DB" value="10"></span></td>
-                </tr>
-            </table>
+          <button class="btn btn-primary" type="submit" value="Save">Continue</button>
           <hr>
 
         </div> <!-- END outer column 3 -->
 
 
-          <div class="col-sm-9 col-md-9 col-lg-9">
+          <div class="col-sm-5 col-md-5 col-lg-5">
 
 
             <h4>Enter or choose your Statistics.</h4>
@@ -118,10 +85,108 @@
                 {{ end }}
                 <hr>
 
-                <button class="btn btn-primary" type="submit" value="Save">Continue to Homeland</button>
+                <button class="btn btn-primary" type="submit" value="Save">Continue</button>
+                <hr>
+                <p>Here you'll roll or choose your character's Statistics, the core natural ability they display. Statistics effect a character's attributes and skill category bonuses.</p>
+                <hr>
               </form>
 
-          </div> <!-- END 9 Col -->
+          </div> <!-- END 5 Col -->
+
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <h4>Attributes</h4>
+              <table class="table table-sm table-striped">
+                <tr>
+                  <td>HP</td>
+                  <td><span id="HP" style="text-align:center" value=""></span></td>
+                </tr>
+
+                <tr>
+                  <td>MP</td>
+                  <td><span id="MP" style="text-align:center" value=""></span></td>
+                </tr>
+
+                <tr>
+                  <td>Damage Bonus</td>
+                  <td><span id="DB" style="text-align:center" value=""></span></td>
+                </tr>
+
+                <tr>
+                  <td>Heal Rate</td>
+                  <td><span id="Heal Rate" style="text-align:center" value=""></span></td>
+                </tr>
+
+                <tr>
+                  <td>SIZ SR</td>
+                  <td><span id="SIZ SR" style="text-align:center" value=""></span></td>
+                </tr>
+
+                <tr>
+                  <td>DEX SR</td>
+                  <td><span id="DEX SR" style="text-align:center" value=""></span></td>
+                </tr>
+
+                <tr>
+                  <td>Spirit Dam</td>
+                  <td><span id="SM DB" style="text-align:center" value=""></span></td>
+                </tr>
+            </table>
+          <hr>
+
+      <h4>Skill Modifiers</h4>
+              <table class="table table-sm table-striped">
+                <tr>
+                  <td>Agility</td>
+                  <td><span id="Agility" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Communication</td>
+                  <td><span id="Communication" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Knowledge</td>
+                  <td><span id="Knowledge" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Magic</td>
+                  <td><span id="Magic" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Manipulation</td>
+                  <td><span id="Manipulation" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Perception</td>
+                  <td><span id="Perception" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Stealth</td>
+                  <td><span id="Stealth" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Melee</td>
+                  <td><span id="Melee" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Ranged</td>
+                  <td><span id="Ranged" value="0"></span>%</td>
+                </tr>
+
+                <tr>
+                  <td>Shield</td>
+                  <td><span id="Shield" value="0"></span>%</td>
+                </tr>
+            </table>
+          <hr>
+          </div> <!-- End 4 column -->
 
           </div> <!-- END outer ROW -->
         </div> <!-- END container -->
@@ -132,8 +197,109 @@
   // Original JavaScript code by Chirp Internet: www.chirp.com.au
   // Please acknowledge use of this code by including this header.
 
-  window.onload = randomValue();
 
+  var skillCategories = {
+    "Agility": 0,
+    "Communication": 0,
+    "Knowledge": 0,
+    "Magic": 0,
+    "Manipulation": 0,
+    "Perception": 0,
+    "Stealth": 0,
+    "Melee": 0,
+    "Ranged": 0,
+    "Shield": 0,
+  };
+
+  var minorPositive = {
+    4:  -5,
+    8:  0,
+    12: 0,
+    16: 0,
+    20: 5,
+  }
+
+  var majorPositive = {
+	4:  -10,
+	8:  -5,
+	12: 0,
+	16: 5,
+	20: 10,
+}
+
+var minorNegative = {
+	4:  5,
+	8:  0,
+	12: 0,
+	16: 0,
+	20: -5,
+}
+
+var majorNegative = {
+	4:  10,
+	8:  5,
+	12: 0,
+	16: -5,
+	20: -10,
+}
+
+var manipulationMods = {
+		"STR": minorPositive,
+		"DEX": majorPositive,
+		"INT": majorPositive,
+		"POW": minorPositive,
+}
+
+// RQSkillCategories is a map of skill categories
+var RQSkillCategories = {
+	// Agility
+	"Agility": {
+			"STR": minorPositive,
+			"SIZ": minorNegative,
+			"DEX": majorPositive,
+			"POW": minorPositive,
+	},
+	// Communication
+	"Communication": {
+			"INT": minorPositive,
+			"POW": minorPositive,
+			"CHA": majorPositive,
+	},
+	// Knowledge
+	"Knowledge": {
+			"INT": majorPositive,
+			"POW": minorPositive,
+	},
+	// Magic
+	"Magic": {
+			"POW": majorPositive,
+			"CHA": minorPositive,
+	},
+	// Manipulation
+	"Manipulation": manipulationMods,
+
+	// Weapons
+	"Melee": manipulationMods,
+
+	"Ranged": manipulationMods,
+
+	"Shield": manipulationMods,
+
+	// Perception
+	"Perception": {
+			"INT": majorPositive,
+			"POW": minorPositive,
+	},
+	// Stealth
+	"Stealth": {
+			"SIZ": majorNegative,
+			"DEX": majorPositive,
+			"INT": majorPositive,
+			"POW": minorNegative,
+	},
+}
+
+  window.onload = randomValue();
 
   function rollDie(sides)
   {
@@ -156,7 +322,6 @@
       };
 
   function updateAttributes() {
-    console.log("Updating Attributes")
 
     pow = parseInt(document.getElementById('POW-roll').value);
     dex = parseInt(document.getElementById('DEX-roll').value);
@@ -172,13 +337,10 @@
     var db = siz + str;
     dbText = "";
     var smDB = pow + cha;
+    smDBText = "";
     var dexSR = 0;
     var sizSR = 0;
     var mp = pow;
-
-
-    console.log(siz);
-    console.log(pow);
 
     // Siz modifiers
     switch (true) {
@@ -191,7 +353,6 @@
       case (siz < 13):
         break;
       case (siz < 17):
-        console.log("HP+1");
         baseHP++;
         break;
       case (siz < 21):
@@ -201,7 +362,7 @@
         baseHP += 3;
         break;
       case (siz > 24):
-        baseHP += ((siz - 24) / 4) + 4;
+        baseHP += Math.round(((siz - 24) / 4) + 4);
         break;
     };
 
@@ -220,8 +381,19 @@
         break;
 	};
 
-  // STR modifiers
+  // Healing Rate 
+  switch (true) {
+	case con < 7:
+		healingRate = 1
+	case con < 13:
+		healingRate = 2
+	case con < 19:
+		healingRate = 3
+	case con > 18:
+		healingRate = Math.round(((con - 18) / 6) + 3)
+	}
 
+  // Damage Bonus modifiers
   switch (true) {
 	case db < 13:
 		dbText = "-1D4";
@@ -239,8 +411,31 @@
 		dbText = "+2D6";
     break;
 	case db > 56:
-		dice = ((db - 56) / 16) + 2
+		dice = Math.round(((db - 56) / 16) + 2)
 		dbText = "+"+dice+"d6";
+    break;
+	}
+
+  // Dex modifiers
+
+  switch (true) {
+	case (dex < 6):
+		dexSR = 5;
+    break;
+	case (dex < 9):
+		dexSR = 4;
+    break;
+	case (dex < 13):
+		dexSR = 3;
+    break;
+	case (dex < 16):
+		dexSR = 2;
+    break;
+	case (dex < 19):
+		dexSR = 1;
+    break;
+	case (dex > 18):
+		dexSR = 0;
     break;
 	}
 
@@ -252,27 +447,115 @@
       case (pow < 17):
         break;
       case (pow < 21):
-        console.log("HP+1");
         baseHP++
         break;
       case (pow < 25):
         baseHP += 2
         break;
       case (pow > 24):
-        baseHP += ((pow - 24) / 4) + 3
+        baseHP += Math.round(((pow - 24) / 4) + 3)
         break;
     };
 
-    console.log(con, baseHP)
+  // Spirit Damage
+    switch (true) {
+	case smDB < 13:
+		smDBText = "1D3"
+    break;
+	case smDB < 25:
+		smDBText = "1D6"
+    break;
+	case smDB < 33:
+		smDBText = "1D6+1"
+    break;
+	case smDB < 41:
+		smDBText = "1D6+3"
+    break;
+	case smDB < 57:
+		smDBText = "2D6+3"
+    break;
+	case smDB > 56:
+		dice = Math.round(((db - 56) / 16) + 2)
+		val = Math.round(((db - 56) / 16) + 3)
+		smDBText = dice + "D6+" + val
+		break;
+	}
+
     document.getElementById("HP").innerHTML = baseHP;
     document.getElementById("MP").innerHTML = mp;
     document.getElementById("DB").innerHTML = dbText;
     document.getElementById("SIZ SR").innerHTML = sizSR;
+    document.getElementById("Heal Rate").innerHTML = healingRate;
     document.getElementById("DEX SR").innerHTML = dexSR;
-    document.getElementById("SM DB").innerHTML = smDB;
+    document.getElementById("SM DB").innerHTML = smDBText;
 
+    updateSkillCategories();
+  };
 
-  }
+  function updateSkillCategories() {
+
+    pow = parseInt(document.getElementById('POW-roll').value);
+    dex = parseInt(document.getElementById('DEX-roll').value);
+    int = parseInt(document.getElementById('INT-roll').value);
+    con = parseInt(document.getElementById('CON-roll').value);
+    siz = parseInt(document.getElementById('SIZ-roll').value);
+    str = parseInt(document.getElementById('STR-roll').value);
+    con = parseInt(document.getElementById('CON-roll').value);
+    cha = parseInt(document.getElementById('CHA-roll').value);
+
+    for (var sc in RQSkillCategories) {
+      // for each skill category - sc = "Agility"
+      console.log(sc)
+      totalMod = 0
+
+      for (var sMod in RQSkillCategories[sc]) {
+        // for each stat that modifies the skill category - sMod = "POW"
+        stat = parseInt(document.getElementById(sMod + '-roll').value);
+        
+        modifiers = RQSkillCategories[sc][sMod]
+
+        console.log(sc, sMod, stat, totalMod)
+
+        // Map against specific values
+			switch (true) {
+			case (stat <= 4):
+				totalMod += modifiers[4];
+        break;
+			case (stat <= 8):
+				totalMod += modifiers[8];
+        break;
+			case (stat <= 12):
+				totalMod += modifiers[12];
+        break;
+			case (stat <= 16):
+				totalMod += modifiers[16];
+        console.log(modifiers[16])
+        break;
+			case (stat <= 20):
+				totalMod += modifiers[20];
+        break;
+			case (stat > 20):
+				if (modifiers[20] > 0) {
+					totalMod += modifiers[20] + Math.round(((stat-20)/4)*5);
+          break;
+				} else {
+					totalMod += modifiers[20] - Math.round(((stat-20)/4)*5);
+          break;
+				}
+			};
+      };
+      skillCategories[sc] = totalMod
+    };
+
+    // Set Categories
+    for (k in skillCategories) {
+      if (skillCategories[k] > 0) {
+          document.getElementById(k).innerHTML = "+" + skillCategories[k];
+      } else {
+          document.getElementById(k).innerHTML = skillCategories[k];
+      }
+    }
+  };
 
   </script>
 
