@@ -450,6 +450,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor:       IsAuthor,
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
+		StringArray:    runequest.CategoryOrder,
 	}
 
 	if req.Method == "GET" {
