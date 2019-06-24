@@ -31,6 +31,26 @@
             <p>{{ $character.Description }}</p>
             <hr>
 
+            <h4>Choose Rune Bonuses</h4>
+                <p>Your adventurer gets bonuses based on their Elemental Rune affinities.</p> 
+                {{ range $i, $r := .RuneArray }}
+                  <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="RuneMod-{{ $i }}-addon">Stat {{ add $i 1 }}</span>
+                        </div>
+                    <select 
+                    type="text" 
+                    class="form-control" 
+                    id="RuneMod-{{ $i }}" 
+                    onchange="updateRunes();" 
+                    name="RuneMod-{{ $i }}">
+                      <option>{{ $r }}</option>
+                      <option>CHA</option>
+                    </select>
+                </div>
+                {{ end }}
+                <hr>
+
             <form action="" method="POST" enctype="multipart/form-data">
           <button class="btn btn-primary" type="submit" value="Save">Continue</button>
           <hr>
@@ -69,20 +89,6 @@
                 {{ end }}
 
                 <input type="button" value="Re-roll" onclick="randomValue();" />
-                <hr>
-                <h4>Choose Rune Bonuses</h4>
-                <p>Your adventurer gets Rune Modifier bonuses to the characteristics corresponding to their primary (highest) and secondary (second-highest) Elemental Rune affinities.</p> 
-                {{ range $i, $r := .RuneArray }}
-                  <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="RuneMod-{{ $i }}-addon">Stat {{ add $i 1 }}</span>
-                        </div>
-                    <select type="text" class="form-control" id="RuneMod-{{ $i }}" name="RuneMod-{{ $i }}">
-                      <option>{{ $r }}</option>
-                      <option>CHA</option>
-                    </select>
-                </div>
-                {{ end }}
                 <hr>
 
                 <button class="btn btn-primary" type="submit" value="Save">Continue</button>
@@ -299,6 +305,11 @@ var RQSkillCategories = {
 	},
 }
 
+  var runes = {}
+
+  var r1Current = "";
+  var r2Current = "";
+
   window.onload = randomValue();
 
   function rollDie(sides)
@@ -318,8 +329,69 @@ var RQSkillCategories = {
     {{ range $k, $v := $character.Homeland.StatisticFrames }}
       document.getElementById('{{ $k }}-roll').value = rollDice({{ $v.Dice }},5)+{{ $v.Modifier}}
     {{ end }}
+
+    // Add runes to array
+    {{ range $i, $r := .RuneArray }}
+      runes[{{$i}}] = {{$r}}
+    {{ end }}
+
+    var r1 = document.getElementById("RuneMod-0").value
+    var r2 = document.getElementById("RuneMod-1").value
+
+    r1Current = r1;
+    r2Current = r2;
+
+      
+    // Add base Rune bonuses
+    var t1 = parseInt(document.getElementById(r1+"-roll").value)
+    document.getElementById(r1+"-roll").value = t1 + 2
+
+    var t2 = parseInt(document.getElementById(r2+"-roll").value)
+    document.getElementById(r2+"-roll").value = t2 + 1
+
     updateAttributes();
       };
+
+  function updateRunes() {
+
+    // Get current selections
+    var r1 = document.getElementById("RuneMod-0").value
+    var r2 = document.getElementById("RuneMod-1").value
+
+    var t1 = parseInt(document.getElementById(runes[0]+"-roll").value)
+    var t2 = parseInt(document.getElementById(runes[1]+"-roll").value)
+    var cha = parseInt(document.getElementById("CHA-roll").value)
+
+    if (r1 != r1Current) {
+      if (r1 == "CHA") {
+        r1Current = "CHA"
+        console.log("Update CHA+2")
+        document.getElementById("CHA-roll").value = cha + 2
+        document.getElementById(runes[0]+"-roll").value = t1 - 2
+
+      } else {
+        r1Current = runes[0]
+        console.log("Update "+ runes[0] + " +2")
+        document.getElementById(runes[0]+"-roll").value = t1 + 2
+        document.getElementById("CHA-roll").value = cha - 2
+
+      };
+    };
+
+    if (r2 != r2Current) {
+      if (r2 == "CHA") {
+        r2Current = "CHA"
+        console.log("Update CHA+1")
+        document.getElementById("CHA-roll").value = cha + 1
+        document.getElementById(runes[1]+"-roll").value = t2 - 1
+      } else {
+        r2Current = runes[1]
+        console.log("Update "+ runes[1] + " +1")
+        document.getElementById(runes[1]+"-roll").value = t2 + 1
+        document.getElementById("CHA-roll").value = cha - 1
+      };
+    };
+  };
 
   function updateAttributes() {
 
@@ -331,6 +403,8 @@ var RQSkillCategories = {
     str = parseInt(document.getElementById('STR-roll').value);
     con = parseInt(document.getElementById('CON-roll').value);
     cha = parseInt(document.getElementById('CHA-roll').value);
+
+    
 
     var baseHP = con;
     var healingRate = 0;
@@ -505,7 +579,6 @@ var RQSkillCategories = {
 
     for (var sc in RQSkillCategories) {
       // for each skill category - sc = "Agility"
-      console.log(sc)
       totalMod = 0
 
       for (var sMod in RQSkillCategories[sc]) {
@@ -513,8 +586,6 @@ var RQSkillCategories = {
         stat = parseInt(document.getElementById(sMod + '-roll').value);
         
         modifiers = RQSkillCategories[sc][sMod]
-
-        console.log(sc, sMod, stat, totalMod)
 
         // Map against specific values
 			switch (true) {
@@ -529,7 +600,6 @@ var RQSkillCategories = {
         break;
 			case (stat <= 16):
 				totalMod += modifiers[16];
-        console.log(modifiers[16])
         break;
 			case (stat <= 20):
 				totalMod += modifiers[20];

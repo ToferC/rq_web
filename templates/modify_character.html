@@ -11,6 +11,8 @@
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
 {{ $counter := .Counter }}
+{{ $skillOrder := .CategoryOrder }}
+{{ $statOrder := .StringArray }}
 
 <div class="container">
   <hr>
@@ -109,7 +111,9 @@
 
     <div class="col-sm-3 col-md-3 col-lg-3">
       <h4>Stats</h4>
+      {{ range $o := $statOrder }}
       {{ range $k, $stat := $statistics }}
+      {{ if eq $o $k }}
 
       <div class="input-group">
         <div class="input-group-prepend">
@@ -124,6 +128,8 @@
         onchange="updateAttributes();"
         value="{{ $stat.Total }}">
       </div>
+      {{ end }}
+      {{ end }}
       {{ end }}
 
       <hr>
@@ -211,7 +217,7 @@
     <div class="col-sm-3 col-md-3 col-lg-3">
       <h4>Skills</h4>
 
-      {{ range $sc := .StringArray }}
+      {{ range $sc := $skillOrder }}
       <h6>{{ $sc }} (<span id="{{ $sc }}"></span>%)</h6>
       {{ range $skill := $skills }}
       {{ if eq $skill.Category $sc }}
