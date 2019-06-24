@@ -30,6 +30,7 @@
 
             <p>{{ $character.Description }}</p>
             <hr>
+            <form action="" method="POST" enctype="multipart/form-data">
 
             <h4>Choose Rune Bonuses</h4>
                 <p>Your adventurer gets bonuses based on their Elemental Rune affinities.</p> 
@@ -51,7 +52,6 @@
                 {{ end }}
                 <hr>
 
-            <form action="" method="POST" enctype="multipart/form-data">
           <button class="btn btn-primary" type="submit" value="Save">Continue</button>
           <hr>
 
