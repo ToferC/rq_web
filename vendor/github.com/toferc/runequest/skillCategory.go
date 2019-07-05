@@ -13,9 +13,9 @@ func (sc SkillCategory) String() string {
 	var text string
 
 	if sc.Value > -1 {
-		text += fmt.Sprintf("\n\n**%s +%d%%", sc.Name, sc.Value)
+		text += fmt.Sprintf("%s (+%d%%)", sc.Name, sc.Value)
 	} else {
-		text += fmt.Sprintf("\n\n**%s %d%%", sc.Name, sc.Value)
+		text += fmt.Sprintf("%s (%d%%)", sc.Name, sc.Value)
 	}
 	return text
 }

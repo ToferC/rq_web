@@ -981,7 +981,7 @@ var RuneSpells = []Spell{
 		Cost:        3,
 	},
 	Spell{
-		CoreString:  "Restone Health",
+		CoreString:  "Restore Health",
 		Description: "",
 		Domain:      "Rune",
 		Source:      "Magic",

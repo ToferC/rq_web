@@ -52,6 +52,7 @@
           <hr>
           <h4>Current Skills</h4>
         {{ range $skill := $character.Skills }}
+        {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
         History: {{ $skill.CreationBonusValue }}%
@@ -62,6 +63,7 @@
         {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
         {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
         </p>
+        {{ end }}
         {{ end }}
 
       <hr>
@@ -88,8 +90,10 @@
                   <select type="text" class="form-control" id="Skill-25-{{$m}}" name="Skill-25-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
+                    {{ if and (gt $s.Total 0) (ne $s.Total (add $s.Base $s.CategoryValue)) }}
                         <option value="{{ $s.Name }}">{{ $s }}</option>
                       {{ end }} <!-- END range $skills -->
+                      {{ end }}
                       <option>--------------</option>
                       {{ range $s := $skills }}
                         <option value="{{ $s.CoreString }}">{{ $s.CoreString }}</option>
@@ -121,8 +125,10 @@
                   <select type="text" class="form-control" id="Skill-10-{{$m}}" name="Skill-10-{{$m}}">
                     <option></option>
                     {{ range $s := $character.Skills }}
+                    {{ if and (gt $s.Total 0) (ne $s.Total (add $s.Base $s.CategoryValue)) }}
                         <option value="{{ $s.Name }}">{{ $s }}</option>
                       {{ end }} <!-- END range $skills -->
+                      {{ end }}
                       <option>--------------</option>
                       {{ range $s := $skills }}
                         <option value="{{ $s.CoreString }}">{{ $s.CoreString }}</option>

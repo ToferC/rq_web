@@ -172,6 +172,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		Counter:        numToArray(10),
 		Flashes:        flashes,
 		StringArray:    runequest.StatMap,
+		CategoryOrder:  runequest.CategoryOrder,
 	}
 
 	if req.Method == "GET" {

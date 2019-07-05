@@ -80,7 +80,7 @@ var PowerRuneOrder = []string{
 	"Movement", "Stasis",
 	"Chaos", "Dragonewt",
 	"Plant", "Spirit",
-	"Undead",
+	"Undeath",
 }
 
 // ConditionRuneOrder sets the order for condition runes
@@ -339,8 +339,8 @@ var PowerRunes = map[string]*Ability{
 		OpposedAbility: "Man",
 		Base:           0,
 	},
-	"Undead": &Ability{
-		CoreString: "Undead",
+	"Undeath": &Ability{
+		CoreString: "Undeath",
 		Type:       "Form Rune",
 		Base:       0,
 	},

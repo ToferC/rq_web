@@ -1,3 +1,110 @@
+Release v1.20.15 (2019-07-03)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API and documentation
+  * AssignPrivateIpAddresses response includes two new fields: AssignedPrivateIpAddresses, NetworkInterfaceId
+* `service/rds`: Updates service API and documentation
+  * This release supports Cross-Account Cloning for Amazon Aurora clusters.
+* `service/s3`: Updates service API, documentation, and examples
+  * Add S3 x-amz-server-side-encryption-context support.
+* `service/swf`: Updates service API and documentation
+  * This release adds APIs that allow adding and removing tags to a SWF domain, and viewing tags for a domain. It also enables adding tags when creating a domain.
+
+Release v1.20.14 (2019-07-02)
+===
+
+### Service Client Updates
+* `service/appstream`: Updates service API and documentation
+  * Adding ImageBuilderName in Fleet API and Documentation updates for AppStream.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/mediastore`: Updates service API, documentation, and paginators
+  * This release adds support for tagging, untagging, and listing tags for AWS Elemental MediaStore containers.
+
+Release v1.20.13 (2019-07-01)
+===
+
+### Service Client Updates
+* `service/docdb`: Updates service API and documentation
+  * This release provides support for cluster delete protection and the ability to stop and start clusters.
+* `service/ec2`: Updates service API and documentation
+  * This release adds support for specifying a maximum hourly price for all On-Demand and Spot instances in both Spot Fleet and EC2 Fleet.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/organizations`: Updates service API and documentation
+  * Specifying the tag key and tag value is required for tagging requests.
+* `service/rds`: Updates service API and documentation
+  * This release adds support for RDS DB Cluster major version upgrade
+
+Release v1.20.12 (2019-06-28)
+===
+
+### Service Client Updates
+* `service/alexaforbusiness`: Updates service API and documentation
+* `service/ec2`: Updates service API and documentation
+  * You can now launch 8xlarge and 16xlarge instance sizes on the general purpose M5 and memory optimized R5 instance types.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/redshift`: Updates service API and documentation
+  * ClusterAvailabilityStatus: The availability status of the cluster for queries. Possible values are the following: Available, Unavailable, Maintenance, Modifying, Failed.
+* `service/workspaces`: Updates service API and documentation
+  * Minor API fixes for WorkSpaces.
+
+Release v1.20.11 (2019-06-27)
+===
+
+### Service Client Updates
+* `service/directconnect`: Updates service API and documentation
+  * Tags will now be included in the API responses of all supported resources (Virtual interfaces, Connections, Interconnects and LAGs). You can also add tags while creating these resources.
+* `service/ec2-instance-connect`: Adds new service
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/pinpoint`: Updates service API and documentation
+  * This release includes editorial updates for the Amazon Pinpoint API documentation.
+* `service/workspaces`: Updates service API and documentation
+  * Added support for the WorkSpaces restore feature and copying WorkSpaces Images across AWS Regions.
+
+Release v1.20.10 (2019-06-27)
+===
+
+### Service Client Updates
+* `service/dynamodb`: Updates service documentation and examples
+  * Documentation updates for dynamodb
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+
+Release v1.20.9 (2019-06-26)
+===
+
+### Service Client Updates
+* `service/apigatewayv2`: Updates service API and documentation
+* `service/codecommit`: Updates service API and documentation
+  * This release supports better exception handling for merges.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+
+Release v1.20.8 (2019-06-25)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API, documentation, and paginators
+  * Starting today, you can use Traffic Mirroring  to copy network traffic from an elastic network interface of Amazon EC2 instances and then send it to out-of-band security and monitoring appliances for content inspection, threat monitoring, and troubleshooting. These appliances can be deployed as individual instances, or as a fleet of instances behind a Network Load Balancer with a User Datagram Protocol (UDP) listener. Traffic Mirroring supports filters and packet truncation, so that you only extract the traffic of interest to monitor by using monitoring tools of your choice.
+* `service/eks`: Updates service API
+
+Release v1.20.7 (2019-06-24)
+===
+
+### Service Client Updates
+* `service/apigateway`: Updates service API and documentation
+  * Customers can pick different security policies (TLS version + cipher suite) for custom domains in API Gateway
+* `service/apigatewayv2`: Updates service API and documentation
+  * Customers can get information about security policies set on custom domain resources in API Gateway
+* `service/application-insights`: Adds new service
+* `service/elasticloadbalancingv2`: Updates service API and documentation
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/fsx`: Updates service API and documentation
+* `service/resourcegroupstaggingapi`: Updates service API, documentation, and paginators
+  * Updated service APIs and documentation.
+* `service/securityhub`: Updates service API, documentation, and paginators
+* `service/service-quotas`: Adds new service
+* `service/ssm`: Updates service API and documentation
+  * AWS Systems Manager now supports deleting a specific version of a SSM Document.
+
 Release v1.20.6 (2019-06-21)
 ===
 

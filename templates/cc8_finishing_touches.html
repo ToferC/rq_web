@@ -30,6 +30,7 @@
         
           <h4>Combat Skills</h4>
         {{ range $skill := $character.Skills }}
+          {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
             {{ if or (eq $skill.Category "Melee") (eq $skill.Category "Ranged") }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
@@ -42,6 +43,7 @@
         {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
         </p>
         {{ end }} <!-- END if -->
+        {{ end }}
         {{ end }}
 
       <hr>

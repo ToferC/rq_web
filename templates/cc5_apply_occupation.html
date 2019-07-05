@@ -37,6 +37,7 @@
 
           <h4>Current Skills</h4>
         {{ range $skill := $character.Skills }}
+        {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
         <p title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
         History: {{ $skill.CreationBonusValue }}%
@@ -47,6 +48,7 @@
         {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
         {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
         </p>
+        {{ end }}
         {{ end }}
             <hr>
             
