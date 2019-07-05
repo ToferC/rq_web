@@ -158,7 +158,9 @@ func main() {
 	r.Handle("/google/login", google.StateHandler(stateConfig, google.LoginHandler(oauth2Config, nil)))
 	r.Handle("/google/callback", google.StateHandler(stateConfig, google.CallbackHandler(oauth2Config, googleLoginFunc(), nil)))
 
+	// Admin Views
 	r.HandleFunc("/users/", UserIndexHandler)
+	r.HandleFunc("/admin_view_user_roster/{id}", AdminUserRosterViewHandler)
 
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)

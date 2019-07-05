@@ -77,8 +77,8 @@ func ListUsers(db *pg.DB) ([]*models.User, error) {
 	}
 
 	// Print names and PK
-	for i, n := range users {
-		fmt.Println(i, n.UserName, n.Password, n.Email)
+	for _, n := range users {
+		n.Characters = countUserCharacterModels(db, n.UserName)
 	}
 	return users, nil
 }

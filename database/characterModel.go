@@ -96,6 +96,20 @@ func ListUserCharacterModels(db *pg.DB, username string) ([]*models.CharacterMod
 	return cms, nil
 }
 
+func countUserCharacterModels(db *pg.DB, username string) int {
+
+	var count int
+
+	_, err := db.Query(&count,
+		`SELECT COUNT(*) FROM character_models WHERE author ->> 'UserName' = ?;`, username)
+	if err != nil {
+		panic(err)
+	}
+
+	return count
+
+}
+
 // PKLoadCharacterModel loads a single character from the DB by pk
 func PKLoadCharacterModel(db *pg.DB, pk int64) (*models.CharacterModel, error) {
 	// Select user by Primary Key
