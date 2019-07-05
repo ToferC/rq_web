@@ -26,11 +26,13 @@ type WebView struct {
 
 // WebUser represents a generic user struct
 type WebUser struct {
-	IsAuthor    bool
-	SessionUser string
-	IsLoggedIn  string
-	IsAdmin     string
-	Users       []*models.User
+	IsAuthor       bool
+	SessionUser    string
+	IsLoggedIn     string
+	IsAdmin        string
+	Users          []*models.User
+	UserCount      int
+	CharacterCount int
 }
 
 // WebChar is a framework to send objects & data to a Web view
@@ -82,7 +84,9 @@ type WebChar struct {
 	StringArray       []string
 	HitLocationForms  map[string]map[string]*runequest.HitLocation
 
-	Flashes []interface{}
+	Flashes        []interface{}
+	UserCount      int
+	CharacterCount int
 }
 
 // SplitLines transfomrs results text string into slice

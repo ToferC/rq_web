@@ -9,9 +9,11 @@
       <div class="container">
         <div class="row">
 
-      <div class="col-sm-9 col-md-9 col-lg-9">
+      <div class="col-sm-12 col-md-12 col-lg-12">
         <h3>User Admin</h3>
-        <table>
+        <h4>Users: {{ .UserCount }}</h4>
+        <h4>Characters: {{ .CharacterCount }}</h4>
+        <table class="table table-sm table-striped">
           <tr>
             <td>UserName</td>
             <td>Admin</td>

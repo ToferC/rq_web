@@ -44,14 +44,22 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	wu := WebUser{
-		SessionUser: username,
-		IsLoggedIn:  loggedIn,
-		IsAdmin:     isAdmin,
-		Users:       users,
+	characters := 0
+
+	for _, v := range users {
+		characters += v.Characters
 	}
 
-	Render(w, "templates/index_users.html", wu)
+	wu := WebUser{
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		Users:          users,
+		UserCount:      len(users),
+		CharacterCount: characters,
+	}
+
+	Render(w, "templates/admin_view_users.html", wu)
 }
 
 func googleLoginFunc() http.Handler {
