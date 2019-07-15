@@ -657,7 +657,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Update Abilities
-		for _, a := range c.Abilities {
+		for k, a := range c.Abilities {
 			mod, _ := strconv.Atoi(req.FormValue(a.Name))
 
 			if mod != a.Total {
@@ -677,7 +677,13 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			if a.UserString != "" {
 				a.UserString = req.FormValue(fmt.Sprintf("%s-UserString", a.Name))
 			}
+
 			a.UpdateAbility()
+
+			// Remove Character Passion if zeroed out
+			if a.Total < 1 {
+				delete(c.Abilities, k)
+			}
 		}
 
 		// Hit locations - need to add new map or amend old one
