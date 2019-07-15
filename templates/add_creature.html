@@ -177,7 +177,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
         </div>
-        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="0">
       </div>
       {{ end }}
 
@@ -203,7 +203,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="{{ $k }}-addon">{{ $k }}</span>
         </div>
-        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="{{ $v.Total }}">
+        <input type="number" class="form-control" aria-describedby="{{ $k }}-addon" name="{{ $k }}" value="0">
       </div>
       {{ end }}
 
@@ -388,6 +388,7 @@
             <span class="input-group-text" for="Hit-Location-Form">Hit Location Form</span>
           </div>
           <select type="number" class="form-control" id="Hit-Location-Form" name="Hit-Location-Form">
+          <option>Humanoids</option>
           {{ range $k, $v := $hitLocationForms }}
             <option>{{ $k }}</option>
           {{ end }}
