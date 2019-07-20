@@ -101,13 +101,22 @@ th {
               {{ if not $character.CreationSteps.Complete }}
               <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
               {{ else }}
-              <a class="btn btn-sm btn-primary" href="/modify/{{ $ID }}">Edit</a>
               <button class="btn btn-sm btn-success" type="submit" value="Save Character State">Save</button>
-              <a class="btn btn-sm btn-info" href="/edit_magic/{{ $ID }}">Magic</a>
-              <a class="btn btn-sm btn-primary" href="/duplicate_character/{{ $ID }}">Duplicate</a>
+              <div class="dropdown">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                  Edit
+                </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/modify/{{ $ID }}">Edit Character</a>
+                    <a class="dropdown-item" href="/add_character_content/{{ $ID }}">Add Traits</a>
+                    <a class="dropdown-item" href="/edit_magic/{{ $ID }}">Edit Magic</a>
+                    <a class="dropdown-item" href="/duplicate_character/{{ $ID }}">Duplicate</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/delete/{{ $ID }}">Delete</a>
 
+                  </div>
+              </div>
               {{ end }}
-              <a class="btn btn-sm btn-danger" href="/delete/{{ $ID }}">Delete</a>
               {{ else }}
               {{ if $open }}
               <a class="btn btn-sm btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to my Roster</a>

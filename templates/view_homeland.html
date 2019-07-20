@@ -12,6 +12,8 @@
 
 {{ define "content" }}
 
+{{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
 {{ $homeland := .HomelandModel.Homeland }}
 {{ $ID := .HomelandModel.ID }}
 {{ $skills := .Skills }}
@@ -36,9 +38,11 @@
   {{ $homeland.Notes }}
   <hr>
   {{ end }}
-  <a class="btn btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
-  <a class="btn btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
-
+  
+  {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+  <a class="btn btn-sm btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
+  <a class="btn btn-sm btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
+  {{ end }}
 
 
 </div>

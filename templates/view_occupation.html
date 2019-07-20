@@ -11,6 +11,8 @@
 {{ end }}
 {{ define "content" }}
 
+{{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
 {{ $occupation := .OccupationModel.Occupation }}
 {{ $ID := .OccupationModel.ID }}
 {{ $skills := .Skills }}
@@ -37,8 +39,10 @@
   <p>Income: {{ $occupation.Income }} L</p>
   <p>Ransom: {{ $occupation.Ransom }} L</p>
   <hr>
-  <a class="btn btn-primary" href="/modify_occupation/{{ $ID }}">Modify</a>
-  <a class="btn btn-danger" href="/delete_occupation/{{ $ID }}">Delete</a>
+    {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+        <a class="btn btn-sm btn-primary" href="/modify_occupation/{{ $ID }}">Modify</a>
+        <a class="btn btn-sm btn-danger" href="/delete_occupation/{{ $ID }}">Delete</a>
+    {{ end }}
 </div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">

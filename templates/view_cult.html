@@ -12,6 +12,7 @@
 {{define "content"}}
 
 {{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
 
 {{ $cult := .CultModel.Cult }}
 
@@ -79,9 +80,10 @@
         {{ end }}</p>
       <hr>
 
-      <a class="btn btn-primary" href="/modify_cult/{{ .CultModel.ID }}">Modify</a>
-      <a class="btn btn-danger" href="/delete_cult/{{ .CultModel.ID }}">Delete</a>
-
+      {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+        <a class="btn btn-sm btn-primary" href="/modify_cult/{{ .CultModel.ID }}">Modify</a>
+        <a class="btn btn-sm btn-danger" href="/delete_cult/{{ .CultModel.ID }}">Delete</a>
+      {{ end }}
     </div> <!-- End Skills Column -->
 
     <div class="col-sm-4 col-md-4 col-lg-4">
