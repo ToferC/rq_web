@@ -140,29 +140,30 @@ func (c *Character) ModifyPowerRune(a Ability) {
 	ab.CreationBonusValue += a.CreationBonusValue
 	ab.InPlayXPValue += a.InPlayXPValue
 
-	c.UpdateOpposedRune(ab)
+	ab.UpdateAbility()
+
+	if ab.OpposedAbility != "" && ab.Total > 0 {
+		c.UpdateOpposedRune(ab)
+	}
+
 }
 
 // UpdateOpposedRune determines the opposing rune value
 func (c *Character) UpdateOpposedRune(ab *Ability) {
 	// Modify Opposing Rune if required
-	if ab.OpposedAbility != "" {
-		opposed := c.PowerRunes[ab.OpposedAbility]
+	opposed := c.PowerRunes[ab.OpposedAbility]
 
-		ab.UpdateAbility()
+	// Maximum of 99 in a Power Rune
+	if ab.Total > 99 {
+		ab.Total = 99
+	}
 
-		// Maximum of 99 in a Power Rune
-		if ab.Total > 99 {
-			ab.Total = 99
-		}
+	opposed.UpdateAbility()
 
-		opposed.UpdateAbility()
+	diff := ab.Total + opposed.Total
 
-		diff := ab.Total + opposed.Total
-
-		if diff > 100 {
-			opposed.Base -= diff - 100
-		}
+	if diff > 99 {
+		opposed.Base -= diff - 100
 	}
 }
 
@@ -260,61 +261,61 @@ var PowerRunes = map[string]*Ability{
 		CoreString:     "Man",
 		Type:           "Form Rune",
 		OpposedAbility: "Beast",
-		Base:           50,
+		Base:           0,
 	},
 	"Beast": &Ability{
 		CoreString:     "Beast",
 		Type:           "Form Rune",
 		OpposedAbility: "Man",
-		Base:           50,
+		Base:           0,
 	},
 	"Fertility": &Ability{
 		CoreString:     "Fertility",
 		Type:           "Power Rune",
 		OpposedAbility: "Death",
-		Base:           50,
+		Base:           0,
 	},
 	"Death": &Ability{
 		CoreString:     "Death",
 		Type:           "Power Rune",
 		OpposedAbility: "Fertility",
-		Base:           50,
+		Base:           0,
 	},
 	"Harmony": &Ability{
 		CoreString:     "Harmony",
 		Type:           "Power Rune",
 		OpposedAbility: "Disorder",
-		Base:           50,
+		Base:           0,
 	},
 	"Disorder": &Ability{
 		CoreString:     "Disorder",
 		Type:           "Power Rune",
 		OpposedAbility: "Harmony",
-		Base:           50,
+		Base:           0,
 	},
 	"Truth": &Ability{
 		CoreString:     "Truth",
 		Type:           "Power Rune",
 		OpposedAbility: "Illusion",
-		Base:           50,
+		Base:           0,
 	},
 	"Illusion": &Ability{
 		CoreString:     "Illusion",
 		Type:           "Power Rune",
 		OpposedAbility: "Truth",
-		Base:           50,
+		Base:           0,
 	},
 	"Stasis": &Ability{
 		CoreString:     "Stasis",
 		Type:           "Power Rune",
 		OpposedAbility: "Movement",
-		Base:           50,
+		Base:           0,
 	},
 	"Movement": &Ability{
 		CoreString:     "Movement",
 		Type:           "Power Rune",
 		OpposedAbility: "Stasis",
-		Base:           50,
+		Base:           0,
 	},
 	"Chaos": &Ability{
 		CoreString: "Chaos",
@@ -322,22 +323,19 @@ var PowerRunes = map[string]*Ability{
 		Base:       0,
 	},
 	"Dragonewt": &Ability{
-		CoreString:     "Dragonewt",
-		Type:           "Form Rune",
-		OpposedAbility: "Man",
-		Base:           0,
+		CoreString: "Dragonewt",
+		Type:       "Form Rune",
+		Base:       0,
 	},
 	"Plant": &Ability{
-		CoreString:     "Plant",
-		Type:           "Form Rune",
-		OpposedAbility: "Man",
-		Base:           0,
+		CoreString: "Plant",
+		Type:       "Form Rune",
+		Base:       0,
 	},
 	"Spirit": &Ability{
-		CoreString:     "Spirit",
-		Type:           "Form Rune",
-		OpposedAbility: "Man",
-		Base:           0,
+		CoreString: "Spirit",
+		Type:       "Form Rune",
+		Base:       0,
 	},
 	"Undeath": &Ability{
 		CoreString: "Undeath",
