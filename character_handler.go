@@ -425,21 +425,6 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
-	// Add options for new runes
-	if c.ConditionRunes == nil {
-		c.ConditionRunes = runequest.ConditionRunes
-	}
-
-	newRunes := []string{"Chaos", "Dragonewt", "Plant", "Spirit"}
-
-	for rk, rv := range runequest.PowerRunes {
-		if isInString(newRunes, rk) {
-			if _, ok := c.PowerRunes[rk]; !ok {
-				c.PowerRunes[rk] = rv
-			}
-		}
-	}
-
 	if cm.Image == nil {
 		cm.Image = new(models.Image)
 		cm.Image.Path = DefaultCharacterPortrait
@@ -591,41 +576,44 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					mod = v.Total
 				}
 
-				// Can't have Power rune > 99
-				if mod > 99 {
-					mod = 99
-				}
+				if mod != 0 {
 
-				if mod != v.Total {
-
-					modVal := mod - v.Total
-
-					update := CreateUpdate(eventString, modVal)
-
-					if v.Updates == nil {
-						v.Updates = []*runequest.Update{}
+					// Can't have Power rune > 99
+					if mod > 99 {
+						mod = 99
 					}
 
-					v.Updates = append(v.Updates, update)
+					if mod != v.Total {
 
-					v.UpdateAbility()
-					v.ExperienceCheck = false
+						modVal := mod - v.Total
 
-					if v.OpposedAbility != "" {
+						update := CreateUpdate(eventString, modVal)
 
-						opposed := c.PowerRunes[v.OpposedAbility]
+						if v.Updates == nil {
+							v.Updates = []*runequest.Update{}
+						}
 
-						// Update opposed Power Rune if needed
-						if v.Total+opposed.Total > 100 {
+						v.Updates = append(v.Updates, update)
 
-							opposedUpdate := CreateUpdate(eventString, -modVal)
+						v.UpdateAbility()
+						v.ExperienceCheck = false
 
-							if opposed.Updates == nil {
-								opposed.Updates = []*runequest.Update{}
+						if v.OpposedAbility != "" {
+
+							opposed := c.PowerRunes[v.OpposedAbility]
+
+							// Update opposed Power Rune if needed
+							if v.Total+opposed.Total > 99 {
+
+								opposedUpdate := CreateUpdate(eventString, -modVal)
+
+								if opposed.Updates == nil {
+									opposed.Updates = []*runequest.Update{}
+								}
+								opposed.Updates = append(opposed.Updates, opposedUpdate)
+								opposed.UpdateAbility()
+								triggered = append(triggered, opposed.Name)
 							}
-							opposed.Updates = append(opposed.Updates, opposedUpdate)
-							opposed.UpdateAbility()
-							triggered = append(triggered, opposed.Name)
 						}
 					}
 				}
@@ -769,8 +757,8 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// AddCharacterContentHandler renders a character in a Web page
-func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
+// AddSkillsHandler renders a character in a Web page
+func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
 
@@ -824,17 +812,15 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
 		IsAuthor:       IsAuthor,
-		Counter:        numToArray(3),
-		Passions:       runequest.PassionTypes,
+		Counter:        numToArray(6),
 		Skills:         runequest.Skills,
-		SpiritMagic:    runequest.SpiritMagicSpells,
-		RuneSpells:     runequest.RuneSpells,
+		CategoryOrder:  runequest.CategoryOrder,
 	}
 
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/add_character_content.html", wc)
+		Render(w, "templates/add_skills.html", wc)
 
 	}
 
@@ -848,7 +834,7 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 		event := req.FormValue("Event")
 
 		// Add Skills
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 7; i++ {
 			coreString := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 
@@ -890,7 +876,7 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 				update := &runequest.Update{
 					Date:  tString,
 					Event: event,
-					Value: value,
+					Value: value - (c.SkillCategories[sk.Category].Value + sk.Base),
 				}
 
 				c.Skills[sk.Name].Updates = append(c.Skills[sk.Name].Updates, update)
@@ -901,8 +887,126 @@ func AddCharacterContentHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		// Add custom Skills
+		for i := 1; i < 7; i++ {
+			str := fmt.Sprintf("Custom-Skill-%d-", i)
+
+			coreString := req.FormValue(str + "CoreString")
+			val, err := strconv.Atoi(req.FormValue(str + "Value"))
+			if err != nil {
+				val = 0
+			}
+
+			if coreString != "" && val > 0 {
+
+				category := req.FormValue(str + "Category")
+
+				sk := &runequest.Skill{
+					CoreString: coreString,
+					Category:   category,
+					Value:      val - c.SkillCategories[category].Value,
+					Total:      val - c.SkillCategories[category].Value,
+				}
+
+				userString := req.FormValue(str + "UserString")
+				if userString != "" {
+					sk.UserString = userString
+				}
+
+				sk.GenerateName()
+				sk.UpdateSkill()
+				c.Skills[sk.Name] = sk
+			}
+		}
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
+	}
+}
+
+// AddPassionsHandler renders a character in a Web page
+func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	vars := mux.Vars(req)
+	pk := vars["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
+	}
+
+	c := cm.Character
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
+	wc := WebChar{
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
+		IsAuthor:       IsAuthor,
+		Counter:        numToArray(6),
+		Passions:       runequest.PassionTypes,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/add_passions.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		err := req.ParseMultipartForm(MaxMemory)
+		if err != nil {
+			panic(err)
+		}
+
 		// Add passions
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 7; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
 

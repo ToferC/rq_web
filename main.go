@@ -201,9 +201,9 @@ func main() {
 	r.HandleFunc("/modify_cult/{id}", ModifyCultHandler)
 	r.HandleFunc("/delete_cult/{id}", DeleteCultHandler)
 
-	r.HandleFunc("/add_character_content/{id}", AddCharacterContentHandler)
+	r.HandleFunc("/add_skills/{id}", AddSkillsHandler)
+	r.HandleFunc("/add_passions/{id}", AddPassionsHandler)
 	r.HandleFunc("/equip_weapons_armor/{id}", EquipWeaponsArmorHandler)
-	//r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 
 	// Faction Handlers
 	r.HandleFunc("/faction_index/", FactionIndexHandler)

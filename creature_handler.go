@@ -329,23 +329,6 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	c.Skills = map[string]*runequest.Skill{}
 
-	// Set Base Rune values for Power Runes
-	baseRunes := []string{
-		"Man", "Beast",
-		"Fertility", "Death",
-		"Harmony", "Disorder",
-		"Truth", "Illusion",
-		"Movement", "Stasis",
-	}
-
-	for _, v := range c.PowerRunes {
-		if isInString(baseRunes, v.CoreString) {
-			v.Total = 50
-		} else {
-			v.Total = 0
-		}
-	}
-
 	// Set 6 skills
 	for i := 0; i < 6; i++ {
 		s := runequest.Skill{

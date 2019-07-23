@@ -561,6 +561,23 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		// Set Base Rune values for Power Runes
+		baseRunes := []string{
+			"Man", "Beast",
+			"Fertility", "Death",
+			"Harmony", "Disorder",
+			"Truth", "Illusion",
+			"Movement", "Stasis",
+		}
+
+		for _, v := range c.PowerRunes {
+			if isInString(baseRunes, v.CoreString) {
+				v.Base = 50
+			} else {
+				v.Base = 0
+			}
+		}
+
 		// Set Elemental Runes
 		for i := 1; i < 3; i++ {
 			pRune := req.FormValue(fmt.Sprintf("PowerRune%d", i))
