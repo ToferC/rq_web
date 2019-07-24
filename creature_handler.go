@@ -413,10 +413,8 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			if err != nil {
 				num = 10
 			}
-			if num > 0 {
-				c.Statistics[st].Base = num
-				c.Statistics[st].Max = num
-			}
+			c.Statistics[st].Base = num
+			c.Statistics[st].Max = num
 		}
 
 		c.DetermineSkillCategoryValues()

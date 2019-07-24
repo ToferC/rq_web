@@ -19,6 +19,7 @@ type Homeland struct {
 	Passions       []Ability
 	Advantages     []Advantage
 	Weapons        []*Weapon
+	LocationForm   string
 }
 
 // StatisticFrame represents stat modifiers to a character
@@ -26,4 +27,5 @@ type StatisticFrame struct {
 	Name     string
 	Dice     int
 	Modifier int
+	Max      int
 }

@@ -55,6 +55,8 @@ func (c *Character) DetermineSkillCategoryValues() {
 
 			// Map against specific values
 			switch {
+			case stat.Total == 0:
+				s.Value = 0
 			case stat.Total <= 4:
 				s.Value += sm.values[4]
 			case stat.Total <= 8:

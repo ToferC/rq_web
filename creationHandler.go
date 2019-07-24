@@ -713,7 +713,7 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 				n = 0
 			}
 			c.Statistics[k].Base = n
-			c.Statistics[k].Max = (v.Dice * 6) + v.Modifier
+			c.Statistics[k].Max = v.Max
 		}
 
 		// Apply Rune Modifiers
@@ -725,8 +725,8 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		c.Statistics[target2].RuneBonus = 1
 		c.Statistics[target2].Max++
 
-		c.LocationForm = "Humanoids"
-		c.HitLocations = runequest.LocationForms["Humanoids"]
+		c.LocationForm = c.Homeland.LocationForm
+		c.HitLocations = runequest.LocationForms[c.Homeland.LocationForm]
 		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
 
 		c.SetAttributes()

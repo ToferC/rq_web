@@ -42,6 +42,7 @@ var LocationForms = map[string]map[string]*HitLocation{
 	"Humanoids, Winged":           HumanoidWingedLocations,
 	"Centaurs":                    CentaurLocations,
 	"Dragons/Manticores":          DragonHitLocations,
+	"Dragonewts":                  DragonewtHitLocations,
 	"Four-Legged Animals":         FourLeggedAnimalsHitLocations,
 	"Four-Legged Animals, Winged": FourLeggedAnimalsWingedHitLocations,
 	"Serpents":                    SerpentLocations,
@@ -52,6 +53,7 @@ var LocationForms = map[string]map[string]*HitLocation{
 	"Wyverns":                     WyvernsHitLocations,
 	"Spiders, Giant":              SpidersGiantHitLocations,
 	"Mammoths/Mastodons":          MammothsHitLocations,
+	"Spirits":                     SpiritHitLocations,
 }
 
 // HumanoidLocations is a base map of hit locations
@@ -611,6 +613,50 @@ var DragonHitLocations = map[string]*HitLocation{
 	},
 }
 
+// DragonewtHitLocations is a base map of hit locations
+var DragonewtHitLocations = map[string]*HitLocation{
+	"Tail": &HitLocation{
+		Name:   "Tail",
+		HitLoc: []int{1, 2},
+		Base:   0,
+	},
+	"R Leg": &HitLocation{
+		Name:   "R Leg",
+		HitLoc: []int{3, 4, 5},
+		Base:   0,
+	},
+	"L Leg": &HitLocation{
+		Name:   "L Leg",
+		HitLoc: []int{6, 7, 8},
+		Base:   0,
+	},
+	"Abdomen": &HitLocation{
+		Name:   "Abdomen",
+		HitLoc: []int{9, 10, 11},
+		Base:   0,
+	},
+	"Chest": &HitLocation{
+		Name:   "Chest",
+		HitLoc: []int{12},
+		Base:   1,
+	},
+	"L Arm": &HitLocation{
+		Name:   "L Arm",
+		HitLoc: []int{16, 17, 18},
+		Base:   -1,
+	},
+	"R Arm": &HitLocation{
+		Name:   "R Arm",
+		HitLoc: []int{13, 14, 15},
+		Base:   -1,
+	},
+	"Head": &HitLocation{
+		Name:   "Head",
+		HitLoc: []int{19, 20},
+		Base:   0,
+	},
+}
+
 // CentaurLocations is a base map of hit locations
 var CentaurLocations = map[string]*HitLocation{
 	"R Hind Leg": &HitLocation{
@@ -661,6 +707,15 @@ var CentaurLocations = map[string]*HitLocation{
 	"Head": &HitLocation{
 		Name:   "Head",
 		HitLoc: []int{19, 20},
+		Base:   0,
+	},
+}
+
+// SpiritHitLocations is a base map of hit locations
+var SpiritHitLocations = map[string]*HitLocation{
+	"Spirit": &HitLocation{
+		Name:   "Spirit",
+		HitLoc: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
 		Base:   0,
 	},
 }

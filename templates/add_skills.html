@@ -23,13 +23,15 @@
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Add Skills</h4>
 
-            <p>Add new skills to {{ $character.Name }}</p>
+            <p>Add new skills to:</p>
 
-            <h5>{{ $character.Name }}</h5>
+           <h5>{{ $character.Name }}</h5>
+            {{ if eq $character.Role "Player Character"}}
             <h5>{{ $character.Homeland.Name }}</h5>
+            <h5>{{ $character.Occupation.Name }}</h5>
+            <h5>{{ $character.Cult.Name }}</h5>
+            {{ end }}
 
-            <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
-                data-holder-rendered="true">
 
             <hr>
             <p>New skills will be added at the percentage value you provide. Skill bases and Skill Category Modifiers will not be added on top of this value.</p>
@@ -54,9 +56,9 @@
             <hr>
 
              <h4>Current Skills</h4>
+             <table class="table table-sm table-striped">
                 {{ range $skill := $character.Skills }}
-                {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
-                <p title="{{ $skill.Name }} ({{ $skill.Category }})
+                <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
                 Base: {{ $skill.Base }}%
                 History: {{ $skill.CreationBonusValue }}%
                 Category: {{ $skill.CategoryValue }}%
@@ -64,10 +66,14 @@
                 Occupation: {{ $skill.OccupationValue }}%
                 Cult: {{ $skill.CultValue }}%
                 {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
-                {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
-                </p>
+                {{end}}">
+    
+                    <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }})
+                    </td>
+                    <td style="text-align:center">{{ $skill.Total }}%</td>
+                </tr>
                 {{ end }}
-                {{ end }}
+            </table>
 
 
         </div> <!-- END outer column 3 -->

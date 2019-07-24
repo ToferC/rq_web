@@ -279,19 +279,20 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		CharacterModel: &cm,
-		HomelandModel:  &hl,
-		IsAuthor:       true,
-		SessionUser:    username,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		Counter:        numToArray(3),
-		BigCounter:     numToArray(20),
-		Passions:       runequest.PassionTypes,
-		CategoryOrder:  runequest.CategoryOrder,
-		Skills:         runequest.Skills,
-		PowerRunes:     runequest.PowerRuneOrder,
-		ElementalRunes: runequest.ElementalRuneOrder,
+		CharacterModel:   &cm,
+		HomelandModel:    &hl,
+		IsAuthor:         true,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		Counter:          numToArray(3),
+		BigCounter:       numToArray(20),
+		Passions:         runequest.PassionTypes,
+		CategoryOrder:    runequest.CategoryOrder,
+		Skills:           runequest.Skills,
+		PowerRunes:       runequest.PowerRuneOrder,
+		ElementalRunes:   runequest.ElementalRuneOrder,
+		HitLocationForms: runequest.LocationForms,
 	}
 
 	if req.Method == "GET" {
@@ -311,6 +312,8 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Homeland.Name = req.FormValue("Name")
 		hl.Homeland.Description = req.FormValue("Description")
 		hl.Homeland.Notes = req.FormValue("Notes")
+
+		hl.Homeland.LocationForm = req.FormValue("Hit-Location-Form")
 
 		// Insert Homeland into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -385,6 +388,11 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			v.Dice = dice
 			v.Modifier = mod
+			v.Max = (dice * 6) + mod + dice
+
+			if mod > 0 {
+				v.Max++
+			}
 
 			fmt.Println(dice, mod)
 		}
@@ -687,17 +695,18 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		HomelandModel:  hl,
-		IsAuthor:       IsAuthor,
-		SessionUser:    username,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		Counter:        []int{1, 2, 3},
-		CategoryOrder:  runequest.CategoryOrder,
-		Skills:         runequest.Skills,
-		Passions:       runequest.PassionTypes,
-		PowerRunes:     runequest.PowerRuneOrder,
-		ElementalRunes: runequest.ElementalRuneOrder,
+		HomelandModel:    hl,
+		IsAuthor:         IsAuthor,
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		Counter:          []int{1, 2, 3},
+		CategoryOrder:    runequest.CategoryOrder,
+		Skills:           runequest.Skills,
+		Passions:         runequest.PassionTypes,
+		PowerRunes:       runequest.PowerRuneOrder,
+		ElementalRunes:   runequest.ElementalRuneOrder,
+		HitLocationForms: runequest.LocationForms,
 	}
 
 	if req.Method == "GET" {
@@ -718,6 +727,8 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Homeland.Name = req.FormValue("Name")
 		hl.Homeland.Description = req.FormValue("Description")
 		hl.Homeland.Notes = req.FormValue("Notes")
+
+		hl.Homeland.LocationForm = req.FormValue("Hit-Location-Form")
 
 		// Insert Homeland into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
@@ -751,6 +762,11 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			v.Dice = dice
 			v.Modifier = mod
+			v.Max = (dice * 6) + mod + dice
+
+			if mod > 0 {
+				v.Max++
+			}
 
 			fmt.Println(dice, mod)
 		}

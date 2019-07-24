@@ -100,6 +100,21 @@
                   </div>
                 </div>
 
+              <h4>Hit Locations</h4>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" for="Hit-Location-Form">Hit Location Form</span>
+                  </div>
+                  <select type="number" class="form-control" id="Hit-Location-Form" name="Hit-Location-Form">
+                  <option>Humanoids</option>
+                  {{ range $k, $v := .HitLocationForms }}
+                    <option>{{ $k }}</option>
+                  {{ end }}
+                  </select>
+                </div>
+                <hr>
+
               <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
               <hr>
               <input class="button" type="submit" value="Save">

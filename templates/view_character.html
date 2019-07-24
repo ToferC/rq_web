@@ -137,6 +137,7 @@ th {
             {{ range $o := $statOrder }}
             {{ range $k, $stat := $character.Statistics }}
             {{ if eq $k $o }}
+            {{ if gt $stat.Total 0 }}
             <tr title="Base: {{ $stat.Base }}
             Rune Bonus: {{ $stat.RuneBonus }}
             {{ range $u := $stat.Updates }}
@@ -150,6 +151,7 @@ th {
                 <td style="text-align:center">{{ $stat.Total }}</td>
                 <td style="text-align:center">{{ multiply $stat.Total 5}}%</td>
             </tr>
+            {{ end }} <!-- END GT -->
             {{ end }} <!-- End IF -->
             {{ end }} <!-- END StatOrder -->
                 {{ end }} <!-- End Stats -->

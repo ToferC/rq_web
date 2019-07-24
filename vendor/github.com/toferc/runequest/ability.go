@@ -153,16 +153,16 @@ func (c *Character) UpdateOpposedRune(ab *Ability) {
 	// Modify Opposing Rune if required
 	opposed := c.PowerRunes[ab.OpposedAbility]
 
-	// Maximum of 99 in a Power Rune
-	if ab.Total > 99 {
-		ab.Total = 99
+	// Maximum of 100 in a Power Rune
+	if ab.Total > 100 {
+		ab.Total = 100
 	}
 
 	opposed.UpdateAbility()
 
 	diff := ab.Total + opposed.Total
 
-	if diff > 99 {
+	if diff > 100 {
 		opposed.Base -= diff - 100
 	}
 }

@@ -52,9 +52,12 @@
 <h4>Statistics</h4>
               {{ range $k, $v := $homeland.StatisticFrames }}
 
-              <p>{{ $k }}: {{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }}</p>
+              <p>{{ $k }}: {{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 1 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }}
+               Max: {{ $v.Max }}</p>
               
               {{ end }}
+<hr>
+  <p>Hit Locations: {{ $homeland.LocationForm }}</p>
 <hr>
 
 <h4>Skills</h4>

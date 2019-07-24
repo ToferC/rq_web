@@ -23,17 +23,13 @@ func (c *Character) SetAttributes() {
 
 	var hp, hr, sz, db, dx, sd, mp *Attribute
 
-	mp = c.DetermineMagicPoints()
-	if c.Statistics["CON"].Base > 0 && c.Statistics["SIZ"].Base > 0 {
-		hp = c.DetermineHitPoints()
-		hr = c.DetermineHealingRate()
-		sz = c.DetermineSizStrikeRank()
-		db = c.DetermineDamageBonus()
-	}
+	hp = c.DetermineHitPoints()
+	hr = c.DetermineHealingRate()
+	sz = c.DetermineSizStrikeRank()
+	db = c.DetermineDamageBonus()
 	sd = c.DetermineSpiritDamage()
-	if c.Statistics["DEX"].Base > 0 {
-		dx = c.DetermineDexStrikeRank()
-	}
+	mp = c.DetermineMagicPoints()
+	dx = c.DetermineDexStrikeRank()
 
 	c.Attributes = map[string]*Attribute{
 		"MP":    mp,
@@ -75,15 +71,20 @@ func (a *Attribute) String() string {
 // DetermineMagicPoints calculates magic points for a Character
 func (c *Character) DetermineMagicPoints() *Attribute {
 	mp := &Attribute{
-		Name:     "Magic Points",
-		MaxValue: 21,
+		Name: "Magic Points",
 	}
 
 	p := c.Statistics["POW"]
 	p.UpdateStatistic()
 
-	mp.Base = p.Total
-	mp.Max = p.Total
+	if p.Total > 0 {
+		mp.Base = p.Total
+		mp.Max = p.Total
+		mp.MaxValue = p.Max
+	} else {
+		mp.Base = 0
+		mp.Max = 0
+	}
 
 	return mp
 }
@@ -92,9 +93,10 @@ func (c *Character) DetermineMagicPoints() *Attribute {
 func (c *Character) DetermineHitPoints() *Attribute {
 
 	hp := &Attribute{
-		Name:     "Hit Points",
-		MaxValue: 21,
+		Name: "Hit Points",
 	}
+
+	var baseHP int
 
 	s := c.Statistics["SIZ"]
 	s.UpdateStatistic()
@@ -109,36 +111,40 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	con := c.Statistics["CON"]
 	con.UpdateStatistic()
 
-	baseHP := con.Total
+	if siz > 0 && con.Total > 0 {
 
-	switch {
-	case siz < 5:
-		baseHP -= 2
-	case siz < 9:
-		baseHP--
-	case siz < 13:
-	case siz < 17:
-		baseHP++
-	case siz < 21:
-		baseHP += 2
-	case siz < 25:
-		baseHP += 3
-	case siz > 24:
-		baseHP += ((siz - 24) / 4) + 4
-	}
+		baseHP = con.Total
 
-	switch {
-	case pow < 5:
-		baseHP--
-	case pow < 9:
-	case pow < 13:
-	case pow < 17:
-	case pow < 21:
-		baseHP++
-	case pow < 25:
-		baseHP += 2
-	case pow > 24:
-		baseHP += ((pow - 24) / 4) + 3
+		switch {
+		case siz < 5:
+			baseHP -= 2
+		case siz < 9:
+			baseHP--
+		case siz < 13:
+		case siz < 17:
+			baseHP++
+		case siz < 21:
+			baseHP += 2
+		case siz < 25:
+			baseHP += 3
+		case siz > 24:
+			baseHP += ((siz - 24) / 4) + 4
+		}
+
+		switch {
+		case pow == 0:
+		case pow < 5:
+			baseHP--
+		case pow < 9:
+		case pow < 13:
+		case pow < 17:
+		case pow < 21:
+			baseHP++
+		case pow < 25:
+			baseHP += 2
+		case pow > 24:
+			baseHP += ((pow - 24) / 4) + 3
+		}
 	}
 
 	hp.Base = baseHP
@@ -147,6 +153,8 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	locHP := 0
 
 	switch {
+	case hp.Base == 0:
+		locHP = 0
 	case hp.Base < 7:
 		locHP = 2
 	case hp.Base < 10:
@@ -176,15 +184,17 @@ func (c *Character) DetermineHealingRate() *Attribute {
 
 	healingRate := &Attribute{
 		Name: "Healing Rate",
-		Max:  21,
 	}
 
 	con := c.Statistics["CON"]
 
 	con.UpdateStatistic()
+
 	tCon := con.Total
 
 	switch {
+	case tCon == 0:
+		healingRate.Base = 0
 	case tCon < 7:
 		healingRate.Base = 1
 	case tCon < 13:
@@ -216,12 +226,15 @@ func (c *Character) DetermineDamageBonus() *Attribute {
 	db := siz.Total + str.Total
 
 	switch {
+	case db == 0:
+		damageBonus.Base = 0
+		damageBonus.Text = "N/A"
 	case db < 13:
 		damageBonus.Base = -4
 		damageBonus.Text = "-1D4"
 	case db < 25:
 		damageBonus.Base = 0
-		damageBonus.Text = "-"
+		damageBonus.Text = ""
 	case db < 33:
 		damageBonus.Base = 4
 		damageBonus.Text = "+1D4"
@@ -262,6 +275,9 @@ func (c *Character) DetermineSpiritDamage() *Attribute {
 	db := pow.Total + cha.Total
 
 	switch {
+	case db == 0:
+		damage.Base = 0
+		damage.Text = "N/A"
 	case db < 13:
 		damage.Base = 3
 		damage.Text = "1D3"
@@ -307,6 +323,9 @@ func (c *Character) DetermineDexStrikeRank() *Attribute {
 	dex.UpdateStatistic()
 
 	switch {
+	case dex.Total == 0:
+		dexSR.Base = 0
+		dexSR.Text = "N/A"
 	case dex.Total < 6:
 		dexSR.Base = 5
 	case dex.Total < 9:
@@ -336,6 +355,9 @@ func (c *Character) DetermineSizStrikeRank() *Attribute {
 	siz.UpdateStatistic()
 
 	switch {
+	case siz.Total == 0:
+		sizSR.Base = 0
+		sizSR.Text = "N/A"
 	case siz.Total < 7:
 		sizSR.Base = 3
 	case siz.Total < 15:

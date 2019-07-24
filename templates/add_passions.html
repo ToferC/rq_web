@@ -22,23 +22,33 @@
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h4>Add Passions</h4>
 
-            <p>Add new passions to {{ $character.Name }}</p>
+            <p>Add new passions to:</p>
 
             <h5>{{ $character.Name }}</h5>
+            {{ if eq $character.Role "Player Character"}}
             <h5>{{ $character.Homeland.Name }}</h5>
+            <h5>{{ $character.Occupation.Name }}</h5>
+            <h5>{{ $character.Cult.Name }}</h5>
+            {{ end }}
 
-            <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
-                data-holder-rendered="true">
-
-            <p>{{ $character.Description }}</p>
             <hr>
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+            <hr>
+            <h5>Current Passions</h5>
+          <table class="table table-sm table-striped">
+            
+          {{ range $a := $character.Abilities }}
+          <tr title="{{ $a.Name }}{{ range $u := $a.Updates }}
+          {{ $u.Event }}: {{ $u.Value }}%{{end}}">
+              <td>{{ $a.Name }}</td>
+            <td style="text-align:center">{{ $a.Total }}%</td>
+          </tr>
+          {{ end }}
+          </table>
         
             <form action="" method="POST" enctype="multipart/form-data">
 
-                <hr>
-
-            <button class="btn btn-primary" type="submit" value="Save">Save</button>
-
+            <hr>
 
         </div> <!-- END outer column 3 -->
 
