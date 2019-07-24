@@ -243,7 +243,7 @@ th {
         {{ end }}
 
         {{ range $r := $character.PowerRunes }}
-        {{ if and (ne $r.Total 50) (ne $r.Total 0) }}
+        {{ if or (and (ne $r.OpposedAbility "") (gt $r.Total 50)) (and (not $r.OpposedAbility) (gt $r.Total 0) ) }}
         <tr title="{{ $r.Name }}
         Base: {{ $r.Base }}
         Homeland: {{ $r.HomelandValue }}%
@@ -757,6 +757,7 @@ th {
                         </div>
             </div>  
     
+            {{ if gt $character.Cult.NumRunePoints 0 }}
             <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="RP-addon">RP ({{ $character.Cult.Name }})</span>
@@ -766,6 +767,7 @@ th {
                           <span class="input-group-text" id="RP-addon">/{{ $character.Cult.NumRunePoints }}</span>
                         </div>
             </div>
+            {{ end }}
 
             {{ range $ec := $character.ExtraCults }}
             <div class="input-group">
