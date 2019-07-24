@@ -226,6 +226,8 @@ func main() {
 
 	// Admin handlers
 	r.HandleFunc("/user_index/", UserIndexHandler)
+	r.HandleFunc("/make_admin/{id}", MakeAdminHandler)
+	r.HandleFunc("/delete_user/{id}", DeleteUserHandler)
 
 	// API
 	r.HandleFunc("/api/character", GetCharacterModels).Methods("GET")

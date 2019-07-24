@@ -1,6 +1,15 @@
 {{ define "title"}}
 
-<title>ORE Signup</title>
+<title>Cradle of Heroes Registration</title>
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LdnW68UAAAAAMFCwBvzPFy3ADZQg75BzxQiJ32t"></script>
+  <script>
+  grecaptcha.ready(function() {
+      grecaptcha.execute('reCAPTCHA_site_key', {action: 'homepage'}).then(function(token) {
+         ...
+      });
+  });
+  </script>
 
 {{ end }}
 

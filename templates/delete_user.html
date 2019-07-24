@@ -1,0 +1,39 @@
+{{ define "title"}}
+
+{{ $user := .User }}
+
+<title>Delete {{ $user.UserName }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $characters := .Characters }}
+{{ $user := .User }}
+
+
+      <div class="container">
+        <h1>DELETE {{ $user.UserName }}</h1>
+        <p>Email: {{ $user.Email }}</p>
+        <div class="row">
+
+          <div class="col-sm-6 col-md-6 col-lg-6">
+        <h4>Characters</h4>
+            <ul>
+          {{ range $c := $characters }}
+            <li>{{ $c.Character.Name }}</li>
+          {{ end }}
+          </ul>
+            <hr>
+        </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/admin_view_user_roster/{{ $user.ID }}" class="btn btn-primary">Return to User</a>
+          
+      </div>
+     
+    </div>
+      </div>
+{{end}}

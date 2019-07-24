@@ -16,6 +16,8 @@ import (
 // WebView is a container for Web_gui data
 type WebView struct {
 	SessionUser string
+	User        *models.User
+	Characters  []*models.CharacterModel
 	IsLoggedIn  string
 	IsAdmin     string
 	Actor       []*models.CharacterModel
