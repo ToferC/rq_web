@@ -43,21 +43,21 @@ func (c *Character) IDCoreRunes() {
 
 	for _, e := range c.ElementalRunes {
 		e.UpdateAbility()
-		if e.Total > 60 {
+		if e.Total > 50 {
 			runes = append(runes, e)
 		}
 	}
 
 	for _, p := range c.PowerRunes {
 		p.UpdateAbility()
-		if p.Total > 60 {
+		if p.Total > 50 {
 			runes = append(runes, p)
 		}
 	}
 
 	for _, c := range c.ConditionRunes {
 		c.UpdateAbility()
-		if c.Total > 60 {
+		if c.Total > 50 {
 			runes = append(runes, c)
 		}
 	}

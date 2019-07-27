@@ -170,7 +170,7 @@ func AddFactionHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cms, err := database.ListUserCharacterModels(db, username)
+	cms, err := database.ListCharacterModels(db)
 
 	factions, err := database.ListFactions(db)
 	if err != nil {

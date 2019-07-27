@@ -78,6 +78,7 @@
 
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <br>
+                    {{ if gt $c.Character.Cult.NumRunePoints 0 }}
                     <h5>Cults</h5>
                     <div class="input-group">
                             <div class="input-group-prepend">
@@ -96,6 +97,7 @@
                                 <span class="input-group-text" id="RP-addon">/{{ $c.Character.Cult.NumRunePoints }} RP</span>
                               </div>
                   </div>
+                  {{ end }}
       
                   {{ range $ec := $c.Character.ExtraCults }}
                   <div class="input-group">

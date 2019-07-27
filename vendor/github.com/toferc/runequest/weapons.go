@@ -16,6 +16,7 @@ type Weapon struct {
 	DEX       int
 	Damage    string
 	STRDamage bool
+	Thrown    bool
 	HP        int
 	CurrentHP int
 	ENC       string
