@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/toferc/runequest"
+
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
 )
@@ -54,14 +56,13 @@ func main() {
 	hls, _ := database.ListHomelandModels(db)
 
 	for _, hl := range hls {
-		hl.Homeland.LocationForm = "Humanoids"
-		for _, v := range hl.Homeland.StatisticFrames {
-			v.Max = (v.Dice * 6) + v.Modifier + v.Dice
 
-			if v.Modifier > 0 {
-				v.Max++
-			}
-		}
+		hl.Homeland.Movement = []runequest.Movement{}
+		hl.Homeland.Movement = append(hl.Homeland.Movement,
+			runequest.Movement{
+				Name:  "Ground",
+				Value: 8,
+			})
 		database.UpdateHomelandModel(db, hl)
 	}
 

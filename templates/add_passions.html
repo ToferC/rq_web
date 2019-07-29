@@ -32,6 +32,7 @@
             {{ end }}
 
             <hr>
+            <form action="" method="POST" enctype="multipart/form-data">
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
             <hr>
             <h5>Current Passions</h5>
@@ -46,7 +47,6 @@
           {{ end }}
           </table>
         
-            <form action="" method="POST" enctype="multipart/form-data">
 
             <hr>
 
@@ -71,7 +71,7 @@
 
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="Passion-{{$m}}-UserString-addon">Input</span>
+                    <span class="input-group-text" id="Passion-{{$m}}-UserString-addon">Focus</span>
                 </div>
                 <input type="text" class="form-control" aria-describedby="Passion-{{$m}}-UserString-addon" name="Passion-{{$m}}-UserString"
                     value="">
@@ -90,6 +90,33 @@
         </div>
 
         <div class="col-sm-4 col-md-4 col-lg-4">
+
+        <h4>Custom Passions</h4>
+
+            {{ range $m := $counter }}
+            <!-- Passions loop -->
+
+            <label for="Passion-{{$m}}-CoreString">Custom Passion {{ $m }}</label>
+                <input type="text" class="form-control" aria-describedby="Custom-Passion-{{$m}}-CoreString-addon" name="Custom-Passion-{{$m}}-CoreString"
+                    value="">
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Custom-Passion-{{$m}}-UserString-addon">Focus</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Custom-Passion-{{$m}}-UserString-addon" name="Custom-Passion-{{$m}}-UserString"
+                    value="">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Custom-Passion-{{$m}}-Base-addon">Passion Base</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="Custom-Passion-{{$m}}-Base-addon" name="Custom-Passion-{{$m}}-Base"
+                    value="60">
+            </div>
+            <hr>
+            {{ end }}
 
             <button class="btn btn-primary" type="submit" value="Save">Save</button>
         </form>

@@ -115,6 +115,25 @@
                 </div>
                 <hr>
 
+                <h5>Movement</h5>
+                {{ range $i, $mv := $homeland.Movement }}
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Move-Name-{{ add $i 1 }}-addon">Name</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Move-Name-{{ add $i 1 }}-addon" name="Move-Name-{{ add $i 1 }}" value ="{{ $mv.Name }}">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Move-Value-{{ add $i 1 }}-addon">Value</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Move-Value-{{ add $i 1 }}-addon" name="Move-Value-{{ add $i 1 }}" value ="{{ $mv.Value }}">
+                </div>
+                {{ end }}
+
+                <hr>
+
               <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
               <hr>
               <input class="button" type="submit" value="Save">

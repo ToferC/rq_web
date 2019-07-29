@@ -187,7 +187,6 @@ th {
 
             </tr>
             {{ end }}
-
             </table>
         
       </div>
@@ -304,6 +303,19 @@ th {
         {{end}}
         </table>
         {{ end }}
+
+        <table class="table table-sm table-striped">
+          <tr>
+            <th>Movement</th>
+            <th>Value</th>
+          </tr>
+          {{ range $mv := $character.Movement }}
+            <tr>
+              <td>{{ $mv.Name }}</td>
+              <td style="text-align:center">{{ $mv.Value }}</td>
+            </tr>
+            {{ end }}
+        </table>
 
       </div>
 

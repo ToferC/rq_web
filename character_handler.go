@@ -425,6 +425,30 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
+	// Add empty Movement's to character if needed
+	if len(c.Movement) == 0 {
+		c.Movement = []*runequest.Movement{
+			&runequest.Movement{
+				Name:  "Ground",
+				Value: 8,
+			},
+		}
+	}
+
+	mvLen := len(c.Movement)
+
+	if len(c.Movement) < 3 {
+		// Add Movement
+		for i := mvLen; i < mvLen+2; i++ {
+
+			c.Movement = append(c.Movement,
+				&runequest.Movement{
+					Name:  "",
+					Value: 0,
+				})
+		}
+	}
+
 	if cm.Image == nil {
 		cm.Image = new(models.Image)
 		cm.Image.Path = DefaultCharacterPortrait
@@ -497,6 +521,28 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			stat.UpdateStatistic()
 
 		}
+
+		tempMovement := []*runequest.Movement{}
+
+		// Add Movement
+		for i := 1; i < mvLen+2; i++ {
+			moveName := req.FormValue(fmt.Sprintf("Move-Name-%d", i))
+
+			if moveName != "" {
+				mv, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Move-Value-%d", i)))
+				if err != nil {
+					mv = 8
+				}
+
+				tempMovement = append(tempMovement,
+					&runequest.Movement{
+						Name:  moveName,
+						Value: mv,
+					})
+			}
+		}
+
+		c.Movement = tempMovement
 
 		for k, s := range c.Skills {
 			mod, _ := strconv.Atoi(req.FormValue(s.Name))
@@ -644,7 +690,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			v.UpdateAbility()
 		}
 
-		// Update Abilities
+		// Update Passions
 		for k, a := range c.Abilities {
 			mod, _ := strconv.Atoi(req.FormValue(a.Name))
 
@@ -1009,30 +1055,69 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 7; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
+			userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
 			if coreString != "" {
 
-				p := runequest.Ability{
+				p := &runequest.Ability{
 					Type:       "Passion",
 					CoreString: coreString,
+					Updates:    []*runequest.Update{},
 				}
-
-				str := fmt.Sprintf("Passion-%d-Base", i)
-				base, err := strconv.Atoi(req.FormValue(str))
-				if err != nil {
-					base = 0
-				}
-				p.Base = base
-
-				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
 
 				if userString != "" {
 					p.UserChoice = true
 					p.UserString = userString
 				}
 
-				c.ModifyAbility(p)
+				targetString := createName(p.CoreString, p.UserString)
+
+				str := fmt.Sprintf("Passion-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+
+				update := CreateUpdate("Add Passions", base)
+				p.Updates = append(p.Updates, update)
+
 				p.UpdateAbility()
+				c.Abilities[targetString] = p
+			}
+		}
+
+		// Add custom passions
+		for i := 1; i < 7; i++ {
+
+			coreString := req.FormValue(fmt.Sprintf("Custom-Passion-%d-CoreString", i))
+			userString := req.FormValue(fmt.Sprintf("Custom-Passion-%d-UserString", i))
+
+			if coreString != "" {
+
+				p := &runequest.Ability{
+					Type:       "Passion",
+					CoreString: coreString,
+					Updates:    []*runequest.Update{},
+				}
+
+				if userString != "" {
+					p.UserChoice = true
+					p.UserString = userString
+				}
+
+				targetString := createName(p.CoreString, p.UserString)
+
+				str := fmt.Sprintf("Custom-Passion-%d-Base", i)
+				base, err := strconv.Atoi(req.FormValue(str))
+				if err != nil {
+					base = 0
+				}
+
+				update := CreateUpdate("Add Custom Passions", base)
+				p.Updates = append(p.Updates, update)
+
+				p.UpdateAbility()
+				c.Abilities[targetString] = p
 			}
 		}
 

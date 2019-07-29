@@ -278,6 +278,24 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		},
 	}
 
+	// Add empty Movement's to homeland
+	if len(hl.Homeland.Movement) == 0 {
+		hl.Homeland.Movement = []runequest.Movement{
+			runequest.Movement{
+				Name:  "Ground",
+				Value: 8,
+			},
+			runequest.Movement{
+				Name:  "",
+				Value: 0,
+			},
+			runequest.Movement{
+				Name:  "",
+				Value: 0,
+			},
+		}
+	}
+
 	wc := WebChar{
 		CharacterModel:   &cm,
 		HomelandModel:    &hl,
@@ -312,6 +330,27 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Homeland.Name = req.FormValue("Name")
 		hl.Homeland.Description = req.FormValue("Description")
 		hl.Homeland.Notes = req.FormValue("Notes")
+
+		tempMovement := []runequest.Movement{}
+
+		// Add Movement
+		for i := 1; i < 4; i++ {
+			moveName := req.FormValue(fmt.Sprintf("Move-Name-%d", i))
+
+			if moveName != "" {
+				mv, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Move-Value-%d", i)))
+				if err != nil {
+					mv = 8
+				}
+
+				tempMovement = append(tempMovement,
+					runequest.Movement{
+						Name:  moveName,
+						Value: mv,
+					})
+			}
+		}
+		hl.Homeland.Movement = tempMovement
 
 		hl.Homeland.LocationForm = req.FormValue("Hit-Location-Form")
 
@@ -689,6 +728,31 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// Add empty Movement's to homeland
+	if len(hl.Homeland.Movement) == 0 {
+		hl.Homeland.Movement = []runequest.Movement{
+			runequest.Movement{
+				Name:  "Ground",
+				Value: 8,
+			},
+		}
+	}
+
+	mvLen := len(hl.Homeland.Movement)
+
+	if mvLen < 3 {
+
+		// Add Movement
+		for i := mvLen; i < mvLen+2; i++ {
+
+			hl.Homeland.Movement = append(hl.Homeland.Movement,
+				runequest.Movement{
+					Name:  "",
+					Value: 0,
+				})
+		}
+	}
+
 	if hl.Image == nil {
 		hl.Image = new(models.Image)
 		hl.Image.Path = DefaultCharacterPortrait
@@ -727,6 +791,27 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Homeland.Name = req.FormValue("Name")
 		hl.Homeland.Description = req.FormValue("Description")
 		hl.Homeland.Notes = req.FormValue("Notes")
+
+		tempMovement := []runequest.Movement{}
+
+		// Add Movement
+		for i := 1; i < mvLen+2; i++ {
+			moveName := req.FormValue(fmt.Sprintf("Move-Name-%d", i))
+
+			if moveName != "" {
+				mv, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Move-Value-%d", i)))
+				if err != nil {
+					mv = 8
+				}
+
+				tempMovement = append(tempMovement,
+					runequest.Movement{
+						Name:  moveName,
+						Value: mv,
+					})
+			}
+		}
+		hl.Homeland.Movement = tempMovement
 
 		hl.Homeland.LocationForm = req.FormValue("Hit-Location-Form")
 

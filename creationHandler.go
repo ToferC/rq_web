@@ -731,6 +731,19 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.SetAttributes()
 
+		// Apply Move
+		if len(c.Movement) == 0 {
+			c.Movement = []*runequest.Movement{}
+		}
+
+		for _, m := range c.Homeland.Movement {
+			c.Movement = append(c.Movement,
+				&runequest.Movement{
+					Name:  m.Name,
+					Value: m.Value,
+				})
+		}
+
 		// Update Character
 		c.CurrentHP = c.Attributes["HP"].Max
 		c.CurrentMP = c.Attributes["MP"].Max

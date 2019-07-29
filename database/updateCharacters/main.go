@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
+	"github.com/toferc/runequest"
 )
 
 var db *pg.DB
@@ -54,7 +55,12 @@ func main() {
 	cms, _ := database.ListAllCharacterModels(db)
 
 	for _, cm := range cms {
-		cm.Character.UpdateCharacter()
+		cm.Character.Movement = []*runequest.Movement{}
+		cm.Character.Movement = append(cm.Character.Movement,
+			&runequest.Movement{
+				Name:  "Ground",
+				Value: 8,
+			})
 		database.UpdateCharacterModel(db, cm)
 	}
 

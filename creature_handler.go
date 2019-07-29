@@ -327,6 +327,18 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		},
 	}
 
+	// Add Movement
+	for i := 0; i < 2; i++ {
+		var moveName string
+		var mv int
+
+		c.Movement = append(c.Movement,
+			&runequest.Movement{
+				Name:  moveName,
+				Value: mv,
+			})
+	}
+
 	c.Skills = map[string]*runequest.Skill{}
 
 	// Set 6 skills
@@ -419,6 +431,28 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.DetermineSkillCategoryValues()
 		c.SetAttributes()
+
+		tempMovement := []*runequest.Movement{}
+
+		// Add Movement
+		for i := 1; i < 4; i++ {
+			moveName := req.FormValue(fmt.Sprintf("Move-Name-%d", i))
+
+			if moveName != "" {
+				mv, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Move-Value-%d", i)))
+				if err != nil {
+					mv = 8
+				}
+
+				tempMovement = append(tempMovement,
+					&runequest.Movement{
+						Name:  moveName,
+						Value: mv,
+					})
+			}
+		}
+
+		c.Movement = tempMovement
 
 		// Add Skills
 		newSkills := map[string]*runequest.Skill{}

@@ -100,7 +100,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "31eb1dce373807e4bc8d7722763ebfeb0f402d9d"
+  revision = "9f7da8acda0cb03d8dd9c2c4f497dc19c8649851"
 
 [[projects]]
   name = "go.opencensus.io"

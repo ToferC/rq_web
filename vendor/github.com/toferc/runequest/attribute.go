@@ -1,6 +1,9 @@
 package runequest
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Attribute is a Character element that is based off other elements
 type Attribute struct {
@@ -128,7 +131,8 @@ func (c *Character) DetermineHitPoints() *Attribute {
 		case siz < 25:
 			baseHP += 3
 		case siz > 24:
-			baseHP += ((siz - 24) / 4) + 4
+			f := float64(siz) - 24.0
+			baseHP += int(math.Ceil(f/4)) + 4
 		}
 
 		switch {
@@ -143,7 +147,8 @@ func (c *Character) DetermineHitPoints() *Attribute {
 		case pow < 25:
 			baseHP += 2
 		case pow > 24:
-			baseHP += ((pow - 24) / 4) + 3
+			f := float64(pow) - 24.0
+			baseHP += int(math.Ceil(f/4)) + 3
 		}
 	}
 
@@ -168,7 +173,8 @@ func (c *Character) DetermineHitPoints() *Attribute {
 	case hp.Base < 22:
 		locHP = 7
 	case hp.Base > 21:
-		locHP = ((hp.Base - 21) / 3) + 7
+		f := float64(hp.Base) - 21.0
+		locHP = int(math.Ceil(f/3)) + 7
 	}
 
 	for _, v := range c.HitLocations {
@@ -202,7 +208,8 @@ func (c *Character) DetermineHealingRate() *Attribute {
 	case tCon < 19:
 		healingRate.Base = 3
 	case tCon > 18:
-		healingRate.Base = ((tCon - 18) / 6) + 3
+		f := float64(healingRate.Base) - 18.0
+		healingRate.Base = int(math.Ceil(f/6)) + 3
 	}
 	healingRate.Total = healingRate.Base + healingRate.Value
 	return healingRate
@@ -213,7 +220,6 @@ func (c *Character) DetermineDamageBonus() *Attribute {
 
 	damageBonus := &Attribute{
 		Name: "Damage Bonus",
-		Max:  21,
 		Dice: 1,
 	}
 
@@ -247,7 +253,8 @@ func (c *Character) DetermineDamageBonus() *Attribute {
 		damageBonus.Text = "+2D6"
 	case db > 56:
 		damageBonus.Base = 6
-		damageBonus.Dice = ((db - 56) / 16) + 2
+		f := float64(db) - 56
+		damageBonus.Dice = int(math.Ceil(f/16)) + 2
 		damageBonus.Text = fmt.Sprintf("+%dD%d",
 			damageBonus.Dice,
 			damageBonus.Base,
@@ -262,7 +269,6 @@ func (c *Character) DetermineSpiritDamage() *Attribute {
 
 	damage := &Attribute{
 		Name: "Spirit Damage",
-		Max:  21,
 		Dice: 1,
 	}
 
@@ -299,8 +305,9 @@ func (c *Character) DetermineSpiritDamage() *Attribute {
 		damage.Text = "2D6+3"
 	case db > 56:
 		damage.Base = 6
-		damage.Dice = ((db - 56) / 16) + 2
-		damage.Value = ((db - 56) / 16) + 3
+		f := float64(db) - 56.0
+		damage.Dice = int(math.Ceil(f/16)) + 2
+		damage.Value = int(math.Ceil(f/16)) + 3
 		damage.Text = fmt.Sprintf("%dD%d+%d",
 			damage.Dice,
 			damage.Base,

@@ -1,6 +1,9 @@
 package runequest
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // SkillCategory is a grouping of skills
 type SkillCategory struct {
@@ -69,9 +72,11 @@ func (c *Character) DetermineSkillCategoryValues() {
 				s.Value += sm.values[20]
 			case stat.Total > 20:
 				if sm.values[20] > 0 {
-					s.Value += sm.values[20] + ((stat.Total-20)/4)*5
+					f := float64(stat.Total) - 20.0
+					s.Value += sm.values[20] + int(math.Ceil(f/4))*5
 				} else {
-					s.Value += sm.values[20] - ((stat.Total-20)/4)*5
+					f := float64(stat.Total) - 20.0
+					s.Value += sm.values[20] - int(math.Ceil(f/4))*5
 				}
 			}
 		}

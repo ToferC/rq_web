@@ -172,6 +172,24 @@
             </table>
           <hr>
 
+          <h4>Movement</h4>
+                {{ range $i, $mv := $character.Movement }}
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Move-Name-{{ add $i 1 }}-addon">Name</span>
+                  </div>
+                  <input type="text" class="form-control" aria-describedby="Move-Name-{{ add $i 1 }}-addon" name="Move-Name-{{ add $i 1 }}" value ="{{ $mv.Name }}">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Move-Value-{{ add $i 1 }}-addon">Value</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Move-Value-{{ add $i 1 }}-addon" name="Move-Value-{{ add $i 1 }}" value ="{{ $mv.Value }}">
+                </div>
+                {{ end }}
+          <hr>
+
       <h4>Elemental Runes</h4>
       {{ range $k, $v := $character.ElementalRunes }}
 
@@ -441,7 +459,7 @@ var RQSkillCategories = {
         baseHP += 3;
         break;
       case (siz > 24):
-        baseHP += Math.round(((siz - 24) / 4) + 4);
+        baseHP += Math.ceil((siz - 24) / 4) + 4;
         break;
     };
 
@@ -469,7 +487,7 @@ var RQSkillCategories = {
 	case con < 19:
 		healingRate = 3
 	case con > 18:
-		healingRate = Math.round(((con - 18) / 6) + 3)
+		healingRate = Math.ceil((con - 18) / 6) + 3;
 	}
 
   // Damage Bonus modifiers
@@ -490,7 +508,7 @@ var RQSkillCategories = {
 		dbText = "+2D6";
     break;
 	case db > 56:
-		dice = Math.round(((db - 56) / 16) + 2)
+		dice = Math.ceil((db - 56) / 16) + 2
 		dbText = "+"+dice+"d6";
     break;
 	}
@@ -532,7 +550,7 @@ var RQSkillCategories = {
         baseHP += 2
         break;
       case (pow > 24):
-        baseHP += Math.round(((pow - 24) / 4) + 3)
+        baseHP += Math.ceil((pow - 24) / 4) + 3
         break;
     };
 
@@ -554,8 +572,8 @@ var RQSkillCategories = {
 		smDBText = "2D6+3"
     break;
 	case smDB > 56:
-		dice = Math.round(((db - 56) / 16) + 2)
-		val = Math.round(((db - 56) / 16) + 3)
+		dice = Math.ceil((db - 56) / 16) + 2
+		val = Math.ceil((db - 56) / 16) + 3
 		smDBText = dice + "D6+" + val
 		break;
 	}
@@ -615,10 +633,10 @@ var RQSkillCategories = {
         break;
 			case (stat > 20):
 				if (modifiers[20] > 0) {
-					totalMod += modifiers[20] + Math.round(((stat-20)/4)*5);
+					totalMod += modifiers[20] + Math.ceil((stat-20)/4)*5;
           break;
 				} else {
-					totalMod += modifiers[20] - Math.round(((stat-20)/4)*5);
+					totalMod += modifiers[20] - Math.ceil((stat-20)/4)*5;
           break;
 				}
 			};
