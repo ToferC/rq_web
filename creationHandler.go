@@ -893,6 +893,10 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				// Skill exists in Character, modify it via pointer
 				c.Skills[targetString].HomelandValue = s.HomelandValue
 
+				if s.Base != c.Skills[targetString].Base {
+					c.Skills[targetString].Base = s.Base
+				}
+
 				fmt.Println("Updated Character Skill: " + c.Skills[targetString].Name)
 
 			} else {
@@ -935,7 +939,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					baseSkill := &runequest.Skill{
 						CoreString: bs.CoreString,
 						Category:   bs.Category,
-						Base:       bs.Base,
+						Base:       s.Base,
 						UserChoice: bs.UserChoice,
 					}
 
