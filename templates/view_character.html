@@ -102,21 +102,21 @@ th {
               <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
               {{ else }}
               <div class="btn-group">
-              <button class="btn btn-sm btn-success" type="submit" value="Save Character State">Save</button> 
+              <button class="btn btn-sm btn-success" type="submit" value="Save Character State" title="Save current character state">Save</button> 
               <div class="dropdown">
                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
                   Edit
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/modify/{{ $ID }}">Edit Character</a>
-                    <a class="dropdown-item" href="/add_skills/{{ $ID }}">Add Skills</a>
-                    <a class="dropdown-item" href="/add_passions/{{ $ID }}">Add Passions</a>
-                    <a class="dropdown-item" href="/edit_magic/{{ $ID }}">Edit Magic</a>
-                    <a class="dropdown-item" href="/equip_weapons_armor/{{ $ID }}">Attacks & Armor</a>
+                    <a class="dropdown-item" title="Edit Character Abilities" href="/modify/{{ $ID }}">Edit Character</a>
+                    <a class="dropdown-item" title="Add new or custom skills" href="/add_skills/{{ $ID }}">Add Skills</a>
+                    <a class="dropdown-item" title="Add new or custom passions" href="/add_passions/{{ $ID }}">Add Passions</a>
+                    <a class="dropdown-item" title="Add/edit spells and magic" href="/edit_magic/{{ $ID }}">Edit Magic</a>
+                    <a class="dropdown-item" title="Add or edit weapons & armor" href="/equip_weapons_armor/{{ $ID }}">Attacks & Armor</a>
                     <div class="dropdown-divider"></div>         
-                    <a class="dropdown-item" href="/duplicate_character/{{ $ID }}">Duplicate</a>
+                    <a class="dropdown-item" title="Create a duplicate of the character in my roster" href="/duplicate_character/{{ $ID }}">Duplicate</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/delete/{{ $ID }}">Delete</a>
+                    <a class="dropdown-item" title="Permanently delete the character" href="/delete/{{ $ID }}">Delete</a>
                   </div>
                 </div>
               </div>
@@ -126,6 +126,7 @@ th {
               <a class="btn btn-sm btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to my Roster</a>
               {{ end }}
               {{ end }}
+              <a class="btn btn-sm btn-info"id="js-copy-character-btn" title="Copy text to Clipboard">Copy Text</a>
               <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ sliceString $character.Description 144 }}" data-via="d20dev" data-hashtags="runequest #glorantha" data-show-count="true">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             <hr>
             
@@ -916,6 +917,72 @@ th {
           target.style.backgroundColor = "white";
         };
         }
+
+        function copyTextToClipboard(text) {
+          var textArea = document.createElement("textarea");
+        
+          //
+          // *** This styling is an extra step which is likely not required. ***
+          //
+          // Why is it here? To ensure:
+          // 1. the element is able to have focus and selection.
+          // 2. if element was to flash render it has minimal visual impact.
+          // 3. less flakyness with selection and copying which **might** occur if
+          //    the textarea element is not visible.
+          //
+          // The likelihood is the element won't even render, not even a
+          // flash, so some of these are just precautions. However in
+          // Internet Explorer the element is visible whilst the popup
+          // box asking the user for permission for the web page to
+          // copy to the clipboard.
+          //
+        
+          // Place in top-left corner of screen regardless of scroll position.
+          textArea.style.position = 'fixed';
+          textArea.style.top = 0;
+          textArea.style.left = 0;
+        
+          // Ensure it has a small width and height. Setting to 1px / 1em
+          // doesn't work as this gives a negative w/h on some browsers.
+          textArea.style.width = '2em';
+          textArea.style.height = '2em';
+        
+          // We don't need padding, reducing the size if it does flash render.
+          textArea.style.padding = 0;
+        
+          // Clean up any borders.
+          textArea.style.border = 'none';
+          textArea.style.outline = 'none';
+          textArea.style.boxShadow = 'none';
+        
+          // Avoid flash of white box if rendered for any reason.
+          textArea.style.background = 'transparent';
+        
+        
+          textArea.value = text;
+        
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+        
+          try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Copying text command was ' + msg);
+          } catch (err) {
+            console.log('Oops, unable to copy');
+          }
+        
+          document.body.removeChild(textArea);
+        }
+        
+        
+        var copyCharacterBtn = document.getElementById('js-copy-character-btn')
+        
+        copyCharacterBtn.addEventListener('click', function(event) {
+          copyTextToClipboard("{{ $character }}");
+        });
+        
         </script>
 
 {{end}}

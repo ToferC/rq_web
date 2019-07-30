@@ -110,27 +110,6 @@
 
             <hr>
 
-            <h4>Armor</h4>
-            <p>Set the armor rating for each of your hit locations.</p>
-        {{ range $s := $character.HitLocationMap }}
-        {{ range $k, $v := $character.HitLocations }}
-        {{ if eq $s $k }}
-
-          <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="{{ $k }}-Armor-addon">{{ $v.Name }}</span>
-              </div>
-              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
-              <div class="input-group-append">
-                  <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
-                </div>
-            </div>  
-         
-        {{ end }} <!-- END if -->
-        {{ end }}
-        {{ end }} <!-- END map -->
-        <hr>
-
             <h4>Ranged Attacks</h4>
 
             {{ range $m, $attack := $rangedattacks }}
@@ -178,6 +157,27 @@
             </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
+
+                <h4>Armor</h4>
+            <p>Set the armor rating for each of your hit locations.</p>
+        {{ range $s := $character.HitLocationMap }}
+        {{ range $k, $v := $character.HitLocations }}
+        {{ if eq $s $k }}
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="{{ $k }}-Armor-addon">{{ $v.Name }}</span>
+              </div>
+              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
+              <div class="input-group-append">
+                  <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
+                </div>
+            </div>  
+         
+        {{ end }} <!-- END if -->
+        {{ end }}
+        {{ end }} <!-- END map -->
+        <hr>
 
                 <h4>Custom Melee Attacks</h4>
 
@@ -316,7 +316,7 @@
       
             
 
-                <button class="btn btn-primary" type="submit" value="Save">Complete Character</button>
+                <button class="btn btn-primary" type="submit" value="Save">Save</button>
 
           </div> <!-- END 9 Col -->
 
