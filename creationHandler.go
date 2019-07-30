@@ -732,10 +732,6 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 		c.SetAttributes()
 
 		// Apply Move
-		if len(c.Movement) == 0 {
-			c.Movement = []*runequest.Movement{}
-		}
-
 		for _, m := range c.Homeland.Movement {
 			c.Movement = append(c.Movement,
 				&runequest.Movement{

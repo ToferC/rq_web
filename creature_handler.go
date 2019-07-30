@@ -328,15 +328,23 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Add Movement
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 3; i++ {
 		var moveName string
 		var mv int
+
+		if i == 0 {
+			moveName = "Ground"
+			mv = 8
+		}
 
 		c.Movement = append(c.Movement,
 			&runequest.Movement{
 				Name:  moveName,
 				Value: mv,
 			})
+
+		moveName = ""
+		mv = 0
 	}
 
 	c.Skills = map[string]*runequest.Skill{}

@@ -10,8 +10,8 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/s3err","internal/sdkio","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/eventstream","private/protocol/eventstream/eventstreamapi","private/protocol/json/jsonutil","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts","service/sts/stsiface"]
-  revision = "ba829de1f3457a55eddf7ed693f36fe9069e39c4"
-  version = "v1.21.6"
+  revision = "384f4536edd1f4b59cf0c03ab3b346aba4c1c9cc"
+  version = "v1.21.7"
 
 [[projects]]
   name = "github.com/dghubble/gologin"
@@ -22,8 +22,8 @@
 [[projects]]
   name = "github.com/go-pg/pg"
   packages = [".","internal","internal/iszero","internal/parser","internal/pool","internal/struct_filter","internal/tag","orm","types"]
-  revision = "11cb265cd96c769490bea4cdc3634ea2049197f6"
-  version = "v8.0.4"
+  revision = "003999b8cdeac09f13d183a7f5e1342d9a33a174"
+  version = "v8.0.5"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -100,7 +100,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "9f7da8acda0cb03d8dd9c2c4f497dc19c8649851"
+  revision = "c72586d1d28587a811c9cb5180ab938181bdb334"
 
 [[projects]]
   name = "go.opencensus.io"
