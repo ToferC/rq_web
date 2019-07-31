@@ -91,6 +91,12 @@
   revision = "cb7f23ec59bec0d61b19c56cd88cee3d0cc1870c"
 
 [[projects]]
+  name = "github.com/shurcooL/sanitized_anchor_name"
+  packages = ["."]
+  revision = "7bfe4c7ecddb3666a94b053b422cdd8f5aaa3615"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/thewhitetulip/Tasks"
   packages = ["sessions"]
   revision = "6388fcf5a6242a3dee62a8095be5db67f66776e8"
@@ -100,7 +106,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "9cf94a607ad7bfce97e4eb3bacb588d4eb3211f3"
+  revision = "b7050872ca8f42ca79856574bfd7b68a8d9e9c49"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -163,6 +169,12 @@
   version = "v1.22.1"
 
 [[projects]]
+  name = "gopkg.in/russross/blackfriday.v2"
+  packages = ["."]
+  revision = "d3b5b032dc8e8927d31a5071b56e14c89f045135"
+  version = "v2.0.1"
+
+[[projects]]
   name = "mellium.im/sasl"
   packages = ["."]
   revision = "e58e780e1378aa4df5dc705364ff5ae9a4dd1e04"
@@ -171,6 +183,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "eef18c92fec98345b006d3c5679d7b1caa61932d1e563c724a1494f76d09fa16"
+  inputs-digest = "e0e4c5312d47bdf35f9a905a2bfdbc182d878527416da361618a0f57412f366d"
   solver-name = "gps-cdcl"
   solver-version = 1

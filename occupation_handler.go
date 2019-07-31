@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/toferc/runequest"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/toferc/runequest"
+	"gopkg.in/russross/blackfriday.v2"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -210,6 +213,11 @@ func OccupationHandler(w http.ResponseWriter, req *http.Request) {
 		oc.Image.Path = DefaultCharacterPortrait
 	}
 
+	// Set Markdown for description
+	input := []byte(oc.Occupation.Description)
+
+	output := template.HTML(blackfriday.Run(input))
+
 	wc := WebChar{
 		OccupationModel: oc,
 		IsAuthor:        IsAuthor,
@@ -218,6 +226,7 @@ func OccupationHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:         isAdmin,
 		Skills:          runequest.Skills,
 		CategoryOrder:   runequest.CategoryOrder,
+		Markdown:        output,
 	}
 
 	// Render page

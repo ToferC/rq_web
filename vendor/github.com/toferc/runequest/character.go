@@ -119,6 +119,14 @@ var CreationStatus = map[string]bool{
 func (c Character) String() string {
 	text := fmt.Sprintf("\n--- %s ---\n", c.Name)
 
+	if len(c.CoreRunes) > 0 {
+		text += "Runes: "
+		for _, cr := range c.CoreRunes {
+			text += fmt.Sprintf("%s ", cr.Name)
+		}
+		text += "\n"
+	}
+
 	text += fmt.Sprintf("\nType: %s", c.Role)
 
 	if c.Role == "Player Character" {
@@ -132,8 +140,10 @@ func (c Character) String() string {
 	if len(c.Statistics) > 0 {
 		text += "\n\nStats:\n"
 		for _, stat := range StatMap {
-			text += fmt.Sprintf("%s (%d%%)\n", c.Statistics[stat],
-				c.Statistics[stat].Total*5)
+			if c.Statistics[stat].Total > 0 {
+				text += fmt.Sprintf("%s (%d%%)\n", c.Statistics[stat],
+					c.Statistics[stat].Total*5)
+			}
 		}
 	}
 
@@ -159,7 +169,7 @@ func (c Character) String() string {
 		}
 	}
 
-	if c.Cult != nil {
+	if c.Cult.Name != "" {
 		text += fmt.Sprintf("\n\n**Cults:\n%s - %s - Rune Points: %d", c.Cult.Name, c.Cult.Rank, c.Cult.NumRunePoints)
 	}
 
@@ -173,8 +183,9 @@ func (c Character) String() string {
 		text += "\n\nElemental Runes:"
 
 		for _, ability := range c.ElementalRunes {
-
-			text += fmt.Sprintf("\n%s", ability)
+			if ability.Total != 0 {
+				text += fmt.Sprintf("\n%s", ability)
+			}
 		}
 	}
 
@@ -182,8 +193,9 @@ func (c Character) String() string {
 		text += "\n\nPower Runes:"
 
 		for _, ability := range c.PowerRunes {
-
-			text += fmt.Sprintf("\n%s", ability)
+			if ability.Total != 0 {
+				text += fmt.Sprintf("\n%s", ability)
+			}
 		}
 	}
 
@@ -191,31 +203,39 @@ func (c Character) String() string {
 		text += "\n\nCondition Runes:"
 
 		for _, ability := range c.ConditionRunes {
-
-			text += fmt.Sprintf("\n%s", ability)
+			if ability.Total != 0 {
+				text += fmt.Sprintf("\n%s", ability)
+			}
 		}
 	}
 
 	if len(c.Skills) > 0 {
 		text += "\n\nSkills:"
 
-		keys := make([]string, 0, len(c.Skills))
-		for k := range c.Skills {
-			keys = append(keys, k)
-		}
+		if len(c.Skills) > 20 {
 
-		sort.Strings(keys)
+			keys := make([]string, 0, len(c.Skills))
+			for k := range c.Skills {
+				keys = append(keys, k)
+			}
 
-		for _, co := range CategoryOrder {
+			sort.Strings(keys)
 
-			sc := c.SkillCategories[co]
+			for _, co := range CategoryOrder {
 
-			text += fmt.Sprintf("\n**%s**\n", sc)
-			for _, skill := range keys {
+				sc := c.SkillCategories[co]
 
-				if c.Skills[skill].Category == sc.Name {
-					text += fmt.Sprintf("%s\n", c.Skills[skill])
+				text += fmt.Sprintf("\n**%s**\n", sc)
+				for _, skill := range keys {
+
+					if c.Skills[skill].Category == sc.Name {
+						text += fmt.Sprintf("%s\n", c.Skills[skill])
+					}
 				}
+			}
+		} else {
+			for _, skill := range c.Skills {
+				text += fmt.Sprintf("%s\n", skill)
 			}
 		}
 	}

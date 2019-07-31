@@ -34,7 +34,7 @@ func (a *Attack) String() string {
 		a.Weapon.HP,
 		a.Special)
 
-	if a.Weapon.Range > 0 {
+	if a.Weapon.Range > 0 || a.Range > 0 {
 		text += fmt.Sprintf("Rng %d", a.Weapon.Range)
 	}
 	return text

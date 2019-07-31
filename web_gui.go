@@ -89,6 +89,7 @@ type WebChar struct {
 	Flashes        []interface{}
 	UserCount      int
 	CharacterCount int
+	Markdown       template.HTML
 }
 
 // SplitLines transfomrs results text string into slice

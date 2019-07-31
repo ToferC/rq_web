@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +16,7 @@ import (
 	"github.com/toferc/rq_web/database"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
+	"gopkg.in/russross/blackfriday.v2"
 )
 
 // CharacterIndexHandler renders the basic character roster page
@@ -161,6 +163,11 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		cm.Image.Path = DefaultCharacterPortrait
 	}
 
+	// Set Markdown for description
+	input := []byte(c.Description)
+
+	output := template.HTML(blackfriday.Run(input))
+
 	//c.DetermineSkillCategoryValues()
 
 	wc := WebChar{
@@ -173,6 +180,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		Flashes:        flashes,
 		StringArray:    runequest.StatMap,
 		CategoryOrder:  runequest.CategoryOrder,
+		Markdown:       output,
 	}
 
 	if req.Method == "GET" {
