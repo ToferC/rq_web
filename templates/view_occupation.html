@@ -28,7 +28,7 @@
   style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .OccupationModel.Image.Path }}"
   data-holder-rendered="true">
 
-  {{ $occupation.Description }}
+    <p>{{ .Markdown }}</p>
   <hr>
   {{ if $occupation.Notes }}
   <h4>Creation Notes</h4>

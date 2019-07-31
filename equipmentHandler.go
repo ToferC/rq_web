@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"strconv"
 
@@ -175,6 +176,20 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 		// Weapons & Attacks
 		// Working - pull map info from form or convert attacks to array?
 
+		damBonus := c.Attributes["DB"]
+		dbString := ""
+		throwDB := ""
+
+		if c.Attributes["DB"].Text != "-" {
+			dbString = damBonus.Text
+
+			if damBonus.Base > 0 {
+				throwDB = fmt.Sprintf("+%dD%d", damBonus.Dice, damBonus.Base/2)
+			} else {
+				throwDB = fmt.Sprintf("-%dD%d", damBonus.Dice, damBonus.Base/2)
+			}
+		}
+
 		tempMelee := map[string]*runequest.Attack{}
 
 		for k, v := range c.MeleeAttacks {
@@ -192,12 +207,6 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 
 					// Select weapon object from array
 					weapon := baseWeapons[weaponIndex]
-
-					dbString := ""
-
-					if c.Attributes["DB"].Text != "-" {
-						dbString = c.Attributes["DB"].Text
-					}
 
 					tempMelee[weapon.Name] = &runequest.Attack{
 						Name:         weapon.Name,
@@ -233,12 +242,6 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 					sr, err := strconv.Atoi(str)
 					if err != nil {
 						sr = 0
-					}
-
-					dbString := ""
-
-					if c.Attributes["DB"].Text != "-" {
-						dbString = c.Attributes["DB"].Text
 					}
 
 					tempMelee[name] = &runequest.Attack{
@@ -280,14 +283,30 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 
 					weapon := baseWeapons[weaponIndex]
 
+					// Set up for thrown weapons
+					throw := false
+
+					if strings.Contains(weapon.Name, "Thrown") {
+						throw = true
+					}
+
+					damage := ""
+
+					if weapon.Thrown {
+						damage = weapon.Damage + throwDB
+					} else {
+						damage = weapon.Damage
+					}
+
 					// Ranged weapon
 					tempRanged[weapon.Name] = &runequest.Attack{
 						Name:         weapon.Name,
 						Skill:        c.Skills[skillString],
-						DamageString: weapon.Damage,
+						DamageString: damage,
 						StrikeRank:   c.Attributes["DEXSR"].Base,
 						Weapon:       weapon,
 					}
+					tempRanged[weapon.Name].Weapon.Thrown = throw
 				}
 			} else {
 				// Custom Weapon

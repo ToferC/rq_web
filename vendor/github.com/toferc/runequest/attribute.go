@@ -234,18 +234,23 @@ func (c *Character) DetermineDamageBonus() *Attribute {
 	switch {
 	case db == 0:
 		damageBonus.Base = 0
+		damageBonus.Dice = 0
 		damageBonus.Text = "N/A"
 	case db < 13:
 		damageBonus.Base = -4
 		damageBonus.Text = "-1D4"
+		damageBonus.Dice = 1
 	case db < 25:
 		damageBonus.Base = 0
+		damageBonus.Dice = 0
 		damageBonus.Text = ""
 	case db < 33:
 		damageBonus.Base = 4
+		damageBonus.Dice = 1
 		damageBonus.Text = "+1D4"
 	case db < 41:
 		damageBonus.Base = 6
+		damageBonus.Dice = 1
 		damageBonus.Text = "+1D6"
 	case db < 57:
 		damageBonus.Base = 6

@@ -107,6 +107,7 @@
       {{ end }}
       {{ end }}
 
+      {{ if $cult.Weapons }}
       <h4>Weapons & Combat</h4>
       {{ range $wp := $cult.Weapons }}
       {{ if eq $wp.Description "Shield" }}
@@ -116,6 +117,7 @@
       {{ end }}
       {{ end }}
       <hr>
+      {{ end }}
 
       <h4>Passions</h4>
       {{ range $passion := $cult.PassionList }}

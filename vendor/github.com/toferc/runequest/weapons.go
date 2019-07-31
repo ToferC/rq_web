@@ -89,6 +89,12 @@ func loadWeapons() []*Weapon {
 			})
 		} else {
 
+			throw := false
+
+			if strings.Contains(record[0], "Thrown") {
+				throw = true
+			}
+
 			r, _ := strconv.Atoi(record[6])
 			weapons = append(weapons, &Weapon{
 				Name:      record[0],
@@ -96,9 +102,11 @@ func loadWeapons() []*Weapon {
 				Range:     r,
 				ENC:       record[4],
 				Damage:    record[3],
+				Thrown:    throw,
 				HP:        sHP,
 				CurrentHP: sHP,
 			})
+
 		}
 	}
 	return weapons
