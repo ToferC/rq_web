@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gosimple/slug"
+
 	"github.com/toferc/runequest"
 	"gopkg.in/russross/blackfriday.v2"
 
@@ -184,18 +186,13 @@ func HomelandHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
-	pk := vars["id"]
+	slug := vars["slug"]
 
-	if len(pk) == 0 {
+	if len(slug) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	hl, err := database.PKLoadHomelandModel(db, int64(id))
+	hl, err := database.LoadHomelandModel(db, slug)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Unable to load HomelandModel")
@@ -633,6 +630,8 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		hl.Author = author
+
+		hl.Slug = slug.Make(hl.Homeland.Name)
 
 		err = database.SaveHomelandModel(db, &hl)
 		if err != nil {
@@ -1111,6 +1110,8 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				hl.Homeland.Skills = append(hl.Homeland.Skills, &sk)
 			}
 		}
+
+		hl.Slug = slug.Make(hl.Homeland.Name)
 
 		// Insert Homeland into App archive
 		err = database.UpdateHomelandModel(db, hl)

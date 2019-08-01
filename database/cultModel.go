@@ -4,12 +4,17 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
+	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
 )
 
 // SaveCultModel saves a Cult to the DB
 func SaveCultModel(db *pg.DB, cl *models.CultModel) error {
+
+	if cl.Slug == "" {
+		cl.Slug = slug.Make(fmt.Sprintf("%s", cl.Cult.Name))
+	}
 
 	// Save character in Database
 	_, err := db.Model(cl).
@@ -24,6 +29,10 @@ func SaveCultModel(db *pg.DB, cl *models.CultModel) error {
 
 // UpdateCultModel updates a Cult in the database
 func UpdateCultModel(db *pg.DB, cl *models.CultModel) error {
+
+	if cl.Slug == "" {
+		cl.Slug = slug.Make(fmt.Sprintf("%s", cl.Cult.Name))
+	}
 
 	err := db.Update(cl)
 	if err != nil {
@@ -53,11 +62,11 @@ func ListCultModels(db *pg.DB) (map[string]*models.CultModel, error) {
 }
 
 // LoadCultModel loads a single Cult from the DB by name
-func LoadCultModel(db *pg.DB, name string) (*models.CultModel, error) {
+func LoadCultModel(db *pg.DB, slug string) (*models.CultModel, error) {
 	// Select user by Primary Key
 	cult := new(models.CultModel)
 	err := db.Model(cult).
-		Where("Name = ?", name).
+		Where("Slug = ?", slug).
 		Limit(1).
 		Select()
 

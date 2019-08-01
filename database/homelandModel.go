@@ -4,12 +4,17 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
+	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
 )
 
 // SaveHomelandModel saves a Homeland to the DB
 func SaveHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
+
+	if hl.Slug == "" {
+		hl.Slug = slug.Make(fmt.Sprintf("%s", hl.Homeland.Name))
+	}
 
 	// Save character in Database
 	_, err := db.Model(hl).
@@ -24,6 +29,10 @@ func SaveHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 
 // UpdateHomelandModel updates a Homeland in the database
 func UpdateHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
+
+	if hl.Slug == "" {
+		hl.Slug = slug.Make(fmt.Sprintf("%s", hl.Homeland.Name))
+	}
 
 	err := db.Update(hl)
 	if err != nil {
@@ -53,11 +62,11 @@ func ListHomelandModels(db *pg.DB) (map[string]*models.HomelandModel, error) {
 }
 
 // LoadHomelandModel loads a single Homeland from the DB by name
-func LoadHomelandModel(db *pg.DB, name string) (*models.HomelandModel, error) {
+func LoadHomelandModel(db *pg.DB, slug string) (*models.HomelandModel, error) {
 	// Select user by Primary Key
 	homeland := new(models.HomelandModel)
 	err := db.Model(homeland).
-		Where("Name = ?", name).
+		Where("Slug = ?", slug).
 		Limit(1).
 		Select()
 

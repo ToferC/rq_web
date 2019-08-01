@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gosimple/slug"
+
 	"github.com/toferc/runequest"
 	"gopkg.in/russross/blackfriday.v2"
 
@@ -183,18 +185,13 @@ func CultHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
-	pk := vars["id"]
+	slug := vars["slug"]
 
-	if len(pk) == 0 {
+	if len(slug) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	cl, err := database.PKLoadCultModel(db, int64(id))
+	cl, err := database.LoadCultModel(db, slug)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Unable to load CultModel")
@@ -724,6 +721,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		cl.Author = author
 
+		cl.Slug = slug.Make(cl.Cult.Name)
+
 		err = database.SaveCultModel(db, &cl)
 		if err != nil {
 			log.Panic(err)
@@ -1240,6 +1239,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				cl.Cult.Skills = append(cl.Cult.Skills, sk)
 			}
 		}
+
+		cl.Slug = slug.Make(cl.Cult.Name)
 
 		// Insert Cult into App archive
 		err = database.UpdateCultModel(db, cl)

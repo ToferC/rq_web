@@ -61,7 +61,7 @@ th {
             </h6>
 
             {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
-            <p><strong>{{ $character.Occupation.Name }} of {{ $character.Homeland.Name }}, {{ $character.Cult.Rank }} of {{ $character.Cult.Name }}</strong></p>
+            <p><strong><a href="/view_occupation/{{ slugify $character.Occupation.Name }}" >{{ $character.Occupation.Name }}</a> of <a href="/view_homeland/{{ slugify $character.Homeland.Name }}" >{{ $character.Homeland.Name }}</a>, {{ $character.Cult.Rank }} of <a href="/view_cult/{{ slugify $character.Cult.Name }}" >{{ $character.Cult.Name }}</a></strong></p>
               {{ if $character.ExtraCults }}
               {{ range $ec := $character.ExtraCults }}
                 {{ $ec.Rank }} of {{ $ec.Name }}<br>

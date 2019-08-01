@@ -4,12 +4,17 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
+	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
 )
 
 // SaveOccupationModel saves a Occupation to the DB
 func SaveOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
+
+	if oc.Slug == "" {
+		oc.Slug = slug.Make(fmt.Sprintf("%s", oc.Occupation.Name))
+	}
 
 	// Save character in Database
 	_, err := db.Model(oc).
@@ -24,6 +29,10 @@ func SaveOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 
 // UpdateOccupationModel updates a Occupation in the database
 func UpdateOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
+
+	if oc.Slug == "" {
+		oc.Slug = slug.Make(fmt.Sprintf("%s", oc.Occupation.Name))
+	}
 
 	err := db.Update(oc)
 	if err != nil {
@@ -53,11 +62,11 @@ func ListOccupationModels(db *pg.DB) (map[string]*models.OccupationModel, error)
 }
 
 // LoadOccupationModel loads a single Occupation from the DB by name
-func LoadOccupationModel(db *pg.DB, name string) (*models.OccupationModel, error) {
+func LoadOccupationModel(db *pg.DB, slug string) (*models.OccupationModel, error) {
 	// Select user by Primary Key
 	occupation := new(models.OccupationModel)
 	err := db.Model(occupation).
-		Where("Name = ?", name).
+		Where("Slug = ?", slug).
 		Limit(1).
 		Select()
 

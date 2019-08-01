@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gosimple/slug"
+
 	"github.com/toferc/runequest"
 	"gopkg.in/russross/blackfriday.v2"
 
@@ -183,18 +185,13 @@ func OccupationHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
-	pk := vars["id"]
+	slug := vars["slug"]
 
-	if len(pk) == 0 {
+	if len(slug) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	oc, err := database.PKLoadOccupationModel(db, int64(id))
+	oc, err := database.LoadOccupationModel(db, slug)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Unable to load OccupationModel")
@@ -591,6 +588,8 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		oc.Author = author
+
+		oc.Slug = slug.Make(oc.Occupation.Name)
 
 		err = database.SaveOccupationModel(db, &oc)
 		if err != nil {
@@ -1033,6 +1032,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				oc.Occupation.Skills = append(oc.Occupation.Skills, sk)
 			}
 		}
+
+		oc.Slug = slug.Make(oc.Occupation.Name)
 
 		// Insert Occupation into App archive
 		err = database.UpdateOccupationModel(db, oc)

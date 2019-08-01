@@ -183,21 +183,21 @@ func main() {
 	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)
 	r.HandleFunc("/add_homeland/", AddHomelandHandler)
-	r.HandleFunc("/view_homeland/{id}", HomelandHandler)
+	r.HandleFunc("/view_homeland/{slug}", HomelandHandler)
 	r.HandleFunc("/modify_homeland/{id}", ModifyHomelandHandler)
 	r.HandleFunc("/delete_homeland/{id}", DeleteHomelandHandler)
 
 	// Occupation Handlers
 	r.HandleFunc("/occupation_index/", OccupationIndexHandler)
 	r.HandleFunc("/add_occupation/", AddOccupationHandler)
-	r.HandleFunc("/view_occupation/{id}", OccupationHandler)
+	r.HandleFunc("/view_occupation/{slug}", OccupationHandler)
 	r.HandleFunc("/modify_occupation/{id}", ModifyOccupationHandler)
 	r.HandleFunc("/delete_occupation/{id}", DeleteOccupationHandler)
 
 	// Cult Handlers
 	r.HandleFunc("/cult_index/", CultIndexHandler)
 	r.HandleFunc("/add_cult/", AddCultHandler)
-	r.HandleFunc("/view_cult/{id}", CultHandler)
+	r.HandleFunc("/view_cult/{slug}", CultHandler)
 	r.HandleFunc("/modify_cult/{id}", ModifyCultHandler)
 	r.HandleFunc("/delete_cult/{id}", DeleteCultHandler)
 
