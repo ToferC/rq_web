@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -664,6 +665,12 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 				if attackType == "Ranged" {
 
+					throw := false
+
+					if strings.Contains(attackName, "Thrown") {
+						throw = true
+					}
+
 					rangedAttacks[attackName] = &runequest.Attack{
 						Name:         attackName,
 						Skill:        c.Skills[attackName],
@@ -676,6 +683,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 							STRDamage: false,
 							Range:     rangeVal,
 							Damage:    damage,
+							Thrown:    throw,
 							HP:        hpVal,
 							CurrentHP: hpVal,
 							Special:   special,

@@ -280,6 +280,9 @@
                             </div>
                             <input type="text" class="form-control" aria-describedby="Custom-R-{{ $r }}-Damage-addon" name="Custom-R-{{ $r }}-Damage" placeholder="1d6+1" value="{{ $attack.Weapon.Damage }}">
                           </div>
+
+                          <strong>Thrown</strong> <input type="checkbox" name="Custom-R-{{ $r }}-Thrown" value="{{ $attack.Weapon.Thrown }}" id="checkbox"
+                            {{if $attack.Weapon.Thrown }} checked{{ end }}>
           
                           <div class="input-group">
                               <div class="input-group-prepend">

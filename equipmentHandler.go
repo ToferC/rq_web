@@ -324,6 +324,14 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 					damage := req.FormValue(fmt.Sprintf("Custom-R-%s-Damage", k))
 					special := req.FormValue(fmt.Sprintf("Custom-R-%s-Special", k))
 
+					// Thrown Weapon
+					thrownWeapon := false
+
+					thrown := req.FormValue(fmt.Sprintf("Custom-R-%s-Thrown", k))
+					if thrown != "" {
+						thrownWeapon = true
+					}
+
 					str := req.FormValue(fmt.Sprintf("Custom-R-%s-Range", k))
 					rangeM, err := strconv.Atoi(str)
 					if err != nil {
@@ -342,10 +350,19 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 						sr = 0
 					}
 
+					// Set damage string for attack
+					damageString := ""
+
+					if thrownWeapon {
+						damageString = damage + throwDB
+					} else {
+						damageString = damage
+					}
+
 					tempRanged[name] = &runequest.Attack{
 						Name:         name,
 						Skill:        c.Skills[skill],
-						DamageString: damage,
+						DamageString: damageString,
 						StrikeRank:   c.Attributes["DEXSR"].Base + sr,
 						Weapon: &runequest.Weapon{
 							Name:      name,
@@ -353,6 +370,7 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 							STRDamage: false,
 							Damage:    damage,
 							Range:     rangeM,
+							Thrown:    thrownWeapon,
 							HP:        hp,
 							CurrentHP: hp,
 							SR:        sr,
