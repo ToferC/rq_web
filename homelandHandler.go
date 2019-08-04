@@ -641,7 +641,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/view_homeland/%d", hl.ID)
+		url := fmt.Sprintf("/view_homeland/%s", hl.Slug)
 
 		http.Redirect(w, req, url, http.StatusFound)
 	}
@@ -1124,7 +1124,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(hl)
 
-		url := fmt.Sprintf("/view_homeland/%d", hl.ID)
+		url := fmt.Sprintf("/view_homeland/%s", hl.Slug)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

@@ -32,7 +32,7 @@
   <hr>
   {{ if $occupation.Notes }}
   <h4>Creation Notes</h4>
-  {{ $occupation.Notes }}
+  {{ toMarkdown ($occupation.Notes) }}
   <hr>
   {{ end }}
   <p>Standard of Living: {{ $occupation.StandardOfLiving }}</p>

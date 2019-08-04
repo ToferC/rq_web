@@ -56,7 +56,7 @@
         <hr>
         {{ if $cult.Notes }}
         <h4>Creation Notes</h4>
-        {{ $cult.Notes }}
+        {{ toMarkdown ($cult.Notes) }}
         <hr>
         {{ end }}
 

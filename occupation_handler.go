@@ -598,7 +598,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved")
 		}
 
-		url := fmt.Sprintf("/view_occupation/%d", oc.ID)
+		url := fmt.Sprintf("/view_occupation/%s", oc.Slug)
 
 		http.Redirect(w, req, url, http.StatusFound)
 	}
@@ -1045,7 +1045,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(oc)
 
-		url := fmt.Sprintf("/view_occupation/%d", oc.ID)
+		url := fmt.Sprintf("/view_occupation/%s", oc.Slug)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

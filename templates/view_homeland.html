@@ -44,7 +44,7 @@
   <hr>
   {{ if $homeland.Notes }}
   <h4>Creation Notes</h4>
-  {{ $homeland.Notes }}
+  {{ toMarkdown ($homeland.Notes) }}
   <hr>
   {{ end }}
   

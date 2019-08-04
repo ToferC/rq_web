@@ -730,7 +730,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Saved Cult")
 		}
 
-		url := fmt.Sprintf("/view_cult/%d", cl.ID)
+		url := fmt.Sprintf("/view_cult/%s", cl.Slug)
 
 		http.Redirect(w, req, url, http.StatusFound)
 	}
@@ -1252,7 +1252,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(cl)
 
-		url := fmt.Sprintf("/view_cult/%d", cl.ID)
+		url := fmt.Sprintf("/view_cult/%s", cl.Slug)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
