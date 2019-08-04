@@ -31,7 +31,7 @@
                   {{ end }}
             </h6>
                 {{ else }}
-                  {{ if .Cult.ParentCult.Runes.Runes }}
+                  {{ if .Cult.ParentCult.Runes }}
                 <h6>{{ range $r := .Cult.ParentCult.Runes }}
                 <img 
                   class alt="{{ $r }}"
