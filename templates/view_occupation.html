@@ -22,23 +22,21 @@
   <div class="col-sm-4 col-md-4 col-lg-4">
 
   <h4>{{ $occupation.Name }}</h4> 
-  <strong>Author: {{ .OccupationModel.Author.UserName }}</strong>
-
+  
   <img class ="card-img-top" data-src="" alt="Thumbnail"
   style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .OccupationModel.Image.Path }}"
   data-holder-rendered="true">
-
-    <p>{{ .Markdown }}</p>
+  <p>Author: {{ .OccupationModel.Author.UserName }}</p>
   <hr>
+    <p>{{ toMarkdown $occupation.Description }}</p>
+  <hr>
+
   {{ if $occupation.Notes }}
-  <h4>Creation Notes</h4>
-  {{ toMarkdown ($occupation.Notes) }}
+  <h5>Creation Notes</h5>
+    <p>{{ toMarkdown $occupation.Notes }}</p>
   <hr>
   {{ end }}
-  <p>Standard of Living: {{ $occupation.StandardOfLiving }}</p>
-  <p>Income: {{ $occupation.Income }} L</p>
-  <p>Ransom: {{ $occupation.Ransom }} L</p>
-  <hr>
+
     {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
         <a class="btn btn-sm btn-primary" href="/modify_occupation/{{ $ID }}">Modify</a>
         <a class="btn btn-sm btn-danger" href="/delete_occupation/{{ $ID }}">Delete</a>
@@ -47,14 +45,30 @@
 
 <div class="col-sm-4 col-md-4 col-lg-4">
 
-<h4>Skills</h4>
-  {{ range $skill := $occupation.Skills }}
-  <p>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{$skill.UserString}}){{end}} +{{ $skill.OccupationValue }}%</p>
-  {{end}}
+<h5>Skills</h5>
+    <table class="table table-sm table-striped">
+        <tr>
+          <th>Skill</th>
+          <th>Base</th>
+          <th>Bonus</th>
+        </tr>
+        {{ range $skill := $occupation.Skills }}
+        <tr>
+          <td>
+              {{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{$skill.UserString}}){{end}}
+          </td>
+          <td>
+            {{ $skill.Base }}
+          </td>
+          <td style="text-align:center">
+              +{{ $skill.OccupationValue }}%
+          </td>
+        {{end}}
+      </table>
 
   <hr>
   {{ if $occupation.SkillChoices }}
-  <h4>Skill Choices</h4>
+  <h5>Skill Choices</h5>
     {{ range $schoice := $occupation.SkillChoices }}
     {{ if gt (len $schoice.Skills) 0}}
     <h5>Choose between</h5>
@@ -68,33 +82,100 @@
     {{ end }}
     {{ end }} <!-- END show loop -->
 
+    {{ if $occupation.Weapons }}
+        <h5>Weapons & Combat</h5>
+        <table class="table table-sm table-striped">
+        <tr>
+          <th>Weapon</th>
+          <th>Bonus</th>
+        </tr>
+        {{ range $wp := $occupation.Weapons }}
+        <tr>
+            <td>
+                {{ if eq $wp.Description "Shield" }}
+                    {{ $wp.Description }}
+                {{ else }}
+                    {{ $wp.Description }} Weapon
+                {{ end }}
+            </td>
+            <td>
+                +{{ $wp.Value }}%
+            </td>
+        </tr>
+        {{ end }}
+        </table>
+        <hr>
+    {{ end }}
+
+    {{ if $occupation.PassionList }}
+        <h5>Passions</h5>
+        <table class="table table-sm table-striped">
+            <tr>
+            <th>Passion</th>
+            <th>Bonus</th>
+            </tr>
+            {{ range $passion := $occupation.PassionList }}
+            <tr>
+            <td>
+                {{ $passion.CoreString }} {{ if $passion.UserString }}({{$passion.UserString}}){{ end }}
+            </td>
+            <td>
+                +10%
+            </td>
+            </tr>
+            {{end}}
+        </table>
+        <hr>
+        {{ end }}
+
 </div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">
 
-        <h4>Weapons & Combat</h4>
-        {{ range $wp := $occupation.Weapons }}
-            {{ if eq $wp.Description "Shield" }}
-            <p>{{ $wp.Description }} +{{ $wp.Value }}%</p>
-            {{ else }}
-            <p>{{ $wp.Description }} Weapon +{{ $wp.Value }}%</p>
-            {{ end }}
-        {{ end }}
-
+        <h5>Details</h5>
+        <table class="table table-sm table-striped">
+            <tr>
+                <td>
+                  Standard of Living
+                </td>
+                <td>
+                  {{ $occupation.StandardOfLiving }}
+                </td>
+            </tr>
+            <tr>
+                  <td>
+                      Income
+                  </td>
+                  <td>
+                      {{ $occupation.Income }} L
+                  </td>
+              </tr>
+              <tr>
+                      <td>
+                          Ransom
+                      </td>
+                      <td>
+                          {{ $occupation.Ransom }} L
+                      </td>
+                  </tr>
+      
+        </table>
         <hr>
 
-    <h4>Passions</h4>
-    {{ range $passion := $occupation.PassionList }}
-    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base {{ $passion.Base }}% or +{{ $passion.OccupationValue }}%</p>    
-    {{end}}
-    <hr>
-
-    <h4>Equipment</h4>
-    <ul>
+    <h5>Equipment</h5>
+    <table class="table table-sm table-striped">
+        <tr>
+            <th>Equipment</th>
+        </tr>
         {{ range $occupation.Equipment}}
-            <li>{{ . }}</li>
+        <tr>
+            <td>
+                {{ . }}
+            </td>
+        </tr>
         {{ end }}
-    </ul>
+        
+    </table>
 
 </div>  
 

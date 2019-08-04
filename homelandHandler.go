@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +10,6 @@ import (
 	"github.com/gosimple/slug"
 
 	"github.com/toferc/runequest"
-	"gopkg.in/russross/blackfriday.v2"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -211,11 +209,6 @@ func HomelandHandler(w http.ResponseWriter, req *http.Request) {
 		hl.Image.Path = DefaultCharacterPortrait
 	}
 
-	// Set Markdown for description
-	input := []byte(hl.Homeland.Description)
-
-	output := template.HTML(blackfriday.Run(input))
-
 	wc := WebChar{
 		HomelandModel: hl,
 		IsAuthor:      IsAuthor,
@@ -224,7 +217,6 @@ func HomelandHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:       isAdmin,
 		Skills:        runequest.Skills,
 		CategoryOrder: runequest.CategoryOrder,
-		Markdown:      output,
 		StringArray:   runequest.StatMap,
 	}
 
@@ -317,6 +309,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		PowerRunes:       runequest.PowerRuneOrder,
 		ElementalRunes:   runequest.ElementalRuneOrder,
 		HitLocationForms: runequest.LocationForms,
+		StringArray:      runequest.StatMap,
 	}
 
 	if req.Method == "GET" {
@@ -779,6 +772,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		PowerRunes:       runequest.PowerRuneOrder,
 		ElementalRunes:   runequest.ElementalRuneOrder,
 		HitLocationForms: runequest.LocationForms,
+		StringArray:      runequest.StatMap,
 	}
 
 	if req.Method == "GET" {

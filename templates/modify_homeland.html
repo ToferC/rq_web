@@ -15,6 +15,7 @@
 {{ $category := .CategoryOrder }}
 {{ $elementalrunes := .ElementalRunes }}
 {{ $powerrunes := .PowerRunes }}
+{{ $statOrder := .StringArray }}
 
       <div class="container">
         <hr>
@@ -111,7 +112,9 @@
 
               <hr>
                 <h4>Statistics</h4>
+{{ range $o := $statOrder }}
               {{ range $k, $v := $homeland.StatisticFrames }}
+              {{ if eq $k $o }}
 
               <label for="Stat-{{ $k }}">{{ $k }}</label>
                   <div class="form-row">
@@ -133,6 +136,8 @@
                   </div>
                 </div>
               
+              {{ end }}
+              {{ end }}
               {{ end }}
 
 

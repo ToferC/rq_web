@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +10,6 @@ import (
 	"github.com/gosimple/slug"
 
 	"github.com/toferc/runequest"
-	"gopkg.in/russross/blackfriday.v2"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -215,11 +213,6 @@ func CultHandler(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	// Set Markdown for description
-	input := []byte(cl.Cult.Description)
-
-	output := template.HTML(blackfriday.Run(input))
-
 	wc := WebChar{
 		CultModel:     cl,
 		IsAuthor:      IsAuthor,
@@ -229,7 +222,6 @@ func CultHandler(w http.ResponseWriter, req *http.Request) {
 		Skills:        runequest.Skills,
 		CategoryOrder: runequest.CategoryOrder,
 		CultModels:    cults,
-		Markdown:      output,
 	}
 
 	// Render page

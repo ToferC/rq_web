@@ -52,11 +52,11 @@
           data-holder-rendered="true">
 
         <hr>
-        <p>{{ .Markdown }}</p>
+        <p>{{ toMarkdown $cult.Description }}</p>
         <hr>
         {{ if $cult.Notes }}
         <h4>Creation Notes</h4>
-        {{ toMarkdown ($cult.Notes) }}
+        <p>{{ toMarkdown $cult.Notes }}</p>
         <hr>
         {{ end }}
 

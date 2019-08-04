@@ -40,11 +40,11 @@
   </h6>
   <hr>
 
-  <p>{{ .Markdown }}</p>
+  <p>{{ toMarkdown $homeland.Description }}</p>
   <hr>
   {{ if $homeland.Notes }}
   <h4>Creation Notes</h4>
-  {{ toMarkdown ($homeland.Notes) }}
+  <p>{{ toMarkdown $homeland.Notes }}</p>
   <hr>
   {{ end }}
   
@@ -52,7 +52,7 @@
   <a class="btn btn-sm btn-primary" href="/modify_homeland/{{ $ID }}">Modify</a>
   <a class="btn btn-sm btn-danger" href="/delete_homeland/{{ $ID }}">Delete</a>
   {{ end }}
-
+  <hr>
 
 </div>
 
@@ -85,6 +85,8 @@
 </table>
 
 <hr>
+  <p>Hit Locations: {{ $homeland.LocationForm }}</p>
+<hr>
   <table class="table table-sm table-striped">
     <tr>
       <th>Movement</th>
@@ -97,9 +99,6 @@
             </tr>
             {{ end }}
   </table>
-<hr>
-  <p>Hit Locations: {{ $homeland.LocationForm }}</p>
-<hr>
 
 {{ if $homeland.PassionList }}
 <h4>Passions</h4>

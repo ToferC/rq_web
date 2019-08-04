@@ -83,11 +83,11 @@ th {
 
 
             <form action="" method="POST">
-            <h5>Description</h5>{{ if gt (len $character.Description) 144 }}
+            <h5>Description</h5>{{ if gt (len $character.Description) 288 }}
             <button class="btn btn-link btn-sm" data-toggle="collapse" type="button" data-target="#description">Show</button></h5>
-            <div id="description" class="collapse"><hr><p>{{ .Markdown }}</p></div>
+            <div id="description" class="collapse"><hr><p>{{ toMarkdown $character.Description }}</p></div>
             {{ else }}
-            <p>{{ .Markdown }}</p>
+            <p>{{ toMarkdown $character.Description }}</p>
             {{ end }}
             <hr>
 
