@@ -191,16 +191,6 @@
 
               <hr>
 
-            <h4>Associated Cults</h4>
-            <!-- Choose from list of Cults ($cults) -->
-
-            {{ range $c := $cults }}
-            {{ if and (not $c.Cult.SubCult) (ne $c.Cult.Name $cult.Name) }}
-              <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $ac := $cult.AssociatedCults }}{{ if eq $c.Cult.Name $ac.Name }}checked{{end}}{{ end }}>
-              {{ end }}
-              {{ end }}
-
-              <hr>
             </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
@@ -284,6 +274,16 @@
                 <hr>
                 {{ end }} <!-- End SkillChoice loop -->
 
+              <h4>Associated Cults</h4>
+            <!-- Choose from list of Cults ($cults) -->
+
+            {{ range $c := $cults }}
+            {{ if ne $c.Cult.Name $cult.Name }}
+              <br><strong>{{ $c.Cult.Name }}</strong> <input type="checkbox" name="Cult-{{$c.Cult.Name}}-Name" value="true" id="checkbox" {{ range $ac := $cult.AssociatedCults }}{{ if eq $c.Cult.Name $ac.Name }}checked{{end}}{{ end }}>
+              {{ end }}
+              {{ end }}
+
+              <hr>
                 
 
               </div> <!-- End Skills Column -->
