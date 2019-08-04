@@ -85,6 +85,7 @@ func (c *Character) UpdateCharacter() {
 	c.SetAttributes()
 	c.UpdateAttributes()
 	c.IDCoreRunes()
+	c.UpdateAttacks()
 
 	if len(c.HitLocations) == 0 {
 		hlForms := LocationForms[c.LocationForm]

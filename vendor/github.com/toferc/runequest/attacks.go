@@ -70,7 +70,7 @@ func (c *Character) UpdateAttacks() {
 
 		throw := false
 
-		if strings.Contains(r.Weapon.Name, "Thrown") {
+		if strings.Contains(r.Weapon.Name, "Thrown") || r.Weapon.Thrown == true {
 			throw = true
 		}
 		r.Weapon.Thrown = throw
