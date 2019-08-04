@@ -11,6 +11,7 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
+	"gopkg.in/russross/blackfriday.v2"
 )
 
 // WebView is a container for Web_gui data
@@ -309,6 +310,13 @@ func slugify(st string) string {
 	return slug.Make(st)
 }
 
+func toMarkdown(st string) template.HTML {
+	input := []byte(st)
+	output := template.HTML(blackfriday.Run(input))
+
+	return output
+}
+
 // Render combines templates, funcs and renders all Web pages in the app
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
@@ -330,6 +338,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"sortedSkills":                 sortedSkills,
 		"splitSkills":                  splitSkills,
 		"slugify":                      slugify,
+		"toMarkdown":                   toMarkdown,
 	}
 
 	baseTemplate := "templates/layout.html"

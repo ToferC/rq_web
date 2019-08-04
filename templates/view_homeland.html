@@ -17,19 +17,28 @@
 {{ $homeland := .HomelandModel.Homeland }}
 {{ $ID := .HomelandModel.ID }}
 {{ $skills := .Skills }}
+{{ $statOrder := .StringArray }}
 
 <div class="container">
 <div class="row">
   <div class="col-sm-4 col-md-4 col-lg-4">
 
-  <h4>{{ $homeland.Name }}</h4> 
-  <strong>Author: {{ .HomelandModel.Author.UserName }}</strong>
-
+  <h4>{{ $homeland.Name }} <img 
+    class alt="{{ $homeland.RuneBonus }}"
+    title="{{ $homeland.RuneBonus }}"
+    style="width: 20px; height: 20px" 
+    src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $homeland.RuneBonus  "Fire/Sky"}}Fire Sky{{else}}{{ $homeland.RuneBonus  }}{{end}}.png"
+  ></h4> 
+  
   <img class ="card-img-top" data-src="" alt="Thumbnail"
   style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
   data-holder-rendered="true">
+  <p>Author: {{ .HomelandModel.Author.UserName }}</p>
 
-  <h5>Rune: {{ $homeland.RuneBonus }}</h5>
+  <hr>
+  <h6>Rune: {{ $homeland.RuneBonus }} 
+  </h6>
+  <hr>
 
   <p>{{ .Markdown }}</p>
   <hr>
@@ -50,14 +59,33 @@
 <div class="col-sm-4 col-md-4 col-lg-4">
 
 <h4>Statistics</h4>
-              {{ range $k, $v := $homeland.StatisticFrames }}
+<table class="table table-sm table-striped">
+  <tr>
+    <th>Statistic</th>
+    <th>Dice</th>
+    <th>Max</th>
+  </tr>
+  {{ range $o := $statOrder }}
+  {{ range $k, $v := $homeland.StatisticFrames }}
+  {{ if eq $k $o }}
+  <tr>
+    <td>
+        {{ $k }}
+    </td>
+    <td>
+        {{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 0 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }}
+    </td>
+    <td>
+        {{ $v.Max }}
+    </td>
+  </tr>
+    {{ end }}
+    {{ end }}
+    {{ end }}
+</table>
 
-              <p>{{ $k }}: {{ $v.Dice }}d6{{ if eq $v.Modifier 0 }}{{else}}{{ if gt $v.Modifier 0 }}+{{ $v.Modifier }}{{ else }}{{ $v.Modifier }}{{ end }}{{ end }}
-               Max: {{ $v.Max }}</p>
-              
-              {{ end }}
 <hr>
-  <table>
+  <table class="table table-sm table-striped">
     <tr>
       <th>Movement</th>
       <th>Value</th>
@@ -73,21 +101,53 @@
   <p>Hit Locations: {{ $homeland.LocationForm }}</p>
 <hr>
 
-<h4>Skills</h4>
-<h5>Skill Bonuses</h5>
-  {{ range $skill := $homeland.Skills }}
-  <p>{{ $skill.CoreString }} ({{$skill.Base}}) {{ if $skill.UserChoice }} ({{$skill.UserString}}){{end}} +{{ $skill.HomelandValue }}%</p>
-  {{end}}
+{{ if $homeland.PassionList }}
+<h4>Passions</h4>
+<table class="table table-sm table-striped">
+    <tr>
+      <th>Passion</th>
+      <th>Bonus</th>
+    </tr>
+    {{ range $passion := $homeland.PassionList }}
+    <tr>
+      <td>
+          {{ $passion.CoreString }} {{ if $passion.UserString }}({{$passion.UserString}}){{ end }}
+      </td>
+      <td>
+        +10%
+      </td>
+    </tr>
+    {{end}}
+</table>
+<hr>
+{{ end }}
 
 </div>
 
 <div class="col-sm-4 col-md-4 col-lg-4">
 
-    <h4>Passions</h4>
-    {{ range $passion := $homeland.PassionList }}
-    <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base: {{ $passion.Base }}%</p>    
-    {{end}}
-    <hr>
+    <h4>Skills</h4>
+    <table class="table table-sm table-striped">
+        <tr>
+          <th>Skill</th>
+          <th>Base</th>
+          <th>Bonus</th>
+        </tr>
+        {{ range $skill := $homeland.Skills }}
+        <tr>
+          <td>
+              {{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{$skill.UserString}}){{end}}
+          </td>
+          <td>
+            {{ $skill.Base }}
+          </td>
+          <td style="text-align:center">
+              +{{ $skill.HomelandValue }}%
+          </td>
+        {{end}}
+      </table>
+
+      <hr>
 
     {{ if $homeland.SkillChoices }}
     <h4>Skill Choices</h4>
@@ -103,6 +163,8 @@
         {{ end }}
     {{ end }}
     {{ end }}
+
+    <hr>
 
 </div>  
 

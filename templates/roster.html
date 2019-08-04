@@ -130,7 +130,7 @@ create and save "building" content, like homelands, occupations and cults, they 
                 <h6>{{ .Author.UserName }}</h6>
 
                 <p class="card-text">
-                  {{ sliceString .Character.Description 144 }}
+                  {{ toMarkdown (sliceString .Character.Description 144) }}
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">

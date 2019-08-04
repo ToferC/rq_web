@@ -21,9 +21,32 @@
   <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
       <form action="" method="POST" enctype="multipart/form-data">
-        <h3>{{ $cult.Name }}{{ if .CultModel.Official }} | Official{{ end }}{{ if $cult.SubCult }} | Sub-Cult of {{ $cult.ParentCult.Name }}{{ end }}</h3>
+        <h4>{{ $cult.Name }}{{ if .CultModel.Official }} | Official{{ end }}{{ if $cult.SubCult }} | Sub-Cult of {{ $cult.ParentCult.Name }}{{ end }}</h4>
 
-        <strong>Author: {{ .CultModel.Author.UserName }}</strong>
+        <hr>
+        {{ if $cult.Runes }}
+                <h6>{{ range $r := $cult.Runes }}
+                <img 
+                  class alt="{{ $r }}"
+                  title="{{ $r }}"
+                  style="width: 20px; height: 20px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r "Fire/Sky"}}Fire Sky{{else}}{{ $r }}{{end}}.png"
+                >
+                  {{ end }}
+            </h6>
+                {{ else }}
+                <h6>{{ range $r := $cult.ParentCult.Runes }}
+                <img 
+                  class alt="{{ $r }}"
+                  title="{{ $r }}"
+                  style="width: 20px; height: 20px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r "Fire/Sky"}}Fire Sky{{else}}{{ $r }}{{end}}.png"
+                >
+                  {{ end }}
+            </h6>
+                {{ end }}
+
+        <p>Author: {{ .CultModel.Author.UserName }}</p>
 
         <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CultModel.Image.Path }}"
           data-holder-rendered="true">
@@ -37,63 +60,87 @@
         <hr>
         {{ end }}
 
-    </div>
-
-    <div class="col-sm-4 col-md-4 col-lg-4">
-      <h4>Details</h4>
-
-      <p>Cult Runes: {{ range $r := $cult.Runes }}{{ $r }}, {{ end }}</p>
-
-      <hr>
-
-      <p>Rune Spells:
-        {{ range $rs := $cult.RuneSpells }}
-        {{ $rs.CoreString }}{{ if $rs.Variable }}(varies){{else}}
-        {{ if eq $rs.Cost 1 }}
-        ({{$rs.Cost}} pt)
-        {{ else }}
-        ({{$rs.Cost}} pts)
-        {{ end }}
-        {{ end }}
-        {{ if ne $rs.UserString "" }}
-         {{ $rs.UserString }}
-        {{ end }}, {{ end }}</p>
-      <hr>
-
-      <p>Spirit Magic:
-        {{ range $sm := $cult.SpiritMagic }}
-        {{ $sm.CoreString }} {{ if $sm.Variable }}(varies){{else}}
-        {{ if eq $sm.Cost 1 }}
-        ({{$sm.Cost}} pt)
-        {{ else }}
-        ({{$sm.Cost}} pts)
-        {{ end }}
-        {{ end }}
-        {{ if ne $sm.UserString "" }}
-         {{ $sm.UserString }}
-        {{ end }}, {{ end }}</p>
-      <hr>
-
-      <p>Associated Cults:
-        {{ range $c := $cult.AssociatedCults }}
-        {{ $c.Name }},
-        {{ end }}</p>
-      <hr>
-
-      {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+        {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
         <a class="btn btn-sm btn-primary" href="/modify_cult/{{ .CultModel.ID }}">Modify</a>
         <a class="btn btn-sm btn-danger" href="/delete_cult/{{ .CultModel.ID }}">Delete</a>
       {{ end }}
+      <hr>
+
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <h4>Rune Spells</h4>
+      <table class="table table-sm table-striped">
+        <tr>
+          <th>Spell</th>
+          <th>Pts</th>
+        </td>
+        {{ range $rs := $cult.RuneSpells }}
+          <tr>
+          <td>
+        {{ $rs.CoreString }}
+        {{ if ne $rs.UserString "" }}
+         {{ $rs.UserString }}
+          {{ end }}
+          </td>
+          <td style="text-align:center">
+          {{ if $rs.Variable }}var{{else}}
+            {{$rs.Cost}}
+            {{ end }}
+          </td>
+        </tr>
+        {{ end }}
+      </table>
+
+      <h4>Spirit Magic</h4>
+      <table class="table table-sm table-striped">
+        <tr>
+          <th>Spell</th>
+          <th>Pts</th>
+        </td>
+        {{ range $sm := $cult.SpiritMagic }}
+          <tr>
+          <td>
+        {{ $sm.CoreString }}
+        {{ if ne $sm.UserString "" }}
+         {{ $sm.UserString }}
+          {{ end }}
+          </td>
+          <td style="text-align:center">
+          {{ if $sm.Variable }}
+          var
+          {{else}}
+            {{$sm.Cost}}
+            {{ end }}
+          </td>
+        </tr>
+        {{ end }}
+      </table>
+
+      <hr>
+
     </div> <!-- End Skills Column -->
 
     <div class="col-sm-4 col-md-4 col-lg-4">
 
       <h4>Skills</h4>
-      {{ range $skill := $cult.Skills }}
-      <p>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{$skill.UserString}}){{end}} +{{ $skill.CultValue }}%</p>
+      <table class="table table-sm table-striped">
+        <tr>
+          <th>Skill</th>
+          <th>Bonus</th>
+        </tr>
+        {{ range $skill := $cult.Skills }}
+        <tr>
+          <td>
+              {{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{$skill.UserString}}){{end}}
+          </td>
+          <td style="text-align:center">
+              +{{ $skill.CultValue }}%
+          </td>
       {{end}}
-      <hr>
+      </table>
 
+      {{ if $cult.SkillChoices }}
       <h4>Skill Choices</h4>
       {{ range $schoice := $cult.SkillChoices }}
       {{ if gt (len $schoice.Skills) 0}}
@@ -106,6 +153,7 @@
       <hr>
       {{ end }}
       {{ end }}
+      {{ end }} <!-- End if SkillChoices -->
 
       {{ if $cult.Weapons }}
       <h4>Weapons & Combat</h4>
@@ -119,11 +167,36 @@
       <hr>
       {{ end }}
 
+      {{ if $cult.PassionList }}
       <h4>Passions</h4>
-      {{ range $passion := $cult.PassionList }}
-      <p>{{ $passion.CoreString }} ({{$passion.UserString}}) Base {{ $passion.Base }}% or +{{ $passion.CultValue }}%</p>
-      {{end}}
+      <table class="table table-sm table-striped">
+          <tr>
+            <th>Passion</th>
+            <th>Bonus</th>
+          </tr>
+          {{ range $passion := $cult.PassionList }}
+          <tr>
+            <td>
+                {{ $passion.CoreString }} {{ if $passion.UserString }}({{$passion.UserString}}){{ end }}
+            </td>
+            <td>
+              +10%
+            </td>
+          </tr>
+          {{end}}
+      </table>
       <hr>
+      {{ end }}
+
+      {{ if $cult.AssociatedCults }}
+      <h4>Associated Cults:</h4>
+      <ul>
+        {{ range $c := $cult.AssociatedCults }}
+        <li><a href="/view_cult/{{ slugify $c.Name }}" >{{ $c.Name }}</a></li>
+        {{ end }}
+      </ul>
+      <hr>
+      {{ end }}
 
     </div> <!-- End Passions & SkillChoices COL 1 -->
 

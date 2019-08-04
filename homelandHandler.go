@@ -225,6 +225,7 @@ func HomelandHandler(w http.ResponseWriter, req *http.Request) {
 		Skills:        runequest.Skills,
 		CategoryOrder: runequest.CategoryOrder,
 		Markdown:      output,
+		StringArray:   runequest.StatMap,
 	}
 
 	// Render page

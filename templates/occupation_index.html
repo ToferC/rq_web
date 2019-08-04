@@ -23,7 +23,7 @@
                 <h5 class="card-title">{{ .Occupation.Name }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Author.UserName }}</h6>
                 <p class="card-text">
-                  {{ sliceString .Occupation.Description 144 }}
+                  {{ toMarkdown (sliceString .Occupation.Description 144) }}
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">

@@ -21,9 +21,29 @@
               data-holder-rendered="true">
               <div class="card-body"></a>
                 <h5 class="card-title">{{ .Cult.Name }}</h5>
+                {{ if .Cult.Runes }}
+                <h6>{{ range $r := .Cult.Runes }}
+                <img 
+                  class alt="{{ $r }}"
+                  style="width: 20px; height: 20px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r "Fire/Sky"}}Fire Sky{{else}}{{ $r }}{{end}}.png"
+                >
+                  {{ end }}
+            </h6>
+                {{ else }}
+                <h6>{{ range $r := .Cult.ParentCult.Runes }}
+                <img 
+                  class alt="{{ $r }}"
+                  style="width: 20px; height: 20px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r "Fire/Sky"}}Fire Sky{{else}}{{ $r }}{{end}}.png"
+                >
+                  {{ end }}
+            </h6>
+                {{ end }}
+                
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Author.UserName }}</h6>
                 <p class="card-text">
-                  {{ sliceString .Cult.Description 144 }}
+                  {{ toMarkdown (sliceString .Cult.Description 144) }}
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
