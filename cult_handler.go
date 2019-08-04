@@ -425,9 +425,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				if t.UserChoice {
 					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
-
-					cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, t)
 				}
+				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, t)
 			}
 		}
 
