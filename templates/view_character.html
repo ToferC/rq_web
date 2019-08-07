@@ -347,8 +347,8 @@ th {
           </table>
           {{ end }}
 
+          {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
           <h5>Details</h5>
-        {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
         <table class="table table-sm table-striped">
             <tr>
                 <td>

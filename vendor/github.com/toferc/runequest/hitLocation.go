@@ -23,7 +23,7 @@ type HitLocation struct {
 // Strings
 func (l HitLocation) String() string {
 	text := fmt.Sprintf("(%s) - %s",
-		TrimSliceBrackets(l.HitLoc),
+		formatIntArray(l.HitLoc),
 		l.Name,
 	)
 

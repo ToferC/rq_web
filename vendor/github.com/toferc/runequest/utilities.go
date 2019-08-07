@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -85,4 +86,19 @@ func readCSVFromURL(url string) ([][]string, error) {
 	}
 
 	return data, nil
+}
+
+func formatIntArray(a []int) string {
+	text := strconv.Itoa(a[0])
+	end := len(a)
+
+	if len(a) > 1 {
+		for i, t := range a {
+			if i+1 == end {
+				str := strconv.Itoa(t)
+				text += "-" + str
+			}
+		}
+	}
+	return text
 }
