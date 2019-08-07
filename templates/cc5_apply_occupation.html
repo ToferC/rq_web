@@ -30,15 +30,17 @@
         {{ if $occupation.Notes }}
         <div id="Notes">
         <h4>Creation Notes</h4>
-            {{ $occupation.Notes }}
+            {{ toMarkdown $occupation.Notes }}
         </div>
             <hr>
         {{ end }}
 
-          <h4>Current Skills</h4>
+         <h4>Current Skills</h4>
+            <table class="table table-sm table-striped">
         {{ range $skill := $character.Skills }}
         {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
-        <p title="{{ $skill.Name }} ({{ $skill.Category }})
+            <tr>
+                <td title="{{ $skill.Name }} ({{ $skill.Category }})
         Base: {{ $skill.Base }}%
         History: {{ $skill.CreationBonusValue }}%
         Category: {{ $skill.CategoryValue }}%
@@ -46,10 +48,15 @@
         Occupation: {{ $skill.OccupationValue }}%
         Cult: {{ $skill.CultValue }}%
         {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
-        {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
-        </p>
+        {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }})
+                </td>
+                <td>
+                    {{ $skill.Total }}%
+                </td>
+            </tr>
         {{ end }}
         {{ end }}
+        </table>
             <hr>
             
             <form action="" method="POST" enctype="multipart/form-data">

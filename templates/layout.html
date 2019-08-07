@@ -32,7 +32,13 @@
       }
     }
 
-    table, tr {
+    table, td,
+    table, th {
+      text-align:left;
+    }
+
+    table, td + td,
+    table, th + th {
       text-align:center;
     }
 

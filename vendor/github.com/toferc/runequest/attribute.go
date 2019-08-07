@@ -220,7 +220,8 @@ func (c *Character) DetermineDamageBonus() *Attribute {
 
 	damageBonus := &Attribute{
 		Name: "Damage Bonus",
-		Dice: 1,
+		Dice: 0,
+		Base: 0,
 	}
 
 	str := c.Statistics["STR"]

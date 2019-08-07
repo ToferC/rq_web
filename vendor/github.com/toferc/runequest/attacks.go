@@ -50,12 +50,15 @@ func (c *Character) UpdateAttacks() {
 	dbString := ""
 	throwDB := ""
 
-	if db.Text != "-" {
+	if db.Text != "" {
 		dbString = db.Text
 
-		if db.Base > 0 {
+		switch {
+		case db.Base == 0:
+			throwDB = ""
+		case db.Base > 0:
 			throwDB = fmt.Sprintf("+%dD%d", db.Dice, db.Base/2)
-		} else {
+		case db.Base < 0:
 			throwDB = fmt.Sprintf("-%dD%d", db.Dice, db.Base/2)
 		}
 	}

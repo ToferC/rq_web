@@ -1250,12 +1250,13 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Equipment
-
 		if len(c.Occupation.Equipment) > 0 {
 			for _, e := range c.Occupation.Equipment {
 				c.Equipment = append(c.Equipment, e)
 			}
 		}
+
+		c.Income = c.Occupation.Income
 
 		// Update CreationSteps
 		c.CreationSteps["Apply Occupation"] = true
