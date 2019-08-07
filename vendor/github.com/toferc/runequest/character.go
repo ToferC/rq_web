@@ -135,6 +135,10 @@ func (c Character) String() string {
 		text += fmt.Sprintf("\nHomeland: %s", c.Homeland.Name)
 		text += fmt.Sprintf("\nOccupation: %s", c.Occupation.Name)
 		text += fmt.Sprintf("\n%s of Cult: %s", c.Cult.Rank, c.Cult.Name)
+
+		text += fmt.Sprintf("\nStandard of Living: %s", c.StandardofLiving)
+		text += fmt.Sprintf("\nIncome: %d L", c.Income)
+		text += fmt.Sprintf("\nRansom: %d L", c.Ransom)
 	}
 
 	text += fmt.Sprintf("\n\nDescription:\n%s", c.Description)
@@ -236,6 +240,7 @@ func (c Character) String() string {
 				}
 			}
 		} else {
+			text += "\n"
 			for _, skill := range c.Skills {
 				text += fmt.Sprintf("%s\n", skill)
 			}
