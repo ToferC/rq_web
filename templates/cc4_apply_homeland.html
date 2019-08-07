@@ -32,7 +32,7 @@
             {{ if $homeland.Notes }}
             <div id="Notes">
             <h4>Creation Notes</h4>
-              {{ $homeland.Notes }}
+              {{ toMarkdown $homeland.Notes }}
             </div>
             <hr>
             {{ end }}

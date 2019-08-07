@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -55,13 +56,46 @@ func main() {
 	cms, _ := database.ListAllCharacterModels(db)
 
 	for _, cm := range cms {
-		cm.Character.Movement = []*runequest.Movement{}
-		cm.Character.Movement = append(cm.Character.Movement,
-			&runequest.Movement{
-				Name:  "Ground",
-				Value: 8,
-			})
+
+		tempRuneSpells := map[string]*runequest.Spell{}
+
+		for k, v := range cm.Character.RuneSpells {
+
+			index, err := indexSpell(k, runequest.RuneSpells)
+			if err != nil {
+				fmt.Println(err)
+				tempRuneSpells[k] = v
+				continue
+			}
+
+			baseSpell := runequest.RuneSpells[index]
+
+			s := &runequest.Spell{
+				Name:       baseSpell.Name,
+				CoreString: baseSpell.CoreString,
+				UserString: v.UserString,
+				Cost:       baseSpell.Cost,
+				Runes:      baseSpell.Runes,
+				Domain:     baseSpell.Domain,
+			}
+
+			s.GenerateName()
+			tempRuneSpells[s.Name] = s
+		}
+		cm.Character.RuneSpells = tempRuneSpells
 		database.UpdateCharacterModel(db, cm)
 	}
+}
 
+func indexSpell(str string, spells []runequest.Spell) (int, error) {
+
+	err := errors.New("Spell Not Found")
+
+	for i, spell := range spells {
+		if str == spell.CoreString {
+			return i, nil
+		}
+	}
+
+	return 0, err
 }

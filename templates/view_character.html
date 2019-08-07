@@ -90,12 +90,6 @@ th {
             <p>{{ toMarkdown $character.Description }}</p>
             {{ end }}
             <hr>
-
-            {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
-            <p>Standard of Living: {{ $character.StandardofLiving }}</p>
-            <p>Ransom: {{ $character.Ransom }} Lunars</p>
-            <hr>
-            {{ end }}
             
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               {{ if not $character.CreationSteps.Complete }}
@@ -298,18 +292,22 @@ th {
 
         {{ range $spell := $character.RuneSpells }}
         <tr>
-            <td>{{ $spell.Name }}</td>
+            <td>{{ $spell.Name }}   {{ range $r := $spell.Runes }}
+                <img 
+                  class alt="{{$r}}"
+                  style="width: 16px; height: 16px" 
+                  src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r "Fire/Sky"}}Fire Sky{{else}}{{ $r }}{{end}}.png"
+                >
+                  {{ end }}
+            </td>
             <td style="text-align:center">{{ $spell.Cost }}</td>  
         </tr>
         {{end}}
         </table>
         {{ end }}
 
+        <h5>Movement</h5>
         <table class="table table-sm table-striped">
-          <tr>
-            <th>Movement</th>
-            <th>Rate</th>
-          </tr>
           {{ range $mv := $character.Movement }}
             <tr>
               <td>{{ $mv.Name }}</td>
@@ -348,6 +346,37 @@ th {
             </tr>          {{end}}
           </table>
           {{ end }}
+
+          <h5>Details</h5>
+        {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
+        <table class="table table-sm table-striped">
+            <tr>
+                <td>
+                  Standard of Living
+                </td>
+                <td>
+                  {{ $character.StandardofLiving }}
+                </td>
+            </tr>
+            <tr>
+                  <td>
+                      Income
+                  </td>
+                  <td>
+                      {{ $character.Income }} L
+                  </td>
+              </tr>
+              <tr>
+                      <td>
+                          Ransom
+                      </td>
+                      <td>
+                          {{ $character.Ransom }} L
+                      </td>
+                  </tr>
+      
+        </table>
+            {{ end }}
 
         
         
@@ -857,9 +886,19 @@ th {
                   </div>
                   {{ end }}
               {{ else }}
-                      {{ range $e := $character.Equipment }}
-                          <p>{{ $e }}</p>
-                      {{ end }}
+              <table class="table table-sm table-striped">
+                <tr>
+                    <th>Equipment</th>
+                </tr>
+                {{ range $character.Equipment}}
+                <tr>
+                    <td>
+                        {{ . }}
+                    </td>
+                </tr>
+                {{ end }}
+                
+            </table>
               {{ end }} <!-- END IsAuthor Loop -->
             </form>
           </div>

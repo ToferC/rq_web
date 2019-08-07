@@ -747,11 +747,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		oc.Occupation.Ransom = ransom
 
-		if req.FormValue("Official") != "" {
-			oc.Official = true
-		} else {
-			oc.Official = false
-		}
+		oc.Occupation.StandardOfLiving = req.FormValue("Standard")
 
 		// Insert Occupation into App archive if user authorizes
 		if req.FormValue("Archive") != "" {

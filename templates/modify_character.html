@@ -13,6 +13,7 @@
 {{ $counter := .Counter }}
 {{ $skillOrder := .CategoryOrder }}
 {{ $statOrder := .StringArray }}
+{{ $standards := .StandardsOfLiving }}
 
 <div class="container">
   <hr>
@@ -74,7 +75,36 @@
 
         <hr>
 
+        {{ if or (eq $character.Role "Player Character") (eq $character.Role "") }}
+        <label for="Standard">Standard of Living</label>
+                    <select type="text" class="form-control" id="Standard" name="Standard">
+                    <option>{{ $character.StandardofLiving }}</option>
+                      {{ range $standards }}
+                          <option>{{ . }}</option>
+                        {{ end }}
+                    </select>
 
+              <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="income-addon">Income</span>
+                    </div>
+                    <input type="number" class="form-control" aria-describedby="income-addon" name="Income" value ="{{ $character.Income }}">
+                    <div class="input-group-append">
+                            <span class="input-group-text" id="income-addon">L</span>
+                          </div>
+                  </div>
+
+                  <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="ransom-addon">Ransom</span>
+                        </div>
+                        <input type="number" class="form-control" aria-describedby="ransom-addon" name="Ransom" value ="{{ $character.Ransom }}">
+                        <div class="input-group-append">
+                                <span class="input-group-text" id="income-addon">L</span>
+                              </div>  
+                    </div>
+        <hr>
+        {{ end }}
 
         <p>Image</p>
         <img class="card-img-top" data-src="" alt="Thumbnail" style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"

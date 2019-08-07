@@ -46,6 +46,7 @@ type Character struct {
 	MeleeAttacks     map[string]*Attack
 	RangedAttacks    map[string]*Attack
 	Equipment        []string
+	Income           int
 	Lunars           int
 	Ransom           int
 	StandardofLiving string

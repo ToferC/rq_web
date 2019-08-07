@@ -455,13 +455,14 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		CharacterModel: cm,
-		SessionUser:    username,
-		IsAuthor:       IsAuthor,
-		IsLoggedIn:     loggedIn,
-		IsAdmin:        isAdmin,
-		CategoryOrder:  runequest.CategoryOrder,
-		StringArray:    runequest.StatMap,
+		CharacterModel:    cm,
+		SessionUser:       username,
+		IsAuthor:          IsAuthor,
+		IsLoggedIn:        loggedIn,
+		IsAdmin:           isAdmin,
+		CategoryOrder:     runequest.CategoryOrder,
+		StringArray:       runequest.StatMap,
+		StandardsOfLiving: runequest.Standards,
 	}
 
 	if req.Method == "GET" {
@@ -494,6 +495,21 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.Cult.NumRunePoints = rp
+
+		// Details
+		c.StandardofLiving = req.FormValue("Standard")
+
+		income, err := strconv.Atoi(req.FormValue("Income"))
+		if err != nil {
+			income = 0
+		}
+		c.Income = income
+
+		ransom, err := strconv.Atoi(req.FormValue("Ransom"))
+		if err != nil {
+			ransom = 0
+		}
+		c.Ransom = ransom
 
 		// Update statistics
 		for _, st := range runequest.StatMap {
@@ -1366,6 +1382,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString: baseSpell.CoreString,
 					UserString: baseSpell.UserString,
 					Cost:       baseSpell.Cost,
+					Runes:      baseSpell.Runes,
 					Domain:     baseSpell.Domain,
 				}
 
