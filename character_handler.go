@@ -1,12 +1,17 @@
 package main
 
 import (
+	"github.com/nfnt/resize"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+	"image"
+	"image/jpeg"
+	"bytes"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -764,17 +769,36 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			if h.Filename != "" {
 				// Process image
 				defer file.Close()
+				
+				fNameSplit := strings.Split(h.Filename, ".")
+				fName := fNameSplit[0] + ".jpeg"
+
 				// example path media/Major/TestImage/Jason_White.jpg
 				path := fmt.Sprintf("/media/%s/%s/%s",
 					cm.Author.UserName,
 					runequest.ToSnakeCase(c.Name),
-					h.Filename,
+					fName,
 				)
+
+				fmt.Println(path)
+
+				size := h.Size
+				buffer := make([]byte, size)
+				file.Read(buffer)
+
+				img, _, _ := image.Decode(bytes.NewReader(buffer))
+
+				newImage := resize.Resize(350, 0, img, resize.Lanczos3)
+				buf := new(bytes.Buffer)
+				err = jpeg.Encode(buf, newImage, nil)
+				if err != nil {
+					log.Printf("JPEG encoding error: %v", err)
+				}
 
 				_, err = uploader.Upload(&s3manager.UploadInput{
 					Bucket: aws.String(os.Getenv("BUCKET")),
 					Key:    aws.String(path),
-					Body:   file,
+					Body:   bytes.NewReader(buf.Bytes()),
 				})
 				if err != nil {
 					log.Panic(err)
