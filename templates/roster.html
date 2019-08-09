@@ -173,6 +173,12 @@ create and save "building" content, like homelands, occupations and cults, they 
 
     const targets = document.querySelectorAll('img');
 
+    const config = {
+  // If the image gets within 50px in the Y axis, start the download.
+      rootMargin: '150px 0px',
+      threshold: 0.01
+    };
+
     const lazyLoad = target => {
       const io = new IntersectionObserver((entries, observer) => {
         console.log(entries)
@@ -187,7 +193,7 @@ create and save "building" content, like homelands, occupations and cults, they 
             observer.disconnect();
           }
         });
-      });
+      }, config);
 
       io.observe(target)
     };
