@@ -15,4 +15,5 @@
 *.out
 
 # Database files
+*.dump.*
 *.dump
