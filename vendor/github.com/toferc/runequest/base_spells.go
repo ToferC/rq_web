@@ -1228,6 +1228,7 @@ var RuneSpells = []Spell{
 		Description: "",
 		Domain:      "Rune",
 		Source:      "Magic",
+		Runes:       []string{"Magic"},
 		Variable:    false,
 		Cost:        1,
 	},
