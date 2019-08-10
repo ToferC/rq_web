@@ -15,4 +15,8 @@
 *.out
 
 # Database files
+*.dump.*
 *.dump
+
+heroku
+heroku.pub
