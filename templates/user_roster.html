@@ -1,11 +1,13 @@
 {{ define "title"}}
 
-<title>RQiG Personal Roster</title>
+<title>Cradle of Heroes Personal Roster</title>
 <meta property="og:image" content="https://runequeset.s3.amazonaws.com/media/christopherallison/sindla+_far-_walker/ga1-newbeginings.jpg" />
 <meta property="og:site_name" content="Cradle of Heroes" />
 <meta property="og:title" content="CoH: My Characters" />
 <meta property="og:description" content="Personal roster page for the RQiG Character app" />
 <meta name="twitter:card" content="summary_large_image">
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
 
 {{ end }}
 
@@ -16,6 +18,7 @@
 {{ $occupations := .OccupationModels }}
 {{ $cults := .CultModels }}
 
+<br>
 <h3>{{ $user }}'s Character Roster</h3>
 
       <div class="container">
@@ -23,8 +26,8 @@
           <div class="row">
               <form action="" method="POST">
                 <hr>
-                  <h4>Search the Cradle</h4>
-                  <p>Strange and wonderous people abound, start typing below to find your quarry: 
+                  <h4><strong>Search the Cradle</strong></h4>
+                  <p><strong>Strange and wonderous people abound. Start typing below to find your quarry: </strong></p>
                 <input type="text" id="search" placeholder="I seek...">
                   <hr>
           </div>

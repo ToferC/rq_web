@@ -7,6 +7,8 @@
 <meta property="og:description" content="Main page for the Cradle of Heroes" />
 <meta name="twitter:card" content="summary_large_image">
 
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+
 {{ end }}
 
 {{define "content"}}
@@ -16,7 +18,8 @@
 {{ $occupations := .OccupationModels }}
 {{ $cults := .CultModels }}
 
-<h3>The Cradle of Heroes</h3>
+<br>
+<h3><strong>The Cradle of Heroes</strong></h3>
 
       <div class="container">
 
@@ -40,8 +43,8 @@ create and save "building" content, like homelands, occupations and cults, they 
 
         <div class="row">
             <form action="" method="POST">
-                <h4>Search the Cradle</h4>
-                <p>Strange and wonderous people abound, start typing below to find your quarry: 
+                <h4><strong>Search the Cradle</strong></h4>
+                  <p><strong>Strange and wonderous people abound. Start typing below to find your quarry: </strong></p>
                 <input type="text" id="search" placeholder="I seek...">
                 <hr>
         </div>
