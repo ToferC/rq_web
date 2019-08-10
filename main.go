@@ -26,10 +26,11 @@ import (
 )
 
 var (
-	db       *pg.DB
-	svc      *s3.S3
-	uploader *s3manager.Uploader
-	decoder  = schema.NewDecoder()
+	db         *pg.DB
+	svc        *s3.S3
+	uploader   *s3manager.Uploader
+	downloader *s3manager.Downloader
+	decoder    = schema.NewDecoder()
 )
 
 // MaxMemory is the max upload size for images

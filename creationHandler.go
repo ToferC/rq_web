@@ -4,12 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
@@ -212,29 +209,10 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		case nil:
 			// Prcless image
 			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				cm.Author.UserName,
-				runequest.ToSnakeCase(cm.Character.Name),
-				h.Filename,
-			)
-
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
+			err = ProcessImage(h, file, &cm)
 			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				log.Printf("Error processing image: %v", err)
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			cm.Image = new(models.Image)
-			cm.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
