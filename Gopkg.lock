@@ -4,14 +4,14 @@
 [[projects]]
   name = "cloud.google.com/go"
   packages = ["compute/metadata"]
-  revision = "cdaaf98f9226c39dc162b8e55083b2fbc67b4674"
-  version = "v0.43.0"
+  revision = "2b2aeece7979f19ee2809459e0411b337d02661a"
+  version = "v0.44.0"
 
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/s3err","internal/sdkio","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/eventstream","private/protocol/eventstream/eventstreamapi","private/protocol/json/jsonutil","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts","service/sts/stsiface"]
-  revision = "14379de571db1ac1b08f2f723a1acc1810c4dd0d"
-  version = "v1.22.2"
+  revision = "1f4898f67806740d2a91c9dfe9a8be8a61523eb4"
+  version = "v1.22.3"
 
 [[projects]]
   name = "github.com/dghubble/gologin"
@@ -30,6 +30,12 @@
   packages = ["proto","ptypes","ptypes/any","ptypes/duration","ptypes/timestamp"]
   revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
   version = "v1.3.2"
+
+[[projects]]
+  name = "github.com/googleapis/gax-go"
+  packages = ["v2"]
+  revision = "bd5b16380fd03dc758d11cef74ba2e3bc8b0e8c2"
+  version = "v2.0.5"
 
 [[projects]]
   name = "github.com/gorilla/mux"
@@ -106,7 +112,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "38237b414444a30661bf5e3b4366e21290853102"
+  revision = "03fdd6904002c6b864be2c782fb7d410231bd71b"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -147,8 +153,8 @@
 [[projects]]
   name = "google.golang.org/api"
   packages = ["gensupport","googleapi","googleapi/internal/uritemplates","googleapi/transport","internal","oauth2/v2","option","transport/http","transport/http/internal/propagation"]
-  revision = "02490b97dff7cfde1995bd77de808fd27053bc87"
-  version = "v0.7.0"
+  revision = "dec2ee309f5b09fc59bc40676447c15736284d78"
+  version = "v0.8.0"
 
 [[projects]]
   name = "google.golang.org/appengine"

@@ -150,7 +150,6 @@ type OperationsService struct {
 func NewProjectsService(s *Service) *ProjectsService {
 	rs := &ProjectsService{s: s}
 	rs.Locations = NewProjectsLocationsService(s)
-	rs.Operations = NewProjectsOperationsService(s)
 	return rs
 }
 
@@ -158,8 +157,6 @@ type ProjectsService struct {
 	s *Service
 
 	Locations *ProjectsLocationsService
-
-	Operations *ProjectsOperationsService
 }
 
 func NewProjectsLocationsService(s *Service) *ProjectsLocationsService {
@@ -180,27 +177,6 @@ func NewProjectsLocationsOperationsService(s *Service) *ProjectsLocationsOperati
 }
 
 type ProjectsLocationsOperationsService struct {
-	s *Service
-}
-
-func NewProjectsOperationsService(s *Service) *ProjectsOperationsService {
-	rs := &ProjectsOperationsService{s: s}
-	rs.ManualRecognitionTasks = NewProjectsOperationsManualRecognitionTasksService(s)
-	return rs
-}
-
-type ProjectsOperationsService struct {
-	s *Service
-
-	ManualRecognitionTasks *ProjectsOperationsManualRecognitionTasksService
-}
-
-func NewProjectsOperationsManualRecognitionTasksService(s *Service) *ProjectsOperationsManualRecognitionTasksService {
-	rs := &ProjectsOperationsManualRecognitionTasksService{s: s}
-	return rs
-}
-
-type ProjectsOperationsManualRecognitionTasksService struct {
 	s *Service
 }
 
@@ -548,10 +524,9 @@ type RecognitionConfig struct {
 	// DiarizationSpeakerCount: *Optional*
 	// If set, specifies the estimated number of speakers in the
 	// conversation.
-	// If not set, defaults to '2'.
-	// Ignored unless enable_speaker_diarization is set to true."
-	// Note: Use diarization_config instead. This field will be DEPRECATED
-	// soon.
+	// Defaults to '2'. Ignored unless enable_speaker_diarization is set to
+	// true.
+	// Note: Use diarization_config instead.
 	DiarizationSpeakerCount int64 `json:"diarizationSpeakerCount,omitempty"`
 
 	// EnableAutomaticPunctuation: *Optional* If 'true', adds punctuation to
@@ -586,8 +561,7 @@ type RecognitionConfig struct {
 	// the top alternative of the recognition result using a speaker_tag
 	// provided
 	// in the WordInfo.
-	// Note: Use diarization_config instead. This field will be DEPRECATED
-	// soon.
+	// Note: Use diarization_config instead.
 	EnableSpeakerDiarization bool `json:"enableSpeakerDiarization,omitempty"`
 
 	// EnableWordConfidence: *Optional* If `true`, the top result includes a
@@ -761,25 +735,15 @@ type RecognitionConfig struct {
 	// speech recognition.
 	// If `use_enhanced` is set to true and the `model` field is not set,
 	// then
-	// an appropriate enhanced model is chosen if:
-	// 1. project is eligible for requesting enhanced models
-	// 2. an enhanced model exists for the audio
+	// an appropriate enhanced model is chosen if an enhanced model exists
+	// for
+	// the audio.
 	//
 	// If `use_enhanced` is true and an enhanced version of the specified
 	// model
 	// does not exist, then the speech is recognized using the standard
 	// version
 	// of the specified model.
-	//
-	// Enhanced speech models require that you opt-in to data logging
-	// using
-	// instructions in
-	// the
-	// [documentation](/speech-to-text/docs/enable-data-logging). If you
-	// set
-	// `use_enhanced` to true and you have not enabled audio logging, then
-	// you
-	// will receive an error.
 	UseEnhanced bool `json:"useEnhanced,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g.
@@ -1006,6 +970,8 @@ func (s *RecognizeResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// SpeakerDiarizationConfig: *Optional* Config to enable speaker
+// diarization.
 type SpeakerDiarizationConfig struct {
 	// EnableSpeakerDiarization: *Optional* If 'true', enables speaker
 	// detection for each recognized word in
@@ -1014,8 +980,7 @@ type SpeakerDiarizationConfig struct {
 	// in the WordInfo.
 	EnableSpeakerDiarization bool `json:"enableSpeakerDiarization,omitempty"`
 
-	// MaxSpeakerCount: *Optional* Only used if diarization_speaker_count is
-	// not set.
+	// MaxSpeakerCount: *Optional*
 	// Maximum number of speakers in the conversation. This range gives you
 	// more
 	// flexibility by allowing the system to automatically determine the
@@ -1023,8 +988,7 @@ type SpeakerDiarizationConfig struct {
 	// number of speakers. If not set, the default value is 6.
 	MaxSpeakerCount int64 `json:"maxSpeakerCount,omitempty"`
 
-	// MinSpeakerCount: *Optional* Only used if diarization_speaker_count is
-	// not set.
+	// MinSpeakerCount: *Optional*
 	// Minimum number of speakers in the conversation. This range gives you
 	// more
 	// flexibility by allowing the system to automatically determine the
@@ -1451,6 +1415,7 @@ func (c *OperationsGetCall) Header() http.Header {
 
 func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1636,6 +1601,7 @@ func (c *OperationsListCall) Header() http.Header {
 
 func (c *OperationsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1813,6 +1779,7 @@ func (c *ProjectsLocationsOperationsGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsOperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1993,6 +1960,7 @@ func (c *ProjectsLocationsOperationsListCall) Header() http.Header {
 
 func (c *ProjectsLocationsOperationsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2118,153 +2086,6 @@ func (c *ProjectsLocationsOperationsListCall) Pages(ctx context.Context, f func(
 	}
 }
 
-// method id "speech.projects.operations.manualRecognitionTasks.get":
-
-type ProjectsOperationsManualRecognitionTasksGetCall struct {
-	s            *Service
-	name         string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-	header_      http.Header
-}
-
-// Get: Gets the latest state of a long-running operation.  Clients can
-// use this
-// method to poll the operation result at intervals as recommended by
-// the API
-// service.
-func (r *ProjectsOperationsManualRecognitionTasksService) Get(name string) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c := &ProjectsOperationsManualRecognitionTasksGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.name = name
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Fields(s ...googleapi.Field) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) IfNoneMatch(entityTag string) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Context(ctx context.Context) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c.ctx_ = ctx
-	return c
-}
-
-// Header returns an http.Header that can be modified by the caller to
-// add HTTP headers to the request.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Header() http.Header {
-	if c.header_ == nil {
-		c.header_ = make(http.Header)
-	}
-	return c.header_
-}
-
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	for k, v := range c.header_ {
-		reqHeaders[k] = v
-	}
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	c.urlParams_.Set("prettyPrint", "false")
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1p1beta1/{+name}")
-	urls += "?" + c.urlParams_.Encode()
-	req, err := http.NewRequest("GET", urls, body)
-	if err != nil {
-		return nil, err
-	}
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"name": c.name,
-	})
-	return gensupport.SendRequest(c.ctx_, c.s.client, req)
-}
-
-// Do executes the "speech.projects.operations.manualRecognitionTasks.get" call.
-// Exactly one of *Operation or error will be non-nil. Any non-2xx
-// status code is an error. Response headers are in either
-// *Operation.ServerResponse.Header or (if a response was returned at
-// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
-// to check whether the returned error was because
-// http.StatusNotModified was returned.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Operation{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := gensupport.DecodeResponse(target, res); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
-	//   "flatPath": "v1p1beta1/projects/{projectsId}/operations/manualRecognitionTasks/{manualRecognitionTasksId}",
-	//   "httpMethod": "GET",
-	//   "id": "speech.projects.operations.manualRecognitionTasks.get",
-	//   "parameterOrder": [
-	//     "name"
-	//   ],
-	//   "parameters": {
-	//     "name": {
-	//       "description": "The name of the operation resource.",
-	//       "location": "path",
-	//       "pattern": "^projects/[^/]+/operations/manualRecognitionTasks/[^/]+$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1p1beta1/{+name}",
-	//   "response": {
-	//     "$ref": "Operation"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
 // method id "speech.speech.longrunningrecognize":
 
 type SpeechLongrunningrecognizeCall struct {
@@ -2318,6 +2139,7 @@ func (c *SpeechLongrunningrecognizeCall) Header() http.Header {
 
 func (c *SpeechLongrunningrecognizeCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2444,6 +2266,7 @@ func (c *SpeechRecognizeCall) Header() http.Header {
 
 func (c *SpeechRecognizeCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}

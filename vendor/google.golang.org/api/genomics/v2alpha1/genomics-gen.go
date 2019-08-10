@@ -1873,6 +1873,9 @@ type VirtualMachine struct {
 	// labels
 	// imposed by Compute Engine.
 	//
+	// Labels keys with the prefix 'google-' are reserved for use by
+	// Google.
+	//
 	// Labels applied at creation time to the VM. Applied on a best-effort
 	// basis
 	// to attached disk resources shortly after VM creation.
@@ -1942,6 +1945,9 @@ func (s *VirtualMachine) MarshalJSON() ([]byte, error) {
 type WorkerAssignedEvent struct {
 	// Instance: The worker's instance name.
 	Instance string `json:"instance,omitempty"`
+
+	// MachineType: The machine type that was assigned for the worker.
+	MachineType string `json:"machineType,omitempty"`
 
 	// Zone: The zone the worker is running in.
 	Zone string `json:"zone,omitempty"`
@@ -2105,6 +2111,7 @@ func (c *PipelinesRunCall) Header() http.Header {
 
 func (c *PipelinesRunCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2244,6 +2251,7 @@ func (c *ProjectsOperationsCancelCall) Header() http.Header {
 
 func (c *ProjectsOperationsCancelCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2400,6 +2408,7 @@ func (c *ProjectsOperationsGetCall) Header() http.Header {
 
 func (c *ProjectsOperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2605,6 +2614,7 @@ func (c *ProjectsOperationsListCall) Header() http.Header {
 
 func (c *ProjectsOperationsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2779,6 +2789,7 @@ func (c *WorkersCheckInCall) Header() http.Header {
 
 func (c *WorkersCheckInCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}

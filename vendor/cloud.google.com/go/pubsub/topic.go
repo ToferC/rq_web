@@ -18,6 +18,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"runtime"
 	"strings"
 	"sync"
@@ -26,11 +27,14 @@ import (
 	"cloud.google.com/go/iam"
 	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go/v2"
+	"go.opencensus.io/stats"
+	"go.opencensus.io/tag"
 	"google.golang.org/api/support/bundler"
 	pb "google.golang.org/genproto/googleapis/pubsub/v1"
 	fmpb "google.golang.org/genproto/protobuf/field_mask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -327,7 +331,7 @@ func (t *Topic) Exists(ctx context.Context) (bool, error) {
 	if err == nil {
 		return true, nil
 	}
-	if grpc.Code(err) == codes.NotFound {
+	if status.Code(err) == codes.NotFound {
 		return false, nil
 	}
 	return false, err
@@ -490,6 +494,10 @@ func (t *Topic) initBundler() {
 }
 
 func (t *Topic) publishMessageBundle(ctx context.Context, bms []*bundledMessage) {
+	ctx, err := tag.New(ctx, tag.Insert(keyStatus, "OK"), tag.Upsert(keyTopic, t.name))
+	if err != nil {
+		log.Printf("pubsub: cannot create context with tag in publishMessageBundle: %v", err)
+	}
 	pbMsgs := make([]*pb.PubsubMessage, len(bms))
 	for i, bm := range bms {
 		pbMsgs[i] = &pb.PubsubMessage{
@@ -498,10 +506,21 @@ func (t *Topic) publishMessageBundle(ctx context.Context, bms []*bundledMessage)
 		}
 		bm.msg = nil // release bm.msg for GC
 	}
+	start := time.Now()
 	res, err := t.c.pubc.Publish(ctx, &pb.PublishRequest{
 		Topic:    t.name,
 		Messages: pbMsgs,
 	}, gax.WithGRPCOptions(grpc.MaxCallSendMsgSize(maxSendRecvBytes)))
+	end := time.Now()
+	if err != nil {
+		// Update context with error tag for OpenCensus,
+		// using same stats.Record() call as success case.
+		ctx, _ = tag.New(ctx, tag.Upsert(keyStatus, "ERROR"),
+			tag.Upsert(keyError, err.Error()))
+	}
+	stats.Record(ctx,
+		PublishLatency.M(float64(end.Sub(start)/time.Millisecond)),
+		PublishedMessages.M(int64(len(bms))))
 	for i, bm := range bms {
 		if err != nil {
 			bm.res.set("", err)

@@ -19,12 +19,16 @@ package spanner
 import (
 	"context"
 	"io"
+	"os"
 	"strings"
 	"testing"
 
+	"cloud.google.com/go/spanner/internal/benchserver"
 	"cloud.google.com/go/spanner/internal/testutil"
 	"google.golang.org/api/iterator"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	gstatus "google.golang.org/grpc/status"
 )
 
@@ -405,5 +409,78 @@ func TestReadWriteTransaction_ErrUnexpectedEOF(t *testing.T) {
 	}
 	if attempts != 1 {
 		t.Fatalf("unexpected number of attempts: %d, expected %d", attempts, 1)
+	}
+}
+
+func TestNewClient_ConnectToEmulator(t *testing.T) {
+	ctx := context.Background()
+
+	s, err := benchserver.NewMockCloudSpanner()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer s.Stop()
+	go s.Serve()
+
+	oldEnv := os.Getenv("SPANNER_EMULATOR_HOST")
+	os.Setenv("SPANNER_EMULATOR_HOST", s.Addr())
+	defer os.Setenv("SPANNER_EMULATOR_HOST", oldEnv)
+
+	c, err := NewClient(ctx, "projects/some-proj/instances/some-inst/databases/some-db")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Close()
+
+	_, err = c.Single().ReadRow(ctx, "Accounts", Key{"alice"}, []string{"balance"})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestClient_ApiClientHeader(t *testing.T) {
+	t.Parallel()
+	server, client := newSpannerInMemTestServerWithInterceptor(t, func(
+		ctx context.Context,
+		method string,
+		req interface{},
+		reply interface{},
+		cc *grpc.ClientConn,
+		invoker grpc.UnaryInvoker,
+		opts ...grpc.CallOption,
+	) error {
+		// Check that the x-goog-api-client is set.
+		headers, ok := metadata.FromOutgoingContext(ctx)
+		if !ok {
+			return spannerErrorf(codes.Internal, "could not get outgoing metadata")
+		}
+		token, ok := headers["x-goog-api-client"]
+		if !ok {
+			return spannerErrorf(codes.Internal, "could not get api client token")
+		}
+		if token == nil {
+			return spannerErrorf(codes.Internal, "nil-value for outgoing api client token")
+		}
+		if len(token) != 1 {
+			return spannerErrorf(codes.Internal, "unexpected number of api client token headers: %v", len(token))
+		}
+		if !strings.HasPrefix(token[0], "gl-go/") {
+			return spannerErrorf(codes.Internal, "unexpected api client token: %v", token[0])
+		}
+		return invoker(ctx, method, req, reply, cc, opts...)
+	},
+	)
+	defer server.teardown(client)
+	ctx := context.Background()
+	iter := client.Single().Query(ctx, NewStatement(selectSingerIDAlbumIDAlbumTitleFromAlbums))
+	defer iter.Stop()
+	for {
+		_, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 }

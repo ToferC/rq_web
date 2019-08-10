@@ -248,13 +248,11 @@ type GoogleCloudServicebrokerV1beta1__Binding struct {
 	// Required.
 	BindingId string `json:"binding_id,omitempty"`
 
-	// CreateTime: Output only.
-	// Timestamp for when the binding was created.
+	// CreateTime: Output only. Timestamp for when the binding was created.
 	CreateTime string `json:"createTime,omitempty"`
 
-	// DeploymentName: Output only.
-	// String containing the Deployment Manager deployment name that was
-	// created
+	// DeploymentName: Output only. String containing the Deployment Manager
+	// deployment name that was created
 	// for this binding,
 	DeploymentName string `json:"deploymentName,omitempty"`
 
@@ -267,8 +265,7 @@ type GoogleCloudServicebrokerV1beta1__Binding struct {
 	// Required.
 	PlanId string `json:"plan_id,omitempty"`
 
-	// ResourceName: Output only.
-	// The resource name of the binding,
+	// ResourceName: Output only. The resource name of the binding,
 	// e.g.
 	// projects/project_id/brokers/broker_id/service_instances/instance_
 	// id/bindings/binding_id.
@@ -308,8 +305,7 @@ func (s *GoogleCloudServicebrokerV1beta1__Binding) MarshalJSON() ([]byte, error)
 // consumable collection of Service Registry catalogs
 // exposed as an OSB Broker.
 type GoogleCloudServicebrokerV1beta1__Broker struct {
-	// CreateTime: Output only.
-	// Timestamp for when the broker was created.
+	// CreateTime: Output only. Timestamp for when the broker was created.
 	CreateTime string `json:"createTime,omitempty"`
 
 	// Name: Name of the broker in the
@@ -325,8 +321,7 @@ type GoogleCloudServicebrokerV1beta1__Broker struct {
 	// rejected.
 	Title string `json:"title,omitempty"`
 
-	// Url: Output only.
-	// URL of the broker OSB-compliant endpoint, for
+	// Url: Output only. URL of the broker OSB-compliant endpoint, for
 	// example:
 	// https://servicebroker.googleapis.com/projects/<project>/broke
 	// rs/<broker>
@@ -604,8 +599,7 @@ type GoogleCloudServicebrokerV1beta1__GetBindingResponse struct {
 	// er/spec.md#service-broker-errors
 	Description string `json:"description,omitempty"`
 
-	// ResourceName: Output only.
-	// The resource name of the binding,
+	// ResourceName: Output only. The resource name of the binding,
 	// e.g.
 	// projects/project_id/brokers/broker_id/service_instances/instance_
 	// id/bindings/binding_id.
@@ -1039,13 +1033,11 @@ type GoogleCloudServicebrokerV1beta1__ServiceInstance struct {
 	// Currently only used for logging context information.
 	Context googleapi.RawMessage `json:"context,omitempty"`
 
-	// CreateTime: Output only.
-	// Timestamp for when the instance was created.
+	// CreateTime: Output only. Timestamp for when the instance was created.
 	CreateTime string `json:"createTime,omitempty"`
 
-	// DeploymentName: Output only.
-	// String containing the Deployment Manager deployment name that was
-	// created
+	// DeploymentName: Output only. String containing the Deployment Manager
+	// deployment name that was created
 	// for this instance,
 	DeploymentName string `json:"deploymentName,omitempty"`
 
@@ -1082,8 +1074,7 @@ type GoogleCloudServicebrokerV1beta1__ServiceInstance struct {
 	// fields.
 	PreviousValues googleapi.RawMessage `json:"previous_values,omitempty"`
 
-	// ResourceName: Output only.
-	// The resource name of the instance,
+	// ResourceName: Output only. The resource name of the instance,
 	// e.g.
 	// projects/project_id/brokers/broker_id/service_instances/instance_
 	// id
@@ -1195,7 +1186,7 @@ type GoogleIamV1__Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -1315,7 +1306,7 @@ type GoogleIamV1__Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -1570,6 +1561,7 @@ func (c *ProjectsBrokersCreateCall) Header() http.Header {
 
 func (c *ProjectsBrokersCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1708,6 +1700,7 @@ func (c *ProjectsBrokersDeleteCall) Header() http.Header {
 
 func (c *ProjectsBrokersDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1865,6 +1858,7 @@ func (c *ProjectsBrokersListCall) Header() http.Header {
 
 func (c *ProjectsBrokersListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2048,6 +2042,7 @@ func (c *ProjectsBrokersInstancesGetCall) Header() http.Header {
 
 func (c *ProjectsBrokersInstancesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2215,6 +2210,7 @@ func (c *ProjectsBrokersInstancesGetLastOperationCall) Header() http.Header {
 
 func (c *ProjectsBrokersInstancesGetLastOperationCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2394,6 +2390,7 @@ func (c *ProjectsBrokersInstancesListCall) Header() http.Header {
 
 func (c *ProjectsBrokersInstancesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2594,6 +2591,7 @@ func (c *ProjectsBrokersInstancesBindingsGetLastOperationCall) Header() http.Hea
 
 func (c *ProjectsBrokersInstancesBindingsGetLastOperationCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2771,6 +2769,7 @@ func (c *ProjectsBrokersInstancesBindingsListCall) Header() http.Header {
 
 func (c *ProjectsBrokersInstancesBindingsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2969,6 +2968,7 @@ func (c *ProjectsBrokersV2CatalogListCall) Header() http.Header {
 
 func (c *ProjectsBrokersV2CatalogListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -3174,6 +3174,7 @@ func (c *ProjectsBrokersV2ServiceInstancesCreateCall) Header() http.Header {
 
 func (c *ProjectsBrokersV2ServiceInstancesCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -3353,6 +3354,7 @@ func (c *ProjectsBrokersV2ServiceInstancesDeleteCall) Header() http.Header {
 
 func (c *ProjectsBrokersV2ServiceInstancesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -3517,6 +3519,7 @@ func (c *ProjectsBrokersV2ServiceInstancesGetCall) Header() http.Header {
 
 func (c *ProjectsBrokersV2ServiceInstancesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -3684,6 +3687,7 @@ func (c *ProjectsBrokersV2ServiceInstancesGetLastOperationCall) Header() http.He
 
 func (c *ProjectsBrokersV2ServiceInstancesGetLastOperationCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -3843,6 +3847,7 @@ func (c *ProjectsBrokersV2ServiceInstancesPatchCall) Header() http.Header {
 
 func (c *ProjectsBrokersV2ServiceInstancesPatchCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4001,6 +4006,7 @@ func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsCreateCall) Header() ht
 
 func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4181,6 +4187,7 @@ func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsDeleteCall) Header() ht
 
 func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4351,6 +4358,7 @@ func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsGetCall) Header() http.
 
 func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4528,6 +4536,7 @@ func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsGetLastOperationCall) H
 
 func (c *ProjectsBrokersV2ServiceInstancesServiceBindingsGetLastOperationCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4654,6 +4663,18 @@ func (r *V1beta1Service) GetIamPolicy(resource string) *V1beta1GetIamPolicyCall 
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0, 1, and 3.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *V1beta1GetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *V1beta1GetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -4691,6 +4712,7 @@ func (c *V1beta1GetIamPolicyCall) Header() http.Header {
 
 func (c *V1beta1GetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4760,6 +4782,12 @@ func (c *V1beta1GetIamPolicyCall) Do(opts ...googleapi.CallOption) (*GoogleIamV1
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0, 1, and 3.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -4827,6 +4855,7 @@ func (c *V1beta1SetIamPolicyCall) Header() http.Header {
 
 func (c *V1beta1SetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -4976,6 +5005,7 @@ func (c *V1beta1TestIamPermissionsCall) Header() http.Header {
 
 func (c *V1beta1TestIamPermissionsCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
