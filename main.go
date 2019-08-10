@@ -143,6 +143,9 @@ func main() {
 	// Set Schema ignoreunknownkeys to true
 	decoder.IgnoreUnknownKeys(true)
 
+	// Miscellaneous actions
+	// ResizeImages(db)
+
 	r := mux.NewRouter()
 
 	fmt.Println("Starting Webserver at port " + port)

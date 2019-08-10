@@ -32,6 +32,10 @@
       }
     }
 
+    h3 {
+      text-align: center;
+    }
+
     table, td,
     table, th {
       text-align:left;
@@ -42,11 +46,19 @@
       text-align:center;
     }
 
+    body {
+      background-color: rgb(96, 96, 109);
+    }
+
+    .container {
+      background-color: rgb(221, 193, 169);
+    }
+
   </style>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       {{ if ne $user ""}}
       <a class="navbar-brand" href="/user_roster/">The Cradle of Heroes</a>
       {{ else }}
@@ -58,27 +70,28 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      {{ if ne $user "" }}
+      
       <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            My Content</a>
-            <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
-               <a class="dropdown-item" href="/user_roster/">Characters</span></a>
-               <a class="dropdown-item" href="/user_faction_index/">Factions</span></a>
-               <a class="dropdown-item" href="/user_encounter_index/">Encounters</span></a>
-            </div>
-          </li>
-      {{ end }}
+        <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Open Content</a>
+          <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
+            <a class="dropdown-item" href="/">Characters</span></a>
+            <a class="dropdown-item" href="/faction_index/">Factions</span></a>
+            <a class="dropdown-item" href="/encounter_index/">Encounters</span></a>
+          </div>
+        </li>
 
-      <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Open Content</a>
-            <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
-               <a class="dropdown-item" href="/">Characters</span></a>
-               <a class="dropdown-item" href="/faction_index/">Factions</span></a>
-               <a class="dropdown-item" href="/encounter_index/">Encounters</span></a>
-            </div>
-          </li>
+        {{ if ne $user "" }}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userNavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              My Content</a>
+              <div class="dropdown-menu" aria-labelledby="userNavbarDropdown">
+                 <a class="dropdown-item" href="/user_roster/">Characters</span></a>
+                 <a class="dropdown-item" href="/user_faction_index/">Factions</span></a>
+                 <a class="dropdown-item" href="/user_encounter_index/">Encounters</span></a>
+              </div>
+            </li>
+        {{ end }}
 
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

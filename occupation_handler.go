@@ -356,10 +356,14 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			oc.Image = new(models.Image)
+			oc.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			oc.Image = new(models.Image)
+			oc.Image.Path = DefaultCharacterPortrait
 		}
 
 		var equipment = []string{}
@@ -795,10 +799,14 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			oc.Image = new(models.Image)
+			oc.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			oc.Image = new(models.Image)
+			oc.Image.Path = DefaultCharacterPortrait
 		}
 
 		// Read Equipment

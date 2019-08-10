@@ -398,10 +398,14 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			hl.Image = new(models.Image)
+			hl.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			hl.Image = new(models.Image)
+			hl.Image.Path = DefaultCharacterPortrait
 		}
 
 		// Read Rune
@@ -890,10 +894,14 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			hl.Image = new(models.Image)
+			hl.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			hl.Image = new(models.Image)
+			hl.Image.Path = DefaultCharacterPortrait
 		}
 
 		hl.Homeland.RuneBonus = req.FormValue("Rune")
