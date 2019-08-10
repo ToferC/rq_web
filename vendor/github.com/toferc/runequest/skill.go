@@ -9,6 +9,7 @@ type Skill struct {
 	UserChoice         bool
 	CoreString         string
 	UserString         string
+	Custom             bool
 	Base               int
 	CategoryValue      int
 	HomelandValue      int

@@ -147,9 +147,11 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := cm.Character
 
-	// Always create 4 empty equipment slots.
-	for i := 0; i < 4; i++ {
-		c.Equipment = append(c.Equipment, "")
+	if IsAuthor {
+		// Create 4 empty equipment slots for new stuff
+		for i := 0; i < 4; i++ {
+			c.Equipment = append(c.Equipment, "")
+		}
 	}
 
 	fmt.Println(c)

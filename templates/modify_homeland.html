@@ -30,18 +30,16 @@
                 <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $homeland.Name }}">
               </div>
 
+              <br>
               
-                <label class="input-group-text" for="Description">Description</label>
-                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="4" value ="Enter Description">{{ $homeland.Description }}</textarea>
+               <label class="input-group-text" for="Description">Description</label>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="Enter Description">{{ $homeland.Description }}</textarea>
+              <br>
 
+               <label class="input-group-text" for="Notes">Creation Notes</label>
+                <textarea class="form-control" aria-describedby="notes-addon" name="Notes" rows="6" value ="Enter Creation Notes">{{ $homeland.Notes }}</textarea>
               <hr>
-              <div class="input-group">
-                  <div class="input-group-prepend">
-                <span class="input-group-text" for="Notes">Creation Notes</span>
-                </div>
-                <textarea class="form-control" aria-describedby="notes-addon" name="Notes" rows="4" default="Enter Notes">{{ $homeland.Notes }}</textarea>
-              </div>
-              <hr>
+
               <img class ="card-img-top" data-src="" alt="Thumbnail"
                 style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
                 data-holder-rendered="true">
@@ -174,6 +172,21 @@
                     <span class="input-group-text" id="Skill-{{ add $k 1 }}-UserString-addon">Specialization</span>
                   </div>
                   <input type="text" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-UserString-addon" name="Skill-{{ add $k 1 }}-UserString" value ="{{ $v.UserString }}">
+                </div>
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Skill-{{ add $k 1 }}-Category-addon">Category</span>
+                  </div>
+                  {{ if $v.Category }}
+                  <input type="text" class="form-control" aria-describedby="Skill-{{ add $k 1 }}-Category-addon" name="Skill-{{ add $k 1 }}-Category" value ="{{ $v.Category }}" disabled>
+                  {{ else }}
+                  <select type="text" class="form-control" id="Skill-{{add $k 1}}-Category" name="Skill-{{add $k 1}}-Category">
+                  {{ range $category }}
+                  <option>{{ . }}</option>
+                    {{ end }}
+                </select>
+                  {{ end }}
                 </div>
 
                 <div class="input-group">

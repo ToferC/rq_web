@@ -828,21 +828,9 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		// Add common skills based on statistics
-		dodge := &runequest.Skill{
-			CoreString: "Dodge",
-			Category:   "Agility",
-			Base:       c.Statistics["DEX"].Total * 2,
-		}
-
-		jump := &runequest.Skill{
-			CoreString: "Jump",
-			Category:   "Agility",
-			Base:       c.Statistics["DEX"].Total * 3,
-		}
-
-		c.Skills["Dodge"] = dodge
-		c.Skills["Jump"] = jump
+		// Update skills now that we have stats
+		c.Skills["Dodge"].Base = c.Statistics["DEX"].Total * 2
+		c.Skills["Jump"].Base = c.Statistics["DEX"].Total * 3
 
 		// Add choices to c.Homeland.Skills
 		for i, sc := range c.Homeland.SkillChoices {
@@ -867,15 +855,17 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			targetString := createName(s.CoreString, s.UserString)
 
-			if c.Skills[targetString] != nil {
-				// Skill exists in Character, modify it via pointer
-				c.Skills[targetString].HomelandValue = s.HomelandValue
+			sk, ok := c.Skills[targetString]
 
-				if s.Base != c.Skills[targetString].Base {
-					c.Skills[targetString].Base = s.Base
+			if ok {
+				// Skill exists in Character, modify it via pointer
+				sk.HomelandValue = s.HomelandValue
+
+				if s.Base != sk.Base {
+					sk.Base = s.Base
 				}
 
-				fmt.Println("Updated Character Skill: " + c.Skills[targetString].Name)
+				fmt.Println("Updated Character Skill: " + sk.Name)
 
 			} else {
 				// We need to find the base skill from the Master list or create it
@@ -909,7 +899,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
 					c.Skills[baseSkill.Name] = baseSkill
 				} else {
-					// Skill exists in master list
+					// Skill exists in master list create new skill based off template
 					fmt.Println("Skill in master list: " + targetString)
 
 					fmt.Println(bs)
@@ -1120,12 +1110,14 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			targetString := createName(s.CoreString, s.UserString)
 
-			if c.Skills[targetString] != nil {
-				// Skill exists in Character, modify it via pointer
-				c.Skills[targetString].OccupationValue = s.OccupationValue
+			sk, ok := c.Skills[targetString]
 
-				if s.Base > c.Skills[targetString].Base {
-					c.Skills[targetString].Base = s.Base
+			if ok {
+				// Skill exists in Character, modify it via pointer
+				sk.OccupationValue = s.OccupationValue
+
+				if s.Base > sk.Base {
+					sk.Base = s.Base
 				}
 
 				fmt.Println("Updated Character Skill: " + c.Skills[targetString].Name)

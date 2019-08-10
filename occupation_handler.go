@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gosimple/slug"
 
 	"github.com/toferc/runequest"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
@@ -328,31 +325,18 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				oc.Author.UserName,
-				runequest.ToSnakeCase(oc.Occupation.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				err = ProcessOccupationImage(h, file, &oc)
+				if err != nil {
+					log.Printf("Error processing image: %v", err)
+				}
+
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			oc.Image = new(models.Image)
-			oc.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
@@ -771,42 +755,25 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				oc.Author.UserName,
-				runequest.ToSnakeCase(oc.Occupation.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				err = ProcessOccupationImage(h, file, oc)
+				if err != nil {
+					log.Printf("Error processing image: %v", err)
+				}
+
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			oc.Image = new(models.Image)
-			oc.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
-			oc.Image = new(models.Image)
-			oc.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
-			oc.Image = new(models.Image)
-			oc.Image.Path = DefaultCharacterPortrait
 		}
 
 		// Read Equipment
@@ -827,7 +794,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		// Read Base Skills from Form
 		for i := 1; i < 20; i++ {
 
-			core := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
 			str := fmt.Sprintf("Skill-%d-Value", i)
 			v, err := strconv.Atoi(req.FormValue(str))
@@ -837,18 +804,41 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 
-			if core != "" && v > 0 {
+			if sk != "" && v > 0 {
 
-				sk := &runequest.Skill{
-					CoreString:      core,
-					OccupationValue: v,
+				s1 := &runequest.Skill{}
+
+				skbaseSkill, ok := runequest.Skills[sk]
+				if !ok {
+					// Skill is new
+					for _, ns := range oc.Occupation.Skills {
+						// Search for CoreString in Occupation Skills
+						if sk == ns.CoreString {
+							s1.CoreString = ns.CoreString
+							s1.UserChoice = ns.UserChoice
+							s1.Base = ns.Base
+							s1.Category = ns.Category
+						}
+					}
+				} else {
+					// Skill exists in base list
+					s1.CoreString = skbaseSkill.CoreString
+					s1.UserChoice = skbaseSkill.UserChoice
+					s1.Base = skbaseSkill.Base
+					s1.Category = skbaseSkill.Category
 				}
+
+				if s1.Category == "" {
+					s1.Category = req.FormValue(fmt.Sprintf("Skill-%d-Category", i))
+				}
+
+				s1.OccupationValue = v
 
 				if userString != "" {
-					sk.UserString = userString
+					s1.UserString = userString
 				}
-				sk.GenerateName()
-				tempSkills = append(tempSkills, sk)
+				s1.GenerateName()
+				tempSkills = append(tempSkills, s1)
 			}
 		}
 

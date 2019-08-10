@@ -20,6 +20,12 @@
   version = "v2.1.0"
 
 [[projects]]
+  name = "github.com/disintegration/imaging"
+  packages = ["."]
+  revision = "5362c131d56305ce787e79a5b94ffc956df00d62"
+  version = "v1.6.0"
+
+[[projects]]
   name = "github.com/go-pg/pg"
   packages = [".","internal","internal/iszero","internal/parser","internal/pool","internal/struct_filter","internal/tag","orm","types"]
   revision = "003999b8cdeac09f13d183a7f5e1342d9a33a174"
@@ -112,7 +118,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "03fdd6904002c6b864be2c782fb7d410231bd71b"
+  revision = "7b4d739e4bf91742a94d28f492c0b114f20d9d7e"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -125,6 +131,12 @@
   name = "golang.org/x/crypto"
   packages = ["bcrypt","blowfish","pbkdf2"]
   revision = "4def268fd1a49955bfb3dda92fe3db4f924f2285"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/image"
+  packages = ["bmp","ccitt","tiff","tiff/lzw"]
+  revision = "cff245a6509b8c4de022d0d5b9037c503c5989d6"
 
 [[projects]]
   branch = "master"
@@ -189,6 +201,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e0e4c5312d47bdf35f9a905a2bfdbc182d878527416da361618a0f57412f366d"
+  inputs-digest = "adbe75124973e342a0f4e0571493638c9c296d113388b26cf35ed59f611ebc6e"
   solver-name = "gps-cdcl"
   solver-version = 1

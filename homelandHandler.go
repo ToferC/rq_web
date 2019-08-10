@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gosimple/slug"
 
 	"github.com/toferc/runequest"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
@@ -370,31 +367,18 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				hl.Author.UserName,
-				runequest.ToSnakeCase(hl.Homeland.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				err = ProcessHomelandImage(h, file, &hl)
+				if err != nil {
+					log.Printf("Error processing image: %v", err)
+				}
+
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			hl.Image = new(models.Image)
-			hl.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
@@ -581,7 +565,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Read New Skills
+		// Read Custom Skills
 
 		for i := 1; i < 4; i++ {
 
@@ -608,7 +592,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				sk.Base = base
 
-				str = fmt.Sprintf("Skill-%d-Value", i)
+				str = fmt.Sprintf("NewSkill-%d-Value", i)
 				v, err := strconv.Atoi(req.FormValue(str))
 				if err != nil {
 					v = 0
@@ -866,42 +850,25 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				hl.Author.UserName,
-				runequest.ToSnakeCase(hl.Homeland.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				err = ProcessHomelandImage(h, file, hl)
+				if err != nil {
+					log.Printf("Error processing image: %v", err)
+				}
+
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			hl.Image = new(models.Image)
-			hl.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
-			hl.Image = new(models.Image)
-			hl.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
-			hl.Image = new(models.Image)
-			hl.Image.Path = DefaultCharacterPortrait
 		}
 
 		hl.Homeland.RuneBonus = req.FormValue("Rune")

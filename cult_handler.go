@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gosimple/slug"
 
 	"github.com/toferc/runequest"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
@@ -363,31 +360,18 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				cl.Author.UserName,
-				runequest.ToSnakeCase(cl.Cult.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				err = ProcessCultImage(h, file, &cl)
+				if err != nil {
+					log.Printf("Error processing image: %v", err)
+				}
+
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			cl.Image = new(models.Image)
-			cl.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
@@ -637,7 +621,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Read passions
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 7; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
 
@@ -910,42 +894,25 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Prcless image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				cl.Author.UserName,
-				runequest.ToSnakeCase(cl.Cult.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				err = ProcessCultImage(h, file, cl)
+				if err != nil {
+					log.Printf("Error processing image: %v", err)
+				}
+
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			cl.Image = new(models.Image)
-			cl.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
-			cl.Image = new(models.Image)
-			cl.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
-			cl.Image = new(models.Image)
-			cl.Image.Path = DefaultCharacterPortrait
 		}
 
 		// Runes
@@ -1041,9 +1008,9 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		tempSkills := []*runequest.Skill{}
 
 		// Read Base Skills from Form
-		for i := 1; i < 10; i++ {
+		for i := 1; i < 20; i++ {
 
-			core := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
+			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 
 			str := fmt.Sprintf("Skill-%d-Value", i)
 			v, err := strconv.Atoi(req.FormValue(str))
@@ -1051,18 +1018,39 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				v = 0
 			}
 
-			if core != "" && v > 0 {
+			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 
-				sk := &runequest.Skill{
-					CoreString: core,
-					CultValue:  v,
+			if sk != "" && v > 0 {
+
+				s1 := &runequest.Skill{}
+
+				skbaseSkill, ok := runequest.Skills[sk]
+				if !ok {
+					// Skill is new
+					for _, ns := range cl.Cult.Skills {
+						// Search for CoreString in Occupation Skills
+						if sk == ns.CoreString {
+							s1.CoreString = ns.CoreString
+							s1.UserChoice = ns.UserChoice
+							s1.Base = ns.Base
+							s1.Category = ns.Category
+						}
+					}
+				} else {
+					// Skill exists in base list
+					s1.CoreString = skbaseSkill.CoreString
+					s1.UserChoice = skbaseSkill.UserChoice
+					s1.Base = skbaseSkill.Base
+					s1.Category = skbaseSkill.Category
 				}
 
-				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				s1.CultValue = v
+
 				if userString != "" {
-					sk.UserString = userString
+					s1.UserString = userString
 				}
-				tempSkills = append(tempSkills, sk)
+				s1.GenerateName()
+				tempSkills = append(tempSkills, s1)
 			}
 		}
 
