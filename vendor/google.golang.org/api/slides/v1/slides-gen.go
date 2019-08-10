@@ -3675,7 +3675,18 @@ type PageProperties struct {
 	// is inherited from
 	// a parent page. If the page has no parent, the color scheme uses a
 	// default
-	// Slides color scheme. This field is read-only.
+	// Slides color scheme, matching the defaults in the Slides
+	// editor.
+	//
+	// Only the concrete colors of the first 12 ThemeColorTypes are
+	// editable. In addition, only
+	// the color scheme on `Master` pages can be updated. To update the
+	// field, a
+	// color scheme containing mappings from all the first 12
+	// ThemeColorTypes to
+	// their concrete colors must be provided. Colors for the
+	// remaining
+	// ThemeColorTypes will be ignored.
 	ColorScheme *ColorScheme `json:"colorScheme,omitempty"`
 
 	// PageBackgroundFill: The background fill of the page. If unset, the
@@ -8124,6 +8135,7 @@ func (c *PresentationsBatchUpdateCall) Header() http.Header {
 
 func (c *PresentationsBatchUpdateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8272,6 +8284,7 @@ func (c *PresentationsCreateCall) Header() http.Header {
 
 func (c *PresentationsCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8409,6 +8422,7 @@ func (c *PresentationsGetCall) Header() http.Header {
 
 func (c *PresentationsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8559,6 +8573,7 @@ func (c *PresentationsPagesGetCall) Header() http.Header {
 
 func (c *PresentationsPagesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8753,6 +8768,7 @@ func (c *PresentationsPagesGetThumbnailCall) Header() http.Header {
 
 func (c *PresentationsPagesGetThumbnailCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}

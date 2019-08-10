@@ -173,20 +173,19 @@ type AudioConfig struct {
 	// than MP3 while using approximately the same bitrate.
 	AudioEncoding string `json:"audioEncoding,omitempty"`
 
-	// EffectsProfileId: Input only. Optional. An identifier which selects
+	// EffectsProfileId: Optional. Input only. An identifier which selects
 	// 'audio effects' profiles
 	// that are applied on (post synthesized) text to speech. Effects are
 	// applied
 	// on top of each other in the order they are given.
 	// See
-	//
-	// [audio-profiles](https:
-	// //cloud.google.com/text-to-speech/docs/au
-	// dio-profiles)
-	// for current supported profile ids.
+	// [audio
+	// profiles](https://cloud.google.com/text-to-speech/docs/audi
+	// o-profiles) for
+	// current supported profile ids.
 	EffectsProfileId []string `json:"effectsProfileId,omitempty"`
 
-	// Pitch: Input only. Optional. Speaking pitch, in the range [-20.0,
+	// Pitch: Optional. Input only. Speaking pitch, in the range [-20.0,
 	// 20.0]. 20 means
 	// increase 20 semitones from the original pitch. -20 means decrease
 	// 20
@@ -208,7 +207,7 @@ type AudioConfig struct {
 	// google.rpc.Code.INVALID_ARGUMENT.
 	SampleRateHertz int64 `json:"sampleRateHertz,omitempty"`
 
-	// SpeakingRate: Input only. Optional. Speaking rate/speed, in the range
+	// SpeakingRate: Optional. Input only. Speaking rate/speed, in the range
 	// [0.25, 4.0]. 1.0 is
 	// the normal native speed supported by the specific voice. 2.0 is twice
 	// as
@@ -217,7 +216,7 @@ type AudioConfig struct {
 	// speed. Any other values < 0.25 or > 4.0 will return an error.
 	SpeakingRate float64 `json:"speakingRate,omitempty"`
 
-	// VolumeGainDb: Input only. Optional. Volume gain (in dB) of the normal
+	// VolumeGainDb: Optional. Input only. Volume gain (in dB) of the normal
 	// native volume
 	// supported by the specific voice, in the range [-96.0, 16.0]. If
 	// unset, or
@@ -608,6 +607,7 @@ func (c *TextSynthesizeCall) Header() http.Header {
 
 func (c *TextSynthesizeCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -762,6 +762,7 @@ func (c *VoicesListCall) Header() http.Header {
 
 func (c *VoicesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}

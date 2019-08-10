@@ -47,6 +47,7 @@ golint ./... 2>&1 | ( \
     grep -vE "receiver name [a-zA-Z]+[0-9]* should be consistent with previous receiver name" | \
     grep -vE "exported const AllUsers|AllAuthenticatedUsers|RoleOwner|SSD|HDD|PRODUCTION|DEVELOPMENT should have comment" | \
     grep -v "exported func Value returns unexported type pretty.val, which can be annoying to use" | \
+    grep -v "exported func Increment returns unexported type firestore.increment, which can be annoying to use" | \
     grep -v "ExecuteStreamingSql" | \
     grep -vE "pubsub\/pstest\/fake\.go.+should have comment or be unexported" | \
     grep -v "ClusterId" | \
@@ -64,6 +65,7 @@ golint ./... 2>&1 | ( \
     grep -v "internal/trace" | \
     grep -v "a blank import should be only in a main or test package" | \
     grep -v "method ExecuteSql should be ExecuteSQL" | \
+    grep -vE "spanner/spansql/(sql|types).go:.*should have comment" | \
     grep -vE "\.pb\.go:" || true) | tee /dev/stderr | (! read)
 
 # TODO(deklerk): It doesn't seem like it, but is it possible to glob both before

@@ -357,7 +357,10 @@ type ProjectsLocationsTriggersService struct {
 
 // Addressable: Information for connecting over HTTP(s).
 type Addressable struct {
+	// Hostname: Deprecated - use url instead.
 	Hostname string `json:"hostname,omitempty"`
+
+	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Hostname") to
 	// unconditionally include in API requests. By default, fields with
@@ -406,7 +409,7 @@ func (s *Addressable) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_READ",
 //               "exempted_members": [
-//                 "user:foo@gmail.com"
+//                 "user:jose@example.com"
 //               ]
 //             },
 //             {
@@ -418,7 +421,7 @@ func (s *Addressable) MarshalJSON() ([]byte, error) {
 //           ]
 //         },
 //         {
-//           "service": "fooservice.googleapis.com"
+//           "service": "sampleservice.googleapis.com"
 //           "audit_log_configs": [
 //             {
 //               "log_type": "DATA_READ",
@@ -426,7 +429,7 @@ func (s *Addressable) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_WRITE",
 //               "exempted_members": [
-//                 "user:bar@gmail.com"
+//                 "user:aliya@example.com"
 //               ]
 //             }
 //           ]
@@ -434,11 +437,11 @@ func (s *Addressable) MarshalJSON() ([]byte, error) {
 //       ]
 //     }
 //
-// For fooservice, this policy enables DATA_READ, DATA_WRITE and
+// For sampleservice, this policy enables DATA_READ, DATA_WRITE and
 // ADMIN_READ
-// logging. It also exempts foo@gmail.com from DATA_READ logging,
+// logging. It also exempts jose@example.com from DATA_READ logging,
 // and
-// bar@gmail.com from DATA_WRITE logging.
+// aliya@example.com from DATA_WRITE logging.
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -484,7 +487,7 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //         {
 //           "log_type": "DATA_READ",
 //           "exempted_members": [
-//             "user:foo@gmail.com"
+//             "user:jose@example.com"
 //           ]
 //         },
 //         {
@@ -495,13 +498,20 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //
 // This enables 'DATA_READ' and 'DATA_WRITE' logging, while
 // exempting
-// foo@gmail.com from DATA_READ logging.
+// jose@example.com from DATA_READ logging.
 type AuditLogConfig struct {
 	// ExemptedMembers: Specifies the identities that do not cause logging
 	// for this type of
 	// permission.
 	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
+
+	// IgnoreChildExemptions: Specifies whether principals can be exempted
+	// for the same LogType in
+	// lower-level resource policies. If true, any lower-level exemptions
+	// will
+	// be ignored.
+	IgnoreChildExemptions bool `json:"ignoreChildExemptions,omitempty"`
 
 	// LogType: The log type that this config enables.
 	//
@@ -598,7 +608,7 @@ type Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -792,7 +802,8 @@ func (s *ConfigMapVolumeSource) MarshalJSON() ([]byte, error) {
 // https://github.com/knative/serving/blob/master/docs/spec/overvie
 // w.md#configuration
 type Configuration struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case always "Configuration".
@@ -933,7 +944,6 @@ type ConfigurationSpec struct {
 
 	// Template: Template holds the latest specification for the Revision to
 	// be stamped out.
-	// Not currently supported by Cloud Run.
 	Template *RevisionTemplate `json:"template,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Generation") to
@@ -1327,7 +1337,8 @@ func (s *ContainerPort) MarshalJSON() ([]byte, error) {
 // DomainMapping: Resource to hold the state and status of a user's
 // domain mapping.
 type DomainMapping struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "domains.cloudrun.com/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "DomainMapping".
@@ -1626,7 +1637,8 @@ func (s *EnvVar) MarshalJSON() ([]byte, error) {
 }
 
 type EventType struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "EventType".
@@ -1665,6 +1677,71 @@ func (s *EventType) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type EventTypeImporter struct {
+	// ApiVersion: The API version of the importer CRD.
+	ApiVersion string `json:"apiVersion,omitempty"`
+
+	// Kind: The kind of the importer CRD.
+	Kind string `json:"kind,omitempty"`
+
+	// Parameters: Parameters required to create an importer for the
+	// EventType.
+	Parameters []*EventTypeParameter `json:"parameters,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ApiVersion") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ApiVersion") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *EventTypeImporter) MarshalJSON() ([]byte, error) {
+	type NoMethod EventTypeImporter
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type EventTypeParameter struct {
+	// Description: Description of the parameter. E.g. "Google Cloud Project
+	// Id."
+	Description string `json:"description,omitempty"`
+
+	// Name: Name of the parameter. E.g. googleCloudProject.
+	Name string `json:"name,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Description") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Description") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *EventTypeParameter) MarshalJSON() ([]byte, error) {
+	type NoMethod EventTypeParameter
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 type EventTypeSpec struct {
 	// Broker: Refers to the Broker that can provide the EventType.
 	Broker string `json:"broker,omitempty"`
@@ -1673,6 +1750,10 @@ type EventTypeSpec struct {
 	// about.
 	// +optional
 	Description string `json:"description,omitempty"`
+
+	// Importer: The importer that provides this EventType to the eventing
+	// mesh.
+	Importer *EventTypeImporter `json:"importer,omitempty"`
 
 	// Schema: Schema is a URI with the EventType schema. It may be a JSON
 	// schema, a
@@ -2008,7 +2089,7 @@ type IntOrString struct {
 	StrVal string `json:"strVal,omitempty"`
 
 	// Type: The type of the value.
-	Type int64 `json:"type,omitempty,string"`
+	Type int64 `json:"type,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "IntVal") to
 	// unconditionally include in API requests. By default, fields with
@@ -2176,7 +2257,8 @@ func (s *ListAuthorizedDomainsResponse) MarshalJSON() ([]byte, error) {
 // ListConfigurationsResponse: ListConfigurationsResponse is a list of
 // Configuration resources.
 type ListConfigurationsResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Configurations.
@@ -2221,7 +2303,8 @@ func (s *ListConfigurationsResponse) MarshalJSON() ([]byte, error) {
 // ListDomainMappingsResponse: ListDomainMappingsResponse is a list of
 // DomainMapping resources.
 type ListDomainMappingsResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "domains.cloudrun.com/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of DomainMappings.
@@ -2263,7 +2346,8 @@ func (s *ListDomainMappingsResponse) MarshalJSON() ([]byte, error) {
 // ListEventTypesResponse: ListEventTypesResponse is a list of EventType
 // resources.
 type ListEventTypesResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of EventTypes.
@@ -2412,7 +2496,8 @@ func (s *ListMeta) MarshalJSON() ([]byte, error) {
 // ListRevisionsResponse: ListRevisionsResponse is a list of Revision
 // resources.
 type ListRevisionsResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Revisions.
@@ -2456,7 +2541,8 @@ func (s *ListRevisionsResponse) MarshalJSON() ([]byte, error) {
 
 // ListRoutesResponse: ListRoutesResponse is a list of Route resources.
 type ListRoutesResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Routes.
@@ -2500,7 +2586,8 @@ func (s *ListRoutesResponse) MarshalJSON() ([]byte, error) {
 
 // ListServicesResponse: A list of Service resources.
 type ListServicesResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Services.
@@ -2545,7 +2632,8 @@ func (s *ListServicesResponse) MarshalJSON() ([]byte, error) {
 // ListTriggersResponse: ListTriggersResponse is a list of Trigger
 // resources.
 type ListTriggersResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Triggers.
@@ -3172,7 +3260,7 @@ type Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -3434,7 +3522,8 @@ func (s *ResourceRequirements) MarshalJSON() ([]byte, error) {
 // https://github.com/knative/serving/blob/master/docs/spec/overvie
 // w.md#revision
 type Revision struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of this resource, in this case "Revision".
@@ -3583,6 +3672,7 @@ type RevisionSpec struct {
 	// for this Revision. In the context of a Revision, we disallow a number
 	// of
 	// fields on this Container, including: name and lifecycle.
+	// In Cloud Run, only a single container may be provided.
 	Containers []*Container `json:"containers,omitempty"`
 
 	// Generation: Deprecated and not currently populated by Cloud Run.
@@ -3594,7 +3684,14 @@ type RevisionSpec struct {
 	// Read-only.
 	Generation int64 `json:"generation,omitempty"`
 
-	// ServiceAccountName: Not currently used by Cloud Run.
+	// ServiceAccountName: Email address of the IAM service account
+	// associated with the revision
+	// of the service. The service account represents the identity of
+	// the
+	// running revision, and determines what permissions the revision has.
+	// If
+	// not provided, the revision will use the project's default service
+	// account.
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
 
 	// ServingState: ServingState holds a value describing the state the
@@ -3734,6 +3831,18 @@ type RevisionTemplate struct {
 	// Metadata: Optional metadata for this Revision, including labels and
 	// annotations. Name
 	// will be generated by the Configuration.
+	// To set minimum instances for this revision, use
+	// the
+	// "autoscaling.knative.dev/minScale" annotation key. (Cloud Run on GKE
+	// only).
+	// To set maximum instances for this revision, use
+	// the
+	// "autoscaling.knative.dev/maxScale" annotation key.
+	// To set Cloud SQL connections for the revision, use
+	// the
+	// "run.googleapis.com/cloudsql-instances" annotation key. Values should
+	// be
+	// comma separated.
 	Metadata *ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec: RevisionSpec holds the desired state of the Revision (from the
@@ -3783,7 +3892,8 @@ func (s *RevisionTemplate) MarshalJSON() ([]byte, error) {
 // automatically deploy the "latest ready" Revision from that
 // Configuration.
 type Route struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of this resource, in this case always "Route".
@@ -3932,7 +4042,7 @@ func (s *RouteSpec) MarshalJSON() ([]byte, error) {
 // (from the
 // controller).
 type RouteStatus struct {
-	// Address: Similar to domain, information on where the service is
+	// Address: Similar to url, information on where the service is
 	// available on HTTP.
 	Address *Addressable `json:"address,omitempty"`
 
@@ -3943,15 +4053,14 @@ type RouteStatus struct {
 	// state of the world.
 	Conditions []*RouteCondition `json:"conditions,omitempty"`
 
-	// Domain: Domain holds the top-level domain that will distribute
-	// traffic over the
-	// provided targets. It generally has the
-	// form
-	// https://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.
-	// app
+	// Domain: Deprecated - use url instead.
+	// Domain holds the top-level domain that will distribute traffic over
+	// the
+	// provided targets.
 	Domain string `json:"domain,omitempty"`
 
-	// DomainInternal: For Cloud Run, identifical to domain.
+	// DomainInternal: Deprecated - use address instead.
+	// For Cloud Run, identifical to domain.
 	DomainInternal string `json:"domainInternal,omitempty"`
 
 	// ObservedGeneration: ObservedGeneration is the 'Generation' of the
@@ -3979,6 +4088,14 @@ type RouteStatus struct {
 	// the
 	// LatestReadyRevisionName that we last observed.
 	Traffic []*TrafficTarget `json:"traffic,omitempty"`
+
+	// Url: URL holds the url that will distribute traffic over the provided
+	// traffic
+	// targets. It generally has the
+	// form
+	// https://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.
+	// app
+	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Address") to
 	// unconditionally include in API requests. By default, fields with
@@ -4191,7 +4308,7 @@ type SecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext
 	// takes
 	// precedence. +optional
-	RunAsGroup int64 `json:"runAsGroup,omitempty,string"`
+	RunAsGroup int64 `json:"runAsGroup,omitempty"`
 
 	// RunAsNonRoot: Indicates that the container must run as a non-root
 	// user.
@@ -4215,7 +4332,7 @@ type SecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext
 	// takes
 	// precedence. +optional
-	RunAsUser int64 `json:"runAsUser,omitempty,string"`
+	RunAsUser int64 `json:"runAsUser,omitempty"`
 
 	// SeLinuxOptions: The SELinux context to be applied to the
 	// container.
@@ -4276,7 +4393,8 @@ func (s *SecurityContext) MarshalJSON() ([]byte, error) {
 // https://github.com/knative/serving/blob/master/docs/spec/overvie
 // w.md#service
 type Service struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "Service".
@@ -4431,19 +4549,11 @@ type ServiceSpec struct {
 	// Template: Template holds the latest specification for the Revision
 	// to
 	// be stamped out.
-	//
-	// Not currently supported by Cloud Run.
 	Template *RevisionTemplate `json:"template,omitempty"`
 
 	// Traffic: Traffic specifies how to distribute traffic over a
 	// collection of Knative
-	// Revisions and Configurations. This will replace existing service
-	// specs
-	// (ServiceSpecRunLatest, ServiceSpecPinnedType, ServiceSpecReleaseType,
-	// and
-	// ServiceSpecManualType).
-	//
-	// Not currently supported by Cloud Run.
+	// Revisions and Configurations.
 	Traffic []*TrafficTarget `json:"traffic,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Generation") to
@@ -4599,7 +4709,7 @@ func (s *ServiceSpecRunLatest) MarshalJSON() ([]byte, error) {
 // ServiceStatus: The current state of the Service. Output only.
 type ServiceStatus struct {
 	// Address: From RouteStatus.
-	// Similar to domain, information on where the service is available on
+	// Similar to url, information on where the service is available on
 	// HTTP.
 	Address *Addressable `json:"address,omitempty"`
 
@@ -4655,6 +4765,15 @@ type ServiceStatus struct {
 	// the
 	// LatestReadyRevisionName that we last observed.
 	Traffic []*TrafficTarget `json:"traffic,omitempty"`
+
+	// Url: From RouteStatus.
+	// URL holds the url that will distribute traffic over the provided
+	// traffic
+	// targets. It generally has the
+	// form
+	// https://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.
+	// app
+	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Address") to
 	// unconditionally include in API requests. By default, fields with
@@ -4890,8 +5009,6 @@ type TrafficTarget struct {
 	// target. When provided LatestRevision must be true if RevisionName
 	// is
 	// empty; it must be false when RevisionName is non-empty.
-	//
-	// Not currently supported in Cloud Run.
 	// +optional
 	LatestRevision bool `json:"latestRevision,omitempty"`
 
@@ -4965,7 +5082,8 @@ func (s *TrafficTarget) MarshalJSON() ([]byte, error) {
 }
 
 type Trigger struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "Trigger".
@@ -5121,6 +5239,38 @@ func (s *TriggerFilterSourceAndType) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type TriggerImporterSpec struct {
+	// Arguments: Arguments to use for the importer. These must match the
+	// parameters in the
+	// EventType's importer.
+	Arguments map[string]string `json:"arguments,omitempty"`
+
+	// EventTypeName: Name of the EventType that this importer provides.
+	EventTypeName string `json:"eventTypeName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Arguments") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Arguments") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TriggerImporterSpec) MarshalJSON() ([]byte, error) {
+	type NoMethod TriggerImporterSpec
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // TriggerSpec: The desired state of the Trigger.
 type TriggerSpec struct {
 	// Broker: Broker is the broker that this trigger receives events from.
@@ -5132,12 +5282,15 @@ type TriggerSpec struct {
 
 	// Filter: Filter is the filter to apply against all events from the
 	// Broker. Only
-	// events that pass this filter will be sent to the Subscriber. If
-	// not
-	// specified, will default to allowing all events.
-	//
-	// This must be specified in Cloud Run.
+	// events that pass this filter will be sent to the Subscriber.
 	Filter *TriggerFilter `json:"filter,omitempty"`
+
+	// Importers: Specification of the importers that will provide events to
+	// the trigger.
+	// Note, for Cloud Run, the importers will only be used if a filter is
+	// not
+	// specified.
+	Importers []*TriggerImporterSpec `json:"importers,omitempty"`
 
 	// Subscriber: Subscriber is the addressable that receives events from
 	// the Broker that
@@ -5400,6 +5553,7 @@ func (c *NamespacesAuthorizeddomainsListCall) Header() http.Header {
 
 func (c *NamespacesAuthorizeddomainsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -5575,6 +5729,7 @@ func (c *NamespacesConfigurationsGetCall) Header() http.Header {
 
 func (c *NamespacesConfigurationsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -5773,6 +5928,7 @@ func (c *NamespacesConfigurationsListCall) Header() http.Header {
 
 func (c *NamespacesConfigurationsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -5943,6 +6099,7 @@ func (c *NamespacesDomainmappingsCreateCall) Header() http.Header {
 
 func (c *NamespacesDomainmappingsCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -6121,6 +6278,7 @@ func (c *NamespacesDomainmappingsDeleteCall) Header() http.Header {
 
 func (c *NamespacesDomainmappingsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -6281,6 +6439,7 @@ func (c *NamespacesDomainmappingsGetCall) Header() http.Header {
 
 func (c *NamespacesDomainmappingsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -6479,6 +6638,7 @@ func (c *NamespacesDomainmappingsListCall) Header() http.Header {
 
 func (c *NamespacesDomainmappingsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -6658,6 +6818,7 @@ func (c *NamespacesEventtypesGetCall) Header() http.Header {
 
 func (c *NamespacesEventtypesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -6856,6 +7017,7 @@ func (c *NamespacesEventtypesListCall) Header() http.Header {
 
 func (c *NamespacesEventtypesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -7065,6 +7227,7 @@ func (c *NamespacesRevisionsDeleteCall) Header() http.Header {
 
 func (c *NamespacesRevisionsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -7225,6 +7388,7 @@ func (c *NamespacesRevisionsGetCall) Header() http.Header {
 
 func (c *NamespacesRevisionsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -7423,6 +7587,7 @@ func (c *NamespacesRevisionsListCall) Header() http.Header {
 
 func (c *NamespacesRevisionsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -7602,6 +7767,7 @@ func (c *NamespacesRoutesGetCall) Header() http.Header {
 
 func (c *NamespacesRoutesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -7800,6 +7966,7 @@ func (c *NamespacesRoutesListCall) Header() http.Header {
 
 func (c *NamespacesRoutesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -7970,6 +8137,7 @@ func (c *NamespacesServicesCreateCall) Header() http.Header {
 
 func (c *NamespacesServicesCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8151,6 +8319,7 @@ func (c *NamespacesServicesDeleteCall) Header() http.Header {
 
 func (c *NamespacesServicesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8311,6 +8480,7 @@ func (c *NamespacesServicesGetCall) Header() http.Header {
 
 func (c *NamespacesServicesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8509,6 +8679,7 @@ func (c *NamespacesServicesListCall) Header() http.Header {
 
 func (c *NamespacesServicesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8688,6 +8859,7 @@ func (c *NamespacesServicesReplaceServiceCall) Header() http.Header {
 
 func (c *NamespacesServicesReplaceServiceCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8827,6 +8999,7 @@ func (c *NamespacesTriggersCreateCall) Header() http.Header {
 
 func (c *NamespacesTriggersCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -8991,6 +9164,7 @@ func (c *NamespacesTriggersDeleteCall) Header() http.Header {
 
 func (c *NamespacesTriggersDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -9146,6 +9320,7 @@ func (c *NamespacesTriggersGetCall) Header() http.Header {
 
 func (c *NamespacesTriggersGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -9344,6 +9519,7 @@ func (c *NamespacesTriggersListCall) Header() http.Header {
 
 func (c *NamespacesTriggersListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -9523,6 +9699,7 @@ func (c *NamespacesTriggersReplaceTriggerCall) Header() http.Header {
 
 func (c *NamespacesTriggersReplaceTriggerCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -9693,6 +9870,7 @@ func (c *ProjectsLocationsListCall) Header() http.Header {
 
 func (c *ProjectsLocationsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -9887,6 +10065,7 @@ func (c *ProjectsLocationsAuthorizeddomainsListCall) Header() http.Header {
 
 func (c *ProjectsLocationsAuthorizeddomainsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -10062,6 +10241,7 @@ func (c *ProjectsLocationsConfigurationsGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsConfigurationsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -10260,6 +10440,7 @@ func (c *ProjectsLocationsConfigurationsListCall) Header() http.Header {
 
 func (c *ProjectsLocationsConfigurationsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -10430,6 +10611,7 @@ func (c *ProjectsLocationsDomainmappingsCreateCall) Header() http.Header {
 
 func (c *ProjectsLocationsDomainmappingsCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -10608,6 +10790,7 @@ func (c *ProjectsLocationsDomainmappingsDeleteCall) Header() http.Header {
 
 func (c *ProjectsLocationsDomainmappingsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -10768,6 +10951,7 @@ func (c *ProjectsLocationsDomainmappingsGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsDomainmappingsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -10966,6 +11150,7 @@ func (c *ProjectsLocationsDomainmappingsListCall) Header() http.Header {
 
 func (c *ProjectsLocationsDomainmappingsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -11145,6 +11330,7 @@ func (c *ProjectsLocationsEventtypesGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsEventtypesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -11343,6 +11529,7 @@ func (c *ProjectsLocationsEventtypesListCall) Header() http.Header {
 
 func (c *ProjectsLocationsEventtypesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -11552,6 +11739,7 @@ func (c *ProjectsLocationsRevisionsDeleteCall) Header() http.Header {
 
 func (c *ProjectsLocationsRevisionsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -11712,6 +11900,7 @@ func (c *ProjectsLocationsRevisionsGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsRevisionsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -11910,6 +12099,7 @@ func (c *ProjectsLocationsRevisionsListCall) Header() http.Header {
 
 func (c *ProjectsLocationsRevisionsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -12089,6 +12279,7 @@ func (c *ProjectsLocationsRoutesGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsRoutesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -12287,6 +12478,7 @@ func (c *ProjectsLocationsRoutesListCall) Header() http.Header {
 
 func (c *ProjectsLocationsRoutesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -12457,6 +12649,7 @@ func (c *ProjectsLocationsServicesCreateCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -12638,6 +12831,7 @@ func (c *ProjectsLocationsServicesDeleteCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -12798,6 +12992,7 @@ func (c *ProjectsLocationsServicesGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -12907,6 +13102,18 @@ func (r *ProjectsLocationsServicesService) GetIamPolicy(resource string) *Projec
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsServicesGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsServicesGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -12944,6 +13151,7 @@ func (c *ProjectsLocationsServicesGetIamPolicyCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesGetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -13013,6 +13221,12 @@ func (c *ProjectsLocationsServicesGetIamPolicyCall) Do(opts ...googleapi.CallOpt
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -13142,6 +13356,7 @@ func (c *ProjectsLocationsServicesListCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -13321,6 +13536,7 @@ func (c *ProjectsLocationsServicesReplaceServiceCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesReplaceServiceCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -13462,6 +13678,7 @@ func (c *ProjectsLocationsServicesSetIamPolicyCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesSetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -13604,6 +13821,7 @@ func (c *ProjectsLocationsServicesTestIamPermissionsCall) Header() http.Header {
 
 func (c *ProjectsLocationsServicesTestIamPermissionsCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -13743,6 +13961,7 @@ func (c *ProjectsLocationsTriggersCreateCall) Header() http.Header {
 
 func (c *ProjectsLocationsTriggersCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -13907,6 +14126,7 @@ func (c *ProjectsLocationsTriggersDeleteCall) Header() http.Header {
 
 func (c *ProjectsLocationsTriggersDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -14062,6 +14282,7 @@ func (c *ProjectsLocationsTriggersGetCall) Header() http.Header {
 
 func (c *ProjectsLocationsTriggersGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -14260,6 +14481,7 @@ func (c *ProjectsLocationsTriggersListCall) Header() http.Header {
 
 func (c *ProjectsLocationsTriggersListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -14439,6 +14661,7 @@ func (c *ProjectsLocationsTriggersReplaceTriggerCall) Header() http.Header {
 
 func (c *ProjectsLocationsTriggersReplaceTriggerCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}

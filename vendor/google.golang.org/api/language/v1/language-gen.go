@@ -152,7 +152,7 @@ type DocumentsService struct {
 
 // AnalyzeEntitiesRequest: The entity analysis request message.
 type AnalyzeEntitiesRequest struct {
-	// Document: Input document.
+	// Document: Required. Input document.
 	Document *Document `json:"document,omitempty"`
 
 	// EncodingType: The encoding type used by the API to calculate offsets.
@@ -243,7 +243,7 @@ func (s *AnalyzeEntitiesResponse) MarshalJSON() ([]byte, error) {
 // AnalyzeEntitySentimentRequest: The entity-level sentiment analysis
 // request message.
 type AnalyzeEntitySentimentRequest struct {
-	// Document: Input document.
+	// Document: Required. Input document.
 	Document *Document `json:"document,omitempty"`
 
 	// EncodingType: The encoding type used by the API to calculate offsets.
@@ -335,7 +335,7 @@ func (s *AnalyzeEntitySentimentResponse) MarshalJSON() ([]byte, error) {
 
 // AnalyzeSentimentRequest: The sentiment analysis request message.
 type AnalyzeSentimentRequest struct {
-	// Document: Input document.
+	// Document: Required. Input document.
 	Document *Document `json:"document,omitempty"`
 
 	// EncodingType: The encoding type used by the API to calculate sentence
@@ -430,7 +430,7 @@ func (s *AnalyzeSentimentResponse) MarshalJSON() ([]byte, error) {
 
 // AnalyzeSyntaxRequest: The syntax analysis request message.
 type AnalyzeSyntaxRequest struct {
-	// Document: Input document.
+	// Document: Required. Input document.
 	Document *Document `json:"document,omitempty"`
 
 	// EncodingType: The encoding type used by the API to calculate offsets.
@@ -526,7 +526,7 @@ func (s *AnalyzeSyntaxResponse) MarshalJSON() ([]byte, error) {
 // which can perform multiple
 // analysis types (sentiment, entities, and syntax) in one call.
 type AnnotateTextRequest struct {
-	// Document: Input document.
+	// Document: Required. Input document.
 	Document *Document `json:"document,omitempty"`
 
 	// EncodingType: The encoding type used by the API to calculate offsets.
@@ -552,7 +552,7 @@ type AnnotateTextRequest struct {
 	// that uses this encoding natively.
 	EncodingType string `json:"encodingType,omitempty"`
 
-	// Features: The enabled features.
+	// Features: Required. The enabled features.
 	Features *Features `json:"features,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Document") to
@@ -694,7 +694,7 @@ func (s *ClassificationCategory) UnmarshalJSON(data []byte) error {
 
 // ClassifyTextRequest: The document classification request message.
 type ClassifyTextRequest struct {
-	// Document: Input document.
+	// Document: Required. Input document.
 	Document *Document `json:"document,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Document") to
@@ -1623,6 +1623,7 @@ func (c *DocumentsAnalyzeEntitiesCall) Header() http.Header {
 
 func (c *DocumentsAnalyzeEntitiesCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1750,6 +1751,7 @@ func (c *DocumentsAnalyzeEntitySentimentCall) Header() http.Header {
 
 func (c *DocumentsAnalyzeEntitySentimentCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -1875,6 +1877,7 @@ func (c *DocumentsAnalyzeSentimentCall) Header() http.Header {
 
 func (c *DocumentsAnalyzeSentimentCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2004,6 +2007,7 @@ func (c *DocumentsAnalyzeSyntaxCall) Header() http.Header {
 
 func (c *DocumentsAnalyzeSyntaxCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2131,6 +2135,7 @@ func (c *DocumentsAnnotateTextCall) Header() http.Header {
 
 func (c *DocumentsAnnotateTextCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}
@@ -2256,6 +2261,7 @@ func (c *DocumentsClassifyTextCall) Header() http.Header {
 
 func (c *DocumentsClassifyTextCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
+	reqHeaders.Set("x-goog-api-client", "gl-go/1.11.0 gdcl/20190802")
 	for k, v := range c.header_ {
 		reqHeaders[k] = v
 	}

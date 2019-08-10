@@ -57,7 +57,33 @@ func main() {
 
 	for _, cm := range cms {
 
-		cm.Character.Income = cm.Character.Occupation.Income
+		tempRuneSpells := map[string]*runequest.Spell{}
+
+		for _, v := range cm.Character.RuneSpells {
+
+			index, err := indexSpell(v.CoreString, runequest.RuneSpells)
+			if err != nil {
+				fmt.Println(err)
+				tempRuneSpells[v.CoreString] = v
+				continue
+			}
+
+			baseSpell := runequest.RuneSpells[index]
+
+			s := &runequest.Spell{
+				Name:       baseSpell.Name,
+				CoreString: baseSpell.CoreString,
+				UserString: v.UserString,
+				Cost:       baseSpell.Cost,
+				Runes:      baseSpell.Runes,
+				Domain:     baseSpell.Domain,
+			}
+
+			s.GenerateName()
+			tempRuneSpells[s.Name] = s
+		}
+		cm.Character.RuneSpells = tempRuneSpells
+
 		database.UpdateCharacterModel(db, cm)
 	}
 }

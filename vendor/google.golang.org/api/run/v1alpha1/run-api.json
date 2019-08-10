@@ -1857,6 +1857,12 @@
                     "resource"
                   ],
                   "parameters": {
+                    "options.requestedPolicyVersion": {
+                      "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
                     "resource": {
                       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                       "location": "path",
@@ -2211,7 +2217,7 @@
       }
     }
   },
-  "revision": "20190522",
+  "revision": "20190731",
   "rootUrl": "https://run.googleapis.com/",
   "schemas": {
     "Addressable": {
@@ -2219,13 +2225,17 @@
       "id": "Addressable",
       "properties": {
         "hostname": {
+          "description": "Deprecated - use url instead.",
+          "type": "string"
+        },
+        "url": {
           "type": "string"
         }
       },
       "type": "object"
     },
     "AuditConfig": {
-      "description": "Specifies the audit configuration for a service.\nThe configuration determines which permission types are logged, and what\nidentities, if any, are exempted from logging.\nAn AuditConfig must have one or more AuditLogConfigs.\n\nIf there are AuditConfigs for both `allServices` and a specific service,\nthe union of the two AuditConfigs is used for that service: the log_types\nspecified in each AuditConfig are enabled, and the exempted_members in each\nAuditLogConfig are exempted.\n\nExample Policy with multiple AuditConfigs:\n\n    {\n      \"audit_configs\": [\n        {\n          \"service\": \"allServices\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n              \"exempted_members\": [\n                \"user:foo@gmail.com\"\n              ]\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n            },\n            {\n              \"log_type\": \"ADMIN_READ\",\n            }\n          ]\n        },\n        {\n          \"service\": \"fooservice.googleapis.com\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n              \"exempted_members\": [\n                \"user:bar@gmail.com\"\n              ]\n            }\n          ]\n        }\n      ]\n    }\n\nFor fooservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ\nlogging. It also exempts foo@gmail.com from DATA_READ logging, and\nbar@gmail.com from DATA_WRITE logging.",
+      "description": "Specifies the audit configuration for a service.\nThe configuration determines which permission types are logged, and what\nidentities, if any, are exempted from logging.\nAn AuditConfig must have one or more AuditLogConfigs.\n\nIf there are AuditConfigs for both `allServices` and a specific service,\nthe union of the two AuditConfigs is used for that service: the log_types\nspecified in each AuditConfig are enabled, and the exempted_members in each\nAuditLogConfig are exempted.\n\nExample Policy with multiple AuditConfigs:\n\n    {\n      \"audit_configs\": [\n        {\n          \"service\": \"allServices\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n              \"exempted_members\": [\n                \"user:jose@example.com\"\n              ]\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n            },\n            {\n              \"log_type\": \"ADMIN_READ\",\n            }\n          ]\n        },\n        {\n          \"service\": \"sampleservice.googleapis.com\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n              \"exempted_members\": [\n                \"user:aliya@example.com\"\n              ]\n            }\n          ]\n        }\n      ]\n    }\n\nFor sampleservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ\nlogging. It also exempts jose@example.com from DATA_READ logging, and\naliya@example.com from DATA_WRITE logging.",
       "id": "AuditConfig",
       "properties": {
         "auditLogConfigs": {
@@ -2243,7 +2253,7 @@
       "type": "object"
     },
     "AuditLogConfig": {
-      "description": "Provides the configuration for logging a type of permissions.\nExample:\n\n    {\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:foo@gmail.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        }\n      ]\n    }\n\nThis enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting\nfoo@gmail.com from DATA_READ logging.",
+      "description": "Provides the configuration for logging a type of permissions.\nExample:\n\n    {\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:jose@example.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        }\n      ]\n    }\n\nThis enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting\njose@example.com from DATA_READ logging.",
       "id": "AuditLogConfig",
       "properties": {
         "exemptedMembers": {
@@ -2252,6 +2262,10 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "ignoreChildExemptions": {
+          "description": "Specifies whether principals can be exempted for the same LogType in\nlower-level resource policies. If true, any lower-level exemptions will\nbe ignored.",
+          "type": "boolean"
         },
         "logType": {
           "description": "The log type that this config enables.",
@@ -2296,7 +2310,7 @@
           "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@example.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -2377,7 +2391,7 @@
       "id": "Configuration",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -2446,7 +2460,7 @@
         },
         "template": {
           "$ref": "RevisionTemplate",
-          "description": "Template holds the latest specification for the Revision to be stamped out.\nNot currently supported by Cloud Run."
+          "description": "Template holds the latest specification for the Revision to be stamped out."
         }
       },
       "type": "object"
@@ -2624,7 +2638,7 @@
       "id": "DomainMapping",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"domains.cloudrun.com/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -2781,7 +2795,7 @@
       "id": "EventType",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"eventing.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -2799,6 +2813,41 @@
       },
       "type": "object"
     },
+    "EventTypeImporter": {
+      "id": "EventTypeImporter",
+      "properties": {
+        "apiVersion": {
+          "description": "The API version of the importer CRD.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "The kind of the importer CRD.",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "Parameters required to create an importer for the EventType.",
+          "items": {
+            "$ref": "EventTypeParameter"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "EventTypeParameter": {
+      "id": "EventTypeParameter",
+      "properties": {
+        "description": {
+          "description": "Description of the parameter. E.g. \"Google Cloud Project Id.\"",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the parameter. E.g. googleCloudProject.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "EventTypeSpec": {
       "id": "EventTypeSpec",
       "properties": {
@@ -2809,6 +2858,10 @@
         "description": {
           "description": "Description is a string describing what the EventType is about.\n+optional",
           "type": "string"
+        },
+        "importer": {
+          "$ref": "EventTypeImporter",
+          "description": "The importer that provides this EventType to the eventing mesh."
         },
         "schema": {
           "description": "Schema is a URI with the EventType schema. It may be a JSON schema, a\nprotobuf schema, etc.\n+optional",
@@ -2963,8 +3016,8 @@
         },
         "type": {
           "description": "The type of the value.",
-          "format": "int64",
-          "type": "string"
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -3027,7 +3080,7 @@
       "id": "ListConfigurationsResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3060,7 +3113,7 @@
       "id": "ListDomainMappingsResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"domains.cloudrun.com/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3086,7 +3139,7 @@
       "id": "ListEventTypesResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"eventing.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3156,7 +3209,7 @@
       "id": "ListRevisionsResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3189,7 +3242,7 @@
       "id": "ListRoutesResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3222,7 +3275,7 @@
       "id": "ListServicesResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3255,7 +3308,7 @@
       "id": "ListTriggersResponse",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"eventing.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "items": {
@@ -3500,7 +3553,7 @@
           "type": "array"
         },
         "etag": {
-          "description": "`etag` is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the `etag` in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: An `etag` is returned in the response to `getIamPolicy`, and\nsystems are expected to put that etag in the request to `setIamPolicy` to\nensure that their change will be applied to the same version of the policy.\n\nIf no `etag` is provided in the call to `setIamPolicy`, then the existing\npolicy is overwritten blindly.",
+          "description": "`etag` is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the `etag` in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: An `etag` is returned in the response to `getIamPolicy`, and\nsystems are expected to put that etag in the request to `setIamPolicy` to\nensure that their change will be applied to the same version of the policy.\n\nIf no `etag` is provided in the call to `setIamPolicy`, then the existing\npolicy is overwritten.",
           "format": "byte",
           "type": "string"
         },
@@ -3630,7 +3683,7 @@
       "id": "Revision",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -3702,7 +3755,7 @@
           "type": "integer"
         },
         "containers": {
-          "description": "Containers holds the single container that defines the unit of execution\nfor this Revision. In the context of a Revision, we disallow a number of\nfields on this Container, including: name and lifecycle.",
+          "description": "Containers holds the single container that defines the unit of execution\nfor this Revision. In the context of a Revision, we disallow a number of\nfields on this Container, including: name and lifecycle.\nIn Cloud Run, only a single container may be provided.",
           "items": {
             "$ref": "Container"
           },
@@ -3714,7 +3767,7 @@
           "type": "integer"
         },
         "serviceAccountName": {
-          "description": "Not currently used by Cloud Run.",
+          "description": "Email address of the IAM service account associated with the revision\nof the service. The service account represents the identity of the\nrunning revision, and determines what permissions the revision has. If\nnot provided, the revision will use the project's default service account.",
           "type": "string"
         },
         "servingState": {
@@ -3784,7 +3837,7 @@
       "properties": {
         "metadata": {
           "$ref": "ObjectMeta",
-          "description": "Optional metadata for this Revision, including labels and annotations. Name\nwill be generated by the Configuration."
+          "description": "Optional metadata for this Revision, including labels and annotations. Name\nwill be generated by the Configuration.\nTo set minimum instances for this revision, use the\n\"autoscaling.knative.dev/minScale\" annotation key. (Cloud Run on GKE only).\nTo set maximum instances for this revision, use the\n\"autoscaling.knative.dev/maxScale\" annotation key.\nTo set Cloud SQL connections for the revision, use the\n\"run.googleapis.com/cloudsql-instances\" annotation key. Values should be\ncomma separated."
         },
         "spec": {
           "$ref": "RevisionSpec",
@@ -3798,7 +3851,7 @@
       "id": "Route",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -3877,7 +3930,7 @@
       "properties": {
         "address": {
           "$ref": "Addressable",
-          "description": "Similar to domain, information on where the service is available on HTTP."
+          "description": "Similar to url, information on where the service is available on HTTP."
         },
         "conditions": {
           "description": "Conditions communicates information about ongoing/complete\nreconciliation processes that bring the \"spec\" inline with the observed\nstate of the world.",
@@ -3887,11 +3940,11 @@
           "type": "array"
         },
         "domain": {
-          "description": "Domain holds the top-level domain that will distribute traffic over the\nprovided targets. It generally has the form\nhttps://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.app",
+          "description": "Deprecated - use url instead.\nDomain holds the top-level domain that will distribute traffic over the\nprovided targets.",
           "type": "string"
         },
         "domainInternal": {
-          "description": "For Cloud Run, identifical to domain.",
+          "description": "Deprecated - use address instead.\nFor Cloud Run, identifical to domain.",
           "type": "string"
         },
         "observedGeneration": {
@@ -3905,6 +3958,10 @@
             "$ref": "TrafficTarget"
           },
           "type": "array"
+        },
+        "url": {
+          "description": "URL holds the url that will distribute traffic over the provided traffic\ntargets. It generally has the form\nhttps://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.app",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3996,8 +4053,8 @@
         },
         "runAsGroup": {
           "description": "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes\nprecedence. +optional",
-          "format": "int64",
-          "type": "string"
+          "format": "int32",
+          "type": "integer"
         },
         "runAsNonRoot": {
           "description": "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes\nprecedence. +optional",
@@ -4005,8 +4062,8 @@
         },
         "runAsUser": {
           "description": "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes\nprecedence. +optional",
-          "format": "int64",
-          "type": "string"
+          "format": "int32",
+          "type": "integer"
         },
         "seLinuxOptions": {
           "$ref": "SELinuxOptions",
@@ -4020,7 +4077,7 @@
       "id": "Service",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"serving.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -4101,10 +4158,10 @@
         },
         "template": {
           "$ref": "RevisionTemplate",
-          "description": "Template holds the latest specification for the Revision to\nbe stamped out.\n\nNot currently supported by Cloud Run."
+          "description": "Template holds the latest specification for the Revision to\nbe stamped out."
         },
         "traffic": {
-          "description": "Traffic specifies how to distribute traffic over a collection of Knative\nRevisions and Configurations. This will replace existing service specs\n(ServiceSpecRunLatest, ServiceSpecPinnedType, ServiceSpecReleaseType, and\nServiceSpecManualType).\n\nNot currently supported by Cloud Run.",
+          "description": "Traffic specifies how to distribute traffic over a collection of Knative\nRevisions and Configurations.",
           "items": {
             "$ref": "TrafficTarget"
           },
@@ -4174,7 +4231,7 @@
       "properties": {
         "address": {
           "$ref": "Addressable",
-          "description": "From RouteStatus.\nSimilar to domain, information on where the service is available on HTTP."
+          "description": "From RouteStatus.\nSimilar to url, information on where the service is available on HTTP."
         },
         "conditions": {
           "description": "Conditions communicates information about ongoing/complete\nreconciliation processes that bring the \"spec\" inline with the observed\nstate of the world.",
@@ -4206,6 +4263,10 @@
             "$ref": "TrafficTarget"
           },
           "type": "array"
+        },
+        "url": {
+          "description": "From RouteStatus.\nURL holds the url that will distribute traffic over the provided traffic\ntargets. It generally has the form\nhttps://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.app",
+          "type": "string"
         }
       },
       "type": "object"
@@ -4292,7 +4353,7 @@
           "type": "string"
         },
         "latestRevision": {
-          "description": "LatestRevision may be optionally provided to indicate that the latest\nready Revision of the Configuration should be used for this traffic\ntarget. When provided LatestRevision must be true if RevisionName is\nempty; it must be false when RevisionName is non-empty.\n\nNot currently supported in Cloud Run.\n+optional",
+          "description": "LatestRevision may be optionally provided to indicate that the latest\nready Revision of the Configuration should be used for this traffic\ntarget. When provided LatestRevision must be true if RevisionName is\nempty; it must be false when RevisionName is non-empty.\n+optional",
           "type": "boolean"
         },
         "name": {
@@ -4323,7 +4384,7 @@
       "id": "Trigger",
       "properties": {
         "apiVersion": {
-          "description": "The API version for this call such as \"v1alpha1\".",
+          "description": "The API version for this call such as \"eventing.knative.dev/v1alpha1\".",
           "type": "string"
         },
         "kind": {
@@ -4399,6 +4460,23 @@
       },
       "type": "object"
     },
+    "TriggerImporterSpec": {
+      "id": "TriggerImporterSpec",
+      "properties": {
+        "arguments": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Arguments to use for the importer. These must match the parameters in the\nEventType's importer.",
+          "type": "object"
+        },
+        "eventTypeName": {
+          "description": "Name of the EventType that this importer provides.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "TriggerSpec": {
       "description": "The desired state of the Trigger.",
       "id": "TriggerSpec",
@@ -4409,7 +4487,14 @@
         },
         "filter": {
           "$ref": "TriggerFilter",
-          "description": "Filter is the filter to apply against all events from the Broker. Only\nevents that pass this filter will be sent to the Subscriber. If not\nspecified, will default to allowing all events.\n\nThis must be specified in Cloud Run."
+          "description": "Filter is the filter to apply against all events from the Broker. Only\nevents that pass this filter will be sent to the Subscriber."
+        },
+        "importers": {
+          "description": "Specification of the importers that will provide events to the trigger.\nNote, for Cloud Run, the importers will only be used if a filter is not\nspecified.",
+          "items": {
+            "$ref": "TriggerImporterSpec"
+          },
+          "type": "array"
         },
         "subscriber": {
           "$ref": "SubscriberSpec",
