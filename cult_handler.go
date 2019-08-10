@@ -391,10 +391,14 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			cl.Image = new(models.Image)
+			cl.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			cl.Image = new(models.Image)
+			cl.Image.Path = DefaultCharacterPortrait
 		}
 
 		// Runes
@@ -934,10 +938,14 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			cl.Image = new(models.Image)
+			cl.Image.Path = DefaultCharacterPortrait
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			cl.Image = new(models.Image)
+			cl.Image.Path = DefaultCharacterPortrait
 		}
 
 		// Runes
