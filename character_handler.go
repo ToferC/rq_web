@@ -39,6 +39,7 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	for _, cm := range characters {
+
 		if cm.Image == nil {
 			cm.Image = new(models.Image)
 			cm.Image.Path = DefaultCharacterPortrait

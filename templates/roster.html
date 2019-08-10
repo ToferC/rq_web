@@ -107,10 +107,12 @@ create and save "building" content, like homelands, occupations and cults, they 
           <div id="character" class="col-md-4">
             <div class="card mb-4 box-shadow">
               <a href="/view_character/{{ .ID }}">
-              <img class="card-img-top" data-lazy="https://s3.amazonaws.com/runequeset{{ .Image.Path }}" alt="Thumbnail"
-              style="width: 100%; height: 300px; display: block; object-fit:cover; overflow:hidden;" 
-              src=""
-              data-holder-rendered="true">
+              <img 
+                class="card-img-top" 
+                data-lazy="https://s3.amazonaws.com/runequeset{{ .Image.Path }}" alt="Thumbnail"
+                style="width: 100%; height: 300px; display: block; object-fit:cover; overflow:hidden;" 
+                src=""
+                data-holder-rendered="true">
               <div class="card-body"></a>
                 <h5 id="name" class="card-title">{{ .Character.Name }}</h5>
                 <h6>{{ range $r := .Character.CoreRunes }}
@@ -158,6 +160,7 @@ create and save "building" content, like homelands, occupations and cults, they 
     </div>
 
     <script type="text/JavaScript">
+
       var $names = $('h5');
       $('#search').keyup(function () {
 
@@ -175,7 +178,7 @@ create and save "building" content, like homelands, occupations and cults, they 
 
     const config = {
   // If the image gets within 50px in the Y axis, start the download.
-      rootMargin: '150px 0px',
+      rootMargin: '300px 0px',
       threshold: 0.01
     };
 
@@ -194,11 +197,11 @@ create and save "building" content, like homelands, occupations and cults, they 
           }
         });
       }, config);
-
+      
       io.observe(target)
     };
 
-targets.forEach(lazyLoad);
+    targets.forEach(lazyLoad);
 
     </script>
 
