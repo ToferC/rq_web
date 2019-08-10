@@ -1,20 +1,12 @@
 package main
 
 import (
-	"github.com/nfnt/resize"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
-	"image"
-	"image/jpeg"
-	"bytes"
-	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
@@ -769,50 +761,12 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			if h.Filename != "" {
 				// Process image
 				defer file.Close()
-				
-				fNameSplit := strings.Split(h.Filename, ".")
-				fName := fNameSplit[0] + ".jpeg"
 
-				// example path media/Major/TestImage/Jason_White.jpg
-				path := fmt.Sprintf("/media/%s/%s/%s",
-					cm.Author.UserName,
-					runequest.ToSnakeCase(c.Name),
-					fName,
-				)
-
-				fmt.Println(path)
-
-				size := h.Size
-				buffer := make([]byte, size)
-				file.Read(buffer)
-
-				img, _, _ := image.Decode(bytes.NewReader(buffer))
-
-				newImage := resize.Resize(350, 0, img, resize.Lanczos3)
-				buf := new(bytes.Buffer)
-				err = jpeg.Encode(buf, newImage, nil)
+				err = ProcessImage(h, file, cm)
 				if err != nil {
-					log.Printf("JPEG encoding error: %v", err)
+					log.Printf("Error processing image: %v", err)
 				}
 
-				_, err = uploader.Upload(&s3manager.UploadInput{
-					Bucket: aws.String(os.Getenv("BUCKET")),
-					Key:    aws.String(path),
-					Body:   bytes.NewReader(buf.Bytes()),
-				})
-				if err != nil {
-					log.Panic(err)
-					fmt.Println("Error uploading file ", err)
-				}
-				fmt.Printf("successfully uploaded %q to %q\n",
-					h.Filename, os.Getenv("BUCKET"))
-
-				if cm.Image == nil {
-					cm.Image = new(models.Image)
-				}
-				cm.Image.Path = path
-
-				fmt.Println(path)
 			} else {
 				fmt.Println("No file provided.")
 			}
