@@ -94,6 +94,7 @@ th {
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               {{ if not $character.CreationSteps.Complete }}
               <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
+              <a class="btn btn-sm btn-danger" title="Permanently delete the character" href="/delete/{{ $ID }}">Delete</a>
               {{ else }}
               <div class="btn-group">
               <button class="btn btn-sm btn-success" type="submit" value="Save Character State" title="Save current character state">Save</button> 
