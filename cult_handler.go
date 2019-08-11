@@ -412,9 +412,14 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					Variable:   rs.Variable,
 					Cost:       rs.Cost,
 				}
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+
+				uStr := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+
+				if uStr != "" {
+					t.UserString = uStr
+					t.UserChoice = true
 				}
+
 				cl.Cult.RuneSpells = append(cl.Cult.RuneSpells, t)
 			}
 		}
@@ -949,9 +954,13 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 					Cost:       rs.Cost,
 				}
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				uStr := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+
+				if uStr != "" {
+					t.UserString = uStr
+					t.UserChoice = true
 				}
+
 				tempRuneSpells = append(tempRuneSpells, t)
 			}
 		}

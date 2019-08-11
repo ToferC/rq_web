@@ -84,7 +84,7 @@
           <td>
         {{ $rs.CoreString }}
         {{ if ne $rs.UserString "" }}
-         {{ $rs.UserString }}
+         ({{ $rs.UserString }})
           {{ end }}{{ range $r := $rs.Runes }}
           <img 
             class alt="{{$r}}"
@@ -113,7 +113,7 @@
           <td>
         {{ $sm.CoreString }}
         {{ if ne $sm.UserString "" }}
-         {{ $sm.UserString }}
+         ({{ $sm.UserString }})
           {{ end }}
           </td>
           <td style="text-align:center">
