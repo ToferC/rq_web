@@ -53,18 +53,18 @@ func main() {
 	fmt.Println(db)
 
 	// AddSlug to cms
-	cms, _ := database.ListAllCharacterModels(db)
+	cults, _ := database.ListCultModels(db)
 
-	for _, cm := range cms {
+	for _, cl := range cults {
 
-		tempRuneSpells := map[string]*runequest.Spell{}
+		tempRuneSpells := []*runequest.Spell{}
 
-		for _, v := range cm.Character.RuneSpells {
+		for _, v := range cl.Cult.RuneSpells {
 
 			index, err := indexSpell(v.CoreString, runequest.RuneSpells)
 			if err != nil {
 				fmt.Println(err)
-				tempRuneSpells[v.CoreString] = v
+				tempRuneSpells = append(tempRuneSpells, v)
 				continue
 			}
 
@@ -80,11 +80,11 @@ func main() {
 			}
 
 			s.GenerateName()
-			tempRuneSpells[s.Name] = s
+			tempRuneSpells = append(tempRuneSpells, s)
 		}
-		cm.Character.RuneSpells = tempRuneSpells
+		cl.Cult.RuneSpells = tempRuneSpells
 
-		database.UpdateCharacterModel(db, cm)
+		database.UpdateCultModel(db, cl)
 	}
 }
 

@@ -85,7 +85,13 @@
         {{ $rs.CoreString }}
         {{ if ne $rs.UserString "" }}
          {{ $rs.UserString }}
-          {{ end }}
+          {{ end }}{{ range $r := $rs.Runes }}
+          <img 
+            class alt="{{$r}}"
+            style="width: 16px; height: 16px" 
+            src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r "Fire/Sky"}}Fire Sky{{else}}{{ $r }}{{end}}.png"
+          >
+            {{ end }}
           </td>
           <td style="text-align:center">
           {{ if $rs.Variable }}var{{else}}

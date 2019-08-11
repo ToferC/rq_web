@@ -407,6 +407,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					Points:     rs.Points,
 					UserChoice: rs.UserChoice,
 					Domain:     rs.Domain,
+					Runes:      rs.Runes,
 					Source:     rs.Source,
 					Variable:   rs.Variable,
 					Cost:       rs.Cost,
@@ -943,6 +944,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 					UserChoice: rs.UserChoice,
 					Domain:     rs.Domain,
 					Source:     rs.Source,
+					Runes:      rs.Runes,
 					Variable:   rs.Variable,
 					Cost:       rs.Cost,
 				}
