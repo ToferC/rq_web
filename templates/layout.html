@@ -190,17 +190,6 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-{{ if .Notes }}
-window.onload = async function() {
-  var notes = document.getElementById('Notes')
-    notes.style.color = "white";
-    notes.style.background = "grey";
-    await sleep(1000)
-    notes.style.color = "black";
-    notes.style.background = "white";
-  };
-  {{ end }}
-
 </script>
 
     <!-- Bootstrap core JavaScript
