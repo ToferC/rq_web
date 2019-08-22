@@ -282,7 +282,7 @@ func ModifyFactionHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cms, err := database.ListUserCharacterModels(db, username)
+	cms, err := database.ListCharacterModels(db)
 
 	// Add empty CharacterModel options if < 10
 	if len(factionCharacters) < 10 {

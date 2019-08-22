@@ -29,15 +29,14 @@
             <td>{{ .IsAdmin }}</td>
             <td>{{ .Email }}</td>
             <td>{{ .Characters }}</td>
-            <td><a href="/admin_view_user_roster/{{ .ID }}">Link</td>
-            <td><a href="/make_admin/{{ .ID }}">Toggle Admin</td>
-            <td><a href="/delete_user/{{ .ID }}">Delete</td>
+            <td><a href="/admin_view_user_roster/{{ .ID }}">Link</a></td>
+            <td><a href="/make_admin/{{ .ID }}">Toggle Admin</a></td>
+            <td><a href="/delete_user/{{ .ID }}">Delete</a></td>
           </tr>
           {{ end }}
         </table>
       </div>
     </div>
-
   </div>
 
 {{end}}

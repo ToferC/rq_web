@@ -57,7 +57,7 @@ func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	return cms, nil
 }
 
-// ListCharacterModels queries Character names and add to slice
+// ListCharacterModels queries open Character names and add to slice
 func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
@@ -69,16 +69,6 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 		panic(err)
 	}
 
-	// Print names and PK
-	for i, cm := range cms {
-
-		if cm.Character.CreationSteps == nil {
-			cm.Character.CreationSteps = map[string]bool{}
-			cm.Character.CreationSteps["Complete"] = true
-		}
-
-		fmt.Println(i, cm.Character.Name)
-	}
 	return cms, nil
 }
 

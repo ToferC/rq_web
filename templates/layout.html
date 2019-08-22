@@ -58,10 +58,6 @@
       background-color: rgb(196, 161, 136);
     }
 
-    .active a {
-      background-color: yellow;
-    }
-
   </style>
   </head>
 
@@ -178,19 +174,6 @@
       {{template "content" .}}
 
     </div><!-- /.container -->
-
-<script>
-{{ if .Flashes }}
-  {{ range $f := .Flashes}}
-  window.alert("{{ $f }}");
-{{ end }}
-{{ end }}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-</script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
