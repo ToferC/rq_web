@@ -82,7 +82,6 @@ th {
             <hr>
 
 
-            <form action="" method="POST">
             <h5>Description</h5>{{ if gt (len $character.Description) 288 }}
             <button class="btn btn-link btn-sm" data-toggle="collapse" type="button" data-target="#description">Show</button></h5>
             <div id="description" class="collapse"><hr><p>{{ toMarkdown $character.Description }}</p></div>
@@ -90,13 +89,14 @@ th {
             <p>{{ toMarkdown $character.Description }}</p>
             {{ end }}
             <hr>
-            
+
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
-              {{ if not $character.CreationSteps.Complete }}
-              <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
-              <a class="btn btn-sm btn-danger" title="Permanently delete the character" href="/delete/{{ $ID }}">Delete</a>
-              {{ else }}
-              <div class="btn-group">
+            {{ if not $character.CreationSteps.Complete }}
+            <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL $character.CreationSteps }}/{{ $ID }}">Resume Creation</a>
+            <a class="btn btn-sm btn-danger" title="Permanently delete the character" href="/delete/{{ $ID }}">Delete</a>
+            {{ else }}
+            <div class="btn-group">
+              <form action="" method="POST">
               <button class="btn btn-sm btn-success" type="submit" value="Save Character State" title="Save current character state">Save</button> 
               <div class="dropdown">
                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">

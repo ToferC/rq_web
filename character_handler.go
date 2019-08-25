@@ -133,8 +133,9 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
-		fmt.Println(err)
 		fmt.Println("Unable to load CharacterModel")
+		http.Redirect(w, req, "/notfound", http.StatusSeeOther)
+		return
 	}
 
 	fmt.Println(cm)

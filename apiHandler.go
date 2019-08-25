@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
@@ -264,6 +265,74 @@ func UpdateCharacterModel(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Updating Character")
 
 	json.NewEncoder(w).Encode(cm)
+}
+
+// CharacterModelLikesHandler handles the basic roster rendering for the app
+func CharacterModelLikesHandler(w http.ResponseWriter, req *http.Request) {
+
+	// Get session values or redirect to Login
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		http.Redirect(w, req, "/login/", 302)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	fmt.Println(loggedIn, isAdmin, username)
+
+	fmt.Println(session)
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+		return
+	}
+
+	vars := mux.Vars(req)
+	idString := vars["id"]
+
+	pk, err := strconv.Atoi(idString)
+	if err != nil {
+		pk = 0
+		log.Println(err)
+	}
+
+	cm, err := database.PKLoadCharacterModel(db, int64(pk))
+
+	if req.Method == "PUT" {
+		_, ok := cm.LikeData[username]
+		if !ok {
+			cm.LikeData[username] = &models.Like{
+				UserName:  username,
+				CreatedAt: time.Now(),
+			}
+			cm.Likes++
+			fmt.Printf("%s liked %s at %s", username, cm.Character.Name, time.Now())
+		} else {
+			delete(cm.LikeData, username)
+			cm.Likes--
+			fmt.Printf("%s unliked %s at %s", username, cm.Character.Name, time.Now())
+		}
+
+		err = database.UpdateCharacterModel(db, cm)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Println("Updated Character")
+	} else {
+		fmt.Println("No request")
+	}
+
+	json.NewEncoder(w).Encode(cm)
+
 }
 
 // DeleteCharacterModel deletes a character

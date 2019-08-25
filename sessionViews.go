@@ -242,3 +242,30 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		Render(w, "templates/signup.html", wc)
 	}
 }
+
+func notFound(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		// in case of error
+	}
+
+	w.WriteHeader(http.StatusNotFound)
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	wc := WebChar{
+		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
+	}
+
+	Render(w, "templates/404.html", wc)
+}

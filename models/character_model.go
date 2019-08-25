@@ -13,6 +13,7 @@ type CharacterModel struct {
 	Character *runequest.Character
 	Open      bool
 	Likes     int
+	LikeData  map[string]*Like
 	Image     *Image
 	Slug      string
 	CreatedAt time.Time `sql:"default:now()"`
@@ -23,4 +24,10 @@ type CharacterModel struct {
 type Image struct {
 	ID   int
 	Path string
+}
+
+// Like represents a user appreciation of an object
+type Like struct {
+	UserName  string
+	CreatedAt time.Time `sql:"default:now()"`
 }

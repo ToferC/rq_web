@@ -147,6 +147,7 @@ func main() {
 	// ResizeImages(db)
 
 	r := mux.NewRouter()
+	r.NotFoundHandler = http.HandlerFunc(notFound)
 
 	fmt.Println("Starting Webserver at port " + port)
 	r.HandleFunc("/", CharacterIndexHandler)
@@ -240,6 +241,8 @@ func main() {
 	r.HandleFunc("/api/character/{id}", CreateCharacterModel).Methods("POST")
 	r.HandleFunc("/api/character/{id}", DeleteCharacterModel).Methods("DELETE")
 	r.HandleFunc("/api/character/{id}", UpdateCharacterModel).Methods("PUT")
+
+	r.HandleFunc("/api/character_like/{id}", CharacterModelLikesHandler).Methods("PUT")
 
 	http.Handle("/", r)
 
