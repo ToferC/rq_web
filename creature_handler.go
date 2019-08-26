@@ -438,8 +438,29 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			c.Statistics[st].Max = num
 		}
 
+		// Set Hit Locations
+		form := req.FormValue("Hit-Location-Form")
+
+		c.LocationForm = form
+		c.HitLocations = runequest.LocationForms[form]
+		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
+
 		c.DetermineSkillCategoryValues()
 		c.SetAttributes()
+
+		c.CurrentHP = c.Attributes["HP"].Max
+		c.CurrentMP = c.Attributes["MP"].Max
+		c.CurrentRP = c.Cult.NumRunePoints
+
+		armorStr := req.FormValue("Armor")
+		armor, err := strconv.Atoi(armorStr)
+		if err != nil {
+			armor = 0
+		}
+		for _, v := range c.HitLocations {
+			v.Armor = armor
+			v.Value = v.Max
+		}
 
 		tempMovement := []*runequest.Movement{}
 
@@ -578,28 +599,6 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Update Character
-
-		form := req.FormValue("Hit-Location-Form")
-
-		c.LocationForm = form
-		c.HitLocations = runequest.LocationForms[form]
-		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
-
-		c.CurrentHP = c.Attributes["HP"].Max
-		c.CurrentMP = c.Attributes["MP"].Max
-		c.CurrentRP = c.Cult.NumRunePoints
-
-		armorStr := req.FormValue("Armor")
-		armor, err := strconv.Atoi(armorStr)
-		if err != nil {
-			armor = 0
-		}
-		for _, v := range c.HitLocations {
-			v.Armor = armor
-			v.Value = v.Max
-		}
-
-		fmt.Println(c.HitLocations)
 
 		c.UpdateCharacter()
 

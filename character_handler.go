@@ -534,9 +534,20 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				stat.ExperienceCheck = false
 				stat.Max += modVal
 			}
-
 			stat.UpdateStatistic()
+		}
 
+		c.SetAttributes()
+
+		// Hit locations
+		for k, v := range c.HitLocations {
+			str := req.FormValue(fmt.Sprintf("%s-Armor", k))
+			armor, err := strconv.Atoi(str)
+			if err != nil {
+				armor = v.Armor
+			}
+			v.Armor = armor
+			v.Value = v.Max
 		}
 
 		tempMovement := []*runequest.Movement{}
@@ -735,17 +746,6 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			if a.Total < 1 {
 				delete(c.Abilities, k)
 			}
-		}
-
-		// Hit locations - need to add new map or amend old one
-
-		for k, v := range c.HitLocations {
-			str := req.FormValue(fmt.Sprintf("%s-Armor", k))
-			armor, err := strconv.Atoi(str)
-			if err != nil {
-				armor = v.Armor
-			}
-			v.Armor = armor
 		}
 
 		// Set Open to true if user authorizes

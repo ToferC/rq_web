@@ -460,14 +460,17 @@
         }
       });
 
-      function updateHP(cID, max) {
+      function updateHP(cID, maxStr) {
 
-        if (this.value > max) {
-          this.value = max
+        var max = parseInt(maxStr)
+        var val = parseInt(this.value)
+
+        if (val > max) {
+          val = max
         };
 
-        if (this.value < (-max * 2)) {
-          this.value = -max * 2
+        if (val < (-max * 2)) {
+          val = -max * 2
         };
 
         var target = document.getElementById(cID);
@@ -475,16 +478,16 @@
         var x = 0;
         var previous = parseInt(this.dataset.previous)
         
-          x = this.value - previous
+          x = val - previous
           target.value = targetVal + x
-          this.dataset.previous = this.value
+          this.dataset.previous = val
     
 
-        if (this.value < -1*max) {
+        if (val < -1*max) {
           this.style.backgroundColor = "red"
-        } else if (this.value < 1) {
+        } else if (val < 1) {
           this.style.backgroundColor = "orange"
-        } else if (this.value < max) {
+        } else if (val < max) {
           this.style.backgroundColor = "yellow"
         } else {
           this.style.backgroundColor = "white"
