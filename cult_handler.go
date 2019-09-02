@@ -617,7 +617,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s2.CultValue = v
 
-				userString2 = req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
+				userString2 := req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
 
 				if userString2 != "" {
 					s2.UserString = strings.TrimSpace(userString2)
