@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/models"
@@ -97,7 +96,7 @@ func LoadFactionCharacterModels(db *pg.DB, slugs []string) ([]*models.CharacterM
 	_, err := db.Query(&cms, `SELECT * FROM character_models WHERE slug IN (?)`, pg.In(slugs))
 
 	if err != nil {
-		log.Panic(err)
+		return cms, err
 	}
 
 	c := counter(slugs)

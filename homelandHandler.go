@@ -189,8 +189,9 @@ func HomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	hl, err := database.LoadHomelandModel(db, slug)
 	if err != nil {
-		fmt.Println(err)
 		fmt.Println("Unable to load HomelandModel")
+		http.Redirect(w, req, "/notfound", http.StatusSeeOther)
+		return
 	}
 
 	fmt.Println(hl)

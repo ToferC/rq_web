@@ -461,7 +461,7 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		Render(w, "templates/login.html", nil)
+		http.Redirect(w, req, "templates/login.html", 302)
 		return
 		// in case of error
 	}

@@ -105,6 +105,8 @@ func FactionHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Unable to load Faction")
+		http.Redirect(w, req, "/notfound", http.StatusSeeOther)
+		return
 	}
 
 	fmt.Println(fac)

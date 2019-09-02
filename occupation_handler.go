@@ -190,6 +190,8 @@ func OccupationHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Unable to load OccupationModel")
+		http.Redirect(w, req, "/notfound", http.StatusSeeOther)
+		return
 	}
 
 	fmt.Println(oc)

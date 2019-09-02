@@ -54,6 +54,8 @@ func main() {
 	hls, _ := database.ListHomelandModels(db)
 
 	for _, hl := range hls {
+
+		
 		database.UpdateHomelandModel(db, hl)
 	}
 

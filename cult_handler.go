@@ -188,8 +188,9 @@ func CultHandler(w http.ResponseWriter, req *http.Request) {
 
 	cl, err := database.LoadCultModel(db, slug)
 	if err != nil {
-		fmt.Println(err)
 		fmt.Println("Unable to load CultModel")
+		http.Redirect(w, req, "/notfound", http.StatusSeeOther)
+		return
 	}
 
 	fmt.Println(cl)

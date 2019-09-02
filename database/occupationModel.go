@@ -71,7 +71,7 @@ func LoadOccupationModel(db *pg.DB, slug string) (*models.OccupationModel, error
 		Select()
 
 	if err != nil {
-		panic(err)
+		return occupation, err
 	}
 
 	fmt.Println("Occupation loaded From DB")

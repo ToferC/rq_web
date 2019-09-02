@@ -537,7 +537,13 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			stat.UpdateStatistic()
 		}
 
+		// Update Character
 		c.SetAttributes()
+
+		// Update Character
+		c.CurrentHP = c.Attributes["HP"].Max
+		c.CurrentMP = c.Attributes["MP"].Max
+		c.CurrentRP = c.Cult.NumRunePoints
 
 		// Hit locations
 		for k, v := range c.HitLocations {

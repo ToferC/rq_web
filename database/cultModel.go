@@ -71,7 +71,7 @@ func LoadCultModel(db *pg.DB, slug string) (*models.CultModel, error) {
 		Select()
 
 	if err != nil {
-		panic(err)
+		return cult, err
 	}
 
 	fmt.Println("Cult loaded From DB")

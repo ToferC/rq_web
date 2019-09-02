@@ -71,7 +71,7 @@ func LoadHomelandModel(db *pg.DB, slug string) (*models.HomelandModel, error) {
 		Select()
 
 	if err != nil {
-		panic(err)
+		return homeland, err
 	}
 
 	fmt.Println("Homeland loaded From DB")
