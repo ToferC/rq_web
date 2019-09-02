@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gosimple/slug"
 
@@ -417,7 +418,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				uStr := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
 
 				if uStr != "" {
-					t.UserString = uStr
+					t.UserString = strings.TrimSpace(uStr)
 					t.UserChoice = true
 				}
 
@@ -441,8 +442,9 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					Cost:       sm.Cost,
 				}
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				if t.UserString != "" {
+					u := req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+					t.UserString = strings.TrimSpace(u)
 				}
 				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, t)
 			}
@@ -531,9 +533,10 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.CultValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+
+				if userString != "" {
+					s1.UserString = strings.TrimSpace(userString)
 				}
 				skillArray = append(skillArray, s1)
 			}
@@ -544,7 +547,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		// Read Weapons
 		for i := 1; i < 4; i++ {
 
-			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			d := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			desc := strings.TrimSpace(d)
 
 			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
@@ -588,9 +592,10 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.CultValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				userString1 := req.FormValue(fmt.Sprintf("Skill-%d-1-UserString", i))
+
+				if userString1 != "" {
+					s1.UserString = strings.TrimSpace(userString1)
 				}
 
 				// Second Skill option
@@ -612,9 +617,10 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s2.CultValue = v
 
-				if s2.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = req.FormValue(userString)
+				userString2 = req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
+
+				if userString2 != "" {
+					s2.UserString = strings.TrimSpace(userString2)
 				}
 
 				// Form SkillChoice
@@ -646,7 +652,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 					v = 0
 				}
 
-				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+				u := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+				userString := strings.TrimSpace(u)
 
 				p := runequest.Ability{
 					Type:       "Passion",
@@ -672,7 +679,8 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				u := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				userString := strings.TrimSpace(u)
 
 				if userString != "" {
 					sk.UserChoice = true
@@ -955,7 +963,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 					Cost:       rs.Cost,
 				}
 
-				uStr := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				u := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
+				uStr := strings.TrimSpace(u)
 
 				if uStr != "" {
 					t.UserString = uStr
@@ -984,8 +993,11 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 					Cost:       sm.Cost,
 				}
 
-				if t.UserChoice {
-					t.UserString = req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				u := req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
+				userString := strings.TrimSpace(u)
+
+				if userString != "" {
+					t.UserString = userString
 				}
 				tempSpiritMagic = append(tempSpiritMagic, t)
 			}
@@ -1002,6 +1014,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			if !c.SubCult {
 
 				str := req.FormValue(fmt.Sprintf("Cult-%s-Name", c.Name))
+				str = strings.TrimSpace(str)
 
 				if str != "" {
 					tempCult := runequest.Cult{
@@ -1030,7 +1043,8 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				v = 0
 			}
 
-			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+			u := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+			userString := strings.TrimSpace(u)
 
 			if sk != "" && v > 0 {
 
@@ -1075,6 +1089,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 
 			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			desc = strings.TrimSpace(desc)
 
 			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
@@ -1114,6 +1129,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+				userString = strings.TrimSpace(userString)
 
 				p := runequest.Ability{
 					Type:       "Passion",
@@ -1160,9 +1176,11 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.CultValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				u1 := req.FormValue(fmt.Sprintf("Skill-%d-1-UserString", i))
+				userString1 := strings.TrimSpace(u1)
+
+				if userString1 != "" {
+					s1.UserString = userString1
 				}
 
 				// Second Skill option
@@ -1184,9 +1202,11 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s2.CultValue = v
 
-				if s2.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = req.FormValue(userString)
+				u2 := req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
+				userString2 := strings.TrimSpace(u2)
+
+				if userString2 != "" {
+					s2.UserString = userString2
 				}
 
 				// Form SkillChoice
@@ -1206,6 +1226,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
+			coreString = strings.TrimSpace(coreString)
 
 			if coreString != "" {
 
@@ -1215,6 +1236,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
 				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				userString = strings.TrimSpace(userString)
 
 				if userString != "" {
 					sk.UserChoice = true
