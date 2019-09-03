@@ -11,9 +11,11 @@ import (
 	"image/png"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 	"unsafe"
 )
@@ -45,6 +47,86 @@ func decodePNG(fileName string) (image.Image, error) {
 	}
 	defer f.Close()
 	return png.Decode(f)
+}
+
+// simpleHB is a simple implementation of highBits.
+func simpleHB(dst []byte, src []byte, invert bool) (d int, s int) {
+	for d < len(dst) {
+		numToPack := len(src) - s
+		if numToPack <= 0 {
+			break
+		} else if numToPack > 8 {
+			numToPack = 8
+		}
+
+		byteValue := byte(0)
+		if invert {
+			byteValue = 0xFF >> uint(numToPack)
+		}
+		for n := 0; n < numToPack; n++ {
+			byteValue |= (src[s] & 0x80) >> uint(n)
+			s++
+		}
+		dst[d] = byteValue
+		d++
+	}
+	return d, s
+}
+
+func TestHighBits(t *testing.T) {
+	rng := rand.New(rand.NewSource(1))
+	dst0 := make([]byte, 3)
+	dst1 := make([]byte, 3)
+	src := make([]byte, 20)
+
+	for r := 0; r < 1000; r++ {
+		numDst := rng.Intn(len(dst0) + 1)
+		randomByte := byte(rng.Intn(256))
+		for i := 0; i < numDst; i++ {
+			dst0[i] = randomByte
+			dst1[i] = randomByte
+		}
+
+		numSrc := rng.Intn(len(src) + 1)
+		for i := 0; i < numSrc; i++ {
+			src[i] = byte(rng.Intn(256))
+		}
+
+		invert := rng.Intn(2) == 0
+
+		d0, s0 := highBits(dst0[:numDst], src[:numSrc], invert)
+		d1, s1 := simpleHB(dst1[:numDst], src[:numSrc], invert)
+
+		if (d0 != d1) || (s0 != s1) || !bytes.Equal(dst0[:numDst], dst1[:numDst]) {
+			srcHighBits := make([]byte, numSrc)
+			for i := range srcHighBits {
+				srcHighBits[i] = src[i] >> 7
+			}
+
+			t.Fatalf("r=%d, numDst=%d, numSrc=%d, invert=%t:\nsrcHighBits=%d\n"+
+				"got  d=%d, s=%d, bytes=[% 02X]\n"+
+				"want d=%d, s=%d, bytes=[% 02X]",
+				r, numDst, numSrc, invert, srcHighBits,
+				d0, s0, dst0[:numDst],
+				d1, s1, dst1[:numDst],
+			)
+		}
+	}
+}
+
+func BenchmarkHighBits(b *testing.B) {
+	rng := rand.New(rand.NewSource(1))
+	dst := make([]byte, 1024)
+	src := make([]byte, 7777)
+	for i := range src {
+		src[i] = uint8(rng.Intn(256))
+	}
+
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		highBits(dst, src, false)
+		highBits(dst, src, true)
+	}
 }
 
 func TestMaxCodeLength(t *testing.T) {
@@ -198,25 +280,23 @@ func TestDecodeInvalidCode(t *testing.T) {
 	}
 }
 
-func TestReadRegular(t *testing.T) { testRead(t, false) }
-func TestReadInvert(t *testing.T)  { testRead(t, true) }
-
-func testRead(t *testing.T, invert bool) {
+func testRead(t *testing.T, fileName string, sf SubFormat, align, invert bool) {
 	t.Helper()
 
 	const width, height = 153, 55
 	opts := &Options{
+		Align:  align,
 		Invert: invert,
 	}
 
 	got := ""
 	{
-		f, err := os.Open("testdata/bw-gopher.ccitt_group3")
+		f, err := os.Open(fileName)
 		if err != nil {
 			t.Fatalf("Open: %v", err)
 		}
 		defer f.Close()
-		gotBytes, err := ioutil.ReadAll(NewReader(f, MSB, Group3, width, height, opts))
+		gotBytes, err := ioutil.ReadAll(NewReader(f, MSB, sf, width, height, opts))
 		if err != nil {
 			t.Fatalf("ReadAll: %v", err)
 		}
@@ -261,9 +341,6 @@ func testRead(t *testing.T, invert bool) {
 				}
 			}
 		}
-		if invert {
-			invertBytes(wantBytes)
-		}
 		want = string(wantBytes)
 	}
 
@@ -289,6 +366,27 @@ func testRead(t *testing.T, invert bool) {
 
 	if got != want {
 		t.Fatalf("got:\n%s\nwant:\n%s", format(got), format(want))
+	}
+}
+
+func TestRead(t *testing.T) {
+	for _, fileName := range []string{
+		"testdata/bw-gopher.ccitt_group3",
+		"testdata/bw-gopher-aligned.ccitt_group3",
+		"testdata/bw-gopher-inverted.ccitt_group3",
+		"testdata/bw-gopher-inverted-aligned.ccitt_group3",
+		"testdata/bw-gopher.ccitt_group4",
+		"testdata/bw-gopher-aligned.ccitt_group4",
+		"testdata/bw-gopher-inverted.ccitt_group4",
+		"testdata/bw-gopher-inverted-aligned.ccitt_group4",
+	} {
+		subFormat := Group3
+		if strings.HasSuffix(fileName, "group4") {
+			subFormat = Group4
+		}
+		align := strings.Contains(fileName, "aligned")
+		invert := strings.Contains(fileName, "inverted")
+		testRead(t, fileName, subFormat, align, invert)
 	}
 }
 

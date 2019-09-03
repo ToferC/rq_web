@@ -102,3 +102,13 @@ func formatIntArray(a []int) string {
 	}
 	return text
 }
+
+// IsInIntArray finds an int in an array of ints
+func IsInIntArray(a []int, t int) bool {
+	for _, i := range a {
+		if t == i {
+			return true
+		}
+	}
+	return false
+}

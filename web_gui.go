@@ -166,6 +166,22 @@ func formatStringArray(a []string) string {
 	return text
 }
 
+func formatSpellArray(sa map[string]runequest.Spell) string {
+	text := ""
+	end := len(sa)
+	counter := 0
+
+	for _, v := range sa {
+		if counter+1 == end {
+			text += v.String()
+		} else {
+			text += v.String() + ", "
+			counter++
+		}
+	}
+	return text
+}
+
 func formatIntArray(a []int) string {
 	text := strconv.Itoa(a[0])
 	end := len(a)
@@ -334,6 +350,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"generateCharacterCreationURL": generateCharacterCreationURL,
 		"formatStringArray":            formatStringArray,
 		"formatIntArray":               formatIntArray,
+		"formatSpellArray":             formatSpellArray,
 		"sortedSkills":                 sortedSkills,
 		"splitSkills":                  splitSkills,
 		"slugify":                      slugify,

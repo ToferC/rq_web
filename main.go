@@ -184,6 +184,7 @@ func main() {
 
 	// Character Modification
 	r.HandleFunc("/edit_magic/{id}", EditMagicHandler)
+	r.HandleFunc("/bound_spirit/{id}", BoundSpiritHandler)
 
 	// Homeland Handlers
 	r.HandleFunc("/homeland_index/", HomelandIndexHandler)

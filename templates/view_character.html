@@ -107,6 +107,7 @@ th {
                     <a class="dropdown-item" title="Add new or custom skills" href="/add_skills/{{ $ID }}">Add Skills</a>
                     <a class="dropdown-item" title="Add new or custom passions" href="/add_passions/{{ $ID }}">Add Passions</a>
                     <a class="dropdown-item" title="Add/edit spells and magic" href="/edit_magic/{{ $ID }}">Edit Magic</a>
+                    <a class="dropdown-item" title="Manage bound spirits" href="/bound_spirit/{{ $ID }}">Bound Spirits</a>
                     <a class="dropdown-item" title="Add or edit weapons & armor" href="/equip_weapons_armor/{{ $ID }}">Attacks & Armor</a>
                     <div class="dropdown-divider"></div>         
                     <a class="dropdown-item" title="Create a duplicate of the character in my roster" href="/duplicate_character/{{ $ID }}">Duplicate</a>
@@ -809,6 +810,8 @@ th {
             </div>  
     
             {{ if gt $character.Cult.NumRunePoints 0 }}
+            <hr>
+            <h5>Cults:</h5>
             <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="RP-addon">RP ({{ $character.Cult.Name }})</span>
@@ -830,6 +833,29 @@ th {
                         <span class="input-group-text" id="RP-addon">/{{ $ec.RunePoints }}</span>
                       </div>
           </div>
+            {{ end }}
+
+            {{ if gt (len $character.BoundSpirits) 0}}
+            <hr>
+            <h5>Bound Spirits:</h5>
+            {{ range $i, $bs := $character.BoundSpirits }}
+            <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="BS-{{$i}}-MP-addon">{{ $bs.Name }}</span>
+                    </div>
+                    <input 
+                      type="number" 
+                      class="form-control" 
+                      aria-describedby="BS-{{$i}}-MP-addon" 
+                      name="BS-{{$i}}-MP-{{ $bs.Name }}" 
+                      value ="{{ $bs.CurrentMP }}"
+                      max="{{ $bs.Pow }}"
+                      min="0">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="BS-{{$i}}-MP-addon">/{{ $bs.Pow }}</span>
+                      </div>
+          </div>
+            {{ end }}
             {{ end }}
             <hr>
             {{ end }} <!-- END in play IF -->
@@ -885,6 +911,34 @@ th {
           </div> <!-- End Column 4 --> 
 
           <div class="col-lg-4">
+
+              {{ if gt (len $character.BoundSpirits) 0}}
+              <h5>Bound Spirits</h5>
+    
+            <table class="table table-sm table-striped">
+              <tr>
+                <th>Spirit</th>
+                <th>Pow</th>
+                <th>Cha</th>
+                <th>Description</th>
+              </tr>
+              {{ range $bs := $character.BoundSpirits }}
+                <tr>
+                  <td><strong>{{ $bs.Name }}</strong> ({{ $bs.Item }})</td>
+                  <td>{{ $bs.Pow }}</td>
+                  <td>{{ $bs.Cha }}</td>
+                  <td>{{ $bs.Description }}</td>
+                </tr>
+                <tr>
+                  <td colspan="4">Spells: {{ formatSpellArray $bs.SpiritMagicSpells }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #000;"><td colspan="4"></td></tr>
+                {{ end }}
+            </table>
+    
+              {{ end }}
+
+
               <h5>Equipment {{ if $IsAuthor }}
                   <button class="btn btn-sm btn-success" type="submit" value="Save Character State">Save</button>
                   {{ end }}</h5>

@@ -5568,151 +5568,6 @@ func (c *Glue) GetJobBookmarkWithContext(ctx aws.Context, input *GetJobBookmarkI
 	return out, req.Send()
 }
 
-const opGetJobBookmarks = "GetJobBookmarks"
-
-// GetJobBookmarksRequest generates a "aws/request.Request" representing the
-// client's request for the GetJobBookmarks operation. The "output" return
-// value will be populated with the request's response once the request completes
-// successfully.
-//
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
-//
-// See GetJobBookmarks for more information on using the GetJobBookmarks
-// API call, and error handling.
-//
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
-//
-//    // Example sending a request using the GetJobBookmarksRequest method.
-//    req, resp := client.GetJobBookmarksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
-//
-// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetJobBookmarks
-func (c *Glue) GetJobBookmarksRequest(input *GetJobBookmarksInput) (req *request.Request, output *GetJobBookmarksOutput) {
-	op := &request.Operation{
-		Name:       opGetJobBookmarks,
-		HTTPMethod: "POST",
-		HTTPPath:   "/",
-		Paginator: &request.Paginator{
-			InputTokens:     []string{"NextToken"},
-			OutputTokens:    []string{"NextToken"},
-			LimitToken:      "MaxResults",
-			TruncationToken: "",
-		},
-	}
-
-	if input == nil {
-		input = &GetJobBookmarksInput{}
-	}
-
-	output = &GetJobBookmarksOutput{}
-	req = c.newRequest(op, input, output)
-	return
-}
-
-// GetJobBookmarks API operation for AWS Glue.
-//
-// Returns information on the job bookmark entries. The list is ordered on decreasing
-// version numbers.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for AWS Glue's
-// API operation GetJobBookmarks for usage and error information.
-//
-// Returned Error Codes:
-//   * ErrCodeInvalidInputException "InvalidInputException"
-//   The input provided was not valid.
-//
-//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
-//   A specified entity does not exist
-//
-//   * ErrCodeInternalServiceException "InternalServiceException"
-//   An internal service error occurred.
-//
-//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
-//   The operation timed out.
-//
-// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetJobBookmarks
-func (c *Glue) GetJobBookmarks(input *GetJobBookmarksInput) (*GetJobBookmarksOutput, error) {
-	req, out := c.GetJobBookmarksRequest(input)
-	return out, req.Send()
-}
-
-// GetJobBookmarksWithContext is the same as GetJobBookmarks with the addition of
-// the ability to pass a context and additional request options.
-//
-// See GetJobBookmarks for details on how to use this API operation.
-//
-// The context must be non-nil and will be used for request cancellation. If
-// the context is nil a panic will occur. In the future the SDK may create
-// sub-contexts for http.Requests. See https://golang.org/pkg/context/
-// for more information on using Contexts.
-func (c *Glue) GetJobBookmarksWithContext(ctx aws.Context, input *GetJobBookmarksInput, opts ...request.Option) (*GetJobBookmarksOutput, error) {
-	req, out := c.GetJobBookmarksRequest(input)
-	req.SetContext(ctx)
-	req.ApplyOptions(opts...)
-	return out, req.Send()
-}
-
-// GetJobBookmarksPages iterates over the pages of a GetJobBookmarks operation,
-// calling the "fn" function with the response data for each page. To stop
-// iterating, return false from the fn function.
-//
-// See GetJobBookmarks method for more information on how to use this operation.
-//
-// Note: This operation can generate multiple requests to a service.
-//
-//    // Example iterating over at most 3 pages of a GetJobBookmarks operation.
-//    pageNum := 0
-//    err := client.GetJobBookmarksPages(params,
-//        func(page *glue.GetJobBookmarksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
-func (c *Glue) GetJobBookmarksPages(input *GetJobBookmarksInput, fn func(*GetJobBookmarksOutput, bool) bool) error {
-	return c.GetJobBookmarksPagesWithContext(aws.BackgroundContext(), input, fn)
-}
-
-// GetJobBookmarksPagesWithContext same as GetJobBookmarksPages except
-// it takes a Context and allows setting request options on the pages.
-//
-// The context must be non-nil and will be used for request cancellation. If
-// the context is nil a panic will occur. In the future the SDK may create
-// sub-contexts for http.Requests. See https://golang.org/pkg/context/
-// for more information on using Contexts.
-func (c *Glue) GetJobBookmarksPagesWithContext(ctx aws.Context, input *GetJobBookmarksInput, fn func(*GetJobBookmarksOutput, bool) bool, opts ...request.Option) error {
-	p := request.Pagination{
-		NewRequest: func() (*request.Request, error) {
-			var inCpy *GetJobBookmarksInput
-			if input != nil {
-				tmp := *input
-				inCpy = &tmp
-			}
-			req, _ := c.GetJobBookmarksRequest(inCpy)
-			req.SetContext(ctx)
-			req.ApplyOptions(opts...)
-			return req, nil
-		},
-	}
-
-	cont := true
-	for p.Next() && cont {
-		cont = fn(p.Page().(*GetJobBookmarksOutput), !p.HasNextPage())
-	}
-	return p.Err()
-}
-
 const opGetJobRun = "GetJobRun"
 
 // GetJobRunRequest generates a "aws/request.Request" representing the
@@ -21176,96 +21031,6 @@ func (s *GetJobBookmarkOutput) SetJobBookmarkEntry(v *JobBookmarkEntry) *GetJobB
 	return s
 }
 
-type GetJobBookmarksInput struct {
-	_ struct{} `type:"structure"`
-
-	// The name of the job in question.
-	//
-	// JobName is a required field
-	JobName *string `type:"string" required:"true"`
-
-	// The maximum size of the response.
-	MaxResults *int64 `type:"integer"`
-
-	// A continuation token, if this is a continuation call.
-	NextToken *int64 `type:"integer"`
-}
-
-// String returns the string representation
-func (s GetJobBookmarksInput) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s GetJobBookmarksInput) GoString() string {
-	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *GetJobBookmarksInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "GetJobBookmarksInput"}
-	if s.JobName == nil {
-		invalidParams.Add(request.NewErrParamRequired("JobName"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
-// SetJobName sets the JobName field's value.
-func (s *GetJobBookmarksInput) SetJobName(v string) *GetJobBookmarksInput {
-	s.JobName = &v
-	return s
-}
-
-// SetMaxResults sets the MaxResults field's value.
-func (s *GetJobBookmarksInput) SetMaxResults(v int64) *GetJobBookmarksInput {
-	s.MaxResults = &v
-	return s
-}
-
-// SetNextToken sets the NextToken field's value.
-func (s *GetJobBookmarksInput) SetNextToken(v int64) *GetJobBookmarksInput {
-	s.NextToken = &v
-	return s
-}
-
-type GetJobBookmarksOutput struct {
-	_ struct{} `type:"structure"`
-
-	// A list of job bookmark entries that defines a point that a job can resume
-	// processing.
-	JobBookmarkEntries []*JobBookmarkEntry `type:"list"`
-
-	// A continuation token, which has a value of 1 if all the entries are returned,
-	// or > 1 if not all requested job runs have been returned.
-	NextToken *int64 `type:"integer"`
-}
-
-// String returns the string representation
-func (s GetJobBookmarksOutput) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s GetJobBookmarksOutput) GoString() string {
-	return s.String()
-}
-
-// SetJobBookmarkEntries sets the JobBookmarkEntries field's value.
-func (s *GetJobBookmarksOutput) SetJobBookmarkEntries(v []*JobBookmarkEntry) *GetJobBookmarksOutput {
-	s.JobBookmarkEntries = v
-	return s
-}
-
-// SetNextToken sets the NextToken field's value.
-func (s *GetJobBookmarksOutput) SetNextToken(v int64) *GetJobBookmarksOutput {
-	s.NextToken = &v
-	return s
-}
-
 type GetJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -23067,7 +22832,7 @@ type GetTableOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The Table object that defines the specified table.
-	Table *Table `type:"structure"`
+	Table *TableData `type:"structure"`
 }
 
 // String returns the string representation
@@ -23081,7 +22846,7 @@ func (s GetTableOutput) GoString() string {
 }
 
 // SetTable sets the Table field's value.
-func (s *GetTableOutput) SetTable(v *Table) *GetTableOutput {
+func (s *GetTableOutput) SetTable(v *TableData) *GetTableOutput {
 	s.Table = v
 	return s
 }
@@ -23413,7 +23178,7 @@ type GetTablesOutput struct {
 	NextToken *string `type:"string"`
 
 	// A list of the requested Table objects.
-	TableList []*Table `type:"list"`
+	TableList []*TableData `type:"list"`
 }
 
 // String returns the string representation
@@ -23433,7 +23198,7 @@ func (s *GetTablesOutput) SetNextToken(v string) *GetTablesOutput {
 }
 
 // SetTableList sets the TableList field's value.
-func (s *GetTablesOutput) SetTableList(v []*Table) *GetTablesOutput {
+func (s *GetTablesOutput) SetTableList(v []*TableData) *GetTablesOutput {
 	s.TableList = v
 	return s
 }
@@ -27624,7 +27389,7 @@ type SearchTablesOutput struct {
 
 	// A list of the requested Table objects. The SearchTables response returns
 	// only the tables that you have access to.
-	TableList []*Table `type:"list"`
+	TableList []*TableData `type:"list"`
 }
 
 // String returns the string representation
@@ -27644,7 +27409,7 @@ func (s *SearchTablesOutput) SetNextToken(v string) *SearchTablesOutput {
 }
 
 // SetTableList sets the TableList field's value.
-func (s *SearchTablesOutput) SetTableList(v []*Table) *SearchTablesOutput {
+func (s *SearchTablesOutput) SetTableList(v []*TableData) *SearchTablesOutput {
 	s.TableList = v
 	return s
 }
@@ -29061,6 +28826,186 @@ func (s *Table) SetTableName(v string) *Table {
 	return s
 }
 
+// Represents a collection of related data organized in columns and rows.
+type TableData struct {
+	_ struct{} `type:"structure"`
+
+	// The time when the table definition was created in the Data Catalog.
+	CreateTime *time.Time `type:"timestamp"`
+
+	// The person or entity who created the table.
+	CreatedBy *string `min:"1" type:"string"`
+
+	// The name of the database where the table metadata resides. For Hive compatibility,
+	// this must be all lowercase.
+	DatabaseName *string `min:"1" type:"string"`
+
+	// A description of the table.
+	Description *string `type:"string"`
+
+	// Indicates whether the table has been registered with AWS Lake Formation.
+	IsRegisteredWithLakeFormation *bool `type:"boolean"`
+
+	// The last time that the table was accessed. This is usually taken from HDFS,
+	// and might not be reliable.
+	LastAccessTime *time.Time `type:"timestamp"`
+
+	// The last time that column statistics were computed for this table.
+	LastAnalyzedTime *time.Time `type:"timestamp"`
+
+	// The table name. For Hive compatibility, this must be entirely lowercase.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The owner of the table.
+	Owner *string `min:"1" type:"string"`
+
+	// These key-value pairs define properties associated with the table.
+	Parameters map[string]*string `type:"map"`
+
+	// A list of columns by which the table is partitioned. Only primitive types
+	// are supported as partition keys.
+	//
+	// When you create a table used by Amazon Athena, and you do not specify any
+	// partitionKeys, you must at least set the value of partitionKeys to an empty
+	// list. For example:
+	//
+	// "PartitionKeys": []
+	PartitionKeys []*Column `type:"list"`
+
+	// The retention time for this table.
+	Retention *int64 `type:"integer"`
+
+	// A storage descriptor containing information about the physical storage of
+	// this table.
+	StorageDescriptor *StorageDescriptor `type:"structure"`
+
+	// The type of this table (EXTERNAL_TABLE, VIRTUAL_VIEW, etc.).
+	TableType *string `type:"string"`
+
+	// The last time that the table was updated.
+	UpdateTime *time.Time `type:"timestamp"`
+
+	// If the table is a view, the expanded text of the view; otherwise null.
+	ViewExpandedText *string `type:"string"`
+
+	// If the table is a view, the original text of the view; otherwise null.
+	ViewOriginalText *string `type:"string"`
+}
+
+// String returns the string representation
+func (s TableData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TableData) GoString() string {
+	return s.String()
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *TableData) SetCreateTime(v time.Time) *TableData {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatedBy sets the CreatedBy field's value.
+func (s *TableData) SetCreatedBy(v string) *TableData {
+	s.CreatedBy = &v
+	return s
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *TableData) SetDatabaseName(v string) *TableData {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *TableData) SetDescription(v string) *TableData {
+	s.Description = &v
+	return s
+}
+
+// SetIsRegisteredWithLakeFormation sets the IsRegisteredWithLakeFormation field's value.
+func (s *TableData) SetIsRegisteredWithLakeFormation(v bool) *TableData {
+	s.IsRegisteredWithLakeFormation = &v
+	return s
+}
+
+// SetLastAccessTime sets the LastAccessTime field's value.
+func (s *TableData) SetLastAccessTime(v time.Time) *TableData {
+	s.LastAccessTime = &v
+	return s
+}
+
+// SetLastAnalyzedTime sets the LastAnalyzedTime field's value.
+func (s *TableData) SetLastAnalyzedTime(v time.Time) *TableData {
+	s.LastAnalyzedTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *TableData) SetName(v string) *TableData {
+	s.Name = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *TableData) SetOwner(v string) *TableData {
+	s.Owner = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *TableData) SetParameters(v map[string]*string) *TableData {
+	s.Parameters = v
+	return s
+}
+
+// SetPartitionKeys sets the PartitionKeys field's value.
+func (s *TableData) SetPartitionKeys(v []*Column) *TableData {
+	s.PartitionKeys = v
+	return s
+}
+
+// SetRetention sets the Retention field's value.
+func (s *TableData) SetRetention(v int64) *TableData {
+	s.Retention = &v
+	return s
+}
+
+// SetStorageDescriptor sets the StorageDescriptor field's value.
+func (s *TableData) SetStorageDescriptor(v *StorageDescriptor) *TableData {
+	s.StorageDescriptor = v
+	return s
+}
+
+// SetTableType sets the TableType field's value.
+func (s *TableData) SetTableType(v string) *TableData {
+	s.TableType = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *TableData) SetUpdateTime(v time.Time) *TableData {
+	s.UpdateTime = &v
+	return s
+}
+
+// SetViewExpandedText sets the ViewExpandedText field's value.
+func (s *TableData) SetViewExpandedText(v string) *TableData {
+	s.ViewExpandedText = &v
+	return s
+}
+
+// SetViewOriginalText sets the ViewOriginalText field's value.
+func (s *TableData) SetViewOriginalText(v string) *TableData {
+	s.ViewOriginalText = &v
+	return s
+}
+
 // An error record for table operations.
 type TableError struct {
 	_ struct{} `type:"structure"`
@@ -29267,7 +29212,7 @@ type TableVersion struct {
 	_ struct{} `type:"structure"`
 
 	// The table in question.
-	Table *Table `type:"structure"`
+	Table *TableData `type:"structure"`
 
 	// The ID value that identifies this table version. A VersionId is a string
 	// representation of an integer. Each version is incremented by 1.
@@ -29285,7 +29230,7 @@ func (s TableVersion) GoString() string {
 }
 
 // SetTable sets the Table field's value.
-func (s *TableVersion) SetTable(v *Table) *TableVersion {
+func (s *TableVersion) SetTable(v *TableData) *TableVersion {
 	s.Table = v
 	return s
 }

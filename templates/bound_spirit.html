@@ -1,0 +1,134 @@
+{{ define "title"}}
+
+<title>Bound Spirits</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $counter := .Counter }}
+{{ $passions := .Passions }}
+{{ $skills := .Skills }}
+{{ $spiritmagic := .SpiritMagic }}
+
+<div class="container">
+    <hr>
+    <div class="row">
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <h4>Bound Spirits</h4>
+
+            <p>Manage bound spirits for:</p>
+
+            <h5>{{ $character.Name }}</h5>
+
+            <hr>
+
+            <form action="" method="POST" enctype="multipart/form-data">
+
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+
+
+        </div> <!-- END outer column 3 -->
+
+        <div class="col-sm-8 col-md-8 col-lg-8">
+
+        <h4>Bound Spirits</h4>
+
+            {{ range $i, $bs := $character.BoundSpirits }}
+
+            <h4>Spirit {{ add $i 1 }}</h4>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-Name-addon">Name</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="BS-{{$i}}-Name-addon" name="BS-{{$i}}-Name" value ="{{ $bs.Name }}">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-Item-addon">Item</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="BS-{{$i}}-Item-addon" name="BS-{{$i}}-Item" value ="{{ $bs.Item }}">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-Description-addon">Description</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="BS-{{$i}}-Description-addon" name="BS-{{$i}}-Description" value ="{{ $bs.Description }}">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-Pow-addon">Pow</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="BS-{{$i}}-Pow-addon" name="BS-{{$i}}-Pow" value ="{{ $bs.Pow }}">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-Cha-addon">Cha</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="BS-{{$i}}-Cha-addon" name="BS-{{$i}}-Cha" value ="{{ $bs.Cha }}">
+            </div>
+
+              <hr>
+
+              <h6>Spirit Magic Spells</h6>
+
+            {{ range $k, $v := $bs.SpiritMagicSpells }}
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="BS-{{$i}}-SpiritMagic-{{ $k }}-addon">Spirit Magic</span>
+                </div>
+                  <select type="text" class="form-control" id="BS-{{$i}}-SpiritMagic-{{ $k }}" name="BS-{{$i}}-SpiritMagic-{{ $k }}">
+                        {{ if eq $v.CoreString "" }}
+                        <option></option>
+                    {{else }}
+                    <option value={{ $v.CoreString }}>{{ $v.CoreString }} ({{ $v.Cost}})pts</option>
+                    {{ end }}
+                    <option></option>
+                {{ range $m, $sm := $spiritmagic }}
+                    <option value="{{ $sm.CoreString }}">{{ $sm.CoreString }} ({{ $sm.Cost }}pts)</option>
+                {{ end }}
+                  </select>
+              </div>
+            
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="BS-{{$i}}-SpiritMagic-{{$k}}-Cost-addon">Level</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="BS-{{$i}}-SpiritMagic-{{$k}}-Cost-addon" name="BS-{{$i}}-SpiritMagic-{{$k}}-Cost" value ="{{ $v.Cost }}">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="BS-{{$i}}-SpiritMagic-{{$k}}-Cost-addon">pts</span>
+                      </div>
+                </div>
+            
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-SpiritMagic-{{$k}}-UserString-addon">Specialization</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="BS-{{$i}}-SpiritMagic-{{$k}}-UserString-addon" name="BS-{{$i}}-SpiritMagic-{{$k}}-UserString" value ="{{ $v.UserString }}">
+              </div>
+
+              <hr>
+              {{ end }}
+
+            <hr>
+            {{ end }}
+
+            <button class="btn btn-primary" type="submit" value="Save">Save</button>
+        </div>
+
+       
+        </form>
+
+    </div> <!-- END outer ROW -->
+</div> <!-- END container -->
+
+{{ end }}
+<!-- end content -->

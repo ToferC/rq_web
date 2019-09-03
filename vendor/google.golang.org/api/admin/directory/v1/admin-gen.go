@@ -3687,6 +3687,14 @@ type User struct {
 	// PrimaryEmail: username of User
 	PrimaryEmail string `json:"primaryEmail,omitempty"`
 
+	// RecoveryEmail: Recovery email of the user.
+	RecoveryEmail string `json:"recoveryEmail,omitempty"`
+
+	// RecoveryPhone: Recovery phone of the user. The phone number must be
+	// in the E.164 format, starting with the plus sign (+). Example:
+	// +16506661212.
+	RecoveryPhone string `json:"recoveryPhone,omitempty"`
+
 	Relations interface{} `json:"relations,omitempty"`
 
 	SshPublicKeys interface{} `json:"sshPublicKeys,omitempty"`
@@ -5496,7 +5504,7 @@ func (r *ChromeosdevicesService) List(customerId string) *ChromeosdevicesListCal
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum number
-// of results to return.
+// of results to return. Max allowed value is 200.
 func (c *ChromeosdevicesListCall) MaxResults(maxResults int64) *ChromeosdevicesListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -5679,10 +5687,9 @@ func (c *ChromeosdevicesListCall) Do(opts ...googleapi.CallOption) (*ChromeOsDev
 	//     },
 	//     "maxResults": {
 	//       "default": "100",
-	//       "description": "Maximum number of results to return.",
+	//       "description": "Maximum number of results to return. Max allowed value is 200.",
 	//       "format": "int32",
 	//       "location": "query",
-	//       "maximum": "200",
 	//       "minimum": "1",
 	//       "type": "integer"
 	//     },
@@ -8167,7 +8174,7 @@ func (c *GroupsListCall) Domain(domain string) *GroupsListCall {
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum number
-// of results to return.
+// of results to return. Max allowed value is 200.
 func (c *GroupsListCall) MaxResults(maxResults int64) *GroupsListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -8331,10 +8338,9 @@ func (c *GroupsListCall) Do(opts ...googleapi.CallOption) (*Groups, error) {
 	//     },
 	//     "maxResults": {
 	//       "default": "200",
-	//       "description": "Maximum number of results to return.",
+	//       "description": "Maximum number of results to return. Max allowed value is 200.",
 	//       "format": "int32",
 	//       "location": "query",
-	//       "maximum": "200",
 	//       "minimum": "1",
 	//       "type": "integer"
 	//     },
@@ -9667,7 +9673,7 @@ func (c *MembersListCall) IncludeDerivedMembership(includeDerivedMembership bool
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum number
-// of results to return.
+// of results to return. Max allowed value is 200.
 func (c *MembersListCall) MaxResults(maxResults int64) *MembersListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -9806,10 +9812,9 @@ func (c *MembersListCall) Do(opts ...googleapi.CallOption) (*Members, error) {
 	//     },
 	//     "maxResults": {
 	//       "default": "200",
-	//       "description": "Maximum number of results to return.",
+	//       "description": "Maximum number of results to return. Max allowed value is 200.",
 	//       "format": "int32",
 	//       "location": "query",
-	//       "maximum": "200",
 	//       "minimum": "1",
 	//       "type": "integer"
 	//     },
@@ -10587,7 +10592,7 @@ func (r *MobiledevicesService) List(customerId string) *MobiledevicesListCall {
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum number
-// of results to return.
+// of results to return. Max allowed value is 100.
 func (c *MobiledevicesListCall) MaxResults(maxResults int64) *MobiledevicesListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -10763,10 +10768,9 @@ func (c *MobiledevicesListCall) Do(opts ...googleapi.CallOption) (*MobileDevices
 	//     },
 	//     "maxResults": {
 	//       "default": "100",
-	//       "description": "Maximum number of results to return.",
+	//       "description": "Maximum number of results to return. Max allowed value is 100.",
 	//       "format": "int32",
 	//       "location": "query",
-	//       "maximum": "100",
 	//       "minimum": "1",
 	//       "type": "integer"
 	//     },

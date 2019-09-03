@@ -367,9 +367,9 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.CreationBonusValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+				if userString != "" {
+					s1.UserString = processUserString(userString)
 				}
 
 				targetString := createName(s1.CoreString, skbaseSkill.UserString)
@@ -382,7 +382,8 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 6; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("Passion-%d-CoreString", i))
-			userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+			us := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+			userString := processUserString(us)
 
 			if coreString != "" {
 
@@ -849,7 +850,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				// User Chooses a new specialization
 				str := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if str != "" {
-					s.UserString = str
+					s.UserString = processUserString(str)
 				}
 			}
 
@@ -1104,7 +1105,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				// User Chooses a new specialization
 				str := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if str != "" {
-					s.UserString = str
+					s.UserString = processUserString(str)
 				}
 			}
 
@@ -1376,7 +1377,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				s := baseSpell
 				if spec != "" {
-					s.UserString = spec
+					s.UserString = processUserString(spec)
 				}
 				s.GenerateName()
 				c.RuneSpells[s.Name] = s
@@ -1408,7 +1409,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 				baseSpell.Cost = cost
 
 				if spec != "" {
-					baseSpell.UserString = spec
+					baseSpell.UserString = processUserString(spec)
 				}
 
 				baseSpell.GenerateName()
@@ -1451,7 +1452,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 				// User Chooses a new specialization
 				str := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 				if str != "" {
-					s.UserString = str
+					s.UserString = processUserString(str)
 				}
 			}
 
@@ -1759,8 +1760,8 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = false
 		}
 
-		c.Clan = req.FormValue("Clan")
-		c.Tribe = req.FormValue("Tribe")
+		c.Clan = processUserString(req.FormValue("Clan"))
+		c.Tribe = processUserString(req.FormValue("Tribe"))
 		c.Age = 21
 
 		c.StandardofLiving = c.Occupation.StandardOfLiving
@@ -1770,7 +1771,8 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		// 25% additions
 		for i := 1; i < 5; i++ {
 			coreString := req.FormValue(fmt.Sprintf("Skill-25-%d", i))
-			userString := req.FormValue(fmt.Sprintf("Skill-25-%d-UserString", i))
+			us := req.FormValue(fmt.Sprintf("Skill-25-%d-UserString", i))
+			userString := processUserString(us)
 
 			targetString := createName(coreString, userString)
 
@@ -1833,7 +1835,8 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		// 10% additions
 		for i := 1; i < 6; i++ {
 			coreString := req.FormValue(fmt.Sprintf("Skill-10-%d", i))
-			userString := req.FormValue(fmt.Sprintf("Skill-10-%d-UserString", i))
+			us := req.FormValue(fmt.Sprintf("Skill-10-%d-UserString", i))
+			userString := processUserString(us)
 
 			targetString := createName(coreString, userString)
 

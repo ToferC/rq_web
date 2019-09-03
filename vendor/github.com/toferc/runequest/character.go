@@ -46,6 +46,7 @@ type Character struct {
 	MeleeAttacks     map[string]*Attack
 	RangedAttacks    map[string]*Attack
 	Equipment        []string
+	BoundSpirits     []*BoundSpirit
 	Income           int
 	Lunars           int
 	Ransom           int
@@ -53,6 +54,11 @@ type Character struct {
 	InPlay           bool
 	Updates          []*Update
 	CreationSteps    map[string]bool
+
+	History []*Event
+
+	Grandparent *FamilyMember
+	Parent      *FamilyMember
 
 	Tags  []string
 	Notes string

@@ -4,14 +4,14 @@
 [[projects]]
   name = "cloud.google.com/go"
   packages = ["compute/metadata"]
-  revision = "2b2aeece7979f19ee2809459e0411b337d02661a"
-  version = "v0.44.0"
+  revision = "ceeb313ad77b789a7fa5287b36a1d127b69b7093"
+  version = "v0.44.3"
 
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
-  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/s3err","internal/sdkio","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/eventstream","private/protocol/eventstream/eventstreamapi","private/protocol/json/jsonutil","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts","service/sts/stsiface"]
-  revision = "1f4898f67806740d2a91c9dfe9a8be8a61523eb4"
-  version = "v1.22.3"
+  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/s3err","internal/sdkio","internal/sdkmath","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/eventstream","private/protocol/eventstream/eventstreamapi","private/protocol/json/jsonutil","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts","service/sts/stsiface"]
+  revision = "d57c8d96f72d9475194ccf18d2ba70ac294b0cb3"
+  version = "v1.23.13"
 
 [[projects]]
   name = "github.com/dghubble/gologin"
@@ -22,14 +22,14 @@
 [[projects]]
   name = "github.com/disintegration/imaging"
   packages = ["."]
-  revision = "5362c131d56305ce787e79a5b94ffc956df00d62"
-  version = "v1.6.0"
+  revision = "9aab30e6aa535fe3337b489b76759ef97dfaf362"
+  version = "v1.6.1"
 
 [[projects]]
   name = "github.com/go-pg/pg"
   packages = [".","internal","internal/iszero","internal/parser","internal/pool","internal/struct_filter","internal/tag","orm","types"]
-  revision = "003999b8cdeac09f13d183a7f5e1342d9a33a174"
-  version = "v8.0.5"
+  revision = "1d957cb20f319c4a1e2db7d345824c12aefe5943"
+  version = "v8.0.6"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -70,8 +70,8 @@
 [[projects]]
   name = "github.com/gosimple/slug"
   packages = ["."]
-  revision = "ec8fb677f0647081580e5f3290dca1bd75af54fb"
-  version = "v1.6.0"
+  revision = "984b6d1a0ae5d1ecf6d718f4e990883d281ba3b8"
+  version = "v1.7.0"
 
 [[projects]]
   name = "github.com/hashicorp/golang-lru"
@@ -118,7 +118,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "7b4d739e4bf91742a94d28f492c0b114f20d9d7e"
+  revision = "b4f0c3b23bf8184c6b0f44e6bd5c0ea8768b9dc4"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -130,19 +130,19 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["bcrypt","blowfish","pbkdf2"]
-  revision = "4def268fd1a49955bfb3dda92fe3db4f924f2285"
+  revision = "9756ffdc24725223350eb3266ffb92590d28f278"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/image"
   packages = ["bmp","ccitt","tiff","tiff/lzw"]
-  revision = "cff245a6509b8c4de022d0d5b9037c503c5989d6"
+  revision = "cb417be4ba39d22a85fafbeeb47bb89396d4d7b4"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context","context/ctxhttp","http/httpguts","http2","http2/hpack","idna","internal/timeseries","trace"]
-  revision = "ca1201d0de80cfde86cb01aea620983605dfe99b"
+  revision = "ba9fcec4b297b415637633c5a6e8fa592e4a16c3"
 
 [[projects]]
   branch = "master"
@@ -154,7 +154,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "51ab0e2deafac1f46c46ad59cf0921be2f180c3d"
+  revision = "9109b7679e13aa34a54834cfb4949cac4b96e576"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -165,26 +165,26 @@
 [[projects]]
   name = "google.golang.org/api"
   packages = ["gensupport","googleapi","googleapi/internal/uritemplates","googleapi/transport","internal","oauth2/v2","option","transport/http","transport/http/internal/propagation"]
-  revision = "dec2ee309f5b09fc59bc40676447c15736284d78"
-  version = "v0.8.0"
+  revision = "feb0267beb8644f5088a03be4d5ec3f8c7020152"
+  version = "v0.9.0"
 
 [[projects]]
   name = "google.golang.org/appengine"
   packages = [".","internal","internal/app_identity","internal/base","internal/datastore","internal/log","internal/modules","internal/remote_api","internal/urlfetch","urlfetch"]
-  revision = "b2f4a3cf3c67576a2ee09e1fe62656a5086ce880"
-  version = "v1.6.1"
+  revision = "5f2a59506353b8d5ba8cbbcd9f3c1f41f1eaf079"
+  version = "v1.6.2"
 
 [[projects]]
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "fa694d86fc64c7654a660f8908de4e879866748d"
+  revision = "24fa4b261c55da65468f2abfdae2b024eef27dfb"
 
 [[projects]]
   name = "google.golang.org/grpc"
   packages = [".","balancer","balancer/base","balancer/roundrobin","binarylog/grpc_binarylog_v1","codes","connectivity","credentials","credentials/internal","encoding","encoding/proto","grpclog","internal","internal/backoff","internal/balancerload","internal/binarylog","internal/channelz","internal/envconfig","internal/grpcrand","internal/grpcsync","internal/syscall","internal/transport","keepalive","metadata","naming","peer","resolver","resolver/dns","resolver/passthrough","serviceconfig","stats","status","tap"]
-  revision = "045159ad57f3781d409358e3ade910a018c16b30"
-  version = "v1.22.1"
+  revision = "6eaf6f47437a6b4e2153a190160ef39a92c7eceb"
+  version = "v1.23.0"
 
 [[projects]]
   name = "gopkg.in/russross/blackfriday.v2"

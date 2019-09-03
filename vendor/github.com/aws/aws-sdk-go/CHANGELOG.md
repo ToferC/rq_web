@@ -1,3 +1,219 @@
+Release v1.23.13 (2019-08-30)
+===
+
+### Service Client Updates
+* `service/apigatewaymanagementapi`: Updates service API and documentation
+* `service/ecs`: Updates service API and documentation
+  * This release of Amazon Elastic Container Service (Amazon ECS) introduces support for modifying the cluster settings for existing clusters, which enables you to toggle whether Container Insights is enabled or not. Support is also introduced for custom log routing using the ECS FireLens integration.
+* `service/mq`: Updates service API and documentation
+  * Adds support for updating security groups selection of an Amazon MQ broker.
+
+### SDK Bugs
+* `aws/csm`: Fix metricChan's unsafe atomic operations ([#2785](https://github.com/aws/aws-sdk-go/pull/2785))
+  * Fixes [#2784](https://github.com/aws/aws-sdk-go/issues/2784) test failure caused by the metricChan.paused member being a value instead of a pointer. If the metricChan value was ever copied the atomic operations performed on paused would be invalid.
+* `aws/client`: Updates logic for request retry delay calculation ([#2796](https://github.com/aws/aws-sdk-go/pull/2796))
+  * Updates logic for calculating the delay after which a request can be retried. Retry delay now includes the Retry-After duration specified in a request. Fixes broken test for retry delays for throttled exceptions.
+  * Fixes [#2795](https://github.com/aws/aws-sdk-go/issues/2795)
+Release v1.23.12 (2019-08-29)
+===
+
+### Service Client Updates
+* `service/application-autoscaling`: Updates service API, documentation, and paginators
+* `service/codepipeline`: Updates service API and documentation
+  * Introducing pipeline execution trigger details in ListPipelineExecutions API.
+* `service/ecs`: Updates service API and documentation
+  * This release of Amazon Elastic Container Service (Amazon ECS) introduces support for including Docker container IDs in the API response when describing and stopping tasks. This enables customers to easily map containers to the tasks they are associated with.
+* `service/elasticache`: Updates service API and documentation
+  * Amazon ElastiCache for Redis now supports encryption at rest using customer managed customer master keys (CMKs) in AWS Key Management Service (KMS). Amazon ElastiCache now supports cluster names upto 40 characters for replicationGoups and upto 50 characters for cacheClusters.
+* `service/lambda`: Updates service API, documentation, and paginators
+  * Adds a "MaximumBatchingWindowInSeconds" parameter to event source mapping api's. Usable by Dynamodb and Kinesis event sources.
+
+### SDK Enhancements
+* `aws/ec2metadata`: Add marketplaceProductCodes to EC2 Instance Identity Document
+  * Adds `MarketplaceProductCodes` to the EC2 Instance Metadata's Identity Document. The ec2metadata client will now retrieve these values if they are available.
+  * Fixes [#2781](https://github.com/aws/aws-sdk-go/issues/2781)
+* `private/protocol`: Add support for parsing fractional time ([#2760](https://github.com/aws/aws-sdk-go/pull/2760))
+  * Fixes the SDK's ability to parse fractional unix timestamp values and added tests.
+  * Fixes [#1448](https://github.com/aws/aws-sdk-go/pull/1448)
+
+Release v1.23.11 (2019-08-28)
+===
+
+### Service Client Updates
+* `service/globalaccelerator`: Updates service API and documentation
+* `service/mediaconvert`: Updates service API and documentation
+  * This release adds the ability to send a job to an on-demand queue while simulating the performance of a job sent to a reserved queue. Use this setting to estimate the number of reserved transcoding slots (RTS) you need for a reserved queue.
+* `service/sqs`: Updates service API and documentation
+  * Added support for message system attributes, which currently lets you send AWS X-Ray trace IDs through Amazon SQS.
+
+Release v1.23.10 (2019-08-27)
+===
+
+### Service Client Updates
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/organizations`: Updates service documentation
+  * Documentation updates for organizations
+
+### SDK Bugs
+* `service/ec2`: Fix int overflow in minTime on 386 and arm ([#2787](https://github.com/aws/aws-sdk-go/pull/2787))
+  * Fixes [2786](https://github.com/aws/aws-sdk-go/issues/2786) int overflow issue on 32-bit platforms like 386 and arm.
+Release v1.23.9 (2019-08-26)
+===
+
+### Service Client Updates
+* `service/securityhub`: Updates service API
+* `service/ssm`: Updates service API and documentation
+  * This feature adds "default tier" to the AWS Systems Manager Parameter Store for parameter creation and update. AWS customers can now set the "default tier" to one of the following values: Standard (default), Advanced or Intelligent-Tiering.  This allows customers to create advanced parameters or parameters in corresponding tiers with one setting rather than code change to specify parameter tiers.
+
+Release v1.23.8 (2019-08-23)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API and documentation
+  * This release of EC2 VM Import Export adds support for exporting Amazon Machine Image(AMI)s to a VM file
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/mediapackage-vod`: Updates service API and documentation
+* `service/transcribe`: Updates service API and documentation
+
+### SDK Enhancements
+* `aws/session`: Add support for CSM options from shared config file ([#2768](https://github.com/aws/aws-sdk-go/pull/2768))
+  * Adds support for enabling and controlling the Client Side Metrics (CSM) reporting from the shared configuration files in addition to the environment variables.
+
+### SDK Bugs
+* `service/s3/s3crypto`: Fix tmp file not being deleted after upload ([#2776](https://github.com/aws/aws-sdk-go/pull/2776))
+  * Fixes the s3crypto's getWriterStore utiliy's send handler not cleaning up the temporary file after Send completes.
+* `private/protocol`: Add protocol tests for blob types and headers ([#2770](https://github.com/aws/aws-sdk-go/pull/2770))
+  * Adds RESTJSON and RESTXML protocol tests for blob headers.
+  * Related to [#750](https://github.com/aws/aws-sdk-go/issues/750)
+* `service/dynamodb/expression`: Improved reporting of bad key conditions ([#2775](https://github.com/aws/aws-sdk-go/pull/2775))
+  * Improved error reporting when invalid key conditions are constructed using KeyConditionBuilder
+Release v1.23.7 (2019-08-22)
+===
+
+### Service Client Updates
+* `service/datasync`: Updates service API and documentation
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/rds`: Updates service API and documentation
+  * This release allows users to enable RDS Data API while creating Aurora Serverless databases.
+
+### SDK Bugs
+* `aws/request`: Fix IsErrorRetryable returning true for nil error ([#2774](https://github.com/aws/aws-sdk-go/pull/2774))
+  * Fixes [#2773](https://github.com/aws/aws-sdk-go/pull/2773) where the IsErrorRetryable helper was incorrectly returning true for nil errors passed in. IsErrorRetryable will now correctly return false when the passed in error is nil like documented.
+
+Release v1.23.6 (2019-08-21)
+===
+
+### Service Client Updates
+* `service/elasticache`: Updates service API and documentation
+  * ElastiCache extends support for Scale down for Redis Cluster-mode enabled and disabled replication groups
+* `service/forecast`: Adds new service
+* `service/forecastquery`: Adds new service
+* `service/personalize-runtime`: Updates service API
+* `service/rekognition`: Updates service documentation
+  * Documentation updates for Amazon Rekognition.
+* `service/sagemaker`: Updates service API and documentation
+  * Amazon SageMaker now supports Amazon EFS and Amazon FSx for Lustre file systems as data sources for training machine learning models. Amazon SageMaker now supports running training jobs on ml.p3dn.24xlarge instance type. This instance type is offered as a limited private preview for certain SageMaker customers. If you are interested in joining the private preview, please reach out to the SageMaker Product Management team via AWS Support."
+* `service/sqs`: Updates service API and documentation
+  * This release provides a way to add metadata tags to a queue when it is created. You can use tags to organize and identify your Amazon SQS queues for cost allocation.
+
+### SDK Enhancements
+* `aws/session`: Ignore invalid shared config file when not used ([#2731](https://github.com/aws/aws-sdk-go/pull/2731))
+  * Updates the Session to not fail to load when credentials are provided via the environment variable, the AWS_PROFILE/Option.Profile have not been specified, and the shared config has not been enabled.
+  * Fixes [#2455](https://github.com/aws/aws-sdk-go/issues/2455)
+
+Release v1.23.5 (2019-08-20)
+===
+
+### Service Client Updates
+* `service/alexaforbusiness`: Updates service API and documentation
+* `service/appstream`: Updates service API and documentation
+  * Includes API updates to support streaming through VPC endpoints for image builders and stacks.
+* `service/sagemaker`: Updates service API and documentation
+  * Amazon SageMaker introduces Managed Spot Training. Increases the maximum number of metric definitions to 40 for SageMaker Training and Hyperparameter Tuning Jobs. SageMaker Neo adds support for Acer aiSage and Qualcomm QCS605 and QCS603.
+* `service/transfer`: Updates service API and documentation
+  * New field in response of TestIdentityProvider
+
+Release v1.23.4 (2019-08-19)
+===
+
+### Service Client Updates
+* `service/appmesh`: Updates service API and documentation
+* `service/cur`: Updates service API and documentation
+  * New IAM permission required for editing AWS Cost and Usage Reports - Starting today, you can allow or deny IAM users permission to edit Cost & Usage Reports through the API and the Billing and Cost Management console. To allow users to edit Cost & Usage Reports, ensure that they have 'cur: ModifyReportDefinition' permission. Refer to the technical documentation (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_cur_ModifyReportDefinition.html) for additional details.
+
+Release v1.23.3 (2019-08-16)
+===
+
+### Service Client Updates
+* `service/ecs`: Updates service API and documentation
+  * This release of Amazon Elastic Container Service (Amazon ECS) introduces support for controlling the usage of swap space on a per-container basis for Linux containers.
+* `service/elasticmapreduce`: Updates service API and documentation
+  * Amazon EMR  has introduced an account level configuration called Block Public Access that allows you to block clusters with ports open to traffic from public IP sources (i.e. 0.0.0.0/0 for IPv4 and ::/0 for IPv6) from launching.  Individual ports or port ranges can be added as exceptions to allow public access.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/robomaker`: Updates service API and documentation
+
+Release v1.23.2 (2019-08-15)
+===
+
+### Service Client Updates
+* `service/appmesh`: Updates service API and documentation
+* `service/athena`: Updates service API and documentation
+  * This release adds support for querying S3 Requester Pays buckets. Users can enable this feature through their Workgroup settings.
+* `service/codecommit`: Updates service API and documentation
+  * This release adds an API, BatchGetCommits, that allows retrieval of metadata for multiple commits in an AWS CodeCommit repository.
+* `service/ec2`: Updates service API and documentation
+  * This release adds an option to use private certificates from AWS Certificate Manager (ACM) to authenticate a Site-to-Site VPN connection's tunnel endpoints and customer gateway device.
+* `service/glue`: Updates service API, documentation, and paginators
+  * GetJobBookmarks API is withdrawn.
+* `service/storagegateway`: Updates service API and documentation
+  * CreateSnapshotFromVolumeRecoveryPoint API supports new parameter: Tags (to be attached to the created resource)
+
+### SDK Enhancements
+* `service/kinesis`: Add support for retrying service specific API errors ([#2751](https://github.com/aws/aws-sdk-go/pull/2751)
+  * Adds support for retrying the Kinesis API error, LimitExceededException.
+  * Fixes [#1376](https://github.com/aws/aws-sdk-go/issues/1376)
+* `aws/credentials/stscreds`: Add STS and Assume Role specific retries ([#2752](https://github.com/aws/aws-sdk-go/pull/2752))
+  * Adds retries to specific STS API errors to the STS AssumeRoleWithWebIdentity credential provider, and STS API operations in general.
+
+Release v1.23.1 (2019-08-14)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API and documentation
+  * This release adds a new API called SendDiagnosticInterrupt, which allows you to send diagnostic interrupts to your EC2 instance.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+
+Release v1.23.0 (2019-08-13)
+===
+
+### Service Client Updates
+* `service/appsync`: Updates service API and documentation
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+
+### SDK Features
+* SDK code generation will no longer remove stutter from operations and type names in service API packages. New API operations and types will not have the service's name removed from them. The SDK was previously squashing API types if removing stutter from a type resulted in a name of a type that already existed. The existing type would be deleted. Only the renamed type remained. This has been fixed, and previously deleted types are now available.
+  * `AWS Glue`'s `GlueTable` with `Table`.  The API's previously deleted `Table` is available as `TableData`.
+  * `AWS IoT Events`'s `IotEventsAction` with `Action`. The previously deleted `Action` is available as `ActionData`.
+
+### SDK Bugs
+* `private/model/api`: Fix broken shape stutter rename during generation ([#2747](https://github.com/aws/aws-sdk-go/pull/2747))
+  * Fixes the SDK's code generation incorrectly renaming types and operations. The code generation would incorrectly rename an API type by removing the service's name from the type's name. This was done without checking for if a type with the new name already existed. Causing the SDK to replace the existing type with the renamed one.
+  * Fixes [#2741](https://github.com/aws/aws-sdk-go/issues/2741)
+* `private/model/api`: Fix API doc being generated with wrong value ([#2748](https://github.com/aws/aws-sdk-go/pull/2748))
+  * Fixes the SDK's generated API documentation for structure member being generated with the wrong documentation value when the member was included multiple times in the model doc-2.json file, but under different types.
+Release v1.22.4 (2019-08-12)
+===
+
+### Service Client Updates
+* `service/application-autoscaling`: Updates service documentation
+* `service/autoscaling`: Updates service documentation
+  * Amazon EC2 Auto Scaling now supports a new Spot allocation strategy "capacity-optimized" that fulfills your request using Spot Instance pools that are optimally chosen based on the available Spot capacity.
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/monitoring`: Updates service documentation
+  * Documentation updates for monitoring
+* `service/rekognition`: Updates service API
+  * Adding new Emotion, Fear
+
 Release v1.22.3 (2019-08-09)
 ===
 

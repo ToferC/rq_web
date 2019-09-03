@@ -298,7 +298,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		oc := models.OccupationModel{
 			Author: user,
 			Occupation: &runequest.Occupation{
-				Name:             req.FormValue("Name"),
+				Name:             processUserString(req.FormValue("Name")),
 				Description:      req.FormValue("Description"),
 				StandardOfLiving: req.FormValue("Standard"),
 				Notes:            req.FormValue("Notes"),
@@ -391,9 +391,10 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.OccupationValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+
+				if userString != "" {
+					s1.UserString = processUserString(userString)
 				}
 				s1.GenerateName()
 				skillArray = append(skillArray, s1)
@@ -405,7 +406,8 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		// Read Weapons
 		for i := 1; i < 5; i++ {
 
-			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			d := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			desc := processUserString(d)
 
 			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
@@ -449,9 +451,10 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.OccupationValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-1-UserString", i))
+
+				if userString != "" {
+					s1.UserString = processUserString(userString)
 				}
 
 				// Second Skill option
@@ -473,9 +476,10 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s2.OccupationValue = v
 
-				if s2.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = req.FormValue(userString)
+				userString2 := req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
+
+				if userString2 != "" {
+					s2.UserString = processUserString(userString2)
 				}
 
 				s1.GenerateName()
@@ -517,7 +521,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					CoreString:      coreString,
 					Base:            base,
 					OccupationValue: v,
-					UserString:      userString,
+					UserString:      processUserString(userString),
 				}
 				oc.Occupation.PassionList = append(oc.Occupation.PassionList, p)
 			}
@@ -526,7 +530,8 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		// Read New Skills
 		for i := 1; i < 5; i++ {
 
-			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
+			cs := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
+			coreString := processUserString(cs)
 
 			if coreString != "" {
 
@@ -535,7 +540,8 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				us := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				userString := processUserString(us)
 
 				if userString != "" {
 					sk.UserChoice = true
@@ -718,7 +724,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Update Occupation here
-		ocName := req.FormValue("Name")
+		ocName := processUserString(req.FormValue("Name"))
 		description := req.FormValue("Description")
 
 		oc.Occupation.Name = ocName
@@ -804,7 +810,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				v = 0
 			}
 
-			userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+			us := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
+			userString := processUserString(us)
 
 			if sk != "" && v > 0 {
 
@@ -852,7 +859,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		for i := 1; i < 5; i++ {
 
-			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			d := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
+			desc := processUserString(d)
 
 			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
@@ -891,7 +899,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 					v = 0
 				}
 
-				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+				us := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
+				userString := processUserString(us)
 
 				p := runequest.Ability{
 					Type:            "Passion",
@@ -937,9 +946,9 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s1.OccupationValue = v
 
-				if s1.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-					s1.UserString = req.FormValue(userString)
+				userString := req.FormValue(fmt.Sprintf("Skill-%d-1-UserString", i))
+				if userString != "" {
+					s1.UserString = processUserString(userString)
 				}
 
 				// Second Skill option
@@ -961,9 +970,9 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				s2.OccupationValue = v
 
-				if s2.UserChoice {
-					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = req.FormValue(userString)
+				userString2 := req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
+				if userString2 != "" {
+					s2.UserString = processUserString(userString2)
 				}
 
 				s1.GenerateName()
@@ -985,7 +994,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		for i := 1; i < 5; i++ {
 
-			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
+			cs := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
+			coreString := processUserString(cs)
 
 			if coreString != "" {
 
@@ -994,7 +1004,8 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 				sk.CoreString = coreString
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
-				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				us := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
+				userString := processUserString(us)
 
 				if userString != "" {
 					sk.UserChoice = true

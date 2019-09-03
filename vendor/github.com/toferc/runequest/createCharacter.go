@@ -26,6 +26,15 @@ func NewCharacter(name string) *Character {
 		SkillCategories: map[string]*SkillCategory{},
 
 		Movement: []*Movement{},
+
+		History: []*Event{},
+
+		Grandparent: &FamilyMember{
+			Alive: true,
+		},
+		Parent: &FamilyMember{
+			Alive: true,
+		},
 	}
 
 	// Skills is a map of regular skills in Runequest

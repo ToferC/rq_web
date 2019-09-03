@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/toferc/runequest"
+	"strings"
 	"time"
+
+	"github.com/toferc/runequest"
 
 	"github.com/gorilla/sessions"
 )
@@ -83,4 +85,12 @@ func createName(coreString string, userString string) string {
 	}
 
 	return targetString
+}
+
+func processUserString(s string) string {
+	trimmed := strings.TrimSpace(s)
+	lower := strings.ToLower(trimmed)
+	title := strings.Title(lower)
+
+	return title
 }

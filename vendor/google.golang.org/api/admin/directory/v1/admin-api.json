@@ -93,7 +93,7 @@
   "description": "Manages enterprise resources such as users and groups, administrative notifications, security features, and more.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/directory/",
-  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/PEYqbC-uxgiBkr1DN_hihusF4Ac\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/5HuD5_WBYDvRWcfO5I5hjCFh4pY\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -349,10 +349,9 @@
             },
             "maxResults": {
               "default": "100",
-              "description": "Maximum number of results to return.",
+              "description": "Maximum number of results to return. Max allowed value is 200.",
               "format": "int32",
               "location": "query",
-              "maximum": "200",
               "minimum": "1",
               "type": "integer"
             },
@@ -941,10 +940,9 @@
             },
             "maxResults": {
               "default": "200",
-              "description": "Maximum number of results to return.",
+              "description": "Maximum number of results to return. Max allowed value is 200.",
               "format": "int32",
               "location": "query",
-              "maximum": "200",
               "minimum": "1",
               "type": "integer"
             },
@@ -1279,10 +1277,9 @@
             },
             "maxResults": {
               "default": "200",
-              "description": "Maximum number of results to return.",
+              "description": "Maximum number of results to return. Max allowed value is 200.",
               "format": "int32",
               "location": "query",
-              "maximum": "200",
               "minimum": "1",
               "type": "integer"
             },
@@ -1499,10 +1496,9 @@
             },
             "maxResults": {
               "default": "100",
-              "description": "Maximum number of results to return.",
+              "description": "Maximum number of results to return. Max allowed value is 100.",
               "format": "int32",
               "location": "query",
-              "maximum": "100",
               "minimum": "1",
               "type": "integer"
             },
@@ -4027,7 +4023,7 @@
       }
     }
   },
-  "revision": "20190708",
+  "revision": "20190806",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Alias": {
@@ -6375,6 +6371,14 @@
             ]
           },
           "description": "username of User",
+          "type": "string"
+        },
+        "recoveryEmail": {
+          "description": "Recovery email of the user.",
+          "type": "string"
+        },
+        "recoveryPhone": {
+          "description": "Recovery phone of the user. The phone number must be in the E.164 format, starting with the plus sign (+). Example: +16506661212.",
           "type": "string"
         },
         "relations": {
