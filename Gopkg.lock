@@ -10,8 +10,8 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/s3err","internal/sdkio","internal/sdkmath","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/eventstream","private/protocol/eventstream/eventstreamapi","private/protocol/json/jsonutil","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts","service/sts/stsiface"]
-  revision = "d57c8d96f72d9475194ccf18d2ba70ac294b0cb3"
-  version = "v1.23.13"
+  revision = "038baef27d86865da72603d700d55d8d0c212ce8"
+  version = "v1.23.14"
 
 [[projects]]
   name = "github.com/dghubble/gologin"
@@ -118,7 +118,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "b4f0c3b23bf8184c6b0f44e6bd5c0ea8768b9dc4"
+  revision = "02dcc7833bbb3401de890e0521d388cf7a4790fc"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -154,7 +154,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "9109b7679e13aa34a54834cfb4949cac4b96e576"
+  revision = "1f305c863dab438568b4750723b2b7b237a469bb"
 
 [[projects]]
   name = "golang.org/x/text"

@@ -360,6 +360,16 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			v.Weapon.CurrentHP = hp
 		}
 
+		// Track Boundspirit MPs
+		for i, bs := range c.BoundSpirits {
+			mpString := req.FormValue(fmt.Sprintf("BS-%d-MP", i))
+			mp, err := strconv.Atoi(mpString)
+			if err != nil {
+				mp = bs.Pow
+			}
+			bs.CurrentMP = mp
+		}
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)

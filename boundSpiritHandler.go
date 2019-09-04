@@ -91,7 +91,7 @@ func BoundSpiritHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Add extra spirit magic
-		for i := 1; i < 4; i++ {
+		for i := 1; i < 5; i++ {
 			tsm := runequest.Spell{
 				Name:       "",
 				CoreString: "",
@@ -159,7 +159,16 @@ func BoundSpiritHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Non-number entered")
 				}
 
+				intStr := req.FormValue(fmt.Sprintf("BS-%d-Int", i))
+
+				intelligence, err := strconv.Atoi(intStr)
+				if err != nil {
+					intelligence = 0
+					fmt.Println("Non-number entered")
+				}
+
 				bs.Pow = pow
+				bs.Int = intelligence
 				bs.Cha = cha
 				bs.CurrentMP = pow
 

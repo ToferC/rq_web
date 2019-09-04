@@ -847,7 +847,7 @@ th {
                       type="number" 
                       class="form-control" 
                       aria-describedby="BS-{{$i}}-MP-addon" 
-                      name="BS-{{$i}}-MP-{{ $bs.Name }}" 
+                      name="BS-{{$i}}-MP" 
                       value ="{{ $bs.CurrentMP }}"
                       max="{{ $bs.Pow }}"
                       min="0">
@@ -913,20 +913,14 @@ th {
           <div class="col-lg-4">
 
               {{ if gt (len $character.BoundSpirits) 0}}
-              <h5>Bound Spirits</h5>
+              <h5>Spirits & Matrixes</h5>
     
             <table class="table table-sm table-striped">
-              <tr>
-                <th>Spirit</th>
-                <th>Pow</th>
-                <th>Cha</th>
-                <th>Description</th>
-              </tr>
+              
               {{ range $bs := $character.BoundSpirits }}
                 <tr>
                   <td><strong>{{ $bs.Name }}</strong> ({{ $bs.Item }})</td>
-                  <td>{{ $bs.Pow }}</td>
-                  <td>{{ $bs.Cha }}</td>
+                  <td>POW: {{ $bs.Pow }}{{ if $bs.Cha }}, CHA: {{ $bs.Cha }}{{end}}{{ if $bs.Int }}, INT: {{ $bs.Int }}{{end}}</td>
                   <td>{{ $bs.Description }}</td>
                 </tr>
                 <tr>

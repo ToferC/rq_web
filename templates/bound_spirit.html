@@ -24,6 +24,8 @@
             <h5>{{ $character.Name }}</h5>
 
             <hr>
+            <p>Add and manage your bound spirits, magic crystals and spell matrixes from here.</p>
+            <p>To remove a spirit, delete its name before you save.</p>
 
             <form action="" method="POST" enctype="multipart/form-data">
 
@@ -34,7 +36,7 @@
 
         <div class="col-sm-8 col-md-8 col-lg-8">
 
-        <h4>Bound Spirits</h4>
+        <h4>Bound Spirits, Spell Matrixes and Crystals</h4>
 
             {{ range $i, $bs := $character.BoundSpirits }}
 
@@ -66,6 +68,13 @@
                   <span class="input-group-text" id="BS-{{$i}}-Pow-addon">Pow</span>
                 </div>
                 <input type="number" class="form-control" aria-describedby="BS-{{$i}}-Pow-addon" name="BS-{{$i}}-Pow" value ="{{ $bs.Pow }}">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="BS-{{$i}}-Int-addon">Int</span>
+                </div>
+                <input type="number" class="form-control" aria-describedby="BS-{{$i}}-Int-addon" name="BS-{{$i}}-Int" value ="{{ $bs.Int }}">
               </div>
 
               <div class="input-group">

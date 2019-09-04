@@ -41,3 +41,19 @@ func (s *Spell) GenerateName() {
 	}
 	s.Name = n
 }
+
+func formatSpellArray(sa map[string]Spell) string {
+	text := ""
+	end := len(sa)
+	counter := 0
+
+	for _, v := range sa {
+		if counter+1 == end {
+			text += v.String()
+		} else {
+			text += v.String() + ", "
+			counter++
+		}
+	}
+	return text
+}
