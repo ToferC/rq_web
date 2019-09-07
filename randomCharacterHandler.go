@@ -1302,6 +1302,13 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.CreationSteps["Finishing Touches"] = true
 		c.CreationSteps["Complete"] = true
 
+		// Insert power into App archive if user authorizes
+		if req.FormValue("Archive") != "" {
+			cm.Open = true
+		} else {
+			cm.Open = false
+		}
+
 		// Save Character
 
 		err = database.SaveCharacterModel(db, &cm)

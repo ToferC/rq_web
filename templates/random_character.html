@@ -21,7 +21,16 @@
         <div class="col-sm-3 col-md-3 col-lg-3">
             <h4>Random Character</h4>
 
-            <p>Create your character by choosing a homeland, an occupation and a cult.</p>
+            <p>Create your character by choosing a homeland, an occupation and a cult or by leaving the selection at "Random".</p>
+            <p>If you don't choose an option, the app will choose from the offical homelands, occupations and cults. You can choose to set one or move options.</p>
+            <p>You can also choose a <strong>Character Scale</strong>. This will set the power level of the random character.</p>
+
+            <table>
+              <tr>
+                <th></th>
+              </tr>
+            </table>
+
 
             <form class="needs-validation" action="" method="POST" enctype="multipart/form-data">
           <button class="btn btn-primary" type="submit" value="Save">Continue</button>
@@ -88,6 +97,10 @@
                       <option>Epic</option>
                 </select>
                 </div>
+
+              <hr>
+              <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox"
+          checked>
 
               <hr>
 
