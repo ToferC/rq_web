@@ -27,21 +27,28 @@
 
             <form action="" method="POST" enctype="multipart/form-data">
         
-          <h4>Combat Skills</h4>
-        {{ range $skill := $character.Skills }}
+        <h4>Combat Skills</h4>
+          <table class="table table-sm table-striped">
+            {{ range $skill := $character.Skills }}
+            {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
             {{ if or (eq $skill.Category "Melee") (eq $skill.Category "Ranged") }}
-        <p title="{{ $skill.Name }} ({{ $skill.Category }})
-        Base: {{ $skill.Base }}%
-        History: {{ $skill.CreationBonusValue }}%
-        Category: {{ $skill.CategoryValue }}%
-        Homeland: {{ $skill.HomelandValue }}%
-        Occupation: {{ $skill.OccupationValue }}%
-        Cult: {{ $skill.CultValue }}%
-        {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
-        {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
-        </p>
+            <tr>
+              <td title="{{ $skill.Name }} ({{ $skill.Category }})
+              Base: {{ $skill.Base }}%
+              History: {{ $skill.CreationBonusValue }}%
+              Category: {{ $skill.CategoryValue }}%
+              Homeland: {{ $skill.HomelandValue }}%
+              Occupation: {{ $skill.OccupationValue }}%
+              Cult: {{ $skill.CultValue }}%
+              {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
+              {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
+              </td>
+            </tr>
+
         {{ end }} <!-- END if -->
         {{ end }}
+        {{ end }}
+          </table>
 
       <hr>
 

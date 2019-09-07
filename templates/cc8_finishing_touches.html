@@ -29,22 +29,27 @@
             <form action="" method="POST" enctype="multipart/form-data">
         
           <h4>Combat Skills</h4>
-        {{ range $skill := $character.Skills }}
-          {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
+          <table class="table table-sm table-striped">
+            {{ range $skill := $character.Skills }}
+            {{ if and (gt $skill.Total 0) (ne $skill.Total (add $skill.Base $skill.CategoryValue)) }}
             {{ if or (eq $skill.Category "Melee") (eq $skill.Category "Ranged") }}
-        <p title="{{ $skill.Name }} ({{ $skill.Category }})
-        Base: {{ $skill.Base }}%
-        History: {{ $skill.CreationBonusValue }}%
-        Category: {{ $skill.CategoryValue }}%
-        Homeland: {{ $skill.HomelandValue }}%
-        Occupation: {{ $skill.OccupationValue }}%
-        Cult: {{ $skill.CultValue }}%
-        {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
-        {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
-        </p>
+            <tr>
+              <td title="{{ $skill.Name }} ({{ $skill.Category }})
+              Base: {{ $skill.Base }}%
+              History: {{ $skill.CreationBonusValue }}%
+              Category: {{ $skill.CategoryValue }}%
+              Homeland: {{ $skill.HomelandValue }}%
+              Occupation: {{ $skill.OccupationValue }}%
+              Cult: {{ $skill.CultValue }}%
+              {{ range $u := $skill.Updates }}{{ $u.Event }}: {{ $u.Value }}%
+              {{end}}">{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}({{ $skill.Base }}): {{ $skill.Total }}%
+              </td>
+            </tr>
+
         {{ end }} <!-- END if -->
         {{ end }}
         {{ end }}
+          </table>
 
       <hr>
 
@@ -68,12 +73,15 @@
 
             <h4>Melee Attacks</h4>
 
-            {{ range $m := $bigcounter }}
+            {{ range $m, $attack := $character.MeleeAttacks }}
             <div class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Melee-Skill-{{$m}}-addon">Skill</span>
                 </div>
                   <select type="text" class="form-control" id="Melee-Skill-{{$m}}" name="Melee-Skill-{{$m}}">
+                  {{ if ne $attack.Skill.Name ""}}
+                    <option value="{{$attack.Skill.Name}}">{{$attack.Skill}}</option>
+                  {{ end }}
                     <option></option>
                     {{ range $s := $character.Skills }}
                         {{ if or (eq $s.Category "Melee") (eq $s.Category "Shield")}}
@@ -88,28 +96,39 @@
                     <span class="input-group-text" id="Melee-Weapon-{{$m}}-addon">Weapon</span>
                 </div>
                   <select type="text" class="form-control" id="Melee-Weapon-{{$m}}" name="Melee-Weapon-{{$m}}">
+                    {{ range $i, $w := $baseweapons }}
+                      {{ if eq $w.Name $attack.Weapon.Name }}
+                        <option value="{{ $w.Name }}">{{ $w.Name }}: {{ $w.Damage }}</option>
+                      {{ end }} <!-- END range $skills -->
+                    {{ end }}
                     <option></option>
                     {{ range $i, $w := $baseweapons }}
                       {{ if or (eq $w.Type "Melee") (eq $w.Type "Shield")}}
-                        <option value="{{ $i }}">{{ $w.Name }}: {{ $w.Damage }}</option>
-                        {{ end }}
+                        <option value="{{ $w.Name }}">{{ $w.Name }}: {{ $w.Damage }}</option>
                       {{ end }} <!-- END range $skills -->
+                      {{ end }}
                   </select>
               </div>
               
                 <hr>
-                {{ end }} <!-- end range counter -->
+                {{ end }} <!-- end Melee Weapon Range -->
+
+            <hr>
 
             <hr>
 
             <h4>Ranged Attacks</h4>
 
-            {{ range $m := $counter }}
+            {{ range $m, $attack := $character.RangedAttacks }}
+
             <div class="input-group">
                     <div class="input-group-prepend">
                     <span class="input-group-text" id="Ranged-Skill-{{$m}}-addon">Skill</span>
                 </div>
                   <select type="text" class="form-control" id="Ranged-Skill-{{$m}}" name="Ranged-Skill-{{$m}}">
+                    {{ if ne $attack.Skill.Name "" }}
+                      <option value="{{$attack.Skill.Name}}">{{$attack.Skill}}</option>
+                    {{ end }}
                     <option></option>
                     {{ range $s := $character.Skills }}
                         {{ if eq $s.Category "Ranged" }}
@@ -124,43 +143,47 @@
                     <span class="input-group-text" id="Ranged-Weapon-{{$m}}-addon">Weapon</span>
                 </div>
                   <select type="text" class="form-control" id="Ranged-Weapon-{{$m}}" name="Ranged-Weapon-{{$m}}">
+                  {{ range $i, $w := $baseweapons }}
+                      {{ if eq $w.Name $attack.Weapon.Name }}
+                        <option value="{{ $w.Name }}">{{ $w.Name }}: {{ $w.Damage }}</option>
+                      {{ end }} <!-- END range $skills -->
+                    {{ end }}
                     <option></option>
                     {{ range $i, $w := $baseweapons }}
                       {{ if eq $w.Type "Ranged"}}
-                        <option value="{{ $i }}">{{ $w.Name }}: {{ $w.Damage }}</option>
-                        {{ end }}
+                        <option value="{{ $w.Name }}">{{ $w.Name }}: {{ $w.Damage }}</option>
                       {{ end }} <!-- END range $skills -->
+                      {{ end }}
                   </select>
               </div>
               
                 <hr>
-                {{ end }} <!-- end range counter -->
+                {{ end }}
             </div>
 
             <div class="col-sm-4 col-md-4 col-lg-4">
 
 
-            <h4>Armor</h4>
-            <p>Set the armor rating for each of your hit locations.</p>
-        {{ range $s := $character.HitLocationMap }}
-        {{ range $k, $v := $character.HitLocations }}
-        {{ if eq $s $k }}
-          <p>{{ $v.HitLoc }} <strong>{{ $v.Name }}</strong></p>
-
-          <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="{{ $k }}-Armor-addon">Armor</span>
-              </div>
-              <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
-              <div class="input-group-append">
-                  <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
-                </div>
-            </div>  
-         
-          <hr>
-        {{ end }} <!-- END if -->
-        {{ end }}
-        {{ end }} <!-- END map -->
+                <h4>Armor</h4>
+                <p>Set the armor rating for each of your hit locations.</p>
+            {{ range $s := $character.HitLocationMap }}
+            {{ range $k, $v := $character.HitLocations }}
+            {{ if eq $s $k }}
+    
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="{{ $k }}-Armor-addon">{{ $v.Name }}</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="{{ $k }}-Armor-addon" name="{{ $k }}-Armor" value ="{{ $v.Armor }}">
+                  <div class="input-group-append">
+                      <span class="input-group-text" id="{{ $k }}-Armor-addon">pts</span>
+                    </div>
+                </div>  
+             
+            {{ end }} <!-- END if -->
+            {{ end }}
+            {{ end }} <!-- END map -->
+            <hr>
 
                 <button class="btn btn-primary" type="submit" value="Save">Complete Character</button>
               </form>

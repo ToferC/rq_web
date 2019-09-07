@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -1957,7 +1958,186 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	}
 
+	// Weapons automation
+
+	sortedSkillArray := sortedSkills(c.Skills)
+
 	baseWeapons := runequest.BaseWeapons
+
+	// Set map for recalling weapons later
+	weaponsMap := map[string]int{}
+
+	for i, w := range baseWeapons {
+		weaponsMap[w.Name] = i
+	}
+
+	// Create maps if needed
+	if c.MeleeAttacks == nil {
+		c.MeleeAttacks = map[string]*runequest.Attack{}
+	}
+
+	if c.RangedAttacks == nil {
+		c.RangedAttacks = map[string]*runequest.Attack{}
+	}
+
+	damBonus := c.Attributes["DB"]
+	dbString := ""
+	throwDB := ""
+
+	if c.Attributes["DB"].Text != "-" {
+		dbString = damBonus.Text
+
+		if damBonus.Base > 0 {
+			throwDB = fmt.Sprintf("+%dD%d", damBonus.Dice, damBonus.Base/2)
+		} else {
+			throwDB = fmt.Sprintf("-%dD%d", damBonus.Dice, damBonus.Base/2)
+		}
+	}
+
+	tempMelee := map[string]*runequest.Attack{}
+
+	// Get best weapons skill
+	for _, ss := range sortedSkillArray {
+		if ss.Category == "Melee" {
+
+			weapon := &runequest.Weapon{}
+
+			for _, bw := range baseWeapons {
+				if bw.MainSkill == ss.Name {
+					weapon = bw
+					break
+				}
+			}
+
+			name := weapon.Name
+
+			if name == "" {
+				name = ss.Name
+			}
+
+			tempMelee[name] = &runequest.Attack{
+				Name:         name,
+				Skill:        ss,
+				DamageString: weapon.Damage + dbString,
+				StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
+				Weapon:       weapon,
+			}
+			break
+		}
+	}
+
+	// Get best weapons skill
+	for _, ss := range sortedSkillArray {
+		if ss.Category == "Shield" {
+
+			weapon := &runequest.Weapon{}
+
+			for _, bw := range baseWeapons {
+				if bw.MainSkill == ss.Name {
+					weapon = bw
+					break
+				}
+			}
+
+			tempMelee[weapon.Name] = &runequest.Attack{
+				Name:         weapon.Name,
+				Skill:        ss,
+				DamageString: weapon.Damage + dbString,
+				StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
+				Weapon:       weapon,
+			}
+			break
+		}
+	}
+
+	c.MeleeAttacks = tempMelee
+
+	tempRanged := map[string]*runequest.Attack{}
+
+	// Get best weapons skill
+	for _, ss := range sortedSkillArray {
+		if ss.Category == "Ranged" {
+
+			weapon := &runequest.Weapon{}
+
+			for _, bw := range baseWeapons {
+				if bw.MainSkill == ss.Name {
+					weapon = bw
+					break
+				}
+			}
+
+			damage := ""
+
+			if weapon.Thrown {
+				damage = weapon.Damage + throwDB
+			} else {
+				damage = weapon.Damage
+			}
+
+			name := weapon.Name
+
+			if name == "" {
+				name = ss.Name
+			}
+
+			tempRanged[name] = &runequest.Attack{
+				Name:         name,
+				Skill:        ss,
+				DamageString: damage,
+				StrikeRank:   c.Attributes["DEXSR"].Base + weapon.SR,
+				Weapon:       weapon,
+			}
+			break
+		}
+	}
+
+	c.RangedAttacks = tempRanged
+
+	// Create empty attack slots if needed
+	if len(c.MeleeAttacks) < 6 {
+		for i := 1; i < 7-len(c.MeleeAttacks); i++ {
+			a := &runequest.Attack{
+				Skill:  &runequest.Skill{},
+				Weapon: &runequest.Weapon{},
+			}
+			c.MeleeAttacks[fmt.Sprintf("%d", i)] = a
+		}
+	} else {
+		// Always create at least 3
+		for i := 1; i < 4; i++ {
+			a := &runequest.Attack{
+				Skill:  &runequest.Skill{},
+				Weapon: &runequest.Weapon{},
+			}
+			c.MeleeAttacks[fmt.Sprintf("%d", i)] = a
+		}
+	}
+
+	if len(c.RangedAttacks) < 6 {
+		for i := 1; i < 7-len(c.RangedAttacks); i++ {
+			a := &runequest.Attack{
+				Skill:  &runequest.Skill{},
+				Weapon: &runequest.Weapon{},
+			}
+			c.RangedAttacks[fmt.Sprintf("%d", i)] = a
+		}
+	} else {
+		// Always create at least 3
+		for i := 1; i < 4; i++ {
+			a := &runequest.Attack{
+				Skill:  &runequest.Skill{},
+				Weapon: &runequest.Weapon{},
+			}
+			c.RangedAttacks[fmt.Sprintf("%d", i)] = a
+		}
+	}
+
+	// Armor
+
+	for _, v := range c.HitLocations {
+		v.Armor = c.Occupation.GenericArmor
+	}
 
 	wc := WebChar{
 		CharacterModel: cm,
@@ -1965,8 +2145,6 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
 		IsAuthor:       IsAuthor,
-		Counter:        numToArray(4),
-		BigCounter:     numToArray(5),
 		Skills:         runequest.Skills,
 		BaseWeapons:    baseWeapons,
 	}
@@ -1993,55 +2171,77 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 			c.RangedAttacks = map[string]*runequest.Attack{}
 		}
 
-		// Do Stuff
-		// Melee Weapons & Attacks
-		for i := 1; i < 5; i++ {
-			weaponString := req.FormValue(fmt.Sprintf("Melee-Weapon-%d", i))
-			skillString := req.FormValue(fmt.Sprintf("Melee-Skill-%d", i))
+		tempMelee := map[string]*runequest.Attack{}
+
+		for k := range c.MeleeAttacks {
+
+			// Regular Weapon from game
+			weaponString := req.FormValue(fmt.Sprintf("Melee-Weapon-%s", k))
+			skillString := req.FormValue(fmt.Sprintf("Melee-Skill-%s", k))
 
 			if weaponString != "" && skillString != "" {
 
-				weaponIndex, err := strconv.Atoi(weaponString)
-				if err != nil {
-					weaponIndex = 0
-				}
+				// Convert weapon name to index
+				weaponIndex := weaponsMap[weaponString]
 
+				// Select weapon object from array
 				weapon := baseWeapons[weaponIndex]
 
-				c.MeleeAttacks[weapon.Name] = &runequest.Attack{
+				tempMelee[weapon.Name] = &runequest.Attack{
 					Name:         weapon.Name,
 					Skill:        c.Skills[skillString],
-					DamageString: weapon.Damage + c.Attributes["DB"].Text,
+					DamageString: weapon.Damage + dbString,
 					StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
 					Weapon:       weapon,
 				}
 			}
 		}
 
+		c.MeleeAttacks = tempMelee
+
 		// Ranged Weapons & Attacks
-		for i := 1; i < 4; i++ {
-			weaponString := req.FormValue(fmt.Sprintf("Ranged-Weapon-%d", i))
-			skillString := req.FormValue(fmt.Sprintf("Ranged-Skill-%d", i))
+		tempRanged := map[string]*runequest.Attack{}
+
+		for k := range c.RangedAttacks {
+
+			// Regular Weapon
+			weaponString := req.FormValue(fmt.Sprintf("Ranged-Weapon-%s", k))
+			skillString := req.FormValue(fmt.Sprintf("Ranged-Skill-%s", k))
 
 			if weaponString != "" && skillString != "" {
 
-				weaponIndex, err := strconv.Atoi(weaponString)
-				if err != nil {
-					weaponIndex = 0
-				}
+				weaponIndex := weaponsMap[weaponString]
 
 				weapon := baseWeapons[weaponIndex]
 
+				// Set up for thrown weapons
+				throw := false
+
+				if strings.Contains(weapon.Name, "Thrown") {
+					throw = true
+				}
+
+				damage := ""
+
+				if weapon.Thrown {
+					damage = weapon.Damage + throwDB
+				} else {
+					damage = weapon.Damage
+				}
+
 				// Ranged weapon
-				c.RangedAttacks[weapon.Name] = &runequest.Attack{
+				tempRanged[weapon.Name] = &runequest.Attack{
 					Name:         weapon.Name,
 					Skill:        c.Skills[skillString],
-					DamageString: weapon.Damage,
+					DamageString: damage,
 					StrikeRank:   c.Attributes["DEXSR"].Base,
 					Weapon:       weapon,
 				}
+				tempRanged[weapon.Name].Weapon.Thrown = throw
 			}
 		}
+
+		c.RangedAttacks = tempRanged
 
 		// Armor
 		for k, v := range c.HitLocations {
