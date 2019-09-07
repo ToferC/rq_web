@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/thewhitetulip/Tasks/sessions"
@@ -53,17 +52,17 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		Author:    author,
 	}
 
-	homelands, err := database.ListHomelandModels(db)
+	homelands, err := database.ListOfficialHomelandModels(db)
 	if err != nil {
 		panic(err)
 	}
 
-	occupations, err := database.ListOccupationModels(db)
+	occupations, err := database.ListOfficialOccupationModels(db)
 	if err != nil {
 		panic(err)
 	}
 
-	cults, err := database.ListCultModels(db)
+	cults, err := database.ListOfficialCultModels(db)
 	if err != nil {
 		panic(err)
 	}
@@ -95,18 +94,29 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Get character scale
 		scale := req.FormValue("Scale")
 
+		scales := []string{"Common", "Heroic", "Epic"}
+
+		if scale == "Random" {
+			scale = scales[ChooseRandom(len(scales))]
+		}
+
+		// Set vars
+		var hlID, ocID, clID int
+
 		// Set Homeland
 		hlStr := req.FormValue("HLStr")
 
 		fmt.Println("Results: " + hlStr)
 
-		hlID, err := strconv.Atoi(hlStr)
-		if err != nil {
-			for _, k := range homelands {
-				// Get first homeland
-				hlID = int(k.ID)
+		if hlStr == "Random" {
+			hlNames := []string{}
+			for k := range homelands {
+				hlNames = append(hlNames, k)
 			}
-			fmt.Println(err)
+			target := hlNames[ChooseRandom(len(hlNames))]
+			hlID = int(homelands[target].ID)
+		} else {
+			hlID = int(homelands[hlStr].ID)
 		}
 
 		hl, err := database.PKLoadHomelandModel(db, int64(hlID))
@@ -142,13 +152,15 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Set Occupation
 		ocStr := req.FormValue("OCStr")
 
-		ocID, err := strconv.Atoi(ocStr)
-		if err != nil {
-			for _, v := range occupations {
-				// Take first occupation in map
-				ocID = int(v.ID)
-				break
+		if ocStr == "Random" {
+			ocNames := []string{}
+			for k := range occupations {
+				ocNames = append(ocNames, k)
 			}
+			target := ocNames[ChooseRandom(len(ocNames))]
+			ocID = int(occupations[target].ID)
+		} else {
+			ocID = int(occupations[ocStr].ID)
 		}
 
 		oc, err := database.PKLoadOccupationModel(db, int64(ocID))
@@ -160,18 +172,20 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("OCCUPATION: " + c.Occupation.Name)
 
 		// Set Cult
-		cStr := req.FormValue("CStr")
+		clStr := req.FormValue("CStr")
 
-		cID, err := strconv.Atoi(cStr)
-		if err != nil {
-			for _, v := range cults {
-				// Take first cult in map
-				cID = int(v.ID)
-				break
+		if clStr == "Random" {
+			clNames := []string{}
+			for k := range cults {
+				clNames = append(clNames, k)
 			}
+			target := clNames[ChooseRandom(len(clNames))]
+			clID = int(cults[target].ID)
+		} else {
+			clID = int(cults[clStr].ID)
 		}
 
-		cultModel, err := database.PKLoadCultModel(db, int64(cID))
+		cultModel, err := database.PKLoadCultModel(db, int64(clID))
 		if err != nil {
 			fmt.Println("No Cult Found")
 		}
@@ -344,6 +358,17 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			minStat = 3
 		}
 
+		// Reset Passions
+
+		c.Abilities = map[string]*runequest.Ability{
+			"Reputation": &runequest.Ability{
+				Name:       "Reputation",
+				CoreString: "Reputation",
+				Base:       5,
+				Updates:    []*runequest.Update{},
+			},
+		}
+
 		// Roll stats
 		for k, v := range cm.Character.Homeland.StatisticFrames {
 			c.Statistics[k].Base = runequest.RollDice(6, minStat, v.Modifier, v.Dice)
@@ -373,7 +398,11 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		t1 := traits[ChooseRandom(len(traits))]
 		t2 := traits[ChooseRandom(len(traits))]
 
-		c.Description = fmt.Sprintf("%s (%s) is %s and %s.", c.Name, gender, t1, t2)
+		text := fmt.Sprintf("%s (%s) is %s and %s.\n", c.Name, gender, t1, t2)
+
+		text += fmt.Sprintf("%s is a %s adventurer.", c.Name, scale)
+
+		c.Description = text
 
 		// Apply Move
 		for _, m := range c.Homeland.Movement {
@@ -752,6 +781,10 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		default:
 			c.Cult.Rank = "Initiate"
 			c.Cult.NumRunePoints = 1
+		}
+
+		if len(c.Cult.RuneSpells) < c.Cult.NumRunePoints {
+			c.Cult.NumRunePoints = len(c.Cult.RuneSpells)
 		}
 
 		c.RuneSpells = map[string]*runequest.Spell{}
@@ -1262,6 +1295,8 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.RangedAttacks = tempRanged
+
+		// Add Family History
 
 		// Update CreationSteps
 		c.CreationSteps["Finishing Touches"] = true

@@ -50,8 +50,9 @@
                     <label class="custom-file-label" for="inputGroupFile">Choose file</label>
                   </div>
             </div>
-
+              {{ if .IsAdmin }}
               <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" {{ if .CultModel.Official }}checked{{ end }}>
+              {{ end }}
               <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox" {{ if $cult.SubCult }}checked{{ end }}>
               <hr>
               <p>If your Cult is a SubCult, please choose your parent Cult.</p>

@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
@@ -50,25 +53,42 @@ func main() {
 
 	fmt.Println(db)
 
-	// AddSlug to cms
-	hls, _ := database.ListHomelandModels(db)
-
-	for _, hl := range hls {
-
-		
-		database.UpdateHomelandModel(db, hl)
-	}
-
 	ocs, _ := database.ListOccupationModels(db)
 
 	for _, oc := range ocs {
+
+		equip := oc.Occupation.Equipment
+
+		max := 6
+
+		if len(equip) < 6 {
+			max = len(equip)
+		}
+		for _, e := range equip[:max] {
+			target := match(e)
+			re := regexp.MustCompile("[0-9]+")
+			armor := re.FindString(target)
+			fmt.Println(armor)
+			aVal, err := strconv.Atoi(armor)
+			if err != nil {
+				aVal = 0
+			}
+			oc.Occupation.GenericArmor = aVal
+			break
+
+		}
 		database.UpdateOccupationModel(db, oc)
 	}
 
-	cls, _ := database.ListCultModels(db)
+}
 
-	for _, cl := range cls {
-		database.UpdateCultModel(db, cl)
+func match(s string) string {
+	i := strings.Index(s, "(")
+	if i >= 0 {
+		j := strings.Index(s[1:], ")")
+		if j >= 0 {
+			return s[i+1 : j-1]
+		}
 	}
-
+	return ""
 }

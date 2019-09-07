@@ -53,7 +53,10 @@
                   </div>
             </div>
 
-              <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
+              {{ if .IsAdmin }}
+              <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox">
+              {{ end }}
+              
               <br><strong>SubCult?</strong> <input type="checkbox" name="SubCult" value="true" id="checkbox">
               <hr>
               <p>If your Cult is a SubCult, please choose your parent Cult.</p>

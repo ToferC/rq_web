@@ -72,7 +72,12 @@
                   </div>
                 </div>
 
-              <br><strong>Official Occupation?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
+              <hr>
+
+              {{ if .IsAdmin }}
+              <br><strong>Official Occupation?</strong> <input type="checkbox" name="Official" value="true" id="checkbox">
+              {{ end }}              
+              
               <hr>
 
               <h4>Equipment</h4>
@@ -82,6 +87,18 @@
                     <input type="text" class="form-control" aria-describedby="Equipment-{{$ec}}-addon" name="Equipment-{{$ec}}" value ="">
                   </div>
               {{ end }}
+
+              <hr>
+
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Armor-addon">Armor Average</span>
+                  </div>
+                  <input type="number" class="form-control" aria-describedby="Armor-addon" name="Armor" value ="0">
+                  <div class="input-group-append">
+                        <span class="input-group-text" id="Armor-addon">pts</span>
+                      </div>
+                </div>
 
               <hr>
               <input class="button" type="submit" value="Save">

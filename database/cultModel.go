@@ -61,6 +61,26 @@ func ListCultModels(db *pg.DB) (map[string]*models.CultModel, error) {
 	return clMap, nil
 }
 
+// ListOfficialCultModels queries Cult names and add to slice
+func ListOfficialCultModels(db *pg.DB) (map[string]*models.CultModel, error) {
+	var cults []*models.CultModel
+
+	_, err := db.Query(&cults, `SELECT * FROM cult_models WHERE official = true`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	clMap := map[string]*models.CultModel{}
+
+	// Create Map
+	for i, cl := range cults {
+		clMap[runequest.ToSnakeCase(cl.Cult.Name)] = cl
+		fmt.Println(i, cl.Cult.Name)
+	}
+	return clMap, nil
+}
+
 // LoadCultModel loads a single Cult from the DB by name
 func LoadCultModel(db *pg.DB, slug string) (*models.CultModel, error) {
 	// Select user by Primary Key

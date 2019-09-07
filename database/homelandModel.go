@@ -61,6 +61,26 @@ func ListHomelandModels(db *pg.DB) (map[string]*models.HomelandModel, error) {
 	return hlMap, nil
 }
 
+// ListOfficialHomelandModels queries Homeland names and add to slice
+func ListOfficialHomelandModels(db *pg.DB) (map[string]*models.HomelandModel, error) {
+	var homelands []*models.HomelandModel
+
+	_, err := db.Query(&homelands, `SELECT * FROM homeland_models WHERE official = true`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	hlMap := map[string]*models.HomelandModel{}
+
+	// Create Map
+	for i, hl := range homelands {
+		hlMap[runequest.ToSnakeCase(hl.Homeland.Name)] = hl
+		fmt.Println(i, hl.Homeland.Name)
+	}
+	return hlMap, nil
+}
+
 // LoadHomelandModel loads a single Homeland from the DB by name
 func LoadHomelandModel(db *pg.DB, slug string) (*models.HomelandModel, error) {
 	// Select user by Primary Key

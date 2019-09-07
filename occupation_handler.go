@@ -305,6 +305,14 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			},
 		}
 
+		// Set generic armor
+		armor := req.FormValue("Armor")
+		aVal, err := strconv.Atoi(armor)
+		if err != nil {
+			aVal = 0
+		}
+		oc.Occupation.GenericArmor = aVal
+
 		income, err := strconv.Atoi(req.FormValue("Income"))
 		if err != nil {
 			income = 0
@@ -795,6 +803,14 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		oc.Occupation.Equipment = equipment
+
+		// Set generic armor
+		armor := req.FormValue("Armor")
+		aVal, err := strconv.Atoi(armor)
+		if err != nil {
+			aVal = 0
+		}
+		oc.Occupation.GenericArmor = aVal
 
 		// Read Skills
 		tempSkills := []*runequest.Skill{}

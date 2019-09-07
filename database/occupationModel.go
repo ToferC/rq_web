@@ -61,6 +61,26 @@ func ListOccupationModels(db *pg.DB) (map[string]*models.OccupationModel, error)
 	return ocMap, nil
 }
 
+// ListOfficialOccupationModels queries Occupation names and add to slice
+func ListOfficialOccupationModels(db *pg.DB) (map[string]*models.OccupationModel, error) {
+	var occupations []*models.OccupationModel
+
+	_, err := db.Query(&occupations, `SELECT * FROM occupation_models where official = true`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	ocMap := map[string]*models.OccupationModel{}
+
+	// Create Map
+	for i, oc := range occupations {
+		ocMap[runequest.ToSnakeCase(oc.Occupation.Name)] = oc
+		fmt.Println(i, oc.Occupation.Name)
+	}
+	return ocMap, nil
+}
+
 // LoadOccupationModel loads a single Occupation from the DB by name
 func LoadOccupationModel(db *pg.DB, slug string) (*models.OccupationModel, error) {
 	// Select user by Primary Key
