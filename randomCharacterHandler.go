@@ -132,12 +132,20 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		rr := runequest.RollDice(100, 1, 0, 1)
 
 		switch {
-		case rr < 51:
+		case rr < 45:
 			gender = "Male"
 			chainModel = "sartarMaleModel.json"
-		case rr < 101:
+		case rr < 91:
 			gender = "Female"
 			chainModel = "sartarFemaleModel.json"
+		default:
+			gender = "Two Spirited"
+			r2 := runequest.RollDice(10, 1, 0, 1)
+			if r2 < 6 {
+				chainModel = "sartarFemaleModel.json"
+			} else {
+				chainModel = "sartarMaleModel.json"
+			}
 		}
 
 		// Load MarkovChains
@@ -400,7 +408,18 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		text := fmt.Sprintf("%s (%s) is %s and %s.\n", c.Name, gender, t1, t2)
 
-		text += fmt.Sprintf("%s is a %s adventurer.", c.Name, scale)
+		pronoun := ""
+
+		switch gender {
+		case "Male":
+			pronoun = "He"
+		case "Female":
+			pronoun = "She"
+		case "Two Spirited":
+			pronoun = "They"
+		}
+
+		text += fmt.Sprintf("%s is a %s adventurer.", pronoun, scale)
 
 		c.Description = text
 
@@ -578,6 +597,10 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Occupation
 
 		fmt.Println("**Occupation**")
+
+		c.StandardofLiving = c.Occupation.StandardOfLiving
+		c.Ransom = c.Occupation.Ransom
+		c.Income = c.Occupation.Income
 
 		// Add choices to c.Occupation.Skills
 		for _, sc := range c.Occupation.SkillChoices {
