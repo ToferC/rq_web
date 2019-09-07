@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
+	"io"
+	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -93,4 +97,32 @@ func processUserString(s string) string {
 	title := strings.Title(lower)
 
 	return title
+}
+
+func readCSV(f string) []string {
+
+	var a []string
+
+	csvFile, err := os.Open(f)
+	if err != nil {
+		log.Println("Couldn't open CSV file", err)
+	}
+	r := csv.NewReader(csvFile)
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Panic(err)
+		}
+		a = append(a, record[0])
+	}
+	return a
+}
+
+// ChooseRandom returns a random number betweeen 0 and l
+func ChooseRandom(l int) int {
+
+	return randomSeed.Intn(l)
 }

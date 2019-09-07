@@ -12,9 +12,9 @@ var PersonalHistoryEvents = map[string]Event{
 			"Sartar":  -5,
 			"Esrolia": 5,
 		},
-		Slug:           "1582_base",
-		FollowingEvent: "1583_base",
-		End:            false,
+		Slug:               "1582_base",
+		FollowingEventSlug: "1583_base",
+		End:                false,
 		Results: []EventResult{
 			EventResult{
 				Range:       []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},

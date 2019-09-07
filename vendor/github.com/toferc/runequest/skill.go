@@ -1,6 +1,9 @@
 package runequest
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 // Skill is a learned ability of an RPG Character
 type Skill struct {
@@ -47,6 +50,29 @@ func (s *Skill) UpdateSkill() {
 	if s.Total > 0 {
 		s.Total += s.CategoryValue
 	}
+}
+
+// AddSkillUpdate adds an update to a skill
+func (s *Skill) AddSkillUpdate(st string, v int) {
+
+	t := time.Now()
+	tString := t.Format("2006-01-02 15:04:05")
+
+	update := &Update{
+		Date:  tString,
+		Event: st,
+		Value: v,
+	}
+
+	if s.Updates == nil {
+		s.Updates = []*Update{}
+	}
+
+	s.Updates = append(s.Updates, update)
+
+	s.UpdateSkill()
+
+	fmt.Printf("Updated Character Skill: %s: %s\n", st, s.Name)
 }
 
 // GenerateName sets the skill map name

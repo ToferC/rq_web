@@ -353,6 +353,14 @@ type BackupRun struct {
 	// on-demand backups.
 	Description string `json:"description,omitempty"`
 
+	// DiskEncryptionConfiguration: Disk encryption configuration specific
+	// to a backup. Applies only to Second Generation instances.
+	DiskEncryptionConfiguration *DiskEncryptionConfiguration `json:"diskEncryptionConfiguration,omitempty"`
+
+	// DiskEncryptionStatus: Disk encryption status specific to a backup.
+	// Applies only to Second Generation instances.
+	DiskEncryptionStatus *DiskEncryptionStatus `json:"diskEncryptionStatus,omitempty"`
+
 	// EndTime: The time the backup operation completed in UTC timezone in
 	// RFC 3339 format, for example 2012-11-15T16:19:00.094Z.
 	EndTime string `json:"endTime,omitempty"`
@@ -1353,6 +1361,9 @@ func (s *FlagsListResponse) MarshalJSON() ([]byte, error) {
 
 // ImportContext: Database instance import context.
 type ImportContext struct {
+	// BakImportOptions: Import parameters specific to SQL Server .BAK files
+	BakImportOptions *ImportContextBakImportOptions `json:"bakImportOptions,omitempty"`
+
 	// CsvImportOptions: Options for importing data as CSV.
 	CsvImportOptions *ImportContextCsvImportOptions `json:"csvImportOptions,omitempty"`
 
@@ -1380,7 +1391,7 @@ type ImportContext struct {
 	// bucket and read access to the file.
 	Uri string `json:"uri,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "CsvImportOptions") to
+	// ForceSendFields is a list of field names (e.g. "BakImportOptions") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -1388,7 +1399,7 @@ type ImportContext struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "CsvImportOptions") to
+	// NullFields is a list of field names (e.g. "BakImportOptions") to
 	// include in API requests with the JSON null value. By default, fields
 	// with empty values are omitted from API requests. However, any field
 	// with an empty value appearing in NullFields will be sent to the
@@ -1400,6 +1411,72 @@ type ImportContext struct {
 
 func (s *ImportContext) MarshalJSON() ([]byte, error) {
 	type NoMethod ImportContext
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ImportContextBakImportOptions: Import parameters specific to SQL
+// Server .BAK files
+type ImportContextBakImportOptions struct {
+	EncryptionOptions *ImportContextBakImportOptionsEncryptionOptions `json:"encryptionOptions,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "EncryptionOptions")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "EncryptionOptions") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ImportContextBakImportOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod ImportContextBakImportOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type ImportContextBakImportOptionsEncryptionOptions struct {
+	// CertPath: Path to the Certificate (.cer) in Cloud Storage, in the
+	// form gs://bucketName/fileName. The instance must have write
+	// permissions to the bucket and read access to the file.
+	CertPath string `json:"certPath,omitempty"`
+
+	// PvkPassword: Password that encrypts the private key
+	PvkPassword string `json:"pvkPassword,omitempty"`
+
+	// PvkPath: Path to the Certificate Private Key (.pvk) in Cloud Storage,
+	// in the form gs://bucketName/fileName. The instance must have write
+	// permissions to the bucket and read access to the file.
+	PvkPath string `json:"pvkPath,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CertPath") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CertPath") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ImportContextBakImportOptionsEncryptionOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod ImportContextBakImportOptionsEncryptionOptions
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -9524,7 +9601,8 @@ func (r *UsersService) Update(project string, instance string, name string, user
 }
 
 // Host sets the optional parameter "host": Host of the user in the
-// instance.
+// instance. For a MySQL instance, it's required; For a PostgreSQL
+// instance, it's optional.
 func (c *UsersUpdateCall) Host(host string) *UsersUpdateCall {
 	c.urlParams_.Set("host", host)
 	return c
@@ -9632,7 +9710,7 @@ func (c *UsersUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "host": {
-	//       "description": "Host of the user in the instance.",
+	//       "description": "Host of the user in the instance. For a MySQL instance, it's required; For a PostgreSQL instance, it's optional.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },

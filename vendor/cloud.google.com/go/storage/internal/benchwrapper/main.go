@@ -17,52 +17,48 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net"
-	"path/filepath"
+	"os"
 
 	"cloud.google.com/go/storage"
 	pb "cloud.google.com/go/storage/internal/benchwrapper/proto"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 )
 
-const (
-	// Ephemeral port to run grpc service.
-	port = ":50051"
-	// minRead respresents the number of bytes to read at a time.
-	minRead = 4
-)
+var port = flag.String("port", "", "specify a port to run on")
+
+// minRead respresents the number of bytes to read at a time.
+const minRead = 1024 * 1024
 
 func main() {
+	flag.Parse()
+	if *port == "" {
+		log.Fatalf("usage: %s --port=8081", os.Args[0])
+	}
+
+	if os.Getenv("STORAGE_EMULATOR_HOST") == "" {
+		log.Fatal("This benchmarking server only works when connected to an emulator. Please set STORAGE_EMULATOR_HOST.")
+	}
+
 	ctx := context.Background()
 	c, err := storage.NewClient(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", *port))
 	if err != nil {
 		log.Fatal(err)
 	}
-	certificate, err := filepath.Abs("benchwrapper/certificate/server.pem")
-	if err != nil {
-		log.Fatal(err)
-	}
-	key, err := filepath.Abs("benchwrapper/certificate/server.key")
-	if err != nil {
-		log.Fatal(err)
-	}
-	creds, err := credentials.NewServerTLSFromFile(certificate, key)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s := grpc.NewServer(grpc.Creds(creds))
+	s := grpc.NewServer()
 	pb.RegisterStorageBenchWrapperServer(s, &server{
 		c: c,
 	})
-	log.Printf("Running on %s\n", port)
+	log.Printf("Running on localhost:%s\n", *port)
 	log.Fatal(s.Serve(lis))
 }
 

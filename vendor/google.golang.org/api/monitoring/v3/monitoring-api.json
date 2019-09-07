@@ -114,6 +114,38 @@
   "protocol": "rest",
   "resources": {
     "projects": {
+      "methods": {
+        "validateUptimeCheckConfig": {
+          "description": "Validates a new uptime check configuration, and also executes the Uptime check. The results of the Uptime check are returned, but not stored.",
+          "flatPath": "v3/projects/{projectsId}:validateUptimeCheckConfig",
+          "httpMethod": "POST",
+          "id": "monitoring.projects.validateUptimeCheckConfig",
+          "parameterOrder": [
+            "parent"
+          ],
+          "parameters": {
+            "parent": {
+              "description": "The project for the uptime check. The format is projects/[PROJECT_ID].",
+              "location": "path",
+              "pattern": "^projects/[^/]+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "v3/{+parent}:validateUptimeCheckConfig",
+          "request": {
+            "$ref": "UptimeCheckConfig"
+          },
+          "response": {
+            "$ref": "ValidateUptimeCheckConfigResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/monitoring",
+            "https://www.googleapis.com/auth/monitoring.read"
+          ]
+        }
+      },
       "resources": {
         "alertPolicies": {
           "methods": {
@@ -1457,7 +1489,7 @@
       }
     }
   },
-  "revision": "20190805",
+  "revision": "20190824",
   "rootUrl": "https://monitoring.googleapis.com/",
   "schemas": {
     "Aggregation": {
@@ -3117,7 +3149,7 @@
       "type": "object"
     },
     "TimeInterval": {
-      "description": "A closed time interval. It extends from the start time to the end time, and includes both: [startTime, endTime]. Valid time intervals depend on the MetricKind of the metric value. In no case can the end time be earlier than the start time.\nFor a GAUGE metric, the startTime value is technically optional; if  no value is specified, the start time defaults to the value of the  end time, and the interval represents a single point in time. Such an  interval is valid only for GAUGE metrics, which are point-in-time  measurements.\nFor DELTA and CUMULATIVE metrics, the start time must be later than  the end time.\nIn all cases, the start time of the next interval must be  at least a microsecond after the end time of the previous interval.  Because the interval is closed, if the start time of a new interval  is the same as the end time of the previous interval, data written  at the new start time could overwrite data written at the previous  end time.",
+      "description": "A closed time interval. It extends from the start time to the end time, and includes both: [startTime, endTime]. Valid time intervals depend on the MetricKind of the metric value. In no case can the end time be earlier than the start time.\nFor a GAUGE metric, the startTime value is technically optional; if  no value is specified, the start time defaults to the value of the  end time, and the interval represents a single point in time. Such an  interval is valid only for GAUGE metrics, which are point-in-time  measurements.\nFor DELTA and CUMULATIVE metrics, the start time must be earlier  than the end time.\nIn all cases, the start time of the next interval must be  at least a microsecond after the end time of the previous interval.  Because the interval is closed, if the start time of a new interval  is the same as the end time of the previous interval, data written  at the new start time could overwrite data written at the previous  end time.",
       "id": "TimeInterval",
       "properties": {
         "endTime": {
@@ -3396,6 +3428,53 @@
             "Allows checks to run from locations within the Asia Pacific area (ex: Singapore)."
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UptimeCheckResult": {
+      "description": "The result of a single uptime check execution. For group checks, this corresponds to one member of the group.",
+      "id": "UptimeCheckResult",
+      "properties": {
+        "checkPassed": {
+          "description": "True if the resource passed the check.",
+          "type": "boolean"
+        },
+        "contentMismatch": {
+          "description": "True if the response had content that did not match the check.",
+          "type": "boolean"
+        },
+        "errorCode": {
+          "description": "For HTTP checks, error, if any, that prevented contact with the resource (ex: DNS_NAME_UNKNOWN, INVALID_URL).",
+          "type": "string"
+        },
+        "httpStatus": {
+          "description": "For HTTP checks, HTTP response code returned by the resource.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "monitoredResource": {
+          "$ref": "MonitoredResource",
+          "description": "The monitored resource (https://cloud.google.com/monitoring/api/resources) for the Uptime check result."
+        },
+        "requestLatency": {
+          "description": "The request latency when executing the uptime check.",
+          "format": "google-duration",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ValidateUptimeCheckConfigResponse": {
+      "description": "The protocol for the ValidateUptimeCheckConfigResponse response.",
+      "id": "ValidateUptimeCheckConfigResponse",
+      "properties": {
+        "uptimeCheckResults": {
+          "description": "The results of the uptime check execution (includes one result per group member, up to a maximum of 3 randomly selected group members).",
+          "items": {
+            "$ref": "UptimeCheckResult"
+          },
+          "type": "array"
         }
       },
       "type": "object"

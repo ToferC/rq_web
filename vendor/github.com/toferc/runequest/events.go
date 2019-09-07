@@ -14,6 +14,16 @@ type FamilyMember struct {
 	Description string
 }
 
+// Year represents the base element of a history
+type Year struct {
+	Year              int
+	HomelandModifiers map[string]int
+	// Map Homeland name to modifier on d20 roll
+	OccupationModifiers map[string]int
+	// Map Occupation name to modifier on d20 roll
+	Events map[int]*Event
+}
+
 // Event represents a full event in previous character history
 type Event struct {
 	Year        int
@@ -27,10 +37,10 @@ type Event struct {
 	// Map Homeland name to modifier on d20 roll
 	OccupationModifiers map[string]int
 	// Map Occupation name to modifier on d20 roll
-	Results           []EventResult
-	FollowingEvent    string
-	FollowingEventMod int
-	Slug              string
+	Results            []EventResult
+	FollowingEventSlug string
+	FollowingEventMod  int
+	Slug               string
 }
 
 // EventResult is a specific die range of random results from previous

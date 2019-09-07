@@ -7,75 +7,83 @@ import (
 )
 
 func main() {
-	c := runequest.NewCharacter("Bob")
 
-	c.Description = "Man"
+	x := runequest.BaseWeapons
 
-	c.Grandparent.Homeland = "Esrolia"
-	c.Grandparent.Occupation = "Hunter"
+	for _, v := range x {
+		fmt.Println(v.MainSkill)
+	}
 
-	mod := 0
-	next := "1582_base"
-	end := false
+	/*
+		c := runequest.NewCharacter("Bob")
 
-	for {
+		c.Description = "Man"
 
-		event := runequest.PersonalHistoryEvents[next]
+		c.Grandparent.Homeland = "Esrolia"
+		c.Grandparent.Occupation = "Hunter"
 
-		fmt.Println(event)
+		mod := 0
+		next := "1582_base"
+		end := false
 
-		// Start history
-		fmt.Println("Start History")
-		result, _ := runequest.DetermineHistory(c, event, mod)
+		for {
 
-		fmt.Println(result)
+			event := runequest.PersonalHistoryEvents[next]
 
-		// Identify last EventResult
+			fmt.Println(event)
 
-		last := c.History[len(c.History)-1]
+			// Start history
+			fmt.Println("Start History")
+			result, _ := runequest.DetermineHistory(c, event, mod)
 
-		fmt.Println("LAST: ", last.Name)
-		fmt.Println("NEXT: ", next)
+			fmt.Println(result)
 
-		//immediate := last.Results[0].ImmediateFollowEvent
-		// Check for immediate followup
+			// Identify last EventResult
 
-		/*if immediate != "" {
-			fmt.Println("New Immediate Event")
+			last := c.History[len(c.History)-1]
 
-			for {
-				// if immediate follow-up, go there
-				e := runequest.PersonalHistoryEvents[immediate]
-				mod := last.Results[0].ImmediateFollowMod
-				r, end := runequest.DetermineHistory(c, e, mod)
+			fmt.Println("LAST: ", last.Name)
+			fmt.Println("NEXT: ", next)
 
-				// Identify last EventResult
-				last := c.History[len(c.History)-1]
-				next := last.Results[0].NextFollowEvent
+			//immediate := last.Results[0].ImmediateFollowEvent
+			// Check for immediate followup
 
-				// Check for immediate followup
-				immediate := last.Results[0].ImmediateFollowEvent
+			if immediate != "" {
+				fmt.Println("New Immediate Event")
 
-				if immediate == "" {
-					break
+				for {
+					// if immediate follow-up, go there
+					e := runequest.PersonalHistoryEvents[immediate]
+					mod := last.Results[0].ImmediateFollowMod
+					r, end := runequest.DetermineHistory(c, e, mod)
+
+					// Identify last EventResult
+					last := c.History[len(c.History)-1]
+					next := last.Results[0].NextFollowEvent
+
+					// Check for immediate followup
+					immediate := last.Results[0].ImmediateFollowEvent
+
+					if immediate == "" {
+						break
+					}
+
+					fmt.Println(next)
+					fmt.Println(end, immediate, r)
 				}
+			}
 
-				fmt.Println(next)
-				fmt.Println(end, immediate, r)
+			// if no immediate event or after immediate event
+			fmt.Println("END: ", end)
+
+			if last.End {
+				break
 			}
 		}
-		*/
 
-		// if no immediate event or after immediate event
-		fmt.Println("END: ", end)
-
-		if last.End {
-			break
+		// Character done
+		for k, v := range c.History {
+			fmt.Println(k, v)
 		}
-	}
-
-	// Character done
-	for k, v := range c.History {
-		fmt.Println(k, v)
-	}
+	*/
 }

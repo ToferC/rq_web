@@ -1,3 +1,30 @@
+Release v1.23.17 (2019-09-06)
+===
+
+### Service Client Updates
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/kinesisanalytics`: Updates service documentation
+  * Documentation updates for kinesisanalytics
+
+### SDK Bugs
+* `awstesting`: Fixes AssertXML to correctly assert on differences ([#2804](https://github.com/aws/aws-sdk-go/pull/2804))
+Release v1.23.16 (2019-09-05)
+===
+
+### Service Client Updates
+* `service/config`: Updates service API, documentation, and paginators
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+
+Release v1.23.15 (2019-09-04)
+===
+
+### Service Client Updates
+* `service/eks`: Updates service API, documentation, and paginators
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/states`: Updates service API and documentation
+  * Added support for new history events
+* `service/transcribe`: Updates service API and documentation
+
 Release v1.23.14 (2019-09-03)
 ===
 

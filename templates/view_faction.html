@@ -311,7 +311,8 @@
                 <div class="col-sm-3 col-md-3 col-lg-3">
                     <h5>Skills</h5>
                     <table class="table table-sm table-striped">
-                            {{ range $skill := (sortedSkills $c.Character.Skills) }}
+                            {{ range $i, $skill := (sortedSkills $c.Character.Skills) }}
+                            {{ if lt $i 10 }}
                             <tr id="skill" title="{{ $skill.Name }} ({{ $skill.Category }})
                             Base: {{ $skill.Base }}%
                             History: {{ $skill.CreationBonusValue }}%
@@ -325,6 +326,7 @@
                                 <td>{{ $skill.CoreString }} {{ if ne $skill.UserString "" }}({{ $skill.UserString}}) {{end}}</td>
                                 <td style="text-align:center">{{ $skill.Total }}%</td>
                             </tr>
+                            {{ end }}
                             {{ end }}
                         </table>
 

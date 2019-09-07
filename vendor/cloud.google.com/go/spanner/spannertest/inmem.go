@@ -425,6 +425,11 @@ func (s *server) readTx(ctx context.Context, session string, tsel *spannerpb.Tra
 		default:
 			return nil, nil, fmt.Errorf("single use transaction in mode %T not supported", mode)
 		}
+	case *spannerpb.TransactionSelector_Id:
+		id := sel.Id // []byte
+		_ = id       // TODO: lookup an existing transaction by ID.
+		tx := &transaction{}
+		return tx, tx.finish, nil
 	}
 }
 
@@ -626,10 +631,8 @@ func (s *server) Commit(ctx context.Context, req *spannerpb.CommitRequest) (*spa
 		case *spannerpb.Mutation_Delete_:
 			del := op.Delete
 			ks := del.KeySet
-			if len(ks.Ranges) > 0 {
-				return nil, fmt.Errorf("deleting key ranges unsupported")
-			}
-			err := s.db.Delete(del.Table, ks.Keys, ks.All)
+
+			err := s.db.Delete(del.Table, ks.Keys, makeKeyRangeList(ks.Ranges), ks.All)
 			if err != nil {
 				return nil, err
 			}
@@ -678,6 +681,8 @@ func spannerTypeFromType(typ spansql.Type) (*spannerpb.Type, error) {
 		code = spannerpb.TypeCode_STRING
 	case spansql.Bytes:
 		code = spannerpb.TypeCode_BYTES
+	case spansql.Date:
+		code = spannerpb.TypeCode_DATE
 	}
 	st := &spannerpb.Type{Code: code}
 	if typ.Array {
@@ -693,6 +698,8 @@ func spannerValueFromValue(x interface{}) (*structpb.Value, error) {
 	switch x := x.(type) {
 	default:
 		return nil, fmt.Errorf("unhandled database value type %T", x)
+	case bool:
+		return &structpb.Value{Kind: &structpb.Value_BoolValue{x}}, nil
 	case int64:
 		// The Spanner int64 is actually a decimal string.
 		s := strconv.FormatInt(x, 10)
@@ -716,4 +723,31 @@ func spannerValueFromValue(x interface{}) (*structpb.Value, error) {
 			&structpb.ListValue{Values: vs},
 		}}, nil
 	}
+}
+
+func makeKeyRangeList(ranges []*spannerpb.KeyRange) keyRangeList {
+	var krl keyRangeList
+	for _, r := range ranges {
+		krl = append(krl, makeKeyRange(r))
+	}
+	return krl
+}
+
+func makeKeyRange(r *spannerpb.KeyRange) *keyRange {
+	var kr keyRange
+	switch s := r.StartKeyType.(type) {
+	case *spannerpb.KeyRange_StartClosed:
+		kr.start = s.StartClosed
+		kr.startClosed = true
+	case *spannerpb.KeyRange_StartOpen:
+		kr.start = s.StartOpen
+	}
+	switch e := r.EndKeyType.(type) {
+	case *spannerpb.KeyRange_EndClosed:
+		kr.end = e.EndClosed
+		kr.endClosed = true
+	case *spannerpb.KeyRange_EndOpen:
+		kr.end = e.EndOpen
+	}
+	return &kr
 }

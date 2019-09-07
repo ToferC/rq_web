@@ -2302,6 +2302,8 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 //
 // A Step can be updated until its state is set to COMPLETE at which
 // points it becomes immutable.
+//
+// Next tag: 23
 type Step struct {
 	// CompletionTime: The time when the step status was set to
 	// complete.
@@ -2815,6 +2817,7 @@ type TestIssue struct {
 	// Possible values:
 	//   "anr"
 	//   "availableDeepLinks"
+	//   "blankScreen"
 	//   "compatibleWithOrchestrator"
 	//   "completeRoboScriptExecution"
 	//   "crashDialogError"
@@ -2831,9 +2834,11 @@ type TestIssue struct {
 	//   "nativeCrash"
 	//   "nonSdkApiUsageReport"
 	//   "nonSdkApiUsageViolation"
+	//   "overlappingUiElements"
 	//   "performedGoogleLogin"
 	//   "performedMonkeyActions"
 	//   "startActivityNotFound"
+	//   "uiElementsTooDeep"
 	//   "unspecifiedType"
 	//   "unusedRoboDirective"
 	//   "usedRoboDirective"

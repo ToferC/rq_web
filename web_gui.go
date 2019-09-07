@@ -228,7 +228,7 @@ func sortedSkills(skills map[string]*runequest.Skill) []*runequest.Skill {
 		return skillArray
 	}
 
-	return skillArray[:9]
+	return skillArray
 }
 
 // By is the type of a "less" function that defines the ordering of its Planet arguments.

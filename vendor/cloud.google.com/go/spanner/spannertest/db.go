@@ -22,6 +22,7 @@ package spannertest
 // TODO: missing transactionality in a serious way!
 
 import (
+	"bytes"
 	"fmt"
 	"sort"
 	"strconv"
@@ -49,8 +50,9 @@ type table struct {
 	// They are reordered on table creation so the primary key columns come first.
 	cols     []colInfo
 	colIndex map[string]int // col name to index
-	pkCols   int            // number of primary key columns
+	pkCols   int            // number of primary key columns (may be 0)
 
+	// Rows are stored in primary key order.
 	rows []row
 }
 
@@ -123,9 +125,6 @@ func (d *database) ApplyDDL(stmt spansql.DDLStmt) *status.Status {
 		pk := make(map[string]int)
 		for i, kp := range stmt.PrimaryKey {
 			pk[kp.Column] = -1000 + i
-		}
-		if len(pk) == 0 {
-			return status.Newf(codes.InvalidArgument, "missing primary key")
 		}
 		sort.SliceStable(stmt.Columns, func(i, j int) bool {
 			a, b := pk[stmt.Columns[i].Name], pk[stmt.Columns[j].Name]
@@ -200,7 +199,7 @@ func (d *database) table(tbl string) (*table, error) {
 }
 
 // writeValues executes a write option (Insert, Update, etc.).
-func (d *database) writeValues(tbl string, cols []string, values []*structpb.ListValue, f func(t *table, colIndexes, pkIndexes []int, r row) error) error {
+func (d *database) writeValues(tbl string, cols []string, values []*structpb.ListValue, f func(t *table, colIndexes []int, r row) error) error {
 	t, err := d.table(tbl)
 	if err != nil {
 		return err
@@ -218,13 +217,11 @@ func (d *database) writeValues(tbl string, cols []string, values []*structpb.Lis
 		revIndex[i] = j
 	}
 
-	var pkIndexes []int
 	for pki := 0; pki < t.pkCols; pki++ {
-		i, ok := revIndex[pki]
+		_, ok := revIndex[pki]
 		if !ok {
 			return status.Errorf(codes.InvalidArgument, "primary key column %s not included in write", t.cols[pki].Name)
 		}
-		pkIndexes = append(pkIndexes, i)
 	}
 
 	for _, vs := range values {
@@ -245,7 +242,7 @@ func (d *database) writeValues(tbl string, cols []string, values []*structpb.Lis
 		}
 		// TODO: enforce NOT NULL?
 
-		if err := f(t, colIndexes, pkIndexes, r); err != nil {
+		if err := f(t, colIndexes, r); err != nil {
 			return err
 		}
 	}
@@ -254,29 +251,26 @@ func (d *database) writeValues(tbl string, cols []string, values []*structpb.Lis
 }
 
 func (d *database) Insert(tbl string, cols []string, values []*structpb.ListValue) error {
-	return d.writeValues(tbl, cols, values, func(t *table, colIndexes, pkIndexes []int, r row) error {
-		var pk []interface{}
-		for _, i := range pkIndexes {
-			pk = append(pk, r[i])
-		}
-		if t.rowForPK(pk) >= 0 {
+	return d.writeValues(tbl, cols, values, func(t *table, colIndexes []int, r row) error {
+		pk := r[:t.pkCols]
+		rowNum, found := t.rowForPK(pk)
+		if found {
 			// TODO: how do we return `ALREADY_EXISTS`?
 			return status.Errorf(codes.Unknown, "row already in table")
 		}
-
-		t.rows = append(t.rows, r)
+		t.insertRow(rowNum, r)
 		return nil
 	})
 }
 
 func (d *database) Update(tbl string, cols []string, values []*structpb.ListValue) error {
-	return d.writeValues(tbl, cols, values, func(t *table, colIndexes, pkIndexes []int, r row) error {
-		var pk []interface{}
-		for _, i := range pkIndexes {
-			pk = append(pk, r[i])
+	return d.writeValues(tbl, cols, values, func(t *table, colIndexes []int, r row) error {
+		if t.pkCols == 0 {
+			return status.Errorf(codes.InvalidArgument, "cannot update table %s with no columns in primary key", tbl)
 		}
-		rowNum := t.rowForPK(pk)
-		if rowNum < 0 {
+		pk := r[:t.pkCols]
+		rowNum, found := t.rowForPK(pk)
+		if !found {
 			// TODO: is this the right way to return `NOT_FOUND`?
 			return status.Errorf(codes.NotFound, "row not in table")
 		}
@@ -289,15 +283,12 @@ func (d *database) Update(tbl string, cols []string, values []*structpb.ListValu
 }
 
 func (d *database) InsertOrUpdate(tbl string, cols []string, values []*structpb.ListValue) error {
-	return d.writeValues(tbl, cols, values, func(t *table, colIndexes, pkIndexes []int, r row) error {
-		var pk []interface{}
-		for _, i := range pkIndexes {
-			pk = append(pk, r[i])
-		}
-		rowNum := t.rowForPK(pk)
-		if rowNum < 0 {
+	return d.writeValues(tbl, cols, values, func(t *table, colIndexes []int, r row) error {
+		pk := r[:t.pkCols]
+		rowNum, found := t.rowForPK(pk)
+		if !found {
 			// New row; do an insert.
-			t.rows = append(t.rows, r)
+			t.insertRow(rowNum, r)
 		} else {
 			// Existing row; do an update.
 			for _, i := range colIndexes {
@@ -310,7 +301,7 @@ func (d *database) InsertOrUpdate(tbl string, cols []string, values []*structpb.
 
 // TODO: Replace
 
-func (d *database) Delete(table string, keys []*structpb.ListValue, all bool) error {
+func (d *database) Delete(table string, keys []*structpb.ListValue, keyRanges keyRangeList, all bool) error {
 	t, err := d.table(table)
 	if err != nil {
 		return err
@@ -330,10 +321,26 @@ func (d *database) Delete(table string, keys []*structpb.ListValue, all bool) er
 			return err
 		}
 		// Not an error if the key does not exist.
-		rowNum := t.rowForPK(pk)
-		if rowNum >= 0 {
+		rowNum, found := t.rowForPK(pk)
+		if found {
 			copy(t.rows[rowNum:], t.rows[rowNum+1:])
 			t.rows = t.rows[:len(t.rows)-1]
+		}
+	}
+
+	for _, r := range keyRanges {
+		r.startKey, err = t.primaryKeyPrefix(r.start.Values)
+		if err != nil {
+			return err
+		}
+		r.endKey, err = t.primaryKeyPrefix(r.end.Values)
+		if err != nil {
+			return err
+		}
+		startRow, endRow := t.findRange(r)
+		if n := endRow - startRow; n > 0 {
+			copy(t.rows[startRow:], t.rows[endRow:])
+			t.rows = t.rows[:len(t.rows)-n]
 		}
 	}
 
@@ -403,8 +410,8 @@ func (d *database) Read(tbl string, cols []string, keys []*structpb.ListValue, l
 				return err
 			}
 			// Not an error if the key does not exist.
-			rowNum := t.rowForPK(pk)
-			if rowNum < 0 {
+			rowNum, found := t.rowForPK(pk)
+			if !found {
 				continue
 			}
 			ri.add(t.rows[rowNum], colIndexes)
@@ -501,6 +508,41 @@ func (t *table) addColumn(cd spansql.ColumnDef) *status.Status {
 	return nil
 }
 
+func (t *table) insertRow(rowNum int, r row) {
+	t.rows = append(t.rows, nil)
+	copy(t.rows[rowNum+1:], t.rows[rowNum:])
+	t.rows[rowNum] = r
+}
+
+// findRange finds the rows included in the key range,
+// reporting it as a half-open interval.
+// r.startKey and r.endKey should be populated.
+func (t *table) findRange(r *keyRange) (int, int) {
+	// TODO: This is incorrect for primary keys with descending order.
+	// It might be sufficient for the caller to switch start/end in that case.
+
+	// startRow is the first row matching the range.
+	startRow := sort.Search(len(t.rows), func(i int) bool {
+		return rowCmp(r.startKey, t.rows[i][:t.pkCols]) <= 0
+	})
+	if startRow == len(t.rows) {
+		return startRow, startRow
+	}
+	if !r.startClosed && rowCmp(r.startKey, t.rows[startRow][:t.pkCols]) == 0 {
+		startRow++
+	}
+
+	// endRow is one more than the last row matching the range.
+	endRow := sort.Search(len(t.rows), func(i int) bool {
+		return rowCmp(r.endKey, t.rows[i][:t.pkCols]) < 0
+	})
+	if !r.endClosed && rowCmp(r.endKey, t.rows[endRow-1][:t.pkCols]) == 0 {
+		endRow--
+	}
+
+	return startRow, endRow
+}
+
 // colIndexes returns the indexes for the named columns.
 func (t *table) colIndexes(cols []string) ([]int, error) {
 	var is []int
@@ -520,6 +562,14 @@ func (t *table) primaryKey(values []*structpb.Value) ([]interface{}, error) {
 	if len(values) != t.pkCols {
 		return nil, status.Errorf(codes.InvalidArgument, "primary key length mismatch: got %d values, table has %d", len(values), t.pkCols)
 	}
+	return t.primaryKeyPrefix(values)
+}
+
+// primaryKeyPrefix constructs the internal representation of a primary key prefix.
+func (t *table) primaryKeyPrefix(values []*structpb.Value) ([]interface{}, error) {
+	if len(values) > t.pkCols {
+		return nil, status.Errorf(codes.InvalidArgument, "primary key length too long: got %d values, table has %d", len(values), t.pkCols)
+	}
 
 	var pk []interface{}
 	for i, value := range values {
@@ -532,35 +582,32 @@ func (t *table) primaryKey(values []*structpb.Value) ([]interface{}, error) {
 	return pk, nil
 }
 
-// rowForPK returns the index of t.rows that holds the row for the given primary key.
-// It returns -1 if it isn't found.
-func (t *table) rowForPK(pk []interface{}) int {
+// rowForPK returns the index of t.rows that holds the row for the given primary key, and true.
+// If the given primary key isn't found, it returns the row that should hold it, and false.
+func (t *table) rowForPK(pk []interface{}) (row int, found bool) {
 	if len(pk) != t.pkCols {
 		panic(fmt.Sprintf("primary key length mismatch: got %d values, table has %d", len(pk), t.pkCols))
 	}
-	for i, row := range t.rows {
-		if rowEqual(pk, row[:t.pkCols]) {
-			return i
-		}
+
+	i := sort.Search(len(t.rows), func(i int) bool {
+		return rowCmp(pk, t.rows[i][:t.pkCols]) <= 0
+	})
+	if i == len(t.rows) {
+		return i, false
 	}
-	return -1
+	return i, rowCmp(pk, t.rows[i][:t.pkCols]) == 0
 }
 
-// rowEqual reports whether two rows have the same values.
-// This is used by rowForPK and so doesn't support array/struct types.
-func rowEqual(a, b []interface{}) bool {
-	if len(a) != len(b) {
-		return false
-	}
+// rowCmp compares two rows, returning -1/0/+1.
+// This is used for primary key matching and so doesn't support array/struct types.
+// a is permitted to be shorter than b.
+func rowCmp(a, b []interface{}) int {
 	for i := 0; i < len(a); i++ {
-		// The only value key column types are represented internally
-		// as Go types comparable with == and !=.
-		// TODO: TIMESTAMP might violate this.
-		if a[i] != b[i] {
-			return false
+		if cmp := compareVals(a[i], b[i]); cmp != 0 {
+			return cmp
 		}
 	}
-	return true
+	return 0
 }
 
 func valForType(v *structpb.Value, t spansql.Type) (interface{}, error) {
@@ -625,3 +672,30 @@ func valForType(v *structpb.Value, t spansql.Type) (interface{}, error) {
 	}
 	return nil, fmt.Errorf("unsupported inserting value kind %T into column of type %s", v.Kind, t.SQL())
 }
+
+type keyRange struct {
+	start, end             *structpb.ListValue
+	startClosed, endClosed bool
+
+	// These are populated during an operation
+	// when we know what table this keyRange applies to.
+	startKey, endKey []interface{}
+}
+
+func (r *keyRange) String() string {
+	var sb bytes.Buffer // TODO: Switch to strings.Builder when we drop support for Go 1.9.
+	if r.startClosed {
+		sb.WriteString("[")
+	} else {
+		sb.WriteString("(")
+	}
+	fmt.Fprintf(&sb, "%v,%v", r.startKey, r.endKey)
+	if r.endClosed {
+		sb.WriteString("]")
+	} else {
+		sb.WriteString(")")
+	}
+	return sb.String()
+}
+
+type keyRangeList []*keyRange

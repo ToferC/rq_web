@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/schema"
 
@@ -31,6 +33,8 @@ var (
 	uploader   *s3manager.Uploader
 	downloader *s3manager.Downloader
 	decoder    = schema.NewDecoder()
+	s          = rand.NewSource(time.Now().Unix())
+	randomSeed = rand.New(s)
 )
 
 // MaxMemory is the max upload size for images
@@ -46,6 +50,10 @@ func init() {
 	os.Setenv("DBUser", "chris")
 	os.Setenv("DBPass", "12345")
 	os.Setenv("DBName", "runequest")
+
+	// Set markov chain for name generator
+	sc := buildModel(3, "sartar_names.txt")
+	saveModel(sc, "sartarModel.json")
 }
 
 func main() {
@@ -181,6 +189,9 @@ func main() {
 	r.HandleFunc("/cc6_apply_cult/{id}", ApplyCultHandler)
 	r.HandleFunc("/cc7_personal_skills/{id}", PersonalSkillsHandler)
 	r.HandleFunc("/cc8_finishing_touches/{id}", FinishingTouchesHandler)
+
+	// Random creation
+	r.HandleFunc("/random_character/", RandomCharacterHandler)
 
 	// Character Modification
 	r.HandleFunc("/edit_magic/{id}", EditMagicHandler)
