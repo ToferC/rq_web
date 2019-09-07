@@ -52,8 +52,11 @@ func init() {
 	os.Setenv("DBName", "runequest")
 
 	// Set markov chain for name generator
-	sc := buildModel(3, "sartar_names.txt")
-	saveModel(sc, "sartarModel.json")
+	sc := buildModel(3, "sartar_male_names.txt")
+	saveModel(sc, "sartarMaleModel.json")
+
+	sc = buildModel(3, "sartar_female_names.txt")
+	saveModel(sc, "sartarFemaleModel.json")
 }
 
 func main() {

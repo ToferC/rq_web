@@ -117,23 +117,27 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.Homeland = hl.Homeland
 		fmt.Println("HOMELAND: " + c.Homeland.Name)
 
+		// Select Gender
+		var gender, chainModel string
+		rr := runequest.RollDice(100, 1, 0, 1)
+
+		switch {
+		case rr < 51:
+			gender = "Male"
+			chainModel = "sartarMaleModel.json"
+		case rr < 101:
+			gender = "Female"
+			chainModel = "sartarFemaleModel.json"
+		}
+
 		// Load MarkovChains
-		sartarChain, err := loadModel("sartarModel.json")
+		chain, err := loadModel(chainModel)
 		if err != nil {
 			log.Println(err)
 		}
 
 		// Name generation
-		c.Name = generateName(sartarChain)
-
-		// Traits generation
-
-		traits := readCSV("traits.csv")
-
-		t1 := traits[ChooseRandom(len(traits))]
-		t2 := traits[ChooseRandom(len(traits))]
-
-		c.Description = fmt.Sprintf("%s is %s and %s.", c.Name, t1, t2)
+		c.Name = generateName(chain)
 
 		// Set Occupation
 		ocStr := req.FormValue("OCStr")
@@ -289,7 +293,16 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		r20 := c.ElementalRunes[remainingRunes[r]]
 		r20.Base = runeValueArray[2]
 
-		// Elemental Runes
+		// Power Runes
+
+		// Reset Power Runes
+		for k, v := range c.PowerRunes {
+			if isInString(runequest.PowerRuneOrder[:9], k) {
+				v.Base = 50
+			} else {
+				v.Base = 0
+			}
+		}
 		// Allocate one Rune bonuses to Cult runes first
 		runesChosen = []string{}
 		for _, r := range c.Cult.Runes {
@@ -350,7 +363,17 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.HitLocations = runequest.LocationForms[c.Homeland.LocationForm]
 		c.HitLocationMap = runequest.SortLocations(c.HitLocations)
 
+		c.DetermineSkillCategoryValues()
 		c.SetAttributes()
+
+		// Traits generation
+
+		traits := readCSV("traits.csv")
+
+		t1 := traits[ChooseRandom(len(traits))]
+		t2 := traits[ChooseRandom(len(traits))]
+
+		c.Description = fmt.Sprintf("%s (%s) is %s and %s.", c.Name, gender, t1, t2)
 
 		// Apply Move
 		for _, m := range c.Homeland.Movement {
@@ -368,6 +391,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		for _, v := range c.HitLocations {
 			v.Value = v.Max
+			v.Armor = c.Occupation.GenericArmor
 		}
 
 		c.CreationSteps["Roll Stats"] = true
@@ -736,14 +760,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Rune Magic
 		fmt.Println("**Choose Rune Spells**")
 
-		numRuneSpells := 1
-
-		switch scale {
-		case "Heroic":
-			numRuneSpells = 3
-		case "Epic":
-			numRuneSpells = 5
-		}
+		numRuneSpells := c.Cult.NumRunePoints
 
 		chosenInt := []int{}
 		index := ChooseRandom(len(c.Cult.RuneSpells))
@@ -768,6 +785,13 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Spirit Magic
 
+		// Add Spirit Magic
+		c.Cult.NumSpiritMagic = 5
+
+		if c.Occupation.Name == "Assistant Shaman" {
+			c.Cult.NumSpiritMagic += 5
+		}
+
 		// Add Associated Cult spells
 		totalSpiritMagic := []*runequest.Spell{}
 
@@ -779,15 +803,14 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		mSP := 5
+		mSP := c.Cult.NumSpiritMagic
 
 		switch scale {
 		case "Heroic":
-			mSP = 10
+			mSP += 5
 		case "Epic":
 			mSP = c.Statistics["CHA"].Total
 		default:
-			mSP = 5
 		}
 
 		cSP := 0
@@ -1025,13 +1048,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Add Spirit Magic
-		c.Cult.NumSpiritMagic = 5
-
-		if c.Occupation.Name == "Assistant Shaman" {
-			c.Cult.NumSpiritMagic += 5
-		}
-
 		// Set Rune Points to Max
 		c.CurrentRP = c.Cult.NumRunePoints
 
@@ -1046,17 +1062,21 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		switch scale {
 		case "Heroic":
 			for i, ss := range sortedSkillArray {
+				roll := runequest.RollDice(6, 1, 0, 1)
+				s := &runequest.Skill{}
 				switch {
 				case i <= 3:
-					s := c.Skills[ss.Name]
-					if s.CoreString == "Speak" {
+					if ss.CoreString == "Speak" || roll >= 5 {
 						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					} else {
+						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Heroic Skill 25", 25)
 				case i <= 8:
-					s := c.Skills[ss.Name]
-					if s.CoreString == "Speak" {
+					if ss.CoreString == "Speak" || roll >= 5 {
 						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					} else {
+						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Heroic Skill 10", 10)
 				default:
@@ -1065,23 +1085,28 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		case "Epic":
 			for i, ss := range sortedSkillArray {
+				roll := runequest.RollDice(6, 1, 0, 1)
+				s := &runequest.Skill{}
 				switch {
 				case i <= 7:
-					s := c.Skills[ss.Name]
-					if s.CoreString == "Speak" {
+					if ss.CoreString == "Speak" || roll >= 5 {
 						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					} else {
+						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Epic Skill 40", 40)
 				case i <= 14:
-					s := c.Skills[ss.Name]
-					if s.CoreString == "Speak" {
+					if ss.CoreString == "Speak" || roll >= 5 {
 						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					} else {
+						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Epic Skill 25", 25)
 				case i <= 21:
-					s := c.Skills[ss.Name]
-					if s.CoreString == "Speak" {
+					if ss.CoreString == "Speak" || roll >= 5 {
 						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					} else {
+						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Epic Skill 10", 10)
 				default:
@@ -1091,10 +1116,13 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		default:
 			// Common Character
 			for i, ss := range sortedSkillArray {
+				roll := runequest.RollDice(6, 1, 0, 1)
+				s := &runequest.Skill{}
 				if i <= 5 {
-					s := c.Skills[ss.Name]
-					if s.CoreString == "Speak" {
+					if ss.CoreString == "Speak" || roll >= 5 {
 						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					} else {
+						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Heroic Skill 10", 10)
 				}
@@ -1150,8 +1178,14 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					}
 				}
 
-				tempMelee[weapon.Name] = &runequest.Attack{
-					Name:         weapon.Name,
+				name := weapon.Name
+
+				if name == "" {
+					name = ss.Name
+				}
+
+				tempMelee[name] = &runequest.Attack{
+					Name:         name,
 					Skill:        ss,
 					DamageString: weapon.Damage + dbString,
 					StrikeRank:   c.Attributes["DEXSR"].Base + c.Attributes["SIZSR"].Base + weapon.SR,
@@ -1210,8 +1244,14 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					damage = weapon.Damage
 				}
 
-				tempRanged[weapon.Name] = &runequest.Attack{
-					Name:         weapon.Name,
+				name := weapon.Name
+
+				if name == "" {
+					name = ss.Name
+				}
+
+				tempRanged[name] = &runequest.Attack{
+					Name:         name,
 					Skill:        ss,
 					DamageString: damage,
 					StrikeRank:   c.Attributes["DEXSR"].Base + weapon.SR,
@@ -1222,8 +1262,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.RangedAttacks = tempRanged
-
-		// Armor
 
 		// Update CreationSteps
 		c.CreationSteps["Finishing Touches"] = true

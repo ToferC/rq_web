@@ -37,7 +37,7 @@ Lance,melee,0,1D10+1,3,10,3.5+,Lance
 Pike,melee,0,2D6+1,3,12,3.5+,Pike
 Long Spear,melee,0,1D10+1,3,10,3,2H Spear
 2H Short Spear,melee,1,1D8+1,2,10,1.5,2H Spear
-Pole Lasso,melee,1/MR,N/A,3,4,3,2H Spear
+Pole Lasso,missile,1/MR,N/A,3,4,3,Pole Lasso
 Head Butt (Minotaur),melee,4,1D6,0,0,0,Grapple
 Composite Bow,missile,S/MR,1D8+1,2,7,100,Composite Bow
 Elf Bow,missile,S/MR,1D8+1,2,6,80,Elf Bow

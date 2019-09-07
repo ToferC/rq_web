@@ -124,7 +124,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "7faa6fa8b9f713c5e296df819af6be4dd73ffe73"
+  revision = "a687084addcffceccab844752ef487f4105dbebe"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -136,7 +136,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["bcrypt","blowfish","pbkdf2"]
-  revision = "9756ffdc24725223350eb3266ffb92590d28f278"
+  revision = "71b5226ff73902d121cd9dbbdfdb67045a805845"
 
 [[projects]]
   branch = "master"

@@ -315,3 +315,5 @@ func (c Character) String() string {
 
 	return text
 }
+
+// Add DescribeCharacter here

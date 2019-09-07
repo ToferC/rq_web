@@ -7,6 +7,7 @@ type Occupation struct {
 	Notes            string
 	Skills           []*Skill
 	Weapons          []WeaponSelection
+	GenericArmor     int
 	SkillChoices     []SkillChoice
 	StandardOfLiving string
 	Income           int
