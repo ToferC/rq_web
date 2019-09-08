@@ -123,6 +123,25 @@ func readCSV(f string) []string {
 
 // ChooseRandom returns a random number betweeen 0 and l
 func ChooseRandom(l int) int {
-
 	return randomSeed.Intn(l)
+}
+
+// ChooseFromStringArray takes an array of strings to choose from and an array of strings already chosen
+// it returns a slected string and an updated array of chosen stings
+func ChooseFromStringArray(stringArray, chosenStrings []string) string {
+
+	fmt.Println("Choose string")
+
+	choice := ChooseRandom(len(stringArray))
+	target := stringArray[choice]
+
+	for isInString(chosenStrings, target) {
+		fmt.Println("String already chosen")
+		choice = ChooseRandom(len(stringArray))
+		target = stringArray[choice]
+	}
+
+	chosenStrings = append(chosenStrings, target)
+
+	return target
 }

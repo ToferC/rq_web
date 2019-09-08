@@ -445,9 +445,28 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		}
 
+		culturalRangedWeapons := []string{}
+		culturalMeleeWeapons := []string{}
+		culturalShields := []string{}
+		culturalWeapons := []string{}
+
 		// Add Skills to Character
 		fmt.Println("**Homeland Skills**")
+
 		for _, s := range c.Homeland.Skills {
+
+			// Add cultural weapons
+			switch s.Category {
+			case "Melee":
+				culturalMeleeWeapons = append(culturalMeleeWeapons, s.CoreString)
+				culturalWeapons = append(culturalWeapons, s.CoreString)
+			case "Ranged":
+				culturalRangedWeapons = append(culturalRangedWeapons, s.CoreString)
+				culturalWeapons = append(culturalWeapons, s.CoreString)
+			case "Shield":
+				culturalShields = append(culturalShields, s.CoreString)
+			}
+
 			// Modify Skill
 			if s.UserString == "any" {
 				// use default specialization
@@ -602,7 +621,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		meleeSkills := []string{}
 		rangedSkills := []string{}
-		allSkills := []string{"Small Shield", "Medium Shield", "Large Shield"}
+		allSkills := []string{}
 		shieldSkills := []string{"Small Shield", "Medium Shield", "Large Shield"}
 
 		for k, v := range runequest.Skills {
@@ -618,33 +637,57 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Choose weapon skills
-		var choice int
+		chosenWeapons := []string{}
 
 		for _, w := range c.Occupation.Weapons {
+			fmt.Println("**Occupation Weapons**")
+			fmt.Println(w)
 
 			target := ""
 
 			switch {
 			case w.Description == "Melee":
-				choice = ChooseRandom(len(meleeSkills))
-				target = meleeSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalMeleeWeapons, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(meleeSkills, chosenWeapons)
+				}
+
 			case w.Description == "Ranged":
-				choice = ChooseRandom(len(rangedSkills))
-				target = rangedSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalRangedWeapons, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(rangedSkills, chosenWeapons)
+				}
 			case w.Description == "Shield":
-				choice = ChooseRandom(len(shieldSkills))
-				target = shieldSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalShields, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(shieldSkills, chosenWeapons)
+				}
 			default:
-				choice = ChooseRandom(len(allSkills))
-				target = allSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalWeapons, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(allSkills, chosenWeapons)
+				}
 			}
 
-			bs := runequest.Skills[target]
+			fmt.Println(target)
+
+			bs := c.Skills[target]
 
 			ws := &runequest.Skill{
 				CoreString:      bs.CoreString,
 				Category:        bs.Category,
-				Base:            bs.Base,
 				OccupationValue: w.Value,
 			}
 
@@ -670,7 +713,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Name = createName(sk.CoreString, sk.UserString)
 				sk.UpdateSkill()
 
-				fmt.Printf("Updated Character Skill: %s: %d\n", sk.Name, s.Base)
+				fmt.Printf("Updated Character Skill: %s: %d\n", sk.Name, s.OccupationValue)
 
 			} else {
 				// We need to find the base skill from the Master list or create it
@@ -699,8 +742,8 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					fmt.Println("Add Skill to character: " + baseSkill.Name)
 					c.Skills[baseSkill.Name] = baseSkill
 				} else {
-					// Skill exists in master list
-					fmt.Println("Skill in master list: " + targetString)
+					// Skill exists in character list
+					fmt.Println("Skill in character list: " + targetString)
 
 					fmt.Println(bs)
 
@@ -887,35 +930,62 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.Cult.Skills = append(c.Cult.Skills, &sc.Skills[m])
 		}
 
+		// Choose weapon skills
+		chosenWeapons = []string{}
+
 		for _, w := range c.Cult.Weapons {
+			fmt.Println("**Cult Weapons**")
+			fmt.Println(w)
 
 			target := ""
 
 			switch {
 			case w.Description == "Melee":
-				choice = ChooseRandom(len(meleeSkills))
-				target = meleeSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalMeleeWeapons, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(meleeSkills, chosenWeapons)
+				}
+
 			case w.Description == "Ranged":
-				choice = ChooseRandom(len(rangedSkills))
-				target = rangedSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalRangedWeapons, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(rangedSkills, chosenWeapons)
+				}
 			case w.Description == "Shield":
-				choice = ChooseRandom(len(shieldSkills))
-				target = shieldSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalShields, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(shieldSkills, chosenWeapons)
+				}
 			default:
-				choice = ChooseRandom(len(allSkills))
-				target = allSkills[choice]
+				roll := runequest.RollDice(6, 1, 0, 1)
+				switch {
+				case roll <= 5:
+					target = ChooseFromStringArray(culturalWeapons, chosenWeapons)
+				default:
+					target = ChooseFromStringArray(allSkills, chosenWeapons)
+				}
 			}
 
-			bs := runequest.Skills[target]
+			fmt.Println(target)
+
+			bs := c.Skills[target]
 
 			ws := &runequest.Skill{
 				CoreString:      bs.CoreString,
 				Category:        bs.Category,
-				Base:            bs.Base,
 				OccupationValue: w.Value,
 			}
 
-			c.Cult.Skills = append(c.Cult.Skills, ws)
+			c.Occupation.Skills = append(c.Occupation.Skills, ws)
 		}
 
 		// Add Skills to Character
