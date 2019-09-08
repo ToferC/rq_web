@@ -317,14 +317,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Power Runes
 
-		// Reset Power Runes
-		for k, v := range c.PowerRunes {
-			if isInString(runequest.PowerRuneOrder[:9], k) {
-				v.Base = 50
-			} else {
-				v.Base = 0
-			}
-		}
 		// Allocate one Rune bonuses to Cult runes first
 		runesChosen = []string{}
 		for _, r := range c.Cult.Runes {
@@ -364,17 +356,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			minStat = 2
 		case "Epic":
 			minStat = 3
-		}
-
-		// Reset Passions
-
-		c.Abilities = map[string]*runequest.Ability{
-			"Reputation": &runequest.Ability{
-				Name:       "Reputation",
-				CoreString: "Reputation",
-				Base:       5,
-				Updates:    []*runequest.Update{},
-			},
 		}
 
 		// Roll stats
@@ -827,25 +808,27 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		numRuneSpells := c.Cult.NumRunePoints
 
-		chosenInt := []int{}
-		index := ChooseRandom(len(c.Cult.RuneSpells))
+		if numRuneSpells > 0 {
 
-		for i := 1; i <= numRuneSpells; i++ {
+			chosenInt := []int{}
+			index := ChooseRandom(len(c.Cult.RuneSpells))
 
-			for isIn(chosenInt, index) {
-				fmt.Println("Spell already chosen")
-				index = ChooseRandom(len(c.Cult.RuneSpells))
+			for i := 1; i <= numRuneSpells; i++ {
+
+				for isIn(chosenInt, index) {
+					fmt.Println("Spell already chosen")
+					index = ChooseRandom(len(c.Cult.RuneSpells))
+				}
+
+				baseSpell := c.Cult.RuneSpells[index]
+
+				s := baseSpell
+
+				s.GenerateName()
+				c.RuneSpells[s.Name] = s
+
+				chosenInt = append(chosenInt, index)
 			}
-
-			baseSpell := c.Cult.RuneSpells[index]
-
-			s := baseSpell
-
-			s.GenerateName()
-			c.RuneSpells[s.Name] = s
-
-			chosenInt = append(chosenInt, index)
-
 		}
 
 		// Spirit Magic
@@ -1020,7 +1003,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Add 20 to one cult skill
 		// Skill exists in Character, modify it via pointer
 
-		index = ChooseRandom(len(c.Cult.Skills))
+		index := ChooseRandom(len(c.Cult.Skills))
 
 		baseSkill := c.Cult.Skills[index]
 		targetSkill := &runequest.Skill{
