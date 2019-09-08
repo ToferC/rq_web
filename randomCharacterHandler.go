@@ -35,10 +35,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cm := models.CharacterModel{}
-
-	c := runequest.NewCharacter("")
-
 	author, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
@@ -46,11 +42,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Println(author)
-
-	cm = models.CharacterModel{
-		Character: c,
-		Author:    author,
-	}
 
 	homelands, err := database.ListOfficialHomelandModels(db)
 	if err != nil {
@@ -68,7 +59,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		CharacterModel:   &cm,
 		SessionUser:      username,
 		IsLoggedIn:       loggedIn,
 		IsAdmin:          isAdmin,
@@ -89,6 +79,16 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		err := req.ParseMultipartForm(MaxMemory)
 		if err != nil {
 			panic(err)
+		}
+
+		// Set structs
+		cm := models.CharacterModel{}
+
+		c := runequest.NewCharacter("")
+
+		cm = models.CharacterModel{
+			Character: c,
+			Author:    author,
 		}
 
 		// Get character scale
@@ -437,9 +437,18 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.CurrentMP = c.Attributes["MP"].Max
 		c.CurrentRP = c.Cult.NumRunePoints
 
+		armor := c.Occupation.GenericArmor
+
+		switch scale {
+		case "Heroic":
+			armor += 2
+		case "Epic":
+			armor += 4
+		}
+
 		for _, v := range c.HitLocations {
 			v.Value = v.Max
-			v.Armor = c.Occupation.GenericArmor
+			v.Armor = armor
 		}
 
 		c.CreationSteps["Roll Stats"] = true

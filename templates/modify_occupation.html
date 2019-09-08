@@ -69,9 +69,11 @@
                     </div>
 
               <hr>
+              {{ if >.OccupationModel.Image }}
               <img class ="card-img-top" data-src="" alt="Thumbnail"
                 style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .OccupationModel.Image.Path }}"
                 data-holder-rendered="true">
+              {{ end }}
 
                 <hr>
 

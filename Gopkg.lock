@@ -124,7 +124,7 @@
   branch = "master"
   name = "github.com/toferc/runequest"
   packages = ["."]
-  revision = "a687084addcffceccab844752ef487f4105dbebe"
+  revision = "d6ae5c81a26b3d276c48d440ab7eae896efea396"
 
 [[projects]]
   name = "go.opencensus.io"
@@ -160,7 +160,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "749cb33beabd9aa6d3178e3de05bcc914f70b2bf"
+  revision = "d223b2b6db03988709bac9e66576ad6ec0d83695"
 
 [[projects]]
   name = "golang.org/x/text"

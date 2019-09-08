@@ -73,7 +73,7 @@ type WebChar struct {
 	StandardsOfLiving []string
 	PowerRunes        []string
 	ElementalRunes    []string
-	Skills            map[string]*runequest.Skill
+	Skills            map[string]runequest.Skill
 	SpiritMagic       []runequest.Spell
 	RuneSpells        []runequest.Spell
 	TotalSpiritMagic  []*runequest.Spell

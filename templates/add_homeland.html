@@ -44,12 +44,6 @@
 
               <hr>
 
-              {{ if .IsAdmin }}
-              <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" id="checkbox">
-              {{ end }}
-
-              <hr>
-
               <h4>Cult Runes</h4>
                 <p>Choose a rune to receive a 10% bonus.</p>
               
@@ -142,7 +136,11 @@
 
                 <hr>
 
-              <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
+              {{ if .IsAdmin }}
+              <p><strong>Official Homeland?</strong> <input type="checkbox" name="Official" id="checkbox"></p>
+              {{ end }}
+
+              <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" id="checkbox" checked>
               <hr>
               <input class="button" type="submit" value="Save">
           </div>

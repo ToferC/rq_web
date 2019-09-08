@@ -211,7 +211,7 @@ func (c Character) String() string {
 		}
 	}
 
-	if len(ConditionRunes) > 0 {
+	if len(c.ConditionRunes) > 0 {
 		text += "\n\nCondition Runes:"
 
 		for _, ability := range c.ConditionRunes {

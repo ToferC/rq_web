@@ -40,10 +40,6 @@
                 <textarea class="form-control" aria-describedby="notes-addon" name="Notes" rows="6" value ="Enter Creation Notes">{{ $homeland.Notes }}</textarea>
               <hr>
 
-              {{ if .IsAdmin }}
-              <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" {{ if .HomelandModel.Official }}checked{{ end }}>
-              {{ end }}
-
               <img class ="card-img-top" data-src="" alt="Thumbnail"
                 style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
                 data-holder-rendered="true">
@@ -144,8 +140,9 @@
 
 
               <hr>
-
-                <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" checked>
+              {{ if .IsAdmin }}
+              <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" id="checkbox" {{ if .HomelandModel.Official }}checked{{ end }}>
+              {{ end }}
 
               <br><strong>Add to Open Homelands?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
               <hr>
