@@ -14,10 +14,10 @@ Shortsword,melee,3,1D6+1,1,12,0.6,Shortsword
 Greatsword,melee,1,2D8,2,12,1.5,Greatsword
 Rhomphaia,melee,2,2D6+2,2,10,1.2,Greatsword
 Sickle-sword,melee,2,1D10+1,1,12,1.2,Greatsword
+Fist,melee,4,1D3,0,0,0,Fist
 Heavy Cestus,melee,4,1D3+2,1,8,0,Fist
 Light Cestus,melee,4,1D3+1,(2),4,0,Fist
 Claw,melee,4,1D4+1,0,0,0,Fist
-Fist,melee,4,1D3,0,0,0,Fist
 Grapple,melee,4,Special,0,0,0,Grapple
 Kick,melee,4,1D6,0,0,0,Kick
 Bite (Baboon),melee,4,1D8+1,0,0,0,Grapple
@@ -31,8 +31,8 @@ Singlestick,melee,4,1D6,(2),5,0.9,1H Mace
 Wooden Club,melee,4,1D6,(2),4,0.4,1H Mace
 Two-handed Mace,melee,3,1D8+2,2,10,0.8,2H Mace
 Quarterstaff,melee,0,1D8,2,8,2,Quarterstaff
-1H Javelin,melee,2,1D6,1,8,1.5,1H Spear
 1H Short Spear,melee,2,1D6+1,2,10,1.5,1H Spear
+1H Javelin,melee,2,1D6,1,8,1.5,1H Spear
 Lance,melee,0,1D10+1,3,10,3.5+,Lance
 Pike,melee,0,2D6+1,3,12,3.5+,Pike
 Long Spear,melee,0,1D10+1,3,10,3,2H Spear
@@ -43,8 +43,8 @@ Composite Bow,missile,S/MR,1D8+1,2,7,100,Composite Bow
 Elf Bow,missile,S/MR,1D8+1,2,6,80,Elf Bow
 Self Bow,missile,S/MR,1D6+1,2,5,80,Self Bow
 Arbalest,missile,1/5R,3D6+1,3,10,150,Arbalest
-Heavy Crossbow,missile,1/3R,2D6+2,2,10,120,Crossbows
 Light Crossbow,missile,l/2R,2D4+2,2,6,100,Crossbows
+Heavy Crossbow,missile,1/3R,2D6+2,2,10,120,Crossbows
 Repeating Crossbow,missile,1/MR,2D4+2,2,6,100,Crossbows
 Atlatl,missile,1/MR,+1D6*,(2),6,10,Dart
 Dart,missile,S/MR,1D6,(2),4,20,Dart

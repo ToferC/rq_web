@@ -52,6 +52,7 @@ type WebChar struct {
 	SessionUser     string
 	IsLoggedIn      string
 	IsAdmin         string
+	IsAuthorized    string
 	Wounds          map[string][]int
 	// IndexModels
 	CharacterModels   []*models.CharacterModel
@@ -85,6 +86,7 @@ type WebChar struct {
 	BigCounter        []int
 	RuneArray         []string
 	StringArray       []string
+	StatBlock         string
 	HitLocationForms  map[string]map[string]*runequest.HitLocation
 
 	Flashes        []interface{}
@@ -150,6 +152,10 @@ func isInString(s []string, t string) bool {
 		}
 	}
 	return false
+}
+
+func statBlock(c *runequest.Character) string {
+	return c.StatBlock()
 }
 
 func formatStringArray(a []string) string {
@@ -355,6 +361,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"splitSkills":                  splitSkills,
 		"slugify":                      slugify,
 		"toMarkdown":                   toMarkdown,
+		"statBlock":                    statBlock,
 	}
 
 	baseTemplate := "templates/layout.html"

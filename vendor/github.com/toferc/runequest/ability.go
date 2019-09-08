@@ -2,6 +2,7 @@ package runequest
 
 import (
 	"fmt"
+	"strings"
 )
 
 // Ability represents any non-Ability % ability in Runequest
@@ -208,6 +209,30 @@ func (c *Character) ModifyAbility(a Ability) {
 		}
 	}
 	a.UpdateAbility()
+}
+
+func formatAbilityMap(sa map[string]*Ability) string {
+	text := ""
+
+	for _, v := range sa {
+		if v.Total > 0 {
+			text += v.String() + ", "
+		}
+	}
+
+	return text
+}
+
+func (c *Character) formatRunes() string {
+	text := ""
+
+	text += formatAbilityMap(c.ElementalRunes)
+
+	text += formatAbilityMap(c.PowerRunes)
+
+	text += strings.TrimRight(formatAbilityMap(c.ConditionRunes), ",")
+
+	return text
 }
 
 // Abilities is a map of the basic abilities in Runequest

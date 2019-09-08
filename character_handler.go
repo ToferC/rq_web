@@ -138,7 +138,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Println(cm)
+	statBlock := cm.Character.StatBlock()
 
 	IsAuthor := false
 
@@ -155,8 +155,6 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	fmt.Println(c)
-
 	if cm.Image == nil {
 		cm.Image = new(models.Image)
 		cm.Image.Path = DefaultCharacterPortrait
@@ -167,6 +165,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		StatBlock:      statBlock,
 		IsLoggedIn:     loggedIn,
 		SessionUser:    username,
 		IsAdmin:        isAdmin,
@@ -376,8 +375,6 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		} else {
 			fmt.Println("Saved")
 		}
-
-		fmt.Println(c)
 
 		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
 

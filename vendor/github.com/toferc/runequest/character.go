@@ -3,6 +3,7 @@ package runequest
 import (
 	"fmt"
 	"sort"
+	"strings"
 )
 
 // Character represents a generic RPG character
@@ -312,6 +313,147 @@ func (c Character) String() string {
 			text += fmt.Sprintf("%s\n", e)
 		}
 	}
+
+	return text
+}
+
+// StatBlock returns a summary text block
+func (c Character) StatBlock() string {
+	text := fmt.Sprintf("\n** %s **\n\n", c.Name)
+
+	if len(c.CoreRunes) > 0 {
+		text += "Runes: "
+		for _, cr := range c.CoreRunes {
+			text += fmt.Sprintf("%s ", cr.Name)
+		}
+	}
+
+	if c.Role == "Player Character" {
+		text += fmt.Sprintf("\nHomeland: %s, ", c.Homeland.Name)
+		text += fmt.Sprintf("Occupation: %s, ", c.Occupation.Name)
+		text += fmt.Sprintf("%s of Cult: %s", c.Cult.Rank, c.Cult.Name)
+	}
+
+	if len(c.Statistics) > 0 {
+		text += "\n\n"
+		for _, stat := range StatMap {
+			if c.Statistics[stat].Total > 0 {
+				text += fmt.Sprintf("%s: %d, ", stat, c.Statistics[stat].Total)
+			}
+		}
+	}
+
+	text = strings.TrimSuffix(text, ",")
+
+	if len(c.Attributes) > 0 {
+		text += "\n\nDerived Stats: "
+		for k, ds := range c.Attributes {
+			if k == "DB" || k == "HP" || k == "MP" {
+				text += fmt.Sprintf("%s, ", ds)
+			}
+		}
+	}
+
+	text = strings.TrimSuffix(text, ",")
+
+	if len(c.Movement) > 0 {
+		text += "Movement- "
+		for _, m := range c.Movement {
+			text += fmt.Sprintf("%s, ", m)
+		}
+	}
+
+	hp := NumToArray(c.Attributes["HP"].Base)
+	text += fmt.Sprintf("\n\nHP: -1 0 %s", printIntArray(hp))
+
+	if len(c.Abilities) > 0 {
+		text += "\n\nPassions: "
+
+		text += strings.TrimSuffix(formatAbilityMap(c.Abilities), ",")
+	}
+
+	text = strings.TrimSuffix(text, ",")
+
+	if c.Cult.Name != "" {
+		text += fmt.Sprintf("\n\nCults: %s - %s - Rune Points: %d", c.Cult.Name, c.Cult.Rank, c.Cult.NumRunePoints)
+	}
+
+	if len(c.ExtraCults) > 0 {
+		for _, ec := range c.ExtraCults {
+			text += fmt.Sprintf("\n%s - %s Rune Points: %d", ec.Name, ec.Rank, ec.RunePoints)
+		}
+	}
+
+	text += "\n\nRunes: "
+
+	text += c.formatRunes()
+
+	text = strings.TrimSuffix(text, ",")
+
+	topSkills := sortedSkills(c.Skills)
+
+	if len(topSkills) > 0 {
+		text += "\n\nSkills: "
+
+		text += formatSkillArray(topSkills[:14])
+	}
+
+	if len(c.SpiritMagic) > 0 {
+		text += "\n\nSpirit Magic: "
+		text += formatSpellPointerArray(c.SpiritMagic)
+	}
+
+	if len(c.RuneSpells) > 0 {
+		text += "\n\nRune Spells: "
+		text += formatSpellPointerArray(c.RuneSpells)
+	}
+
+	if len(c.Powers) > 0 {
+		text += "\nPowers:\n"
+		for _, p := range c.Powers {
+			text += fmt.Sprintf("%s: %s\n", p.Name, p.Description)
+		}
+	}
+
+	if len(c.BoundSpirits) > 0 {
+		text += "\nSpirits & Matrices:\n"
+		for _, bs := range c.BoundSpirits {
+			text += bs.String() + "\n"
+		}
+	}
+
+	if len(c.MeleeAttacks) > 0 {
+		text += "\n\nAttacks:\n"
+		for _, m := range c.MeleeAttacks {
+			text += fmt.Sprintf("%s\n", m)
+		}
+	}
+
+	if len(c.RangedAttacks) > 0 {
+		for _, r := range c.RangedAttacks {
+			text += fmt.Sprintf("%s\n", r)
+		}
+	}
+
+	if len(c.HitLocations) > 0 {
+		text += "\nHit Locations:\n"
+		for _, hlm := range c.HitLocationMap {
+			for k, v := range c.HitLocations {
+				if k == hlm {
+					text += fmt.Sprintf("%s", v)
+				}
+			}
+		}
+	}
+
+	if len(c.Equipment) > 0 {
+		text += "\nEquipment:\n"
+		for _, e := range c.Equipment {
+			text += strings.TrimSuffix(fmt.Sprintf("%s, ", e), ",")
+		}
+	}
+
+	text = strings.TrimSuffix(text, ",")
 
 	return text
 }

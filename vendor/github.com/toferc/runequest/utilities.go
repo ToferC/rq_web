@@ -112,3 +112,27 @@ func IsInIntArray(a []int, t int) bool {
 	}
 	return false
 }
+
+// NumToArray takes and int and returns an array of [1:int]
+func NumToArray(m int) []int {
+
+	a := []int{}
+
+	for i := 1; i < m+1; i++ {
+		a = append(a, i)
+	}
+
+	return a
+}
+
+// printIntArray prints all intgers in an array
+func printIntArray(a []int) string {
+
+	text := ""
+
+	for _, t := range a {
+		str := strconv.Itoa(t)
+		text += str + " "
+	}
+	return text
+}
