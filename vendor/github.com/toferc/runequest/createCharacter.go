@@ -655,6 +655,10 @@ func NewCharacter(name string) *Character {
 		},
 	}
 
+	for _, v := range c.Skills {
+		v.Updates = []*Update{}
+	}
+
 	// Abilities is a map of the basic abilities in Runequest
 	c.Abilities = map[string]*Ability{
 		"Reputation": &Ability{

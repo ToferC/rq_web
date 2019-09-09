@@ -94,10 +94,17 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Get character scale
 		scale := req.FormValue("Scale")
 
-		scales := []string{"Common", "Heroic", "Epic"}
-
 		if scale == "Random" {
-			scale = scales[ChooseRandom(len(scales))]
+
+			scaleRoll := runequest.RollDice(100, 1, 0, 1)
+			switch {
+			case scaleRoll < 61:
+				scale = "Common"
+			case scaleRoll < 91:
+				scale = "Heroic"
+			case scaleRoll < 101:
+				scale = "Epic"
+			}
 		}
 
 		// Set vars
@@ -387,20 +394,20 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		t1 := traits[ChooseRandom(len(traits))]
 		t2 := traits[ChooseRandom(len(traits))]
 
-		text := fmt.Sprintf("%s (%s) is %s and %s.\n", c.Name, gender, t1, t2)
+		text := fmt.Sprintf("%s is %s and %s.\n", c.Name, t1, t2)
 
-		pronoun := ""
+		pronoun := []string{}
 
 		switch gender {
 		case "Male":
-			pronoun = "He"
+			pronoun = []string{"He", "Him"}
 		case "Female":
-			pronoun = "She"
+			pronoun = []string{"She", "Her"}
 		case "Two Spirited":
-			pronoun = "They"
+			pronoun = []string{"They", "Them"}
 		}
 
-		text += fmt.Sprintf("%s is a %s adventurer.", pronoun, scale)
+		text += fmt.Sprintf("%s is a %s adventurer. (%s/%s)", pronoun[0], scale, pronoun[0], pronoun[1])
 
 		c.Description = text
 
@@ -839,10 +846,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.Cult.NumRunePoints = 1
 		}
 
-		if len(c.Cult.RuneSpells) < c.Cult.NumRunePoints {
-			c.Cult.NumRunePoints = len(c.Cult.RuneSpells)
-		}
-
 		c.RuneSpells = map[string]*runequest.Spell{}
 		c.SpiritMagic = map[string]*runequest.Spell{}
 
@@ -850,6 +853,10 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("**Choose Rune Spells**")
 
 		numRuneSpells := c.Cult.NumRunePoints
+
+		if len(c.Cult.RuneSpells) < c.Cult.NumRunePoints {
+			numRuneSpells = len(c.Cult.RuneSpells)
+		}
 
 		if numRuneSpells > 0 {
 
@@ -1175,7 +1182,21 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Personal Skills
 		fmt.Println("**Personal Skills**")
 
+		// Get all skills straight
+		skillNames := []string{}
+
+		tempSkillMap := map[string]*runequest.Skill{}
+
+		for _, v := range c.Skills {
+			v.GenerateName()
+			tempSkillMap[v.Name] = v
+			skillNames = append(skillNames, v.Name)
+		}
+
+		c.Skills = tempSkillMap
+
 		sortedSkillArray := sortedSkills(c.Skills)
+		chosenSkills := []string{}
 
 		switch scale {
 		case "Heroic":
@@ -1184,16 +1205,15 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				s := &runequest.Skill{}
 				switch {
 				case i <= 3:
-					if ss.CoreString == "Speak" || roll >= 5 {
-						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					if ss.CoreString == "Speak" || roll >= 6 {
+						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
 					} else {
 						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Heroic Skill 25", 25)
 				case i <= 8:
-					if ss.CoreString == "Speak" || roll >= 5 {
-						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
-					} else {
+					if ss.CoreString == "Speak" || roll >= 6 {
+						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
 						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Heroic Skill 10", 10)
@@ -1207,22 +1227,22 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				s := &runequest.Skill{}
 				switch {
 				case i <= 7:
-					if ss.CoreString == "Speak" || roll >= 5 {
-						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					if ss.CoreString == "Speak" || roll >= 6 {
+						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
 					} else {
 						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Epic Skill 40", 40)
 				case i <= 14:
-					if ss.CoreString == "Speak" || roll >= 5 {
-						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					if ss.CoreString == "Speak" || roll >= 6 {
+						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
 					} else {
 						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Epic Skill 25", 25)
 				case i <= 21:
-					if ss.CoreString == "Speak" || roll >= 5 {
-						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					if ss.CoreString == "Speak" || roll >= 6 {
+						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
 					} else {
 						s = c.Skills[ss.Name]
 					}
@@ -1237,8 +1257,8 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				roll := runequest.RollDice(6, 1, 0, 1)
 				s := &runequest.Skill{}
 				if i <= 5 {
-					if ss.CoreString == "Speak" || roll >= 5 {
-						s = sortedSkillArray[ChooseRandom(len(sortedSkillArray))]
+					if ss.CoreString == "Speak" || roll >= 6 {
+						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
 					} else {
 						s = c.Skills[ss.Name]
 					}

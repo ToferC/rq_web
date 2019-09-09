@@ -221,6 +221,7 @@ func sortedSkills(skills map[string]*runequest.Skill) []*runequest.Skill {
 	skillArray := []*runequest.Skill{}
 
 	for _, v := range skills {
+		v.UpdateSkill()
 		skillArray = append(skillArray, v)
 	}
 

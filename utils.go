@@ -145,3 +145,19 @@ func ChooseFromStringArray(stringArray, chosenStrings []string) string {
 
 	return target
 }
+
+// ChooseFromSkillArray takes an array of Skills to choose from and an array of ints already chosen
+// it returns a target index and an updated array of chosen indexes
+func ChooseFromSkillArray(skillArray []*runequest.Skill, chosenInts []int) int {
+
+	choice := ChooseRandom(len(skillArray))
+
+	for isIn(chosenInts, choice) {
+		fmt.Println("Int already chosen")
+		choice = ChooseRandom(len(skillArray))
+	}
+
+	chosenInts = append(chosenInts, choice)
+
+	return choice
+}

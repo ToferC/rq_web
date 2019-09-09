@@ -195,6 +195,7 @@ func main() {
 
 	// Random creation
 	r.HandleFunc("/random_character/", RandomCharacterHandler)
+	r.HandleFunc("/random_faction/", RandomFactionHandler)
 
 	// Character Modification
 	r.HandleFunc("/edit_magic/{id}", EditMagicHandler)

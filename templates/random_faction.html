@@ -1,0 +1,153 @@
+{{ define "title"}}
+
+<title>Create Random Character</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $homelands := .HomelandModels }}
+{{ $occupations := .OccupationModels }}
+{{ $cults := .CultModels }}
+{{ $user := .SessionUser }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <h4>Random Faction</h4>
+
+            <p>Create your faction by describing it and then choosing a homeland, an occupation and a cult or by leaving the selection at "Random".</p>
+            <p>The values you choose here will be the same for all characters created. </p>
+            <p>If you don't choose an option, the app will choose from the offical homelands, occupations and cults. You can choose to set one or move options.</p>
+            <p>You can also choose a <strong>Character Scale</strong>. This will set the power level of the random character.</p>
+
+            <h4>Character Scale</h4>
+            <table class="table table-sm table-striped">
+                <title>Scale</title>
+              <tr>
+                <td>Common</td>
+                <td>Regular people</td>
+              </tr>
+              <tr>
+                <td>Heroic</td>
+                <td>Roughly the level of starting PCs</td>
+              </tr>
+              <tr>
+                <td>Epic</td>
+                <td>Major bad-asses</td>
+              </tr>
+            </table>
+
+
+            <form class="needs-validation" action="" method="POST" enctype="multipart/form-data">
+          <button class="btn btn-primary" type="submit" value="Save">Continue</button>
+          <hr>
+
+          </div> <!-- END outer column 6 -->
+
+
+          <div class="col-sm-9 col-md-9 col-lg-9">
+
+          <h4>Describe Faction</h4>
+          <br>
+          <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="" required>
+              </div>
+
+              <br>
+
+              <label class="input-group-text" for="Description">Description</label>
+          <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" placeholder="Enter faction or hero band description here..."></textarea>
+
+              <hr>
+              <p><strong>Choose the number of heroes in the faction.</strong></p>
+                <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="number-addon">Heroes (1-8)</span>
+                </div>
+                <input type="number" min=1 max=8 class="form-control" aria-describedby="number-addon" name="Number" value="4">
+                </div>
+
+              <hr>
+
+              <strong>Add to Open Factions?</strong> <input type="checkbox" name="Open" value="true" id="checkbox" checked>
+              <p>Will also make all random characters open.</p>
+              <hr>
+
+                
+
+              <h4>Choose Homeland, Occupation & Cult</h4>
+              <p>Any non-random choices will be the same for all heroes created.</p>
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Homeland">Homeland</span>
+                </div>
+              <select type="text" class="form-control" id="Homeland" name="HLStr">
+                <option>Random</option>
+                {{ range $k, $v := $homelands }}
+                <option value={{ $k }}>{{ $v.Homeland.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Occupation">Occupation</span>
+                </div>
+              <select type="text" class="form-control" id="Occupation" name="OCStr">
+                <option>Random</option>
+
+                {{ range $k, $v := $occupations }}
+                    <option value={{ $k }}>{{ $v.Occupation.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" for="Cult">Cult</span>
+              </div>
+              <select type="text" class="form-control" id="Cult" name="CStr">
+                <option>Random</option>
+
+                {{ range $k, $v := $cults }}
+                    <option value={{ $k }}>{{ $v.Cult.Name }}</option>
+                {{ end }}
+              </select>
+              </div>
+
+              <hr>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" for="Scale">Character Scale</span>
+                </div>
+                <select type="text" class="form-control" id="Scale" name="Scale">
+                      <option>Random</option>
+                      <option>Common</option>
+                      <option>Heroic</option>
+                      <option>Epic</option>
+                </select>
+                </div>
+
+              <hr>
+
+                <button class="btn btn-primary" type="submit" value="Save">Continue</button>
+              </form>
+              <hr>
+
+          </div> <!-- END 9 Col -->
+
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->
