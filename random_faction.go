@@ -105,8 +105,8 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 			numChars = 1
 		}
 
-		if numChars > 6 {
-			numChars = 6
+		if numChars > 8 {
+			numChars = 8
 		}
 
 		for i := 1; i <= numChars; i++ {
@@ -273,12 +273,21 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("CULT: " + c.Cult.Name)
 
 			if c.Occupation.StandardOfLiving == "Free" {
-				c.Abilities["Reputation"].OccupationValue = 5
+				c.Abilities["Reputation"].OccupationValue += 5
 			}
 
 			if c.Occupation.StandardOfLiving == "Noble" {
-				c.Abilities["Reputation"].OccupationValue = 10
+				c.Abilities["Reputation"].OccupationValue += 10
 			}
+
+			switch scale {
+			case "Heroic":
+				c.Abilities["Reputation"].CreationBonusValue = runequest.RollDice(6, 1, 0, 2)
+			case "Epic":
+				c.Abilities["Reputation"].CreationBonusValue = runequest.RollDice(6, 1, 0, 4)
+			}
+
+			c.Abilities["Reputation"].UpdateAbility()
 
 			cm.Image = new(models.Image)
 			cm.Image.Path = DefaultCharacterPortrait

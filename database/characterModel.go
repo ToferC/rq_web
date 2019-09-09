@@ -62,7 +62,8 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
 	_, err := db.Query(&cms,
-		`SELECT * FROM character_models WHERE open = true 
+		`SELECT * FROM character_models WHERE open = true
+		
 		ORDER BY created_at DESC;`)
 
 	if err != nil {
@@ -78,6 +79,9 @@ func ListCraftedCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 
 	_, err := db.Query(&cms,
 		`SELECT * FROM character_models WHERE open = true AND random = false
+		UNION
+		SELECT * FROM character_models WHERE open = true AND random IS NULL
+
 		ORDER BY created_at DESC;`)
 
 	if err != nil {

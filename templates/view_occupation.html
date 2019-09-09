@@ -27,6 +27,8 @@
   <img class ="card-img-top" data-src="" alt="Thumbnail"
   style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .OccupationModel.Image.Path }}"
   data-holder-rendered="true">
+    <h5>{{ if .Occupationodel.Official }}Official Occupation{{ end }}</h5>
+
   <p>Author: {{ .OccupationModel.Author.UserName }}</p>
   <hr>
     <p>{{ toMarkdown $occupation.Description }}</p>

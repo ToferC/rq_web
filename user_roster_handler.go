@@ -217,6 +217,10 @@ func DuplicateCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Saved")
 	}
 
+	cm.Likes++
+
+	database.UpdateCharacterModel(db, cm)
+
 	url := fmt.Sprintf("/view_character/%d", newCharacterModel.ID)
 
 	http.Redirect(w, req, url, 302)

@@ -34,6 +34,7 @@
   <img class ="card-img-top" data-src="" alt="Thumbnail"
   style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .HomelandModel.Image.Path }}"
   data-holder-rendered="true">
+  <h5>{{ if .HomelandModel.Official }}Official Homeland{{ end }}</h5>
   <p>Author: {{ .HomelandModel.Author.UserName }}</p>
 
   <hr>
