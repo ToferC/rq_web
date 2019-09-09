@@ -1416,6 +1416,8 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Save Character
 
+		cm.Random = true
+
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			log.Panic(err)

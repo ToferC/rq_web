@@ -845,6 +845,8 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.CreationSteps["Complete"] = true
 
+		cm.Random = false
+
 		fmt.Println(c)
 
 		err = database.SaveCharacterModel(db, &cm)

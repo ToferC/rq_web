@@ -1450,6 +1450,8 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 				cm.Open = false
 			}
 
+			cm.Random = true
+
 			// Save Character
 
 			err = database.SaveCharacterModel(db, &cm)

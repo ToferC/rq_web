@@ -14,8 +14,92 @@ import (
 	"github.com/toferc/runequest"
 )
 
-// CharacterIndexHandler renders the basic character roster page
-func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
+// CraftedCharacterIndexHandler renders the basic character roster page
+func CraftedCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	characters, err := database.ListCraftedCharacterModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, cm := range characters {
+
+		if cm.Image == nil {
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
+		}
+	}
+
+	homelands, err := database.ListHomelandModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		CharacterModels:  characters,
+		HomelandModels:   homelands,
+		OccupationModels: occupations,
+		CultModels:       cults,
+	}
+
+	if req.Method == "GET" {
+		Render(w, "templates/crafted_roster.html", wc)
+	}
+
+	if req.Method == "POST" {
+
+		// Parse Form and redirect
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		query := &database.QueryArgs{
+			Homeland:   req.FormValue("Homeland"),
+			Occupation: req.FormValue("Occupation"),
+			Cult:       req.FormValue("Cult"),
+		}
+
+		wc.CharacterModels, err = query.GetFilteredCharacterModels(db)
+		if err != nil {
+			log.Println(err)
+		}
+		Render(w, "templates/crafted_roster.html", wc)
+	}
+
+}
+
+// AllCharacterIndexHandler renders the basic character roster page
+func AllCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
 
@@ -94,6 +178,89 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 			log.Println(err)
 		}
 		Render(w, "templates/roster.html", wc)
+	}
+}
+
+// RandomCharacterIndexHandler renders the basic character roster page
+func RandomCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	characters, err := database.ListRandomCharacterModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, cm := range characters {
+
+		if cm.Image == nil {
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
+		}
+	}
+
+	homelands, err := database.ListHomelandModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	occupations, err := database.ListOccupationModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	cults, err := database.ListCultModels(db)
+	if err != nil {
+		panic(err)
+	}
+
+	wc := WebChar{
+		SessionUser:      username,
+		IsLoggedIn:       loggedIn,
+		IsAdmin:          isAdmin,
+		CharacterModels:  characters,
+		HomelandModels:   homelands,
+		OccupationModels: occupations,
+		CultModels:       cults,
+	}
+
+	if req.Method == "GET" {
+		Render(w, "templates/random_roster.html", wc)
+	}
+
+	if req.Method == "POST" {
+
+		// Parse Form and redirect
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		query := &database.QueryArgs{
+			Homeland:   req.FormValue("Homeland"),
+			Occupation: req.FormValue("Occupation"),
+			Cult:       req.FormValue("Cult"),
+		}
+
+		wc.CharacterModels, err = query.GetFilteredCharacterModels(db)
+		if err != nil {
+			log.Println(err)
+		}
+		Render(w, "templates/random_roster.html", wc)
 	}
 
 }

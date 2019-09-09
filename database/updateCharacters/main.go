@@ -1,14 +1,12 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
-	"github.com/toferc/runequest"
 )
 
 var db *pg.DB
@@ -52,51 +50,13 @@ func main() {
 
 	fmt.Println(db)
 
-	// AddSlug to cms
-	cults, _ := database.ListCultModels(db)
+	cms, err := database.ListAllCharacterModels(db)
 
-	for _, cl := range cults {
-
-		tempRuneSpells := []*runequest.Spell{}
-
-		for _, v := range cl.Cult.RuneSpells {
-
-			index, err := indexSpell(v.CoreString, runequest.RuneSpells)
-			if err != nil {
-				fmt.Println(err)
-				tempRuneSpells = append(tempRuneSpells, v)
-				continue
-			}
-
-			baseSpell := runequest.RuneSpells[index]
-
-			s := &runequest.Spell{
-				Name:       baseSpell.Name,
-				CoreString: baseSpell.CoreString,
-				UserString: v.UserString,
-				Cost:       baseSpell.Cost,
-				Runes:      baseSpell.Runes,
-				Domain:     baseSpell.Domain,
-			}
-
-			s.GenerateName()
-			tempRuneSpells = append(tempRuneSpells, s)
-		}
-		cl.Cult.RuneSpells = tempRuneSpells
-
-		database.UpdateCultModel(db, cl)
-	}
-}
-
-func indexSpell(str string, spells []runequest.Spell) (int, error) {
-
-	err := errors.New("Spell Not Found")
-
-	for i, spell := range spells {
-		if str == spell.CoreString {
-			return i, nil
+	for _, cm := range cms {
+		if cm.Random != true {
+			cm.Random = false
+			database.UpdateCharacterModel(db, cm)
 		}
 	}
 
-	return 0, err
 }

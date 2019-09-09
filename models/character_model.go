@@ -10,6 +10,7 @@ import (
 type CharacterModel struct {
 	ID        int64
 	Author    *User
+	Random    bool
 	Character *runequest.Character
 	Open      bool
 	Likes     int
