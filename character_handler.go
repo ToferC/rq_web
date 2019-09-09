@@ -967,6 +967,8 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Image.Path = DefaultCharacterPortrait
 		}
 
+		cm.Random = false
+
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
