@@ -8,7 +8,7 @@ import (
 //User implements a generic user model
 type User struct {
 	ID             int64
-	UserName       string    `sql:",unique"`
+	UserName       string    `sql:",not null;unique"`
 	Email          string    `json:"-"`
 	Password       string    `json:"-"`
 	IsAdmin        bool      `json:"-"`

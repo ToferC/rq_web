@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/dghubble/gologin/google"
 
@@ -206,11 +207,13 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		req.ParseForm()
 
 		username := req.Form.Get("username")
+		username = strings.TrimSpace(username)
 		rawpassword := req.Form.Get("password")
 		email := req.Form.Get("email")
 
 		if len(username) < 2 || len(rawpassword) < 2 {
 			http.Redirect(w, req, "/signup/", 302)
+			return
 		}
 
 		password, err := database.HashPassword(rawpassword)
