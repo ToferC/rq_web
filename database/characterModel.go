@@ -79,6 +79,7 @@ func PaginateCharacterModels(db *pg.DB, limit, offset int) ([]*models.CharacterM
 	err := db.Model(&cms).
 		Limit(limit).
 		Offset(offset).
+		Where("open = true").
 		Order("created_at DESC").
 		Select()
 
