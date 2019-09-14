@@ -117,7 +117,21 @@ func AllCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
-	characters, err := database.ListCharacterModels(db)
+	values := mux.Vars(req)
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.PaginateCharacterModels(db, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -153,6 +167,8 @@ func AllCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 		HomelandModels:   homelands,
 		OccupationModels: occupations,
 		CultModels:       cults,
+		Offset:           offset,
+		Limit:            limit,
 	}
 
 	if req.Method == "GET" {
@@ -177,7 +193,7 @@ func AllCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		Render(w, "templates/roster.html", wc)
+		Render(w, "templates/query_roster.html", wc)
 	}
 }
 

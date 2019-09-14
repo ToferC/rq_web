@@ -61,10 +61,26 @@ func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
-	_, err := db.Query(&cms,
-		`SELECT * FROM character_models WHERE open = true
-		
-		ORDER BY created_at DESC;`)
+	_, err := db.Query(&cms, `SELECT * FROM character_models ORDER BY created_at DESC
+						WHERE open = true;`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return cms, nil
+}
+
+// PaginateCharacterModels queries open Character names and add to slice
+func PaginateCharacterModels(db *pg.DB, limit, offset int) ([]*models.CharacterModel, error) {
+
+	var cms []*models.CharacterModel
+
+	err := db.Model(&cms).
+		Limit(limit).
+		Offset(offset).
+		Order("created_at DESC").
+		Select()
 
 	if err != nil {
 		panic(err)

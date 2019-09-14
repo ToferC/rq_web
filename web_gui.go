@@ -9,9 +9,9 @@ import (
 	"strings"
 
 	"github.com/gosimple/slug"
+	"github.com/russross/blackfriday/v2"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
-	"gopkg.in/russross/blackfriday.v2"
 )
 
 // WebView is a container for Web_gui data
@@ -92,6 +92,9 @@ type WebChar struct {
 	Flashes        []interface{}
 	UserCount      int
 	CharacterCount int
+
+	Offset int
+	Limit  int
 }
 
 // SplitLines transfomrs results text string into slice

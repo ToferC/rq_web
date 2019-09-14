@@ -161,9 +161,6 @@ func main() {
 	r.NotFoundHandler = http.HandlerFunc(notFound)
 
 	fmt.Println("Starting Webserver at port " + port)
-	r.HandleFunc("/", AllCharacterIndexHandler)
-	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
-	r.HandleFunc("/random_roster/", RandomCharacterIndexHandler)
 
 	r.HandleFunc("/about/", AboutHandler)
 	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
@@ -263,6 +260,11 @@ func main() {
 
 	r.HandleFunc("/api/character_like/{id}", CharacterModelLikesHandler).Methods("PUT")
 
+	// Index handlers
+	r.HandleFunc("/", AllCharacterIndexHandler)
+	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
+	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
+	r.HandleFunc("/random_roster/", RandomCharacterIndexHandler)
 	http.Handle("/", r)
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
