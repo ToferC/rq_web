@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/go-pg/pg"
 	"github.com/gosimple/slug"
@@ -23,8 +24,25 @@ func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 		Set("character = ?character").
 		Insert(cm)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
+
+	setTSVSearch := fmt.Sprintf(`
+	UPDATE character_models SET search = 
+	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
+	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
+	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
+
+	setweight(to_tsvector(coalesce(character#> '{Homeland, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character#> '{Occupation, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character#> '{Cult, Name}')), 'D') ||
+
+	WHERE
+	id = %d;
+	`, cm.ID)
+
+	db.ExecOne(setTSVSearch)
+
 	return err
 }
 
@@ -39,8 +57,25 @@ func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
 	err := db.Update(cm)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
+
+	setTSVSearch := fmt.Sprintf(`
+	UPDATE character_models SET search = 
+	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
+	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
+	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
+
+	setweight(to_tsvector(coalesce(character#> '{Homeland, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character#> '{Occupation, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character#> '{Cult, Name}')), 'D') ||
+
+	WHERE
+	id = %d;
+	`, cm.ID)
+
+	db.ExecOne(setTSVSearch)
+
 	return err
 }
 
@@ -51,7 +86,27 @@ func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	_, err := db.Query(&cms, `SELECT * FROM character_models ORDER BY created_at DESC;`)
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
+	}
+
+	return cms, nil
+}
+
+// SearchCharacterModels queries Character names and add to slice
+func SearchCharacterModels(db *pg.DB, q string) ([]*models.CharacterModel, error) {
+	var cms []*models.CharacterModel
+
+	_, err := db.Query(&cms, `
+				SELECT *,
+				ts_rank_cd(search, q) AS RANK
+				FROM character_models, plainto_tsquery(?) q
+				WHERE
+				search @@ q AND open = 'true'
+				ORDER BY rank DESC
+				LIMIT 25;`, q)
+
+	if err != nil {
+		log.Println(err)
 	}
 
 	return cms, nil
@@ -65,7 +120,7 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 						WHERE open = true;`)
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return cms, nil
@@ -84,7 +139,7 @@ func PaginateCharacterModels(db *pg.DB, limit, offset int) ([]*models.CharacterM
 		Select()
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return cms, nil
@@ -102,7 +157,7 @@ func ListCraftedCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 		ORDER BY created_at DESC;`)
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return cms, nil
@@ -117,7 +172,7 @@ func ListRandomCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 		ORDER BY created_at DESC;`)
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return cms, nil
@@ -131,7 +186,7 @@ func ListUserCharacterModels(db *pg.DB, username string) ([]*models.CharacterMod
 		`SELECT * FROM character_models WHERE author ->> 'UserName' = ? ORDER BY created_at DESC;`, username)
 
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return cms, nil
@@ -144,7 +199,7 @@ func countUserCharacterModels(db *pg.DB, username string) int {
 	_, err := db.Query(&count,
 		`SELECT COUNT(*) FROM character_models WHERE author ->> 'UserName' = ?;`, username)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return count

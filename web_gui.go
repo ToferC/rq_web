@@ -93,6 +93,8 @@ type WebChar struct {
 	UserCount      int
 	CharacterCount int
 
+	// Search and database
+	Query  string
 	Offset int
 	Limit  int
 }

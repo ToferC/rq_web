@@ -33,6 +33,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script type='text/javascript' src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js"></script>
 
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+
 
   <style>
     @media print {
@@ -179,8 +181,8 @@
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Under Construction" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <input class="form-control mr-sm-2" id="main_search" type="search" placeholder="Enter search terms" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" onclick="goTo()" type="submit">Search</button>
     </form>
   </div>
 </nav>
@@ -195,7 +197,20 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- Latest compiled and minified CSS -->
+<script type="text/javascript">
 
+
+
+  function goTo() {
+    query = document.getElementById('main_search').value
+
+    console.log(query)
+    window.alert(query)
+
+    location.href = "/character_search_results/" + query;
+  }
+
+</script>
   
   </body>
 </html>

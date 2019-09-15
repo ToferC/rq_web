@@ -260,11 +260,15 @@ func main() {
 
 	r.HandleFunc("/api/character_like/{id}", CharacterModelLikesHandler).Methods("PUT")
 
+	// Search
+	r.HandleFunc("/character_search_results/{query}", CharacterSearchHandler)
+
 	// Index handlers
 	r.HandleFunc("/", AllCharacterIndexHandler)
 	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
 	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
 	r.HandleFunc("/random_roster/", RandomCharacterIndexHandler)
+
 	http.Handle("/", r)
 
 	log.Fatal(http.ListenAndServe(":"+port, r))

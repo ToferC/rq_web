@@ -1,0 +1,158 @@
+{{ define "title"}}
+
+<title>Cradle of Heroes</title>
+<meta property="og:image" content="https://runequeset.s3.amazonaws.com/media/christopherallison/sindla+_far-_walker/ga1-newbeginings.jpg" />
+<meta property="og:site_name" content="Cradle of Heroes" />
+<meta property="og:title" content="CoH: View Open Characters" />
+<meta property="og:description" content="Main page for the Cradle of Heroes" />
+<meta name="twitter:card" content="summary_large_image">
+
+{{ end }}
+
+{{define "content"}}
+{{ $user := .SessionUser }}
+{{ $IsAdmin := .IsAdmin }}
+{{ $homelands := .HomelandModels }}
+{{ $occupations := .OccupationModels }}
+{{ $cults := .CultModels }}
+
+<br>
+<h3><strong>Search Results: "{{ .Query }}" </strong></h3>
+
+      <div class="container">
+        <hr><br>
+
+        <div class="row">
+          {{ range .CharacterModels }}
+          <div id="character" class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <a href="/view_character/{{ .ID }}">
+              <img 
+                class="card-img-top" 
+                data-lazy="https://s3.amazonaws.com/runequeset{{ .Image.Path }}" alt="Thumbnail"
+                style="width: 100%; height: 300px; display: block; object-fit:cover; overflow:hidden;" 
+                src=""
+                data-holder-rendered="true">
+              <div class="card-body"></a>
+                <h5 id="name" class="card-title">{{ .Character.Name }}</h5>
+                <h6>{{ range $r := .Character.CoreRunes }}
+                <img 
+                  class alt="{{$r.Name}}"
+                  style="width: 20px; height: 20px" 
+                  data-lazy="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq $r.Name "Fire/Sky"}}Fire Sky{{else}}{{ $r.Name }}{{end}}.png"
+                  src=""
+                >
+                  {{ end }}
+                </h6>
+
+                {{ if or (eq .Character.Role "Player Character") (eq .Character.Role "") }}
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} {{if .Character.Occupation.Name }}| {{ .Character.Occupation.Name }}{{end}} {{ if .Character.Cult.Name }}| {{ .Character.Cult.Name }}{{ end }}</h6>
+                  {{ else }}
+                  <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Role }}</h6>
+                  {{ end }}
+                <h6>{{ .Author.UserName }}</h6>
+
+                <p class="card-text">
+                  {{ toMarkdown (sliceString .Character.Description 144) }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a class="btn btn-sm btn-primary"
+                    href="/view_character/{{ .ID }}">View</a>
+                    {{ if eq $user .Author.UserName }}
+                    {{ if not .Character.CreationSteps.Complete }}
+                      <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL .Character.CreationSteps }}/{{ .ID }}">Resume Creation</a>
+                      {{ else }}
+                      <a class="btn btn-sm btn-primary" href="/modify/{{ .ID }}">Modify</a>
+                    {{ end }}
+                    {{ end }}
+                    {{ if eq $IsAdmin "true" }}
+                    <a class="btn btn-sm btn-danger"
+                    href="/delete/{{ .ID }}">Delete</a>
+                    {{ end }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{ end }}
+
+      </div>
+
+      <div class="row bg-dark" id="Paginator Row">
+        <div class="col col-md-3 col-lg-1 col-sm-4">
+          {{ if gt .Offset 0 }}
+              <a class="btn btn-sm btn-primary" href="/{{.Limit }}/{{subtract .Offset 1}}"><< Page {{ .Offset }}</a>
+          {{ else }}
+          {{ end }}
+        </div>
+        <div class="col col-md-1 col-lg-4 col-sm-0">
+
+        </div>
+
+        <div class="col col-md-4 col-lg-2 col-sm-4" style="text-align: center">
+            <strong style="color: white">Page {{add .Offset 1}} </strong>
+          </div>
+
+          <div class="col col-md-1 col-lg-4 col-sm-0">
+
+            </div>
+
+        <div class="col col-md-3 col-lg-1 col-sm-4">
+          <a class="btn btn-sm btn-primary" href="/{{.Limit }}/{{add .Offset 1}}">>> Page {{ add .Offset 2}}</a>
+        </div>
+        <hr>
+        <br>
+        </div> <!-- End Paginator row-->
+        <br>
+
+    </div>
+
+    <script type="text/JavaScript">
+
+      var $names = $('h5');
+      $('#search').keyup(function () {
+
+        var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+        reg = RegExp(val, 'i'),
+        text;
+
+    $names.parent().parent().parent().show().filter(function () {
+        text = $(this).children().text().replace(/\s+/g, ' ');
+        return !reg.test(text);
+    }).hide();
+});
+
+    const targets = document.querySelectorAll('img');
+
+    const config = {
+  // If the image gets within 50px in the Y axis, start the download.
+      rootMargin: '300px 0px',
+      threshold: 0.01
+    };
+
+    const lazyLoad = target => {
+      const io = new IntersectionObserver((entries, observer) => {
+        console.log(entries)
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            const src = img.getAttribute('data-lazy');
+
+            img.setAttribute('src', src);
+
+            observer.disconnect();
+          }
+        });
+      }, config);
+      
+      io.observe(target)
+    };
+
+    targets.forEach(lazyLoad);
+
+    </script>
+
+
+{{end}}
