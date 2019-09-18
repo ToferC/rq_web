@@ -682,7 +682,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			case w.Description == "Shield":
 				roll := runequest.RollDice(6, 1, 0, 1)
 				switch {
-				case roll <= 5:
+				case roll <= 5 && len(culturalShields) > 0:
 					target = ChooseFromStringArray(culturalShields, chosenWeapons)
 				default:
 					target = ChooseFromStringArray(shieldSkills, chosenWeapons)
@@ -976,7 +976,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			case w.Description == "Shield":
 				roll := runequest.RollDice(6, 1, 0, 1)
 				switch {
-				case roll <= 5:
+				case roll <= 5 && len(culturalShields) > 0:
 					target = ChooseFromStringArray(culturalShields, chosenWeapons)
 				default:
 					target = ChooseFromStringArray(shieldSkills, chosenWeapons)

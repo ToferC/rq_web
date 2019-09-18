@@ -181,8 +181,8 @@
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" id="main_search" type="search" placeholder="Enter search terms" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" onclick="goTo()" type="submit">Search</button>
+      <input class="form-control mr-sm-2" id="main_search" onsubmit="return goTo()" type="search" placeholder="Enter search terms" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" onclick="return goTo()" type="redirect">Search</button>
     </form>
   </div>
 </nav>
@@ -202,12 +202,11 @@
 
 
   function goTo() {
-    query = document.getElementById('main_search').value
+    var query = document.getElementById('main_search').value;
 
-    console.log(query)
-    window.alert(query)
+    window.location = "/character_search_results/" + query;
 
-    location.href = "/character_search_results/" + query;
+    return false;
   }
 
 </script>

@@ -9,6 +9,32 @@ import (
 	"github.com/toferc/rq_web/models"
 )
 
+func updateTSVectors(db *pg.DB, id int64) {
+
+	setTSVSearch := fmt.Sprintf(`
+
+	UPDATE character_models SET tsv =
+	
+	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
+	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
+	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
+
+	setweight(to_tsvector(coalesce(character #> '{Homeland, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character #> '{Occupation, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character #> '{Cult, Name}')), 'D')
+
+	WHERE
+	id = %d;
+	`, id)
+
+	_, err := db.Exec(setTSVSearch)
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Println("Updated TSV")
+}
+
 // SaveCharacterModel saves a Character to the DB
 func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
@@ -27,21 +53,9 @@ func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 		log.Println(err)
 	}
 
-	setTSVSearch := fmt.Sprintf(`
-	UPDATE character_models SET search = 
-	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
-	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
-	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
+	fmt.Println(cm.ID, cm.Character.Name)
 
-	setweight(to_tsvector(coalesce(character#> '{Homeland, Name}')), 'D') ||
-	setweight(to_tsvector(coalesce(character#> '{Occupation, Name}')), 'D') ||
-	setweight(to_tsvector(coalesce(character#> '{Cult, Name}')), 'D') ||
-
-	WHERE
-	id = %d;
-	`, cm.ID)
-
-	db.ExecOne(setTSVSearch)
+	updateTSVectors(db, cm.ID)
 
 	return err
 }
@@ -60,21 +74,7 @@ func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 		log.Println(err)
 	}
 
-	setTSVSearch := fmt.Sprintf(`
-	UPDATE character_models SET search = 
-	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
-	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
-	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
-
-	setweight(to_tsvector(coalesce(character#> '{Homeland, Name}')), 'D') ||
-	setweight(to_tsvector(coalesce(character#> '{Occupation, Name}')), 'D') ||
-	setweight(to_tsvector(coalesce(character#> '{Cult, Name}')), 'D') ||
-
-	WHERE
-	id = %d;
-	`, cm.ID)
-
-	db.ExecOne(setTSVSearch)
+	updateTSVectors(db, cm.ID)
 
 	return err
 }
@@ -93,17 +93,18 @@ func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 }
 
 // SearchCharacterModels queries Character names and add to slice
-func SearchCharacterModels(db *pg.DB, q string) ([]*models.CharacterModel, error) {
+func SearchCharacterModels(db *pg.DB, q string, limit, offset int) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
 	_, err := db.Query(&cms, `
 				SELECT *,
-				ts_rank_cd(search, q) AS RANK
+				ts_rank_cd(tsv, q) AS RANK
 				FROM character_models, plainto_tsquery(?) q
 				WHERE
-				search @@ q AND open = 'true'
+				tsv @@ q AND open = 'true'
 				ORDER BY rank DESC
-				LIMIT 25;`, q)
+				LIMIT ?
+				OFFSET ?;`, q, limit, offset)
 
 	if err != nil {
 		log.Println(err)
@@ -116,8 +117,9 @@ func SearchCharacterModels(db *pg.DB, q string) ([]*models.CharacterModel, error
 func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
-	_, err := db.Query(&cms, `SELECT * FROM character_models ORDER BY created_at DESC
-						WHERE open = true;`)
+	_, err := db.Query(&cms, `SELECT * FROM character_models 
+							ORDER BY created_at DESC
+							WHERE open = true;`)
 
 	if err != nil {
 		log.Println(err)

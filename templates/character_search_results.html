@@ -99,7 +99,9 @@
             </div>
 
         <div class="col col-md-3 col-lg-1 col-sm-4">
+          {{ if gt (len .CharacterModels) 65 }}
           <a class="btn btn-sm btn-primary" href="/{{.Limit }}/{{add .Offset 1}}">>> Page {{ add .Offset 2}}</a>
+          {{ end }}
         </div>
         <hr>
         <br>

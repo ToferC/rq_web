@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
@@ -33,7 +34,19 @@ func CharacterSearchHandler(w http.ResponseWriter, req *http.Request) {
 
 	query := values["query"]
 
-	characters, err := database.SearchCharacterModels(db, query)
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.SearchCharacterModels(db, query, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -46,34 +59,13 @@ func CharacterSearchHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	homelands, err := database.ListHomelandModels(db)
-	if err != nil {
-		panic(err)
-	}
-
-	occupations, err := database.ListOccupationModels(db)
-	if err != nil {
-		panic(err)
-	}
-
-	cults, err := database.ListCultModels(db)
-	if err != nil {
-		panic(err)
-	}
-
 	wc := WebChar{
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		CharacterModels:  characters,
-		HomelandModels:   homelands,
-		OccupationModels: occupations,
-		CultModels:       cults,
-		Query:            query,
+		SessionUser:     username,
+		IsLoggedIn:      loggedIn,
+		IsAdmin:         isAdmin,
+		CharacterModels: characters,
+		Query:           query,
 	}
 
-	if req.Method == "GET" {
-		Render(w, "templates/character_search_results.html", wc)
-	}
-
+	Render(w, "templates/character_search_results.html", wc)
 }

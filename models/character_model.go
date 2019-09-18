@@ -3,12 +3,14 @@ package models
 import (
 	"time"
 
-	"github.com/go-pg/pg/types"
 	"github.com/toferc/runequest"
 )
 
 // CharacterModel represents the Web struct for a runequest.Character
+// Must add tsv column tsvector type to database for search
 type CharacterModel struct {
+	tableName struct{} `pg:",discard_unknown_columns"`
+
 	ID        int64
 	Author    *User
 	Random    bool
@@ -16,7 +18,6 @@ type CharacterModel struct {
 	Open      bool
 	Likes     int
 	LikeData  map[string]*Like
-	Search    types.ValueAppender // tsValue
 	Image     *Image
 	Slug      string
 	CreatedAt time.Time `sql:"default:now()"`

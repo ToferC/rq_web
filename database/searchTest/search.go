@@ -50,7 +50,7 @@ func main() {
 
 	fmt.Println(db)
 
-	cms, err := database.SearchCharacterModels(db, "esrolian")
+	cms, err := database.ListAllCharacterModels(db)
 
 	for _, cm := range cms {
 		fmt.Println(cm.Character.Name)
