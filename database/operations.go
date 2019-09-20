@@ -38,6 +38,32 @@ func CreateTSVColumn(db *pg.DB) error {
 	return err
 }
 
+func updateTSVectors(db *pg.DB, id int64) {
+
+	setTSVSearch := fmt.Sprintf(`
+
+	UPDATE character_models SET tsv =
+	
+	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
+	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
+	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
+
+	setweight(to_tsvector(coalesce(character #> '{Homeland, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character #> '{Occupation, Name}')), 'D') ||
+	setweight(to_tsvector(coalesce(character #> '{Cult, Name}')), 'D')
+
+	WHERE
+	id = %d;
+	`, id)
+
+	_, err := db.Exec(setTSVSearch)
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Println("Updated TSV")
+}
+
 func createSchema(db *pg.DB) error {
 	for _, model := range []interface{}{
 		(*models.CharacterModel)(nil),

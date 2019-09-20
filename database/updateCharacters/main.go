@@ -53,10 +53,7 @@ func main() {
 	cms, err := database.ListAllCharacterModels(db)
 
 	for _, cm := range cms {
-		if cm.Random != true {
-			cm.Random = false
-			database.UpdateCharacterModel(db, cm)
-		}
+		database.UpdateCharacterModel(db, cm)
 	}
 
 }

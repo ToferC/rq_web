@@ -9,32 +9,6 @@ import (
 	"github.com/toferc/rq_web/models"
 )
 
-func updateTSVectors(db *pg.DB, id int64) {
-
-	setTSVSearch := fmt.Sprintf(`
-
-	UPDATE character_models SET tsv =
-	
-	setweight(to_tsvector(coalesce(character ->> 'Name')), 'A') ||
-	setweight(to_tsvector(coalesce(author ->> 'UserName')), 'B') ||
-	setweight(to_tsvector(coalesce(character ->> 'Description')), 'C') ||
-
-	setweight(to_tsvector(coalesce(character #> '{Homeland, Name}')), 'D') ||
-	setweight(to_tsvector(coalesce(character #> '{Occupation, Name}')), 'D') ||
-	setweight(to_tsvector(coalesce(character #> '{Cult, Name}')), 'D')
-
-	WHERE
-	id = %d;
-	`, id)
-
-	_, err := db.Exec(setTSVSearch)
-	if err != nil {
-		log.Println(err)
-	}
-
-	fmt.Println("Updated TSV")
-}
-
 // SaveCharacterModel saves a Character to the DB
 func SaveCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 
