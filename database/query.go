@@ -1,6 +1,8 @@
 package database
 
 import (
+	"log"
+
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/models"
 )
@@ -11,6 +13,26 @@ type QueryArgs struct {
 	Homeland   string
 	Occupation string
 	Cult       string
+}
+
+// SearchCharacterModels queries Character names and add to slice
+func SearchCharacterModels(db *pg.DB, q string) ([]*models.CharacterModel, error) {
+	var cms []*models.CharacterModel
+
+	_, err := db.Query(&cms, `
+				SELECT *,
+				ts_rank_cd(tsv, q) AS RANK
+				FROM character_models, plainto_tsquery(?) q
+				WHERE
+				tsv @@ q AND open = 'true'
+				ORDER BY rank DESC
+				;`, q)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return cms, nil
 }
 
 // GetFilteredCharacterModels returns characters matching the query

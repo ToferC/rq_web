@@ -26,57 +26,9 @@
                   <h4>Search the Cradle</h4>
                   <p>Strange and wonderous people abound, start typing below to find your quarry: 
                 <input type="text" id="search" placeholder="I seek...">
-                  <hr>
           </div>
-
-          <div class="row">
-            <div class="col-md-3">
-                <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" for="Homeland">Homeland</span>
-                  </div>
-                <select type="text" class="form-control" id="Homeland" name="Homeland">
-                  <option></option>
-                  {{ range $k, $v := $homelands }}
-                  <option>{{ $v.Homeland.Name }}</option>
-                  {{ end }}
-                </select>
-                </div>
   
-            </div>
-            <div class="col-md-3">
-                <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" for="Occupation">Occupation</span>
-                  </div>
-                <select type="text" class="form-control" id="Occupation" name="Occupation">
-                  <option></option>
-                  {{ range $k, $v := $occupations }}
-                      <option>{{ $v.Occupation.Name }}</option>
-                  {{ end }}
-                </select>
-                </div>
-  
-            </div>
-            <div class="col-md-3">
-  
-                <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" for="Cult">Cult</span>
-                </div>
-                <select type="text" class="form-control" id="Cult" name="Cult">
-                  <option></option>
-                  {{ range $k, $v := $cults }}
-                      <option>{{ $v.Cult.Name }}</option>
-                  {{ end }}
-                </select>
-                </div>
-  
-            </div>
-  
-            <div class="col-md-3">
               <button class="btn btn-primary" type="submit" value="Save">Filter</button>
-            </div>
   
             </form>
           </div>
@@ -121,7 +73,7 @@
                     {{ if eq $user .Author.UserName }}{{ if not .Character.CreationSteps.Complete }}
                       <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL .Character.CreationSteps }}/{{ .ID }}">Resume Creation</a>
                       {{ else }}
-                      <a class="btn btn-sm btn-primary" href="/modify/{{ .ID }}">Modify</a>
+                      <a class="btn btn-sm btn-primary" href="/modify/{{ .User.ID }}">Modify</a>
                     {{ end }}
                     {{ end }}
                   </div>
@@ -131,6 +83,35 @@
           </div>
           {{ end }}
       </div>
+
+      <div class="row bg-dark" id="Paginator Row">
+        <div class="col col-md-3 col-lg-1 col-sm-4">
+          {{ if gt .Offset 0 }}
+              <a class="btn btn-sm btn-primary" href="/admin_view_user_roster/{{ .User.ID }}/{{.Limit }}/{{subtract .Offset 1}}"><< Page {{ .Offset }}</a>
+          {{ else }}
+          {{ end }}
+        </div>
+        <div class="col col-md-1 col-lg-4 col-sm-0">
+
+        </div>
+
+        <div class="col col-md-4 col-lg-2 col-sm-4" style="text-align: center">
+            <strong style="color: white">Page {{add .Offset 1}} </strong>
+          </div>
+
+          <div class="col col-md-1 col-lg-4 col-sm-0">
+
+            </div>
+        
+            <div class="col col-md-3 col-lg-1 col-sm-4">
+              {{ if gt (len .CharacterModels) 65 }}
+          <a class="btn btn-sm btn-primary" href="/admin_view_user_roster/{{ .User.ID }}/{{.Limit }}/{{add .Offset 1}}">>> Page {{ add .Offset 2}}</a>
+          {{ end }}
+        </div>
+        <hr>
+        <br>
+        </div> <!-- End Paginator row-->
+        <br>
     </div>
 
     <script type="text/JavaScript">

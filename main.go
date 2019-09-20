@@ -112,6 +112,9 @@ func main() {
 
 	fmt.Println(db)
 
+	database.CreateTSVColumn(db)
+	database.CreateIndex(db)
+
 	// Create AWS session using local default config
 	// or Env Variables if on Heroku
 	sess, err := session.NewSession(&aws.Config{
@@ -163,7 +166,9 @@ func main() {
 	fmt.Println("Starting Webserver at port " + port)
 
 	r.HandleFunc("/about/", AboutHandler)
+	r.HandleFunc("/user_roster/{limit}/{offset}", UserCharacterRosterHandler)
 	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
+
 	r.HandleFunc("/add_to_user_roster/{id}", AddToUserRosterHandler)
 	r.HandleFunc("/duplicate_character/{id}", DuplicateCharacterHandler)
 
@@ -176,6 +181,7 @@ func main() {
 
 	// Admin Views
 	r.HandleFunc("/admin_view_users/", UserIndexHandler)
+	r.HandleFunc("/admin_view_user_roster/{id}/{limit}/{offset}", AdminUserRosterViewHandler)
 	r.HandleFunc("/admin_view_user_roster/{id}", AdminUserRosterViewHandler)
 
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
@@ -266,7 +272,10 @@ func main() {
 	// Index handlers
 	r.HandleFunc("/", AllCharacterIndexHandler)
 	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
+	r.HandleFunc("/crafted_roster/{limit}/{offset}", CraftedCharacterIndexHandler)
 	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
+
+	r.HandleFunc("/random_roster/{limit}/{offset}", RandomCharacterIndexHandler)
 	r.HandleFunc("/random_roster/", RandomCharacterIndexHandler)
 
 	http.Handle("/", r)

@@ -92,27 +92,6 @@ func ListAllCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	return cms, nil
 }
 
-// SearchCharacterModels queries Character names and add to slice
-func SearchCharacterModels(db *pg.DB, q string, limit, offset int) ([]*models.CharacterModel, error) {
-	var cms []*models.CharacterModel
-
-	_, err := db.Query(&cms, `
-				SELECT *,
-				ts_rank_cd(tsv, q) AS RANK
-				FROM character_models, plainto_tsquery(?) q
-				WHERE
-				tsv @@ q AND open = 'true'
-				ORDER BY rank DESC
-				LIMIT ?
-				OFFSET ?;`, q, limit, offset)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	return cms, nil
-}
-
 // ListCharacterModels queries open Character names and add to slice
 func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
@@ -148,7 +127,7 @@ func PaginateCharacterModels(db *pg.DB, limit, offset int) ([]*models.CharacterM
 }
 
 // ListCraftedCharacterModels queries open Character names and add to slice
-func ListCraftedCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
+func ListCraftedCharacterModels(db *pg.DB, limit, offset int) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
 	_, err := db.Query(&cms,
@@ -156,7 +135,9 @@ func ListCraftedCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 		UNION
 		SELECT * FROM character_models WHERE open = true AND random IS NULL
 
-		ORDER BY created_at DESC;`)
+		ORDER BY created_at DESC
+		LIMIT ?
+		OFFSET ?;`, limit, offset)
 
 	if err != nil {
 		log.Println(err)
@@ -166,12 +147,14 @@ func ListCraftedCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 }
 
 // ListRandomCharacterModels queries open Character names and add to slice
-func ListRandomCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
+func ListRandomCharacterModels(db *pg.DB, limit, offset int) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
 	_, err := db.Query(&cms,
 		`SELECT * FROM character_models WHERE open = true AND random = true
-		ORDER BY created_at DESC;`)
+		ORDER BY created_at DESC
+		LIMIT ?
+		OFFSET ?;`, limit, offset)
 
 	if err != nil {
 		log.Println(err)
@@ -181,11 +164,16 @@ func ListRandomCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 }
 
 // ListUserCharacterModels queries Character names and add to slice
-func ListUserCharacterModels(db *pg.DB, username string) ([]*models.CharacterModel, error) {
+func ListUserCharacterModels(db *pg.DB, username string, limit, offset int) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
 	_, err := db.Query(&cms,
-		`SELECT * FROM character_models WHERE author ->> 'UserName' = ? ORDER BY created_at DESC;`, username)
+		`SELECT * FROM character_models 
+		WHERE author ->> 'UserName' = ? 
+		ORDER BY created_at DESC
+		LIMIT ?
+		OFFSET ?
+		;`, username, limit, offset)
 
 	if err != nil {
 		log.Println(err)

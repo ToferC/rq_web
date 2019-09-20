@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
@@ -34,21 +33,9 @@ func CharacterSearchHandler(w http.ResponseWriter, req *http.Request) {
 
 	query := values["query"]
 
-	l := values["limit"]
-	limit, err := strconv.Atoi(l)
+	characters, err := database.SearchCharacterModels(db, query)
 	if err != nil {
-		limit = 66
-	}
-
-	o := values["offset"]
-	offset, err := strconv.Atoi(o)
-	if err != nil {
-		offset = 0
-	}
-
-	characters, err := database.SearchCharacterModels(db, query, limit, offset)
-	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for _, cm := range characters {

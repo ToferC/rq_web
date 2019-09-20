@@ -85,13 +85,25 @@ func GetUserCharacterModels(w http.ResponseWriter, req *http.Request) {
 		}
 	*/
 
-	vars := mux.Vars(req)
-	idString := vars["id"]
+	values := mux.Vars(req)
+	idString := values["id"]
 
 	pk, err := strconv.Atoi(idString)
 	if err != nil {
 		pk = 0
 		log.Println(err)
+	}
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
 	}
 
 	user, err := database.PKLoadUser(db, int64(pk))
@@ -100,7 +112,7 @@ func GetUserCharacterModels(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Unable to load User")
 	}
 
-	cms, err := database.ListUserCharacterModels(db, user.UserName)
+	cms, err := database.ListUserCharacterModels(db, user.UserName, limit, offset)
 	if err != nil {
 		log.Println(err)
 	}

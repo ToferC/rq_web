@@ -33,7 +33,21 @@ func CraftedCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
-	characters, err := database.ListCraftedCharacterModels(db)
+	values := mux.Vars(req)
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.ListCraftedCharacterModels(db, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -69,6 +83,8 @@ func CraftedCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 		HomelandModels:   homelands,
 		OccupationModels: occupations,
 		CultModels:       cults,
+		Limit:            limit,
+		Offset:           offset,
 	}
 
 	if req.Method == "GET" {
@@ -216,7 +232,21 @@ func RandomCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
-	characters, err := database.ListRandomCharacterModels(db)
+	values := mux.Vars(req)
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.ListRandomCharacterModels(db, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -252,6 +282,8 @@ func RandomCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 		HomelandModels:   homelands,
 		OccupationModels: occupations,
 		CultModels:       cults,
+		Limit:            limit,
+		Offset:           offset,
 	}
 
 	if req.Method == "GET" {

@@ -17,10 +17,18 @@
 {{ $cults := .CultModels }}
 
 <br>
-<h3><strong>Search Results: "{{ .Query }}" </strong></h3>
 
-      <div class="container">
-        <hr><br>
+<div class="container">
+<div class="row">
+            <form action="" method="POST">
+                <h3><strong>Search the Cradle</strong></h3>
+                <h4><strong>Results for: "{{ .Query }}" </strong></h4>
+                  <p><strong>Strange and wonderous people abound. Start typing below to narrow your search: </strong></p>
+                <input type="text" id="search" placeholder="I seek...">
+                <hr>
+        </div>
+
+        <br>
 
         <div class="row">
           {{ range .CharacterModels }}
@@ -78,35 +86,7 @@
           {{ end }}
 
       </div>
-
-      <div class="row bg-dark" id="Paginator Row">
-        <div class="col col-md-3 col-lg-1 col-sm-4">
-          {{ if gt .Offset 0 }}
-              <a class="btn btn-sm btn-primary" href="/{{.Limit }}/{{subtract .Offset 1}}"><< Page {{ .Offset }}</a>
-          {{ else }}
-          {{ end }}
-        </div>
-        <div class="col col-md-1 col-lg-4 col-sm-0">
-
-        </div>
-
-        <div class="col col-md-4 col-lg-2 col-sm-4" style="text-align: center">
-            <strong style="color: white">Page {{add .Offset 1}} </strong>
-          </div>
-
-          <div class="col col-md-1 col-lg-4 col-sm-0">
-
-            </div>
-
-        <div class="col col-md-3 col-lg-1 col-sm-4">
-          {{ if gt (len .CharacterModels) 65 }}
-          <a class="btn btn-sm btn-primary" href="/{{.Limit }}/{{add .Offset 1}}">>> Page {{ add .Offset 2}}</a>
-          {{ end }}
-        </div>
-        <hr>
-        <br>
-        </div> <!-- End Paginator row-->
-        <br>
+      <hr>
 
     </div>
 

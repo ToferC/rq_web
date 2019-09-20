@@ -39,8 +39,8 @@ func AdminUserRosterViewHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	vars := mux.Vars(req)
-	pk := vars["id"]
+	values := mux.Vars(req)
+	pk := values["id"]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -56,7 +56,19 @@ func AdminUserRosterViewHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
-	characters, err := database.ListUserCharacterModels(db, u.UserName)
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.ListUserCharacterModels(db, u.UserName, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -68,57 +80,17 @@ func AdminUserRosterViewHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	homelands, err := database.ListHomelandModels(db)
-	if err != nil {
-		panic(err)
-	}
-
-	occupations, err := database.ListOccupationModels(db)
-	if err != nil {
-		panic(err)
-	}
-
-	cults, err := database.ListCultModels(db)
-	if err != nil {
-		panic(err)
-	}
-
 	wc := WebChar{
-		User:             u,
-		SessionUser:      username,
-		IsLoggedIn:       loggedIn,
-		IsAdmin:          isAdmin,
-		CharacterModels:  characters,
-		HomelandModels:   homelands,
-		OccupationModels: occupations,
-		CultModels:       cults,
+		User:            u,
+		SessionUser:     username,
+		IsLoggedIn:      loggedIn,
+		IsAdmin:         isAdmin,
+		CharacterModels: characters,
+		Limit:           limit,
+		Offset:          offset,
 	}
 
-	if req.Method == "GET" {
-		Render(w, "templates/admin_view_user_roster.html", wc)
-	}
-
-	if req.Method == "POST" {
-
-		// Parse Form and redirect
-		err := req.ParseForm()
-		if err != nil {
-			panic(err)
-		}
-
-		query := &database.QueryArgs{
-			UserName:   username,
-			Homeland:   req.FormValue("Homeland"),
-			Occupation: req.FormValue("Occupation"),
-			Cult:       req.FormValue("Cult"),
-		}
-
-		wc.CharacterModels, err = query.GetUserFilteredCharacterModels(db)
-		if err != nil {
-			log.Println(err)
-		}
-		Render(w, "templates/admin_view_user_roster.html", wc)
-	}
+	Render(w, "templates/admin_view_user_roster.html", wc)
 }
 
 // MakeAdminHandler handles the basic roster rendering for the app
@@ -198,8 +170,8 @@ func DeleteUserHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
-	vars := mux.Vars(req)
-	idString := vars["id"]
+	values := mux.Vars(req)
+	idString := values["id"]
 
 	pk, err := strconv.Atoi(idString)
 	if err != nil {
@@ -221,7 +193,11 @@ func DeleteUserHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	cms, err := database.ListUserCharacterModels(db, user.UserName)
+	limit := 9999
+
+	offset := 0
+
+	cms, err := database.ListUserCharacterModels(db, user.UserName, limit, offset)
 	if err != nil {
 		log.Println(err)
 	}

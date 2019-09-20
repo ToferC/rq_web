@@ -27,7 +27,7 @@
                     {{ range $f := $factions }}
                   <tr>
                       <td>{{ $f.Name }}</td>
-                      <td>{{ $f.Description }}</td>
+                      <td>{{ sliceString $f.Description 144}}</td>
                       <td>{{ len $f.CharacterModelSlugs }}</td>
                       <td><a href="/view_faction/{{ $f.Slug }}">Link</a></td>
                   </tr>

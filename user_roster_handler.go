@@ -35,7 +35,21 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	characters, err := database.ListUserCharacterModels(db, username)
+	values := mux.Vars(req)
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.ListUserCharacterModels(db, username, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -70,6 +84,8 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 		HomelandModels:   homelands,
 		OccupationModels: occupations,
 		CultModels:       cults,
+		Limit:            limit,
+		Offset:           offset,
 	}
 
 	if req.Method == "GET" {
