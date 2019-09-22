@@ -157,7 +157,7 @@
             </div>
         
             <div class="col col-md-3 col-lg-1 col-sm-4">
-              {{ if gt (len .CharacterModels) 65 }}
+              {{ if gt (len .CharacterModels) (subtract .Limit 1) }}
           <a class="btn btn-sm btn-primary" href="/user_roster/{{.Limit }}/{{add .Offset 1}}">>> Page {{ add .Offset 2}}</a>
           {{ end }}
         </div>

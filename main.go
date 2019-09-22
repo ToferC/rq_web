@@ -289,8 +289,8 @@ func main() {
 	r.HandleFunc("/character_search_results/{query}", CharacterSearchHandler)
 
 	// Index handlers
-	r.HandleFunc("/", AllCharacterIndexHandler)
 	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
+	r.HandleFunc("/", AllCharacterIndexHandler)
 	r.HandleFunc("/crafted_roster/{limit}/{offset}", CraftedCharacterIndexHandler)
 	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
 

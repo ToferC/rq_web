@@ -46,7 +46,7 @@ func GetCharacterModels(w http.ResponseWriter, req *http.Request) {
 		}
 	*/
 
-	cms, err := database.ListCharacterModels(db)
+	cms, err := database.ListOpenCharacterModels(db)
 	if err != nil {
 		log.Println(err)
 	}

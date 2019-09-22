@@ -172,7 +172,7 @@ func AddFactionHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cms, err := database.ListCharacterModels(db)
+	cms, err := database.ListOpenCharacterModels(db)
 
 	factions, err := database.ListFactions(db)
 	if err != nil {
@@ -284,7 +284,7 @@ func ModifyFactionHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
-	cms, err := database.ListCharacterModels(db)
+	cms, err := database.ListOpenCharacterModels(db)
 
 	// Add empty CharacterModel options if < 10
 	if len(factionCharacters) < 10 {

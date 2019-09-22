@@ -51,7 +51,7 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	characters, err := database.ListUserCharacterModels(db, username, limit, offset)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for _, cm := range characters {
