@@ -13,7 +13,8 @@
 {{ $statOrder := .StringArray }}
 
       <div class="container">
-            <h3>{{ $faction.Name }} - {{ $faction.Author.UserName }} {{ if (or $IsAuthor $IsAdmin )}}
+            <h3>{{ $faction.Name }} - {{ $faction.Author.UserName }} 
+            {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             <a class="btn btn-sm btn-primary" href="/modify_faction/{{ $faction.Slug }}">Edit</a>
             <a class="btn btn-sm btn-danger" href="/delete_faction/{{ $faction.Slug }}">Delete</a>
             {{ end }}</h3>
@@ -91,7 +92,7 @@
                               class="form-control" 
                               aria-describedby="RP-addon" 
                               name="RP" 
-                              {{ if not (or $IsAuthor $IsAdmin) }}disabled{{end }}
+                              {{ if not $IsAuthor }}disabled{{end }}
                               value ="{{ $c.Character.CurrentRP }}">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="RP-addon">/{{ $c.Character.Cult.NumRunePoints }} RP</span>
@@ -111,7 +112,7 @@
                             class="form-control" 
                             aria-describedby="RP-addon" 
                             name="RP-{{ $ec.Name }}" 
-                            {{ if not (or $IsAuthor $IsAdmin) }}disabled{{end }}
+                            {{ if not $IsAuthor }}disabled{{end }}
                             value ="{{ $ec.CurrentRunePoints }}">
                           <div class="input-group-append">
                               <span class="input-group-text" id="RP-addon">/{{ $ec.RunePoints }}</span>
@@ -230,7 +231,7 @@
                                   class="form-control" 
                                   aria-describedby="MP-addon" 
                                   name="MP"
-                                  {{ if not (or $IsAuthor $IsAdmin) }}disabled{{end }}
+                                  {{ if not $IsAuthor }}disabled{{end }}
                                   value ="{{ $c.Character.CurrentMP }}">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="MP-addon">/{{ $c.Character.Attributes.MP.Max }}</span>

@@ -14,7 +14,7 @@
 <div class="container">
   
       <h3>
-        {{ $encounter.Name }} {{ if $IsAuthor }}
+        {{ $encounter.Name }} {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
         <a
           class="btn btn-sm btn-primary"
           href="/modify_encounter/{{ $encounter.Slug }}"
