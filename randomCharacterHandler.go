@@ -134,35 +134,11 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.Homeland = hl.Homeland
 		fmt.Println("HOMELAND: " + c.Homeland.Name)
 
-		// Select Gender
-		var gender, chainModel string
-		rr := runequest.RollDice(100, 1, 0, 1)
-
-		switch {
-		case rr < 45:
-			gender = "Male"
-			chainModel = "sartarMaleModel.json"
-		case rr < 91:
-			gender = "Female"
-			chainModel = "sartarFemaleModel.json"
-		default:
-			gender = "Two Spirited"
-			r2 := runequest.RollDice(10, 1, 0, 1)
-			if r2 < 6 {
-				chainModel = "sartarFemaleModel.json"
-			} else {
-				chainModel = "sartarMaleModel.json"
-			}
-		}
-
-		// Load MarkovChains
-		chain, err := loadModel(chainModel)
-		if err != nil {
-			log.Println(err)
-		}
+		name, description := generateBackground(c, scale)
 
 		// Name generation
-		c.Name = generateName(chain)
+		c.Name = name
+		c.Description = description
 
 		// Set Occupation
 		ocStr := req.FormValue("OCStr")
@@ -395,30 +371,6 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.DetermineSkillCategoryValues()
 		c.SetAttributes()
-
-		// Traits generation
-
-		traits := readCSV("traits.csv")
-
-		t1 := traits[ChooseRandom(len(traits))]
-		t2 := traits[ChooseRandom(len(traits))]
-
-		text := fmt.Sprintf("%s is %s and %s.\n", c.Name, t1, t2)
-
-		pronoun := []string{}
-
-		switch gender {
-		case "Male":
-			pronoun = []string{"He", "Him"}
-		case "Female":
-			pronoun = []string{"She", "Her"}
-		case "Two Spirited":
-			pronoun = []string{"They", "Them"}
-		}
-
-		text += fmt.Sprintf("%s is a %s adventurer. (%s/%s)", pronoun[0], scale, pronoun[0], pronoun[1])
-
-		c.Description = text
 
 		// Apply Move
 		for _, m := range c.Homeland.Movement {
@@ -1223,6 +1175,7 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				case i <= 8:
 					if ss.CoreString == "Speak" || roll >= 6 {
 						s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
+					} else {
 						s = c.Skills[ss.Name]
 					}
 					s.AddSkillUpdate("Heroic Skill 10", 10)
