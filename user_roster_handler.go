@@ -115,6 +115,85 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// UserOpenCharacterRosterHandler handles user-specific rosters
+func UserOpenCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	values := mux.Vars(req)
+
+	pk := values["id"]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	u, err := database.PKLoadUser(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	characters, err := database.ListOpenUserCharacterModels(db, u.UserName, limit, offset)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for _, cm := range characters {
+		if cm.Image == nil {
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
+		}
+	}
+
+	wc := WebChar{
+		SessionUser:     username,
+		IsLoggedIn:      loggedIn,
+		IsAdmin:         isAdmin,
+		User:            u,
+		CharacterModels: characters,
+		Limit:           limit,
+		Offset:          offset,
+	}
+
+	Render(w, "templates/user_open_roster.html", wc)
+
+}
+
 // AddToUserRosterHandler adds an open charactermodel to the individual user roster
 func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 

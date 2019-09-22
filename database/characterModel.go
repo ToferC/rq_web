@@ -155,6 +155,25 @@ func ListUserCharacterModels(db *pg.DB, username string, limit, offset int) ([]*
 	return cms, nil
 }
 
+// ListOpenUserCharacterModels queries Character names and add to slice
+func ListOpenUserCharacterModels(db *pg.DB, username string, limit, offset int) ([]*models.CharacterModel, error) {
+	var cms []*models.CharacterModel
+
+	err := db.Model(&cms).
+		Limit(limit).
+		Offset(offset*limit).
+		Where("author ->> 'UserName' = ?", username).
+		Where("open = true").
+		Order("created_at DESC").
+		Select()
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return cms, nil
+}
+
 func countUserCharacterModels(db *pg.DB, username string) int {
 
 	var count int

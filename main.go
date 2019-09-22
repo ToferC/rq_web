@@ -185,8 +185,6 @@ func main() {
 	fmt.Println("Starting Webserver at port " + port)
 
 	r.HandleFunc("/about/", AboutHandler)
-	r.HandleFunc("/user_roster/{limit}/{offset}", UserCharacterRosterHandler)
-	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
 
 	r.HandleFunc("/add_to_user_roster/{id}", AddToUserRosterHandler)
 	r.HandleFunc("/duplicate_character/{id}", DuplicateCharacterHandler)
@@ -289,13 +287,21 @@ func main() {
 	r.HandleFunc("/character_search_results/{query}", CharacterSearchHandler)
 
 	// Index handlers
-	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
-	r.HandleFunc("/", AllCharacterIndexHandler)
+
 	r.HandleFunc("/crafted_roster/{limit}/{offset}", CraftedCharacterIndexHandler)
 	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
 
 	r.HandleFunc("/random_roster/{limit}/{offset}", RandomCharacterIndexHandler)
 	r.HandleFunc("/random_roster/", RandomCharacterIndexHandler)
+
+	r.HandleFunc("/user_open_roster/{id}/{limit}/{offset}", UserOpenCharacterRosterHandler)
+	r.HandleFunc("/user_open_roster/{id}", UserOpenCharacterRosterHandler)
+
+	r.HandleFunc("/user_roster/{limit}/{offset}", UserCharacterRosterHandler)
+	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
+
+	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
+	r.HandleFunc("/", AllCharacterIndexHandler)
 
 	http.Handle("/", r)
 
