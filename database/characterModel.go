@@ -71,8 +71,8 @@ func ListOpenCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
 	_, err := db.Query(&cms, `SELECT * FROM character_models 
-							ORDER BY created_at DESC
-							WHERE open = true;`)
+							WHERE open = true
+							ORDER BY character ->> 'Name';`)
 
 	if err != nil {
 		log.Println(err)

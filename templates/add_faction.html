@@ -50,7 +50,9 @@
                   <select type="text" class="form-control" id="Character-{{ $i }}" name="Character-{{ $i }}">
                     <option></option>
                     {{ range $c := $cms }}
+                    {{ if ne $c.Character.Name ""}}
                     <option value={{$c.Slug}}>{{ $c.Character.Name }}</option>
+                      {{ end }}
                       {{ end }}
                   </select>
               </div>
