@@ -255,7 +255,7 @@ func main() {
 	r.HandleFunc("/add_faction/", AddFactionHandler)
 	r.HandleFunc("/view_faction/{slug}", FactionHandler)
 	r.HandleFunc("/modify_faction/{slug}", ModifyFactionHandler)
-	r.HandleFunc("/delete_faction/{slug}", DeleteFactionHandler)
+	r.HandleFunc("/delete_faction/{id}", DeleteFactionHandler)
 
 	// Encounter Handlers
 	r.HandleFunc("/encounter_index/", EncounterIndexHandler)

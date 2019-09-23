@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/toferc/runequest"
 
@@ -378,9 +379,14 @@ func DeleteFactionHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
-	slug := vars["slug"]
+	pk := vars["id"]
 
-	fac, err := database.SlugLoadFaction(db, slug)
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		id = 0
+	}
+
+	fac, err := database.PKLoadFaction(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
 	}

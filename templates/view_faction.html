@@ -16,7 +16,7 @@
             <h3>{{ $faction.Name }} - {{ $faction.Author.UserName }} 
             {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             <a class="btn btn-sm btn-primary" href="/modify_faction/{{ $faction.Slug }}">Edit</a>
-            <a class="btn btn-sm btn-danger" href="/delete_faction/{{ $faction.Slug }}">Delete</a>
+            <a class="btn btn-sm btn-danger" href="/delete_faction/{{ $faction.ID }}">Delete</a>
             {{ end }}</h3>
             <hr>
             <p>{{ $faction.Description }}</p>

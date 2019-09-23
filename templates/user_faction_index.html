@@ -23,6 +23,7 @@
                         <td><strong>Description</strong></td>
                         <td><strong>Members</strong></td>
                         <td><strong>Link</strong></td>
+                        <td><strong>Delete</strong></td>
                     </thead>
                     {{ range $f := $factions }}
                   <tr>
@@ -30,6 +31,8 @@
                       <td>{{ sliceString $f.Description 144 }}</td>
                       <td>{{ len $f.CharacterModelSlugs }}</td>
                       <td><a href="/view_faction/{{ $f.Slug }}">Link</a></td>
+                      <td><a href="/delete_faction/{{ $f.ID }}">Delete</a></td>
+
                   </tr>
                   {{ end }}
               </table>
