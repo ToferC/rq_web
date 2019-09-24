@@ -26,6 +26,7 @@
                   style="width: 20px; height: 20px" 
                   src="https://runequeset.s3.amazonaws.com/media/Runes/{{ if eq .Homeland.RuneBonus  "Fire/Sky"}}Fire Sky{{else}}{{ .Homeland.RuneBonus  }}{{end}}.png"
                 ></h5>
+                 <h6 class="card-subtitle mb-2 text-muted">{{ if .Official }}Official{{ end }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Author.UserName }}</h6>
                 <p class="card-text">
                   {{ toMarkdown (sliceString .Homeland.Description 144) }}

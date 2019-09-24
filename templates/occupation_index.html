@@ -21,6 +21,7 @@
               data-holder-rendered="true">
               <div class="card-body"></a>
                 <h5 class="card-title">{{ .Occupation.Name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ if .Official }}Official{{ end }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Author.UserName }}</h6>
                 <p class="card-text">
                   {{ toMarkdown (sliceString .Occupation.Description 144) }}

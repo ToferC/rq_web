@@ -43,7 +43,7 @@
                   {{ end }}
             </h6>
                 {{ end }}
-                
+                <h6 class="card-subtitle mb-2 text-muted">{{ if .Official }}Official{{ end }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Author.UserName }}</h6>
                 <p class="card-text">
                   {{ toMarkdown (sliceString .Cult.Description 144) }}
