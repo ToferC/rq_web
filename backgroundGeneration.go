@@ -122,7 +122,7 @@ func generateBackground(c *runequest.Character, scale string) (string, string) {
 	t1 := traits[ChooseRandom(len(traits))]
 	t2 := traits[ChooseRandom(len(traits))]
 
-	description = fmt.Sprintf("%s is %s and %s.\n", c.Name, t1, t2)
+	description = fmt.Sprintf("%s is %s and %s.\n", name, t1, t2)
 
 	pronoun := []string{}
 

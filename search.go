@@ -52,6 +52,7 @@ func CharacterSearchHandler(w http.ResponseWriter, req *http.Request) {
 		IsAdmin:         isAdmin,
 		CharacterModels: characters,
 		Query:           query,
+		Index:           "true",
 	}
 
 	Render(w, "templates/character_search_results.html", wc)

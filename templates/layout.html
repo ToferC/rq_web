@@ -180,14 +180,32 @@
         </div>
       </li>
     </ul>
+    {{ if ne .Index "true" }}
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" id="main_search" onsubmit="return goTo()" type="search" placeholder="Enter search terms" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" onclick="return goTo()" type="redirect">Search</button>
     </form>
+    {{ end }}
   </div>
 </nav>
 
     <div class="container">
+
+    {{ if eq .Index "true" }}
+    <div class="row">
+      <div class="col-12">
+                <br>
+                <h4><strong>Search the Cradle</strong></h4>
+                  <p><strong>Strange and wonderous people abound. Start typing below to find your quarry: </strong></p>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" id="main_search" onsubmit="return goTo()" type="search" value="{{ .Query }}" placeholder="Enter search terms" aria-label="Search">
+                    <button class="btn btn-success my-2 my-sm-0" onclick="return goTo()" type="redirect">Search</button>
+                  </form>
+                <hr>
+        </div>
+      </div>
+      
+    {{ end }}
 
       {{template "content" .}}
 
@@ -199,15 +217,13 @@
     <!-- Latest compiled and minified CSS -->
 <script type="text/javascript">
 
-
-
-  function goTo() {
-    var query = document.getElementById('main_search').value;
-
-    window.location = "/character_search_results/" + query;
-
-    return false;
-  }
+function goTo() {
+        var query = document.getElementById('main_search').value;
+    
+        window.location = "/character_search_results/" + query;
+    
+        return false;
+      };
 
 </script>
   

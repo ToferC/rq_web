@@ -86,6 +86,7 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 		CultModels:       cults,
 		Limit:            limit,
 		Offset:           offset,
+		Index:            "true",
 	}
 
 	if req.Method == "GET" {
@@ -133,10 +134,6 @@ func UserOpenCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 	username := sessionMap["username"]
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
-
-	if username == "" {
-		http.Redirect(w, req, "/", 302)
-	}
 
 	values := mux.Vars(req)
 

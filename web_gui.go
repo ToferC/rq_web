@@ -97,6 +97,8 @@ type WebChar struct {
 	Query  string
 	Offset int
 	Limit  int
+
+	Index string
 }
 
 // SplitLines transfomrs results text string into slice
