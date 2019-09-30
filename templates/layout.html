@@ -220,7 +220,11 @@
 function goTo() {
         var query = document.getElementById('main_search').value;
     
-        window.location = "/character_search_results/" + query;
+        window.location = "/character_search_results/" + query
+        
+        {{ if .User }}
+        + " {{ .User.UserName }}"
+        {{ end }};
     
         return false;
       };

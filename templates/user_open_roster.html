@@ -57,7 +57,7 @@
                     {{ if eq $user .Author.UserName }}{{ if not .Character.CreationSteps.Complete }}
                       <a class="btn btn-sm btn-primary" href="/{{ generateCharacterCreationURL .Character.CreationSteps }}/{{ .ID }}">Resume Creation</a>
                       {{ else }}
-                      <a class="btn btn-sm btn-primary" href="/modify/{{ .User.ID }}">Modify</a>
+                      <a class="btn btn-sm btn-primary" href="/modify/{{ .Author.ID }}">Modify</a>
                     {{ end }}
                     {{ end }}
                   </div>
