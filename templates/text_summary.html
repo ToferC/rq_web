@@ -1,0 +1,93 @@
+
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>View {{ $character.Name }}</title>
+<meta property="og:site_name" content="Cradle of Heroes" />
+<meta property="og:title" content="RQG: View {{ $character.Name }}" />
+<meta property="og:image" content="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}" />
+<meta property="og:description" content="{{ sliceString $character.Description 144 }}" />
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+    text-align: center;
+}
+
+</style>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $open := .CharacterModel.Open }}
+{{ $ID := .CharacterModel.ID }}
+{{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
+{{ $author := .CharacterModel.Author }}
+{{ $baseSkills := index (splitSkills $character.Skills) 0 }}
+{{ $secondarySkills := index (splitSkills $character.Skills) 1 }}
+{{ $primarySkills := index (splitSkills $character.Skills) 2 }}
+{{ $statOrder := .StringArray }}
+{{ $skillOrder := .CategoryOrder }}
+
+      <div class="container">
+        <hr>
+        
+        <ul class="nav nav-tabs" id="textSummaryTabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="summary-tab" data-toggle="tab" href="#summary" aria-controls="summary" aria-selected="true">Summary</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="statblock-tab" data-toggle="tab" href="#statblock" aria-controls="statblock" aria-selected="false">Stat Block</a>
+          </li>
+        </ul>
+
+      <div class="tab-content" id="textSummaryTabs">
+      <div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+            
+
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <br>
+            <textarea class="form-control" rows="30">{{ index .StringArray 0 }}</textarea>
+            <br>
+        </div>
+
+      </div> <!-- End Skill Row-->
+      </div> <!-- End Tab pane 1-->
+
+      <div class="tab-pane fade" id="statblock" role="tabpanel" aria-labelledby="statblock-tab">
+            
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <br>
+            <textarea class="form-control" rows="30">{{ index .StringArray 1 }}</textarea>
+            <br>
+        </div>
+
+
+      </div> <!-- End Skill Row-->
+      </div> <!-- End Tab pane 2-->
+
+
+      </div> <!-- End Skill tab -->
+      <hr>
+
+      </div>
+
+{{end}}

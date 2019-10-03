@@ -122,8 +122,7 @@ th {
               <a class="btn btn-sm btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to my Roster</a>
               {{ end }}
               {{ end }}
-              <a class="btn btn-sm btn-info"id="js-copy-character-btn" title="Copy text to Clipboard">Copy Text</a>
-              <a class="btn btn-sm btn-info"id="js-copy-statblock-btn" title="Copy Stat Block to Clipboard">StatBlock</a>
+              <a class="btn btn-sm btn-info"id="text_summary" href="/text_summary/{{ $ID }}" title="Go to text summary">Text</a>
 
               <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ sliceString $character.Description 144 }}" data-via="d20dev" data-hashtags="runequest #glorantha" data-show-count="true">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             <hr>

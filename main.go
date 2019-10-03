@@ -202,6 +202,7 @@ func main() {
 	r.HandleFunc("/admin_view_user_roster/{id}", AdminUserRosterViewHandler)
 
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
+	r.HandleFunc("/text_summary/{id}", TextSummaryHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
 	r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 

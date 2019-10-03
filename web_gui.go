@@ -25,6 +25,7 @@ type WebView struct {
 	Actions     []int
 	NumRolls    []int
 	ErrorString []error
+	Index       string
 }
 
 // WebUser represents a generic user struct
@@ -36,6 +37,7 @@ type WebUser struct {
 	Users          []*models.User
 	UserCount      int
 	CharacterCount int
+	Index          string
 }
 
 // WebChar is a framework to send objects & data to a Web view
