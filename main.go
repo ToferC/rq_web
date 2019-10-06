@@ -217,6 +217,13 @@ func main() {
 	r.HandleFunc("/cc7_personal_skills/{id}", PersonalSkillsHandler)
 	r.HandleFunc("/cc8_finishing_touches/{id}", FinishingTouchesHandler)
 
+	// Note Handlers
+	r.HandleFunc("/notes_index/{id}", NoteIndexHandler)
+	r.HandleFunc("/view_note/{slug}", NoteHandler)
+	r.HandleFunc("/add_note/{id}", AddNoteHandler)
+	r.HandleFunc("/modify_note/{slug}", ModifyNoteHandler)
+	r.HandleFunc("/delete_note/{id}", DeleteNoteHandler)
+
 	// Random creation
 	r.HandleFunc("/random_character/", RandomCharacterHandler)
 	r.HandleFunc("/random_faction/", RandomFactionHandler)

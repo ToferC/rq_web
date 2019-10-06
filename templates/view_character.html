@@ -123,6 +123,7 @@ th {
               {{ end }}
               {{ end }}
               <a class="btn btn-sm btn-info"id="text_summary" href="/text_summary/{{ $ID }}" title="Go to text summary">Text</a>
+              <a class="btn btn-sm btn-info"id="notes_index" href="/notes_index/{{ $ID }}" title="Go to notes">Notes ({{ .CharacterModel.Notes }})</a>
 
               <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ sliceString $character.Description 144 }}" data-via="d20dev" data-hashtags="runequest #glorantha" data-show-count="true">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             <hr>

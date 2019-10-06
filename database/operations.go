@@ -74,6 +74,7 @@ func createSchema(db *pg.DB) error {
 		(*models.Faction)(nil),
 		(*models.Encounter)(nil),
 		(*models.Campaign)(nil),
+		(*models.Note)(nil),
 		(*models.User)(nil)} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
 			Temp:        false,

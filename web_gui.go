@@ -16,16 +16,19 @@ import (
 
 // WebView is a container for Web_gui data
 type WebView struct {
-	SessionUser string
-	User        *models.User
-	Characters  []*models.CharacterModel
-	IsLoggedIn  string
-	IsAdmin     string
-	Actor       []*models.CharacterModel
-	Actions     []int
-	NumRolls    []int
-	ErrorString []error
-	Index       string
+	SessionUser    string
+	User           *models.User
+	Characters     []*models.CharacterModel
+	CharacterModel *models.CharacterModel
+	IsLoggedIn     string
+	IsAdmin        string
+	IsAuthor       bool
+	Actor          []*models.CharacterModel
+	Notes          []*models.Note
+	Note           *models.Note
+	Seasons        []string
+	Weeks          []string
+	Index          string
 }
 
 // WebUser represents a generic user struct

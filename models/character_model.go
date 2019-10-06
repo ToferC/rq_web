@@ -18,6 +18,7 @@ type CharacterModel struct {
 	Open      bool
 	Likes     int
 	LikeData  map[string]*Like
+	Notes     int
 	Image     *Image
 	Slug      string
 	CreatedAt time.Time `sql:"default:now()"`

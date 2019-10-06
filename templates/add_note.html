@@ -1,0 +1,118 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Add Note to {{ $character.Name }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $character := .CharacterModel.Character }}
+{{ $note := .Note }}
+
+<div class="container">
+        
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+              <br>
+            <h4>Add Note for {{ $character.Name }}.</h4>
+            <p>Fill in the fields below to create your note.</p>
+            <form action="" method="POST">
+            <hr>
+
+              <div class="form-group">
+                <label class="form-group-text" id="name-addon">Title</label>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Title" value="{{ $note.Body }}" placeholder="Your note title...">
+              </div>
+
+              <hr>
+
+              <p>Time</p>
+
+              <div class="form-row">
+                  <div class="col">
+  
+              <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="year-addon">Year</span>
+            </div>
+            <input type="number" class="form-control" aria-describedby="year-addon" name="Year" value="{{ $note.Year }}">
+          </div>
+          </div>
+  
+          <div class="col">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" for="Season">Season</span>
+            </div>
+            <select type="text" class="form-control" id="Season" name="Season">
+              {{ if ne $note.Season ""}}
+              <option>{{ $note.Season }}</option>
+              <option></option>
+              {{ end }}
+              {{ range .Seasons }}
+              <option>{{ . }}</option>
+              {{ end }}
+            </select>
+          </div>
+          </div>
+  
+          <div class="col">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" for="Week">Week</span>
+            </div>
+            <select type="text" class="form-control" id="Week" name="Week">
+            {{ if ne $note.Week ""}}
+              <option>{{ $note.Week }}</option>
+              <option></option>
+              {{ end }}
+              {{ range .Weeks }}
+              <option>{{ . }}</option>
+              {{ end }}
+            </select>
+          </div>
+          </div>
+  
+      </div>
+
+      <hr>
+
+        <label for="Body">Write your notes here using Markdown</label>
+        <textarea class="form-control" aria-describedby="Body-addon" name="Body" rows="30" placeholder="Your notes...">{{ $note.Body }}</textarea>
+         
+
+        <hr>
+           
+          <p>If you want, you can add one or more personal tags to describe the events.</p>
+
+          <div class="form-row">
+          <div class="col">
+            <label class="form-group-text" id="Tags-addon">Tag 1</label>
+            <input type="text" class="form-control" aria-describedby="Tags-addon" name="Tags" placeholder="Enter tag here" value="{{ index $note.Tags 0 }}">
+          </div>
+
+          <div class="col">
+            <label class="form-group-text" id="Tags-addon">Tag 2</label>
+            <input type="text" class="form-control" aria-describedby="Tags-addon" name="Tags" placeholder="Enter tag here" value="{{ index $note.Tags 1 }}">
+          </div>
+
+          <div class="col">
+            <label class="form-group-text" id="Tags-addon">Tag 3</label>
+            <input type="text" class="form-control" aria-describedby="Tags-addon" name="Tags" placeholder="Enter tag here" value="{{ index $note.Tags 2 }}">
+          </div>
+          </div>
+        <hr>
+        <button class="btn btn-primary" type="submit" value="Save">Save Note</button>
+        <hr>
+        </div>
+
+    </div>
+     
+    </form>
+    </div>
+      </div>
+
+{{ end }}
+<!-- end content -->

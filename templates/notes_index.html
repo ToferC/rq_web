@@ -1,0 +1,48 @@
+{{ define "title"}}
+
+<title>Notes</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $notes := .Notes }}
+{{ $character := .CharacterModel.Character }}
+{{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            
+                <p><a href="/view_character/{{ .CharacterModel.ID }}">{{ $character.Name}}</a> >> Notes
+
+                {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+                <a class="btn btn-sm btn-primary" href="/add_note/{{ .CharacterModel.ID }}">+</a>{{ end }}</p>
+                
+              
+                <table class="table table-striped">
+                    <thead>
+                        <td><strong>Title</strong></td>
+                        <td><strong>Year</strong></td>
+                        <td><strong>Season</strong></td>
+                        <td><strong>Week</strong></td>
+                    </thead>
+                    {{ range $n := $notes }}
+                  <tr>
+                      <td><strong><a href="/view_note/{{ $n.Slug }}">{{ $n.Title }}</a></strong></td>
+                      <td>{{ $n.Year }}</td>
+                      <td>{{ $n.Season }}</td>
+                      <td>{{ $n.Week }}</td>
+                  </tr>
+                  {{ end }}
+              </table>
+              
+              </div> <!-- End Character Column -->
+
+            </form>
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

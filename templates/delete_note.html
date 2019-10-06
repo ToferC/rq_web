@@ -1,0 +1,27 @@
+{{ define "title"}}
+
+<title>Delete {{ .Note.Title }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $note := .Note }}
+
+      <div class="container">
+        <h1>DELETE {{ $note.Title }}</h1>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            
+            <hr>
+            {{ toMarkdown $note.Body }}
+            <hr>
+            
+            <form action="" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            <a href="/view_note/{{ $note.Slug }}" class="btn btn-primary">Return to Note</a>
+          </div>
+    </div>
+      </div>
+{{end}}

@@ -1,0 +1,40 @@
+{{ define "title"}}
+
+<title>{{ .Note.Title }}</title>
+
+{{ end }}
+
+{{define "content"}}
+
+{{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
+{{ $character := .CharacterModel.Character }}
+{{ $note := .Note }}
+
+<div class="container">
+  <hr>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+    <p><a href="/view_character/{{ .CharacterModel.ID }}">{{ $character.Name}}</a> >>  <a href="/notes_index/{{ .CharacterModel.ID }}">Notes</a> >> {{ $note.Title }}</p>
+    <h6>{{ $note.Year }} - {{ $note.Season }} Season - {{ $note.Week }} Week</h6>
+    <hr>
+    {{ toMarkdown $note.Body }}
+
+    <hr>
+    <p><strong>Tags:</strong> {{ formatStringArray $note.Tags }}</p>
+
+    <hr>
+    {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
+    <a class="btn btn-sm btn-primary" href="/modify_note/{{ $note.Slug }}">Edit</a>
+    <a class="btn btn-sm btn-danger" href="/delete_note/{{ $note.ID }}">Delete</a>
+    {{ end }}</h4>
+    <hr>
+
+    </div> <!-- End COL 1 -->
+
+  </div> <!-- END outer ROW -->
+</div> <!-- END container -->
+
+{{ end }}
+<!-- end content -->
