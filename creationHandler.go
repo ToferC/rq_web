@@ -345,6 +345,8 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Abilities["Reputation"].CreationBonusValue = rep
 
+		c.Abilities["Reputation"].UpdateAbility()
+
 		// Add Skills
 		for i := 1; i < 4; i++ {
 
