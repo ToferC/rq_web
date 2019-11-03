@@ -211,7 +211,7 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		rawpassword := req.Form.Get("password")
 		email := req.Form.Get("email")
 
-		if len(username) < 2 || len(rawpassword) < 2 {
+		if len(username) < 2 || len(username) > 24 || len(rawpassword) < 2 {
 			http.Redirect(w, req, "/signup/", 302)
 			return
 		}
