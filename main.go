@@ -296,9 +296,6 @@ func main() {
 
 	// Index handlers
 
-	r.HandleFunc("/crafted_roster/{limit}/{offset}", CraftedCharacterIndexHandler)
-	r.HandleFunc("/crafted_roster/", CraftedCharacterIndexHandler)
-
 	r.HandleFunc("/random_roster/{limit}/{offset}", RandomCharacterIndexHandler)
 	r.HandleFunc("/random_roster/", RandomCharacterIndexHandler)
 
@@ -308,8 +305,11 @@ func main() {
 	r.HandleFunc("/user_roster/{limit}/{offset}", UserCharacterRosterHandler)
 	r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
 
-	r.HandleFunc("/{limit}/{offset}", AllCharacterIndexHandler)
-	r.HandleFunc("/", AllCharacterIndexHandler)
+	r.HandleFunc("/all_characters/{limit}/{offset}", AllCharacterIndexHandler)
+	r.HandleFunc("/all_characters/", AllCharacterIndexHandler)
+
+	r.HandleFunc("/{limit}/{offset}", CraftedCharacterIndexHandler)
+	r.HandleFunc("/", CraftedCharacterIndexHandler)
 
 	http.Handle("/", r)
 
