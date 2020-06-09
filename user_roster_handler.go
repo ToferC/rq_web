@@ -34,6 +34,7 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil || username == "" || loggedIn == "false" {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Get variables from URL
@@ -42,11 +43,13 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
@@ -96,6 +99,7 @@ func DuplicateCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil || username == "" || loggedIn == "false" {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Get variables from URL
@@ -104,11 +108,13 @@ func DuplicateCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
