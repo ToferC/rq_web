@@ -90,9 +90,10 @@ func DuplicateCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	sessionMap := getUserSessionValues(session)
 
 	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
 
 	author, err := database.LoadUser(db, username)
-	if err != nil {
+	if err != nil || username == "" || loggedIn == "false" {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
 	}
