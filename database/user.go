@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/models"
@@ -36,16 +37,21 @@ func UpdateUser(db *pg.DB, u *models.User) error {
 func LoadUser(db *pg.DB, username string) (*models.User, error) {
 	user := new(models.User)
 
-	fmt.Println("Loading User " + username)
-	err := db.Model(user).
-		Where("user_name = ?", username).
-		Limit(1).
-		Select()
-	if err != nil {
-		fmt.Println(err)
-		return new(models.User), err
+	if strings.TrimSpace(username) != "" {
+
+		fmt.Println("Loading User " + username)
+		err := db.Model(user).
+			Where("user_name = ?", username).
+			Limit(1).
+			Select()
+		if err != nil {
+			fmt.Println(err)
+			return new(models.User), err
+		}
+		return user, nil
+	} else {
+		return nil, fmt.Errorf("Incorrect Username")
 	}
-	return user, nil
 }
 
 //ValidUser will check if the user exists in db and if the
