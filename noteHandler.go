@@ -40,11 +40,13 @@ func NoteIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -151,6 +153,7 @@ func AddNoteHandler(w http.ResponseWriter, req *http.Request) {
 	if username == "" {
 		// Add user message
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Get variables from URL
@@ -159,11 +162,13 @@ func AddNoteHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -265,6 +270,7 @@ func ModifyNoteHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	if len(nt.Tags) < 3 {
@@ -289,6 +295,7 @@ func ModifyNoteHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wv := WebView{
@@ -368,6 +375,7 @@ func DeleteNoteHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	nt, err := database.PKLoadNote(db, int64(id))
@@ -389,6 +397,7 @@ func DeleteNoteHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wv := WebView{

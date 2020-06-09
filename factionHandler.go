@@ -165,12 +165,14 @@ func AddFactionHandler(w http.ResponseWriter, req *http.Request) {
 	if username == "" {
 		// Add user message
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	user, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	cms, err := database.ListOpenCharacterModels(db)
@@ -283,6 +285,7 @@ func ModifyFactionHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	cms, err := database.ListOpenCharacterModels(db)
@@ -398,6 +401,7 @@ func DeleteFactionHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wc := WebChar{

@@ -36,6 +36,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	cm := models.CharacterModel{}
@@ -46,6 +47,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	fmt.Println(author)
@@ -243,6 +245,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/cc12_personal_history/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
+		return
 	}
 }
 
@@ -635,6 +638,7 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -642,11 +646,13 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -775,6 +781,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -782,11 +789,13 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1020,6 +1029,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -1027,11 +1037,13 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1276,6 +1288,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -1283,11 +1296,13 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1699,6 +1714,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -1706,11 +1722,13 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1933,6 +1951,7 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -1940,11 +1959,13 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))

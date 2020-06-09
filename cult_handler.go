@@ -82,11 +82,13 @@ func CultListHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
@@ -102,6 +104,7 @@ func CultListHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := cm.Character
@@ -184,6 +187,7 @@ func CultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(slug) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cl, err := database.LoadCultModel(db, slug)
@@ -250,6 +254,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 	if username == "" {
 		// Add user message
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := runequest.NewCharacter("name")
@@ -306,6 +311,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 			http.Redirect(w, req, "/", 302)
+			return
 		}
 
 		// Map default Cult to Character.Cults
@@ -710,6 +716,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 			http.Redirect(w, req, "/", 302)
+			return
 		}
 
 		cl.Author = author
@@ -755,6 +762,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cl, err := database.PKLoadCultModel(db, int64(id))
@@ -775,6 +783,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Add extra runes
@@ -1304,6 +1313,7 @@ func DeleteCultHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cl, err := database.PKLoadCultModel(db, int64(id))
@@ -1323,6 +1333,7 @@ func DeleteCultHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wc := WebChar{

@@ -44,11 +44,13 @@ func CreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -302,12 +304,14 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	author, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	fmt.Println(author)
@@ -888,11 +892,13 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
@@ -908,6 +914,7 @@ func ModifyCreatureHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := cm.Character

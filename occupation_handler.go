@@ -82,11 +82,13 @@ func OccupationListHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
@@ -102,6 +104,7 @@ func OccupationListHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := cm.Character
@@ -184,6 +187,7 @@ func OccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(slug) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	oc, err := database.LoadOccupationModel(db, slug)
@@ -245,6 +249,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	if username == "" {
 		// Add user message
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := runequest.NewCharacter("name")
@@ -292,6 +297,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 			http.Redirect(w, req, "/", 302)
+			return
 		}
 
 		// Map default Occupation to Character.Occupations
@@ -581,6 +587,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 			http.Redirect(w, req, "/", 302)
+			return
 		}
 
 		oc.Author = author
@@ -626,6 +633,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	oc, err := database.PKLoadOccupationModel(db, int64(id))
@@ -646,6 +654,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Create empty equipment slots if < 16
@@ -1092,6 +1101,7 @@ func DeleteOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	oc, err := database.PKLoadOccupationModel(db, int64(id))
@@ -1111,6 +1121,7 @@ func DeleteOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wc := WebChar{

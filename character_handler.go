@@ -40,11 +40,13 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -295,6 +297,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/view_character/%d#gameplay", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
+		return
 	}
 
 }
@@ -325,11 +328,13 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
@@ -345,6 +350,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := cm.Character
@@ -731,6 +737,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
+		return
 	}
 }
 
@@ -755,6 +762,7 @@ func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -762,11 +770,13 @@ func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -906,6 +916,7 @@ func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
+		return
 	}
 }
 
@@ -930,6 +941,7 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -937,11 +949,13 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1062,6 +1076,7 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
+		return
 	}
 }
 
@@ -1086,6 +1101,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -1093,11 +1109,13 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1401,6 +1419,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
+		return
 	}
 }
 
@@ -1428,11 +1447,13 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
@@ -1447,6 +1468,7 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	if cm.Image == nil {
@@ -1475,5 +1497,6 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println("Deleted ", cm.Character.Name)
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 }

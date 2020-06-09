@@ -210,6 +210,7 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	values := mux.Vars(req)
@@ -282,11 +283,13 @@ func UserOpenCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	u, err := database.PKLoadUser(db, int64(id))

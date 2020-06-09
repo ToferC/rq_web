@@ -35,12 +35,14 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	author, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	fmt.Println(author)
@@ -1436,7 +1438,8 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 		url := fmt.Sprintf("/view_faction/%s", fac.Slug)
 
 		http.Redirect(w, req, url, http.StatusFound)
+		return
 
-		http.Redirect(w, req, url, http.StatusSeeOther)
+		//http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }

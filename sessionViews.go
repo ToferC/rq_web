@@ -97,6 +97,7 @@ func googleLoginFunc() http.Handler {
 		log.Print("user ", googleUser.Name, " is authenticated")
 		fmt.Println(session.Values)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 	return http.HandlerFunc(fn)
 }
@@ -160,6 +161,7 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 			if err != nil {
 				fmt.Println(err)
 				http.Redirect(w, req, "/", 302)
+				return
 			}
 
 			if user.IsAdmin {
@@ -172,6 +174,7 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 			log.Print("user ", username, " is authenticated")
 			fmt.Println(session.Values)
 			http.Redirect(w, req, "/", 302)
+			return
 		} else {
 			log.Print("Invalid user " + username)
 			Render(w, "templates/login.html", wc)
@@ -240,6 +243,7 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 			log.Print("user ", username, " is authenticated")
 			fmt.Println(session.Values)
 			http.Redirect(w, req, "/", 302)
+			return
 		}
 	} else if req.Method == "GET" {
 		Render(w, "templates/signup.html", wc)

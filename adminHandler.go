@@ -33,10 +33,12 @@ func AdminUserRosterViewHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	if isAdmin != "true" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	values := mux.Vars(req)
@@ -44,11 +46,13 @@ func AdminUserRosterViewHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	u, err := database.PKLoadUser(db, int64(id))
@@ -132,6 +136,7 @@ func MakeAdminHandler(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 		fmt.Println("Unable to load User")
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	if !user.IsAdmin {
@@ -148,6 +153,7 @@ func MakeAdminHandler(w http.ResponseWriter, req *http.Request) {
 	url := "/user_index/"
 
 	http.Redirect(w, req, url, http.StatusFound)
+	return
 }
 
 // DeleteUserHandler handles the basic roster rendering for the app
@@ -191,6 +197,7 @@ func DeleteUserHandler(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 		fmt.Println("Unable to load User")
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	limit := 9999
@@ -231,6 +238,7 @@ func DeleteUserHandler(w http.ResponseWriter, req *http.Request) {
 		url := "/user_index/"
 
 		http.Redirect(w, req, url, http.StatusFound)
+		return
 	}
 
 }

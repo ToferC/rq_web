@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
@@ -53,7 +54,9 @@ func main() {
 	cms, err := database.ListAllCharacterModels(db)
 
 	for _, cm := range cms {
-		database.UpdateCharacterModel(db, cm)
+		if cm.Random == true && strings.TrimSpace(cm.Author.UserName) == "" {
+			fmt.Printf("Found and deleted: %s\n", cm.Character.Name)
+			database.DeleteCharacterModel(db, cm.ID)
+		}
 	}
-
 }

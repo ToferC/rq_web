@@ -83,11 +83,13 @@ func HomelandListHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	// Load CharacterModel
@@ -103,6 +105,7 @@ func HomelandListHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := cm.Character
@@ -185,6 +188,7 @@ func HomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(slug) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	hl, err := database.LoadHomelandModel(db, slug)
@@ -246,6 +250,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if username == "" {
 		// Add user message
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	c := runequest.NewCharacter("name")
@@ -264,6 +269,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Map default Homeland to Character.Homelands
@@ -613,6 +619,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 			http.Redirect(w, req, "/", 302)
+			return
 		}
 
 		hl.Author = author
@@ -658,6 +665,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	hl, err := database.PKLoadHomelandModel(db, int64(id))
@@ -678,6 +686,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Add Homelandstats if not already there
@@ -1133,6 +1142,7 @@ func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	hl, err := database.PKLoadHomelandModel(db, int64(id))
@@ -1152,6 +1162,7 @@ func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wc := WebChar{

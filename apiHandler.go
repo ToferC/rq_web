@@ -212,6 +212,7 @@ func CreateCharacterModel(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	cm.ID = int64(pk)
@@ -268,6 +269,7 @@ func UpdateCharacterModel(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	err = database.UpdateCharacterModel(db, cm)

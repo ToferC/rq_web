@@ -162,12 +162,14 @@ func AddEncounterHandler(w http.ResponseWriter, req *http.Request) {
 	if username == "" {
 		// Add user message
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	user, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	factions, err := database.ListFactions(db)
@@ -278,6 +280,7 @@ func ModifyEncounterHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	// Load factions for options
@@ -396,6 +399,7 @@ func DeleteEncounterHandler(w http.ResponseWriter, req *http.Request) {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	wc := WebChar{

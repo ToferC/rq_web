@@ -36,6 +36,7 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		http.Redirect(w, req, "/", 302)
+		return
 	}
 
 	vars := mux.Vars(req)
@@ -43,11 +44,13 @@ func EquipWeaponsArmorHandler(w http.ResponseWriter, req *http.Request) {
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
 	}
 
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
