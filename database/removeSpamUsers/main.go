@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/rq_web/database"
@@ -54,7 +55,8 @@ func main() {
 
 	for _, u := range users {
 
-		if u.UserName == "" {
+		if strings.Replace(u.UserName, " ", "", -1) == "" {
+			fmt.Println("Found spam")
 			database.DeleteUser(db, u.ID)
 		}
 	}
