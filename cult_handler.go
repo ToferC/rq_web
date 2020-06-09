@@ -417,7 +417,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				uStr := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
 
 				if uStr != "" {
-					t.UserString = processUserString(uStr)
+					t.UserString = ProcessUserString(uStr)
 					t.UserChoice = true
 				}
 
@@ -443,7 +443,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 				if t.UserString != "" {
 					u := req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
-					t.UserString = processUserString(u)
+					t.UserString = ProcessUserString(u)
 				}
 				cl.Cult.SpiritMagic = append(cl.Cult.SpiritMagic, t)
 			}
@@ -535,7 +535,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				userString := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
 
 				if userString != "" {
-					s1.UserString = processUserString(userString)
+					s1.UserString = ProcessUserString(userString)
 				}
 				skillArray = append(skillArray, s1)
 			}
@@ -547,7 +547,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 
 			d := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
-			desc := processUserString(d)
+			desc := ProcessUserString(d)
 
 			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
@@ -594,7 +594,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				userString1 := req.FormValue(fmt.Sprintf("Skill-%d-1-UserString", i))
 
 				if userString1 != "" {
-					s1.UserString = processUserString(userString1)
+					s1.UserString = ProcessUserString(userString1)
 				}
 
 				// Second Skill option
@@ -619,7 +619,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				userString2 := req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
 
 				if userString2 != "" {
-					s2.UserString = processUserString(userString2)
+					s2.UserString = ProcessUserString(userString2)
 				}
 
 				// Form SkillChoice
@@ -652,7 +652,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				u := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				p := runequest.Ability{
 					Type:       "Passion",
@@ -679,7 +679,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
 				u := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				if userString != "" {
 					sk.UserChoice = true
@@ -963,7 +963,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				u := req.FormValue(fmt.Sprintf("RS-%s-UserString", rs.CoreString))
-				uStr := processUserString(u)
+				uStr := ProcessUserString(u)
 
 				if uStr != "" {
 					t.UserString = uStr
@@ -993,7 +993,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				u := req.FormValue(fmt.Sprintf("SM-%s-UserString", sm.CoreString))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				if userString != "" {
 					t.UserString = userString
@@ -1013,7 +1013,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			if !c.SubCult {
 
 				str := req.FormValue(fmt.Sprintf("Cult-%s-Name", c.Name))
-				str = processUserString(str)
+				str = ProcessUserString(str)
 
 				if str != "" {
 					tempCult := runequest.Cult{
@@ -1043,7 +1043,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			}
 
 			u := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
-			userString := processUserString(u)
+			userString := ProcessUserString(u)
 
 			if sk != "" && v > 0 {
 
@@ -1088,7 +1088,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 
 			desc := req.FormValue(fmt.Sprintf("Weapon-%d-Description", i))
-			desc = processUserString(desc)
+			desc = ProcessUserString(desc)
 
 			if desc != "" {
 				str := fmt.Sprintf("Weapon-%d-Value", i)
@@ -1128,7 +1128,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				userString := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-				userString = processUserString(userString)
+				userString = ProcessUserString(userString)
 
 				p := runequest.Ability{
 					Type:       "Passion",
@@ -1176,7 +1176,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				s1.CultValue = v
 
 				u1 := req.FormValue(fmt.Sprintf("Skill-%d-1-UserString", i))
-				userString1 := processUserString(u1)
+				userString1 := ProcessUserString(u1)
 
 				if userString1 != "" {
 					s1.UserString = userString1
@@ -1202,7 +1202,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				s2.CultValue = v
 
 				u2 := req.FormValue(fmt.Sprintf("Skill-%d-2-UserString", i))
-				userString2 := processUserString(u2)
+				userString2 := ProcessUserString(u2)
 
 				if userString2 != "" {
 					s2.UserString = userString2
@@ -1225,7 +1225,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 
 			coreString := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
-			coreString = processUserString(coreString)
+			coreString = ProcessUserString(coreString)
 
 			if coreString != "" {
 
@@ -1235,7 +1235,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
 				userString := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
-				userString = processUserString(userString)
+				userString = ProcessUserString(userString)
 
 				if userString != "" {
 					sk.UserChoice = true

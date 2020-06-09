@@ -91,7 +91,8 @@ func createName(coreString string, userString string) string {
 	return targetString
 }
 
-func processUserString(s string) string {
+// ProcessUserString returns a simplified
+func ProcessUserString(s string) string {
 	trimmed := strings.TrimSpace(s)
 	lower := strings.ToLower(trimmed)
 	title := strings.Title(lower)

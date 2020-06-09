@@ -493,7 +493,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 				tempMovement = append(tempMovement,
 					&runequest.Movement{
-						Name:  processUserString(moveName),
+						Name:  ProcessUserString(moveName),
 						Value: mv,
 					})
 			}
@@ -520,7 +520,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 			if s.UserString != "" {
 				us := req.FormValue(fmt.Sprintf("%s-UserString", s.Name))
-				s.UserString = processUserString(us)
+				s.UserString = ProcessUserString(us)
 			}
 			s.UpdateSkill()
 
@@ -668,7 +668,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 			if a.UserString != "" {
 				us := req.FormValue(fmt.Sprintf("%s-UserString", a.Name))
-				a.UserString = processUserString(us)
+				a.UserString = ProcessUserString(us)
 			}
 
 			a.UpdateAbility()
@@ -837,7 +837,7 @@ func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				if userString != "" {
-					sk.UserString = processUserString(userString)
+					sk.UserString = ProcessUserString(userString)
 				}
 
 				sk.GenerateName()
@@ -887,7 +887,7 @@ func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 
 				userString := req.FormValue(str + "UserString")
 				if userString != "" {
-					sk.UserString = processUserString(userString)
+					sk.UserString = ProcessUserString(userString)
 				}
 
 				sk.GenerateName()
@@ -998,7 +998,7 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 
 				if userString != "" {
 					p.UserChoice = true
-					p.UserString = processUserString(userString)
+					p.UserString = ProcessUserString(userString)
 				}
 
 				targetString := createName(p.CoreString, p.UserString)
@@ -1027,13 +1027,13 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 
 				p := &runequest.Ability{
 					Type:       "Passion",
-					CoreString: processUserString(coreString),
+					CoreString: ProcessUserString(coreString),
 					Updates:    []*runequest.Update{},
 				}
 
 				if userString != "" {
 					p.UserChoice = true
-					p.UserString = processUserString(userString)
+					p.UserString = ProcessUserString(userString)
 				}
 
 				targetString := createName(p.CoreString, p.UserString)
@@ -1251,7 +1251,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 
 				tempCults = append(tempCults,
 					&runequest.ExtraCult{
-						Name:       processUserString(eCult),
+						Name:       ProcessUserString(eCult),
 						Rank:       eRank,
 						RunePoints: eRP,
 					})
@@ -1302,7 +1302,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				if spec != "" {
-					s.UserString = processUserString(spec)
+					s.UserString = ProcessUserString(spec)
 				}
 
 				s.GenerateName()
@@ -1360,7 +1360,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				if spec != "" {
-					s.UserString = processUserString(spec)
+					s.UserString = ProcessUserString(spec)
 				}
 
 				s.GenerateName()
@@ -1380,7 +1380,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 
 			if name != "" {
 				p := &runequest.Power{
-					Name:        processUserString(name),
+					Name:        ProcessUserString(name),
 					Description: desc,
 				}
 				tempPowers[name] = p

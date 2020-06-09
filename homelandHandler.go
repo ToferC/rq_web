@@ -463,7 +463,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-UserString", i)
-					s1.UserString = processUserString(req.FormValue(userString))
+					s1.UserString = ProcessUserString(req.FormValue(userString))
 				}
 				skillArray = append(skillArray, s1)
 			}
@@ -486,7 +486,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				u := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				p := runequest.Ability{
 					Type:          "Passion",
@@ -530,7 +530,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-					s1.UserString = processUserString(req.FormValue(userString))
+					s1.UserString = ProcessUserString(req.FormValue(userString))
 				}
 
 				// Second Skill option
@@ -554,7 +554,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 				if s2.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = processUserString(req.FormValue(userString))
+					s2.UserString = ProcessUserString(req.FormValue(userString))
 				}
 
 				// Form SkillChoice
@@ -572,7 +572,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		for i := 1; i < 4; i++ {
 
 			c := req.FormValue(fmt.Sprintf("NewSkill-%d-CoreString", i))
-			coreString := processUserString(c)
+			coreString := ProcessUserString(c)
 
 			if coreString != "" {
 
@@ -582,7 +582,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
 				u := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				if userString != "" {
 					sk.UserChoice = true
@@ -791,7 +791,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		// Add Movement
 		for i := 1; i < mvLen+2; i++ {
 			m := req.FormValue(fmt.Sprintf("Move-Name-%d", i))
-			moveName := processUserString(m)
+			moveName := ProcessUserString(m)
 
 			if moveName != "" {
 				mv, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Move-Value-%d", i)))
@@ -886,7 +886,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 			sk := req.FormValue(fmt.Sprintf("Skill-%d-CoreString", i))
 			u := req.FormValue(fmt.Sprintf("Skill-%d-UserString", i))
-			userString := processUserString(u)
+			userString := ProcessUserString(u)
 
 			if sk != "" {
 
@@ -959,7 +959,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				}
 
 				u := req.FormValue(fmt.Sprintf("Passion-%d-UserString", i))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				p := runequest.Ability{
 					Type:          "Passion",
@@ -1008,7 +1008,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 				if s1.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-1-UserString", i)
-					s1.UserString = processUserString(req.FormValue(userString))
+					s1.UserString = ProcessUserString(req.FormValue(userString))
 				}
 
 				// Second Skill option
@@ -1032,7 +1032,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 				if s2.UserChoice {
 					userString := fmt.Sprintf("Skill-%d-2-UserString", i)
-					s2.UserString = processUserString(req.FormValue(userString))
+					s2.UserString = ProcessUserString(req.FormValue(userString))
 				}
 
 				s1.GenerateName()
@@ -1064,7 +1064,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Category = req.FormValue(fmt.Sprintf("NewSkill-%d-Category", i))
 
 				u := req.FormValue(fmt.Sprintf("NewSkill-%d-UserString", i))
-				userString := processUserString(u)
+				userString := ProcessUserString(u)
 
 				if userString != "" {
 					sk.UserChoice = true

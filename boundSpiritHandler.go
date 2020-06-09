@@ -141,7 +141,7 @@ func BoundSpiritHandler(w http.ResponseWriter, req *http.Request) {
 
 				bs.Name = name
 				bs.Description = description
-				bs.Item = processUserString(item)
+				bs.Item = ProcessUserString(item)
 
 				powStr := req.FormValue(fmt.Sprintf("BS-%d-Pow", i))
 
@@ -212,7 +212,7 @@ func BoundSpiritHandler(w http.ResponseWriter, req *http.Request) {
 						baseSpell := runequest.SpiritMagicSpells[index]
 
 						if spec != "" {
-							spec = processUserString(spec)
+							spec = ProcessUserString(spec)
 						} else {
 							spec = baseSpell.UserString
 						}
