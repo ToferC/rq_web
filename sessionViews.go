@@ -74,8 +74,8 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 		Users:          users,
 		UserCount:      len(users),
 		CharacterCount: characters,
-		limit:          limit,
-		offset:         offset,
+		Limit:          limit,
+		Offset:         offset,
 	}
 
 	Render(w, "templates/admin_view_users.html", wu)

@@ -93,12 +93,11 @@ func ListUsers(db *pg.DB) ([]*models.User, error) {
 // PaginateUsers queries open Character names and add to slice
 func PaginateUsers(db *pg.DB, limit, offset int) ([]*models.User, error) {
 
-	var cms []*models.User
+	var users []*models.User
 
-	err := db.Model(&cms).
+	err := db.Model(&users).
 		Limit(limit).
 		Offset(offset * limit).
-		Where("open = true").
 		Order("created_at DESC").
 		Select()
 
@@ -106,7 +105,11 @@ func PaginateUsers(db *pg.DB, limit, offset int) ([]*models.User, error) {
 		log.Println(err)
 	}
 
-	return cms, nil
+	for _, n := range users {
+		n.Characters = countUserCharacterModels(db, n.UserName)
+	}
+
+	return users, nil
 }
 
 // PKLoadUser loads a single User from the DB by pk

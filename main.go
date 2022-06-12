@@ -197,10 +197,12 @@ func main() {
 	r.Handle("/google/callback", google.StateHandler(stateConfig, google.CallbackHandler(oauth2Config, googleLoginFunc(), nil)))
 
 	// Admin Views
+	r.HandleFunc("/admin_view_users/{limit}/{offset}", UserIndexHandler)
 	r.HandleFunc("/admin_view_users/", UserIndexHandler)
 	r.HandleFunc("/admin_view_user_roster/{id}/{limit}/{offset}", AdminUserRosterViewHandler)
 	r.HandleFunc("/admin_view_user_roster/{id}", AdminUserRosterViewHandler)
 
+	// Character Views
 	r.HandleFunc("/view_character/{id}", CharacterHandler)
 	r.HandleFunc("/text_summary/{id}", TextSummaryHandler)
 	r.HandleFunc("/modify/{id}", ModifyCharacterHandler)

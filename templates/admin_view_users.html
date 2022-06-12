@@ -18,6 +18,7 @@
             <td>UserName</td>
             <td>Admin</td>
             <td>Email</td>
+            <td>Created At</td>
             <td>Characters</td>
             <td>Link</td>
             <td>Make Admin</td>
@@ -28,6 +29,7 @@
             <td>{{ .UserName }}</td>
             <td>{{ .IsAdmin }}</td>
             <td>{{ .Email }}</td>
+            <td>{{ renderDate .CreatedAt }}</td>
             <td>{{ .Characters }}</td>
             <td><a href="/admin_view_user_roster/{{ .ID }}">Link</a></td>
             <td><a href="/make_admin/{{ .ID }}">Toggle Admin</a></td>
@@ -37,6 +39,35 @@
         </table>
       </div>
     </div>
+
+    <div class="row bg-dark" id="Paginator Row">
+      <div class="col col-md-3 col-lg-1 col-sm-4">
+        {{ if gt .Offset 0 }}
+            <a class="btn btn-sm btn-primary" href="/admin_view_users/{{.Limit }}/{{subtract .Offset 1}}"><< Page {{ .Offset }}</a>
+        {{ else }}
+        {{ end }}
+      </div>
+      <div class="col col-md-1 col-lg-4 col-sm-0">
+
+      </div>
+
+      <div class="col col-md-4 col-lg-2 col-sm-4" style="text-align: center">
+          <strong style="color: white">Page {{add .Offset 1}} </strong>
+        </div>
+
+        <div class="col col-md-1 col-lg-4 col-sm-0">
+
+          </div>
+      
+          <div class="col col-md-3 col-lg-1 col-sm-4">
+            {{ if gt (len .Users) 65 }}
+        <a class="btn btn-sm btn-primary" href="/admin_view_users/{{.Limit }}/{{add .Offset 1}}">>> Page {{ add .Offset 2}}</a>
+        {{ end }}
+      </div>
+      <hr>
+      <br>
+      </div> <!-- End Paginator row-->
+      <br>
   </div>
 
 {{end}}

@@ -42,8 +42,8 @@ type WebUser struct {
 	UserCount      int
 	CharacterCount int
 	Index          string
-	limit          int
-	offset         int
+	Limit          int
+	Offset         int
 }
 
 // WebChar is a framework to send objects & data to a Web view
@@ -355,7 +355,7 @@ func toMarkdown(st string) template.HTML {
 }
 
 func renderDate(dt time.Time) string {
-	date := dt.Format("2006-01-01")
+	date := dt.Format("2006/01/02")
 
 	return date
 }
