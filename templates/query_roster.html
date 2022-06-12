@@ -133,6 +133,7 @@ create and save "building" content, like homelands, occupations and cults, they 
                   {{ else }}
                   <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Role }}</h6>
                   {{ end }}
+                  <h6 class="card-subtitle mb-2 text-muted">Created at {{ renderDate .CreatedAt }}</h6>  
                 <h6>{{ .Author.UserName }}</h6>
 
                 <p class="card-text">

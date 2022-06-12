@@ -78,7 +78,7 @@ th {
           style="width: 100%; display: block;" src="https://s3.amazonaws.com/runequeset{{ .CharacterModel.Image.Path }}"
           data-holder-rendered="true">
 
-            <p>Author: {{ $author.UserName }}</p>
+          <p>Created at {{ renderDate .CharacterModel.CreatedAt }} by {{ $author.UserName }}</p>
             <hr>
 
 

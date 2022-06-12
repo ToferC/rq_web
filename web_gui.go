@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gosimple/slug"
 	"github.com/russross/blackfriday/v2"
@@ -351,6 +352,12 @@ func toMarkdown(st string) template.HTML {
 	return output
 }
 
+func renderDate(dt time.Time) string {
+	date := dt.Format("2006-01-01")
+
+	return date
+}
+
 // Render combines templates, funcs and renders all Web pages in the app
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
@@ -375,6 +382,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"slugify":                      slugify,
 		"toMarkdown":                   toMarkdown,
 		"statBlock":                    statBlock,
+		"renderDate":                   renderDate,
 	}
 
 	baseTemplate := "templates/layout.html"

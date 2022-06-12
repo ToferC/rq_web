@@ -68,10 +68,10 @@
                 {{ if or (eq .Character.Role "Player Character") (eq .Character.Role "") }}
                 <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Homeland.Name }} {{if .Character.Occupation.Name }}| {{ .Character.Occupation.Name }}{{end}} {{ if .Character.Cult.Name }}| {{ .Character.Cult.Name }}{{ end }}</h6>
                   {{ else }}
-                  <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Role }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Role }}</h6>
                   {{ end }}
+                <h6 class="card-subtitle mb-2 text-muted">Created at {{ renderDate .CreatedAt }}</h6>  
                 <h6><a href="/user_open_roster/{{ .Author.ID }}">{{ .Author.UserName }}</a></h6>
-
                 <p class="card-text">
                   {{ toMarkdown (sliceString .Character.Description 144) }}
                 </p>
