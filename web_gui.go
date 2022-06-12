@@ -42,6 +42,8 @@ type WebUser struct {
 	UserCount      int
 	CharacterCount int
 	Index          string
+	limit          int
+	offset         int
 }
 
 // WebChar is a framework to send objects & data to a Web view

@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/go-pg/pg"
@@ -87,6 +88,25 @@ func ListUsers(db *pg.DB) ([]*models.User, error) {
 		n.Characters = countUserCharacterModels(db, n.UserName)
 	}
 	return users, nil
+}
+
+// PaginateUsers queries open Character names and add to slice
+func PaginateUsers(db *pg.DB, limit, offset int) ([]*models.User, error) {
+
+	var cms []*models.User
+
+	err := db.Model(&cms).
+		Limit(limit).
+		Offset(offset * limit).
+		Where("open = true").
+		Order("created_at DESC").
+		Select()
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return cms, nil
 }
 
 // PKLoadUser loads a single User from the DB by pk

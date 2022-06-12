@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/dghubble/gologin/google"
+	"github.com/gorilla/mux"
 
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/rq_web/database"
@@ -40,7 +42,21 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	users, err := database.ListUsers(db)
+	values := mux.Vars(req)
+
+	l := values["limit"]
+	limit, err := strconv.Atoi(l)
+	if err != nil {
+		limit = 66
+	}
+
+	o := values["offset"]
+	offset, err := strconv.Atoi(o)
+	if err != nil {
+		offset = 0
+	}
+
+	users, err := database.PaginateUsers(db, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -58,6 +74,8 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 		Users:          users,
 		UserCount:      len(users),
 		CharacterCount: characters,
+		limit:          limit,
+		offset:         offset,
 	}
 
 	Render(w, "templates/admin_view_users.html", wu)
