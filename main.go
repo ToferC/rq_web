@@ -16,8 +16,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 
-	"github.com/dghubble/gologin"
-	"github.com/dghubble/gologin/google"
+	gologin "github.com/dghubble/gologin/v2"
+	"github.com/dghubble/gologin/v2/google"
 	"golang.org/x/oauth2"
 	googleOAuth2 "golang.org/x/oauth2/google"
 

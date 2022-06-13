@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dghubble/gologin/google"
+	"github.com/dghubble/gologin/v2/google"
 	"github.com/gorilla/mux"
 
 	"github.com/thewhitetulip/Tasks/sessions"
