@@ -33,7 +33,7 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 	author, err := database.LoadUser(db, username)
 	if err != nil || username == "" || loggedIn == "false" {
 		fmt.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -74,7 +74,7 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	url := fmt.Sprintf("/view_character/%d", newCharacterModel.ID)
 
-	http.Redirect(w, req, url, 302)
+	http.Redirect(w, req, url, http.StatusFound)
 }
 
 // DuplicateCharacterHandler adds an open charactermodel to the individual user roster
@@ -98,7 +98,7 @@ func DuplicateCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	author, err := database.LoadUser(db, username)
 	if err != nil || username == "" || loggedIn == "false" {
 		fmt.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -144,5 +144,5 @@ func DuplicateCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	url := fmt.Sprintf("/view_character/%d", newCharacterModel.ID)
 
-	http.Redirect(w, req, url, 302)
+	http.Redirect(w, req, url, http.StatusFound)
 }

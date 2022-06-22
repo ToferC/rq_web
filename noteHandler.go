@@ -15,7 +15,7 @@ import (
 	"github.com/toferc/runequest"
 )
 
-// NoteIndexHandler renders the basic character roster page
+// NoteIndexHandler renders a list of notes under a character
 func NoteIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -79,7 +79,7 @@ func NoteIndexHandler(w http.ResponseWriter, req *http.Request) {
 	Render(w, "templates/notes_index.html", wv)
 }
 
-// NoteHandler renders a character in a Web page
+// NoteHandler renders a note in a Web page
 func NoteHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -138,7 +138,7 @@ func AddNoteHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -152,7 +152,7 @@ func AddNoteHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		// Add user message
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -251,7 +251,7 @@ func ModifyNoteHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -269,7 +269,7 @@ func ModifyNoteHandler(w http.ResponseWriter, req *http.Request) {
 	nt, err := database.SlugLoadNote(db, slug)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -294,7 +294,7 @@ func ModifyNoteHandler(w http.ResponseWriter, req *http.Request) {
 	if username == nt.AuthorUserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -357,7 +357,7 @@ func DeleteNoteHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -396,7 +396,7 @@ func DeleteNoteHandler(w http.ResponseWriter, req *http.Request) {
 	if username == nt.AuthorUserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

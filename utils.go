@@ -9,6 +9,9 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+
 	"github.com/toferc/runequest"
 
 	"github.com/gorilla/sessions"
@@ -71,7 +74,7 @@ func CreateUpdate(text string, value int) *runequest.Update {
 
 	update := &runequest.Update{
 		Date:  tString,
-		Event: fmt.Sprintf("%s", text),
+		Event: text,
 		Value: value,
 	}
 	fmt.Printf("Add Update: %s %d\n", text, value)
@@ -85,7 +88,7 @@ func createName(coreString string, userString string) string {
 	if userString != "" {
 		targetString = fmt.Sprintf("%s (%s)", coreString, userString)
 	} else {
-		targetString = fmt.Sprintf("%s", coreString)
+		targetString = coreString
 	}
 
 	return targetString
@@ -95,9 +98,9 @@ func createName(coreString string, userString string) string {
 func ProcessUserString(s string) string {
 	trimmed := strings.TrimSpace(s)
 	lower := strings.ToLower(trimmed)
-	title := strings.Title(lower)
+	title_case := cases.Title(language.English)
 
-	return title
+	return title_case.String(lower)
 }
 
 func readCSV(f string) []string {
@@ -128,7 +131,7 @@ func ChooseRandom(l int) int {
 }
 
 // ChooseFromStringArray takes an array of strings to choose from and an array of strings already chosen
-// it returns a slected string and an updated array of chosen stings
+// it returns a selected string and an updated array of chosen stings
 func ChooseFromStringArray(stringArray, chosenStrings []string) string {
 
 	fmt.Println("Choose string")
@@ -142,7 +145,7 @@ func ChooseFromStringArray(stringArray, chosenStrings []string) string {
 		target = stringArray[choice]
 	}
 
-	chosenStrings = append(chosenStrings, target)
+	//chosenStrings = append(chosenStrings, target)
 
 	return target
 }
@@ -158,7 +161,7 @@ func ChooseFromSkillArray(skillArray []*runequest.Skill, chosenInts []int) int {
 		choice = ChooseRandom(len(skillArray))
 	}
 
-	chosenInts = append(chosenInts, choice)
+	//chosenInts = append(chosenInts, choice)
 
 	return choice
 }

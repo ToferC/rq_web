@@ -220,7 +220,7 @@ func formatIntArray(a []int) string {
 
 func indexSpell(str string, spells []runequest.Spell) (int, error) {
 
-	err := errors.New("Spell Not Found")
+	err := errors.New("spell not found")
 
 	for i, spell := range spells {
 		if str == spell.CoreString {
@@ -288,9 +288,9 @@ func (s *skillSorter) Less(i, j int) bool {
 
 func splitSkills(skills map[string]*runequest.Skill) []map[string]*runequest.Skill {
 	split := []map[string]*runequest.Skill{
-		map[string]*runequest.Skill{},
-		map[string]*runequest.Skill{},
-		map[string]*runequest.Skill{},
+		{},
+		{},
+		{},
 	}
 
 	if len(skills) < 20 {

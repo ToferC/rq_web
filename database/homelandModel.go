@@ -13,7 +13,7 @@ import (
 func SaveHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 
 	if hl.Slug == "" {
-		hl.Slug = slug.Make(fmt.Sprintf("%s", hl.Homeland.Name))
+		hl.Slug = slug.Make(hl.Homeland.Name)
 	}
 
 	// Save character in Database
@@ -31,7 +31,7 @@ func SaveHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 func UpdateHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 
 	if hl.Slug == "" {
-		hl.Slug = slug.Make(fmt.Sprintf("%s", hl.Homeland.Name))
+		hl.Slug = slug.Make(hl.Homeland.Name)
 	}
 
 	err := db.Update(hl)

@@ -16,14 +16,14 @@ import (
 )
 
 // GetCharacterModels handles the basic roster rendering for the app
-func GetCharacterModels(w http.ResponseWriter, req *http.Request) {
+func GetCraftedCharacterModels(w http.ResponseWriter, req *http.Request) {
 
 	// Get session values or redirect to Login
 	session, err := sessions.Store.Get(req, "session")
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -41,12 +41,12 @@ func GetCharacterModels(w http.ResponseWriter, req *http.Request) {
 
 	/*
 		if username == "" {
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 	*/
 
-	cms, err := database.ListOpenCharacterModels(db)
+	cms, err := database.APICraftedCharacterModels(db)
 	if err != nil {
 		log.Println(err)
 	}
@@ -62,7 +62,7 @@ func GetUserCharacterModels(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -80,7 +80,7 @@ func GetUserCharacterModels(w http.ResponseWriter, req *http.Request) {
 
 	/*
 		if username == "" {
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 	*/
@@ -128,7 +128,7 @@ func GetCharacterModel(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -146,7 +146,7 @@ func GetCharacterModel(w http.ResponseWriter, req *http.Request) {
 
 	/*
 		if username == "" {
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 	*/
@@ -176,7 +176,7 @@ func CreateCharacterModel(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -193,7 +193,7 @@ func CreateCharacterModel(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(session)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -211,7 +211,7 @@ func CreateCharacterModel(w http.ResponseWriter, req *http.Request) {
 	err = json.NewDecoder(req.Body).Decode(cm)
 	if err != nil {
 		log.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -233,7 +233,7 @@ func UpdateCharacterModel(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -250,7 +250,7 @@ func UpdateCharacterModel(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(session)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -263,12 +263,12 @@ func UpdateCharacterModel(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 
-	cm, err := database.PKLoadCharacterModel(db, int64(pk))
+	cm, _ := database.PKLoadCharacterModel(db, int64(pk))
 
 	err = json.NewDecoder(req.Body).Decode(cm)
 	if err != nil {
 		log.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -289,7 +289,7 @@ func CharacterModelLikesHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -306,7 +306,7 @@ func CharacterModelLikesHandler(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(session)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -357,7 +357,7 @@ func DeleteCharacterModel(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -374,7 +374,7 @@ func DeleteCharacterModel(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(session)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

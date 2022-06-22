@@ -13,7 +13,7 @@ import (
 func SaveCultModel(db *pg.DB, cl *models.CultModel) error {
 
 	if cl.Slug == "" {
-		cl.Slug = slug.Make(fmt.Sprintf("%s", cl.Cult.Name))
+		cl.Slug = slug.Make(cl.Cult.Name)
 	}
 
 	// Save character in Database
@@ -31,7 +31,7 @@ func SaveCultModel(db *pg.DB, cl *models.CultModel) error {
 func UpdateCultModel(db *pg.DB, cl *models.CultModel) error {
 
 	if cl.Slug == "" {
-		cl.Slug = slug.Make(fmt.Sprintf("%s", cl.Cult.Name))
+		cl.Slug = slug.Make(cl.Cult.Name)
 	}
 
 	err := db.Update(cl)

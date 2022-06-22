@@ -23,7 +23,7 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -38,7 +38,7 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(session)
 
 	if isAdmin != "true" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -114,7 +114,7 @@ func googleLoginFunc() http.Handler {
 		session.Save(req, w)
 		log.Print("user ", googleUser.Name, " is authenticated")
 		fmt.Println(session.Values)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 	return http.HandlerFunc(fn)
@@ -133,7 +133,7 @@ func LogoutFunc(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Logged Out")
 		}
 	}
-	http.Redirect(w, req, "/", 302)
+	http.Redirect(w, req, "/", http.StatusFound)
 	// Redirect to main page
 }
 
@@ -178,7 +178,7 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 			user, err := database.LoadUser(db, username)
 			if err != nil {
 				fmt.Println(err)
-				http.Redirect(w, req, "/", 302)
+				http.Redirect(w, req, "/", http.StatusFound)
 				return
 			}
 
@@ -191,7 +191,7 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 			session.Save(req, w)
 			log.Print("user ", username, " is authenticated")
 			fmt.Println(session.Values)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		} else {
 			log.Print("Invalid user " + username)
@@ -233,7 +233,7 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		email := req.Form.Get("email")
 
 		if len(username) < 2 || len(username) > 24 || len(rawpassword) < 2 {
-			http.Redirect(w, req, "/signup/", 302)
+			http.Redirect(w, req, "/signup/", http.StatusFound)
 			return
 		}
 
@@ -260,7 +260,7 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 			session.Save(req, w)
 			log.Print("user ", username, " is authenticated")
 			fmt.Println(session.Values)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 	} else if req.Method == "GET" {

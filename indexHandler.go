@@ -45,7 +45,7 @@ func CraftedCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 		offset = 0
 	}
 
-	characters, err := database.ListCraftedCharacterModels(db, limit, offset)
+	characters, err := database.PaginateCraftedCharacterModels(db, limit, offset)
 	if err != nil {
 		panic(err)
 	}
@@ -209,7 +209,7 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

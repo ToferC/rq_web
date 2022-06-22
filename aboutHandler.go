@@ -17,7 +17,7 @@ func AboutHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}

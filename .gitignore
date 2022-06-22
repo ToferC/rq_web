@@ -20,3 +20,6 @@
 
 heroku
 heroku.pub
+
+# Data files
+characters.json

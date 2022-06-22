@@ -284,7 +284,7 @@ func main() {
 	r.HandleFunc("/delete_user/{id}", DeleteUserHandler)
 
 	// API
-	r.HandleFunc("/api/character", GetCharacterModels).Methods("GET")
+	r.HandleFunc("/api/character", GetCraftedCharacterModels).Methods("GET")
 	r.HandleFunc("/api/character/user/{id}", GetUserCharacterModels).Methods("GET")
 	r.HandleFunc("/api/character/{id}", GetCharacterModel).Methods("GET")
 	r.HandleFunc("/api/character/{id}", CreateCharacterModel).Methods("POST")

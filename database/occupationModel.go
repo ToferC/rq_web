@@ -13,7 +13,7 @@ import (
 func SaveOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 
 	if oc.Slug == "" {
-		oc.Slug = slug.Make(fmt.Sprintf("%s", oc.Occupation.Name))
+		oc.Slug = slug.Make(oc.Occupation.Name)
 	}
 
 	// Save character in Database
@@ -31,7 +31,7 @@ func SaveOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 func UpdateOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 
 	if oc.Slug == "" {
-		oc.Slug = slug.Make(fmt.Sprintf("%s", oc.Occupation.Name))
+		oc.Slug = slug.Make(oc.Occupation.Name)
 	}
 
 	err := db.Update(oc)

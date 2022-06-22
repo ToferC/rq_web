@@ -65,7 +65,7 @@ func HomelandListHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -104,7 +104,7 @@ func HomelandListHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cm.Author.UserName {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -235,7 +235,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -249,7 +249,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		// Add user message
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -268,7 +268,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	user, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -618,7 +618,7 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		author, err := database.LoadUser(db, username)
 		if err != nil {
 			fmt.Println(err)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 
@@ -647,7 +647,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -685,7 +685,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if username == hl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1124,7 +1124,7 @@ func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -1161,7 +1161,7 @@ func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	if username == hl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

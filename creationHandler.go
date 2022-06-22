@@ -35,7 +35,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -46,7 +46,7 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	author, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -269,7 +269,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -472,7 +472,7 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "templates/login.html", 302)
+		http.Redirect(w, req, "templates/login.html", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -485,7 +485,7 @@ func ChooseRunesHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -643,7 +643,7 @@ func RollStatisticsHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -786,7 +786,7 @@ func ApplyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	session.Save(req, w)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1034,7 +1034,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	session.Save(req, w)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1293,7 +1293,7 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 	session.Save(req, w)
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1719,7 +1719,7 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1956,7 +1956,7 @@ func FinishingTouchesHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

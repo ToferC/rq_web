@@ -64,7 +64,7 @@ func CultListHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -103,7 +103,7 @@ func CultListHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cm.Author.UserName {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -239,7 +239,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -253,7 +253,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		// Add user message
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -310,7 +310,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		user, err := database.LoadUser(db, username)
 		if err != nil {
 			fmt.Println(err)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 
@@ -715,7 +715,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 		author, err := database.LoadUser(db, username)
 		if err != nil {
 			fmt.Println(err)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 
@@ -744,7 +744,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -782,7 +782,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1295,7 +1295,7 @@ func DeleteCultHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -1332,7 +1332,7 @@ func DeleteCultHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cl.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

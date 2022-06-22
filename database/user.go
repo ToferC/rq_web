@@ -51,7 +51,7 @@ func LoadUser(db *pg.DB, username string) (*models.User, error) {
 		}
 		return user, nil
 	} else {
-		return nil, fmt.Errorf("Incorrect Username")
+		return nil, fmt.Errorf("incorrect username")
 	}
 }
 

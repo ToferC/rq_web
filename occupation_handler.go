@@ -64,7 +64,7 @@ func OccupationListHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -103,7 +103,7 @@ func OccupationListHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cm.Author.UserName {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -234,7 +234,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -248,7 +248,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		// Add user message
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -296,7 +296,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		user, err := database.LoadUser(db, username)
 		if err != nil {
 			fmt.Println(err)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 
@@ -586,7 +586,7 @@ func AddOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		author, err := database.LoadUser(db, username)
 		if err != nil {
 			fmt.Println(err)
-			http.Redirect(w, req, "/", 302)
+			http.Redirect(w, req, "/", http.StatusFound)
 			return
 		}
 
@@ -615,7 +615,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -653,7 +653,7 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	if username == oc.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -688,10 +688,10 @@ func ModifyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 		for i := len(oc.Occupation.SkillChoices); i < 5; i++ {
 			tempSkillChoice := runequest.SkillChoice{
 				Skills: []runequest.Skill{
-					runequest.Skill{
+					{
 						Name: "default",
 					},
-					runequest.Skill{
+					{
 						Name: "default",
 					},
 				},
@@ -1083,7 +1083,7 @@ func DeleteOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -1120,7 +1120,7 @@ func DeleteOccupationHandler(w http.ResponseWriter, req *http.Request) {
 	if username == oc.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

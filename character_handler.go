@@ -310,7 +310,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		http.Redirect(w, req, "/login/", 302)
+		http.Redirect(w, req, "/login/", http.StatusFound)
 		return
 		// in case of error
 	}
@@ -349,7 +349,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cm.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -761,7 +761,7 @@ func AddSkillsHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -940,7 +940,7 @@ func AddPassionsHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1100,7 +1100,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -1467,7 +1467,7 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	if username == cm.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 

@@ -34,14 +34,14 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 	isAdmin := sessionMap["isAdmin"]
 
 	if username == "" {
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
 	author, err := database.LoadUser(db, username)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, req, "/", 302)
+		http.Redirect(w, req, "/", http.StatusFound)
 		return
 	}
 
@@ -219,21 +219,15 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 				parentCult := cultModel.Cult.ParentCult
 				if parentCult != nil {
 					// Add SubCult skills
-					for _, s := range cultModel.Cult.Skills {
-						parentCult.Skills = append(parentCult.Skills, s)
-					}
+					parentCult.Skills = append(parentCult.Skills, cultModel.Cult.Skills...)
 					// Add SubCult weapons
-					for _, w := range cultModel.Cult.Weapons {
-						parentCult.Weapons = append(parentCult.Weapons, w)
-					}
+					parentCult.Weapons = append(parentCult.Weapons, cultModel.Cult.Weapons...)
+
 					// Add SubCult RuneSpells
-					for _, rs := range cultModel.Cult.RuneSpells {
-						parentCult.RuneSpells = append(parentCult.RuneSpells, rs)
-					}
+					parentCult.RuneSpells = append(parentCult.RuneSpells, cultModel.Cult.RuneSpells...)
+
 					// Add SubCult SpiritMagic
-					for _, sm := range cultModel.Cult.SpiritMagic {
-						parentCult.SpiritMagic = append(parentCult.SpiritMagic, sm)
-					}
+					parentCult.SpiritMagic = append(parentCult.SpiritMagic, cultModel.Cult.SpiritMagic...)
 
 					// Set Details to ParentCult
 					parentCult.Name = cultModel.Cult.Name
@@ -818,9 +812,7 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 
 			// Equipment
 			if len(c.Occupation.Equipment) > 0 {
-				for _, e := range c.Occupation.Equipment {
-					c.Equipment = append(c.Equipment, e)
-				}
+				c.Equipment = append(c.Equipment, c.Occupation.Equipment...)
 			}
 
 			c.Income = c.Occupation.Income
@@ -888,14 +880,11 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 			}
 
 			// Add Associated Cult spells
-			totalSpiritMagic := []*runequest.Spell{}
 
-			totalSpiritMagic = c.Cult.SpiritMagic
+			totalSpiritMagic := c.Cult.SpiritMagic
 
 			for _, ac := range c.Cult.AssociatedCults {
-				for _, spell := range ac.SpiritMagic {
-					totalSpiritMagic = append(totalSpiritMagic, spell)
-				}
+				totalSpiritMagic = append(totalSpiritMagic, ac.SpiritMagic...)
 			}
 
 			mSP := c.Cult.NumSpiritMagic
