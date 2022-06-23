@@ -69,7 +69,7 @@ func init() {
 			saveModel(sc, h+"MaleModel.json")
 		}
 
-		if _, err := os.Stat(h + "MaleModel.json"); err == nil {
+		if _, err := os.Stat(h + "FemaleModel.json"); err == nil {
 			continue
 		} else {
 			sc := buildModel(3, h+"_female_names.txt")

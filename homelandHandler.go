@@ -283,15 +283,15 @@ func AddHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	// Add empty Movement's to homeland
 	if len(hl.Homeland.Movement) == 0 {
 		hl.Homeland.Movement = []runequest.Movement{
-			runequest.Movement{
+			{
 				Name:  "Ground",
 				Value: 8,
 			},
-			runequest.Movement{
+			{
 				Name:  "",
 				Value: 0,
 			},
-			runequest.Movement{
+			{
 				Name:  "",
 				Value: 0,
 			},
@@ -718,10 +718,10 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 		for i := len(hl.Homeland.SkillChoices); i < 4; i++ {
 			tempSkillChoice := runequest.SkillChoice{
 				Skills: []runequest.Skill{
-					runequest.Skill{
+					{
 						Name: "default",
 					},
-					runequest.Skill{
+					{
 						Name: "default",
 					},
 				},
@@ -733,7 +733,7 @@ func ModifyHomelandHandler(w http.ResponseWriter, req *http.Request) {
 	// Add empty Movement's to homeland
 	if len(hl.Homeland.Movement) == 0 {
 		hl.Homeland.Movement = []runequest.Movement{
-			runequest.Movement{
+			{
 				Name:  "Ground",
 				Value: 8,
 			},
@@ -1189,7 +1189,7 @@ func DeleteHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Deleted Homeland")
 		}
 
-		url := fmt.Sprint("/homeland_index/")
+		url := "/homeland_index/"
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

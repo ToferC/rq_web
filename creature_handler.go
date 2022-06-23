@@ -325,7 +325,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 	cm.Character = c
 
 	c.Abilities = map[string]*runequest.Ability{
-		"Reputation": &runequest.Ability{
+		"Reputation": {
 			CoreString: "Reputation",
 			Type:       "Base",
 			Value:      5,
@@ -380,7 +380,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			UserString: "",
 			Cost:       0,
 		}
-		c.RuneSpells["zzNewRS-"+string(i)] = trs
+		c.RuneSpells["zzNewRS-"+fmt.Sprint(i)] = trs
 	}
 
 	// Add extra spirit magic
@@ -392,7 +392,7 @@ func NewCreatureHandler(w http.ResponseWriter, req *http.Request) {
 			Cost:       0,
 		}
 		tsm.Name = createName(tsm.CoreString, tsm.UserString)
-		c.SpiritMagic["zzNewSM-"+string(i)] = tsm
+		c.SpiritMagic["zzNewSM-"+fmt.Sprint(i)] = tsm
 	}
 
 	wc := WebChar{

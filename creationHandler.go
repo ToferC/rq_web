@@ -167,21 +167,16 @@ func ChooseHomelandHandler(w http.ResponseWriter, req *http.Request) {
 			parentCult := cultModel.Cult.ParentCult
 			if parentCult != nil {
 				// Add SubCult skills
-				for _, s := range cultModel.Cult.Skills {
-					parentCult.Skills = append(parentCult.Skills, s)
-				}
+				parentCult.Skills = append(parentCult.Skills, cultModel.Cult.Skills...)
+
 				// Add SubCult weapons
-				for _, w := range cultModel.Cult.Weapons {
-					parentCult.Weapons = append(parentCult.Weapons, w)
-				}
+				parentCult.Weapons = append(parentCult.Weapons, c.Cult.Weapons...)
+
 				// Add SubCult RuneSpells
-				for _, rs := range cultModel.Cult.RuneSpells {
-					parentCult.RuneSpells = append(parentCult.RuneSpells, rs)
-				}
+				parentCult.RuneSpells = append(parentCult.RuneSpells, c.Cult.RuneSpells...)
+
 				// Add SubCult SpiritMagic
-				for _, sm := range cultModel.Cult.SpiritMagic {
-					parentCult.SpiritMagic = append(parentCult.SpiritMagic, sm)
-				}
+				parentCult.SpiritMagic = append(parentCult.SpiritMagic, c.Cult.SpiritMagic...)
 
 				// Set Details to ParentCult
 				parentCult.Name = cultModel.Cult.Name
@@ -343,7 +338,7 @@ func PersonalHistoryHandler(w http.ResponseWriter, req *http.Request) {
 			c.Equipment = append(c.Equipment, fmt.Sprintf("History: %d Lunars", lunars))
 		}
 
-		str = fmt.Sprintf("Reputation")
+		str = "Reputation"
 		rep, err := strconv.Atoi(req.FormValue(str))
 		if err != nil {
 			rep = 0
@@ -1244,9 +1239,7 @@ func ApplyOccupationHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Equipment
 		if len(c.Occupation.Equipment) > 0 {
-			for _, e := range c.Occupation.Equipment {
-				c.Equipment = append(c.Equipment, e)
-			}
+			c.Equipment = append(c.Equipment, c.Occupation.Equipment...)
 		}
 
 		c.Income = c.Occupation.Income
@@ -1329,14 +1322,12 @@ func ApplyCultHandler(w http.ResponseWriter, req *http.Request) {
 	numSpiritMagic := numToArray(5)
 
 	// Add Associated Cult spells
-	totalSpiritMagic := []*runequest.Spell{}
+	var totalSpiritMagic []*runequest.Spell
 
 	totalSpiritMagic = c.Cult.SpiritMagic
 
 	for _, ac := range c.Cult.AssociatedCults {
-		for _, spell := range ac.SpiritMagic {
-			totalSpiritMagic = append(totalSpiritMagic, spell)
-		}
+		totalSpiritMagic = append(totalSpiritMagic, ac.SpiritMagic...)
 	}
 
 	wc := WebChar{
@@ -1836,9 +1827,6 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 					c.Skills[sk.Name].UpdateSkill()
 				}
 
-				// Potential error here - Insight (Human)
-				s = c.Skills[targetString]
-
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")
 
@@ -1900,8 +1888,6 @@ func PersonalSkillsHandler(w http.ResponseWriter, req *http.Request) {
 					c.Skills[sk.Name] = sk
 					c.Skills[sk.Name].UpdateSkill()
 				}
-
-				s = c.Skills[targetString]
 
 				t := time.Now()
 				tString := t.Format("2006-01-02 15:04:05")

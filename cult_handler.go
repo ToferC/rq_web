@@ -336,7 +336,7 @@ func AddCultHandler(w http.ResponseWriter, req *http.Request) {
 			cl.Cult.SubCult = false
 		}
 
-		parentCultModel := &models.CultModel{}
+		var parentCultModel *models.CultModel
 
 		if cl.Cult.SubCult {
 			// Set ParentCult
@@ -806,10 +806,10 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 		for i := len(cl.Cult.SkillChoices); i < 4; i++ {
 			tempSkillChoice := runequest.SkillChoice{
 				Skills: []runequest.Skill{
-					runequest.Skill{
+					{
 						Name: "default",
 					},
-					runequest.Skill{
+					{
 						Name: "default",
 					},
 				},
@@ -885,7 +885,7 @@ func ModifyCultHandler(w http.ResponseWriter, req *http.Request) {
 			cl.Cult.SubCult = false
 		}
 
-		parentCultModel := &models.CultModel{}
+		var parentCultModel *models.CultModel
 
 		if cl.Cult.SubCult {
 			// Set ParentCult
@@ -1360,7 +1360,7 @@ func DeleteCultHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Deleted Cult")
 		}
 
-		url := fmt.Sprint("/cult_index/")
+		url := "/cult_index/"
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

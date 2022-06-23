@@ -84,7 +84,7 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 func googleLoginFunc() http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
 
-		session, err := sessions.Store.Get(req, "session")
+		session, _ := sessions.Store.Get(req, "session")
 
 		ctx := req.Context()
 		googleUser, err := google.UserFromContext(ctx)

@@ -248,7 +248,8 @@ func ResizeImages(db *pg.DB) error {
 		fmt.Println("Downloading image")
 
 		if cm.Image != nil {
-			downloader := s3manager.NewDownloader(session.New())
+			sess := session.Must(session.NewSession())
+			downloader := s3manager.NewDownloader(sess)
 			_, err := downloader.Download(buff,
 				&s3.GetObjectInput{
 					Bucket: aws.String("runequeset"),

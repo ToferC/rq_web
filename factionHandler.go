@@ -175,7 +175,7 @@ func AddFactionHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	cms, err := database.ListOpenCharacterModels(db)
+	cms, _ := database.ListOpenCharacterModels(db)
 
 	factions, err := database.ListFactions(db)
 	if err != nil {
@@ -288,7 +288,7 @@ func ModifyFactionHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	cms, err := database.ListOpenCharacterModels(db)
+	cms, _ := database.ListOpenCharacterModels(db)
 
 	// Add empty CharacterModel options if < 10
 	if len(factionCharacters) < 10 {
@@ -428,7 +428,7 @@ func DeleteFactionHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Deleted Faction")
 		}
 
-		url := fmt.Sprint("/faction_index/")
+		url := "/faction_index/"
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

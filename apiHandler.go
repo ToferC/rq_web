@@ -319,7 +319,7 @@ func CharacterModelLikesHandler(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 
-	cm, err := database.PKLoadCharacterModel(db, int64(pk))
+	cm, _ := database.PKLoadCharacterModel(db, int64(pk))
 
 	if req.Method == "PUT" {
 		_, ok := cm.LikeData[username]

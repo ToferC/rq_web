@@ -1148,7 +1148,7 @@ func DeleteOccupationHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Deleted Occupation")
 		}
 
-		url := fmt.Sprint("/occupation_index/")
+		url := "/occupation_index/"
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

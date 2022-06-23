@@ -358,7 +358,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	// Add empty Movement's to character if needed
 	if len(c.Movement) == 0 {
 		c.Movement = []*runequest.Movement{
-			&runequest.Movement{
+			{
 				Name:  "Ground",
 				Value: 8,
 			},
@@ -1161,7 +1161,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 			UserString: "",
 			Cost:       0,
 		}
-		c.RuneSpells["zzNewRS-"+string(i)] = trs
+		c.RuneSpells["zzNewRS-"+fmt.Sprint(i)] = trs
 	}
 
 	// Add extra spirit magic
@@ -1173,7 +1173,7 @@ func EditMagicHandler(w http.ResponseWriter, req *http.Request) {
 			Cost:       0,
 		}
 		tsm.Name = createName(tsm.CoreString, tsm.UserString)
-		c.SpiritMagic["zzNewSM-"+string(i)] = tsm
+		c.SpiritMagic["zzNewSM-"+fmt.Sprint(i)] = tsm
 	}
 
 	// Add extra Powers

@@ -426,7 +426,7 @@ func DeleteEncounterHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Deleted Encounter")
 		}
 
-		url := fmt.Sprint("/encounter_index/")
+		url := "/encounter_index/"
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

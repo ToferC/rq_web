@@ -431,7 +431,7 @@ func DeleteNoteHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Updated CharacterModel")
 		}
 
-		url := fmt.Sprint("/")
+		url := "/"
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

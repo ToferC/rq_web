@@ -271,7 +271,7 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 			c.Role = "Player Character"
 
 			// Choose Runes
-			runeValueArray := []int{}
+			var runeValueArray []int
 			boostRunes := 0
 
 			runesChosen := []string{}
@@ -1190,7 +1190,7 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 			case "Heroic":
 				for i, ss := range sortedSkillArray {
 					roll := runequest.RollDice(6, 1, 0, 1)
-					s := &runequest.Skill{}
+					var s *runequest.Skill
 					switch {
 					case i <= 3:
 						if ss.CoreString == "Speak" || roll >= 6 {
@@ -1202,17 +1202,18 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 					case i <= 8:
 						if ss.CoreString == "Speak" || roll >= 6 {
 							s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]
+						} else {
 							s = c.Skills[ss.Name]
 						}
 						s.AddSkillUpdate("Heroic Skill 10", 10)
 					default:
-						break
+
 					}
 				}
 			case "Epic":
 				for i, ss := range sortedSkillArray {
 					roll := runequest.RollDice(6, 1, 0, 1)
-					s := &runequest.Skill{}
+					var s *runequest.Skill
 					switch {
 					case i <= 7:
 						if ss.CoreString == "Speak" || roll >= 6 {
@@ -1236,14 +1237,14 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 						}
 						s.AddSkillUpdate("Epic Skill 10", 10)
 					default:
-						break
+
 					}
 				}
 			default:
 				// Common Character
 				for i, ss := range sortedSkillArray {
 					roll := runequest.RollDice(6, 1, 0, 1)
-					s := &runequest.Skill{}
+					var s *runequest.Skill
 					if i <= 5 {
 						if ss.CoreString == "Speak" || roll >= 6 {
 							s = c.Skills[ChooseFromStringArray(skillNames, chosenSkills)]

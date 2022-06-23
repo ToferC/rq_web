@@ -76,7 +76,7 @@ func BoundSpiritHandler(w http.ResponseWriter, req *http.Request) {
 				Cost:       0,
 			}
 			tsm.Name = createName(tsm.CoreString, tsm.UserString)
-			bs.SpiritMagicSpells["zzNewSM-"+string(i)] = tsm
+			bs.SpiritMagicSpells["zzNewSM-"+fmt.Sprint(i)] = tsm
 		}
 	}
 
@@ -102,7 +102,7 @@ func BoundSpiritHandler(w http.ResponseWriter, req *http.Request) {
 				Cost:       0,
 			}
 			tsm.Name = createName(tsm.CoreString, tsm.UserString)
-			bs.SpiritMagicSpells["zzNewSM-"+string(i)] = tsm
+			bs.SpiritMagicSpells["zzNewSM-"+fmt.Sprint(i)] = tsm
 		}
 
 		c.BoundSpirits = append(c.BoundSpirits, bs)
