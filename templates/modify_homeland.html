@@ -140,7 +140,7 @@
 
 
               <hr>
-              {{ if .IsAdmin }}
+              {{ if eq .IsAdmin "true" }}
               <br><strong>Official Homeland?</strong> <input type="checkbox" name="Official" id="checkbox" {{ if .HomelandModel.Official }}checked{{ end }}>
               {{ end }}
 

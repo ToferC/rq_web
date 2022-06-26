@@ -86,7 +86,7 @@
                 </div>
                 <hr>
               
-              {{ if .IsAdmin }}
+              {{ if eq .IsAdmin "true" }}
               <br><strong>Official Occupation?</strong> <input type="checkbox" name="Official" value="true" id="checkbox" {{ if .OccupationModel.Official }}checked{{ end }}>
               {{ end }}              
               <hr>

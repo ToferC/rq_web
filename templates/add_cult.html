@@ -53,7 +53,7 @@
                   </div>
             </div>
 
-              {{ if .IsAdmin }}
+              {{ if eq .IsAdmin "true" }}
               <br><strong>Official Cult?</strong> <input type="checkbox" name="Official" value="true" id="checkbox">
               {{ end }}
               

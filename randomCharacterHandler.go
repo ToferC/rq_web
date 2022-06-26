@@ -865,21 +865,23 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		cSP := 0
 
-		for {
-			index := ChooseRandom(len(c.Cult.SpiritMagic))
+		if len(c.Cult.SpiritMagic) > 0 {
+			for {
+				index := ChooseRandom(len(c.Cult.SpiritMagic))
 
-			baseSpell := totalSpiritMagic[index]
+				baseSpell := totalSpiritMagic[index]
 
-			if baseSpell.Variable {
-				pts := runequest.RollDice(mSP-cSP, 1, 0, 1)
-				baseSpell.Cost = pts
-			}
+				if baseSpell.Variable {
+					pts := runequest.RollDice(mSP-cSP, 1, 0, 1)
+					baseSpell.Cost = pts
+				}
 
-			baseSpell.GenerateName()
-			c.SpiritMagic[baseSpell.Name] = baseSpell
-			cSP += baseSpell.Cost
-			if cSP >= mSP {
-				break
+				baseSpell.GenerateName()
+				c.SpiritMagic[baseSpell.Name] = baseSpell
+				cSP += baseSpell.Cost
+				if cSP >= mSP {
+					break
+				}
 			}
 		}
 
