@@ -54,9 +54,8 @@ func ListCultModels(db *pg.DB) (map[string]*models.CultModel, error) {
 	clMap := map[string]*models.CultModel{}
 
 	// Create Map
-	for i, cl := range cults {
+	for _, cl := range cults {
 		clMap[runequest.ToSnakeCase(cl.Cult.Name)] = cl
-		fmt.Println(i, cl.Cult.Name)
 	}
 	return clMap, nil
 }
@@ -74,9 +73,8 @@ func ListOfficialCultModels(db *pg.DB) (map[string]*models.CultModel, error) {
 	clMap := map[string]*models.CultModel{}
 
 	// Create Map
-	for i, cl := range cults {
+	for _, cl := range cults {
 		clMap[runequest.ToSnakeCase(cl.Cult.Name)] = cl
-		fmt.Println(i, cl.Cult.Name)
 	}
 	return clMap, nil
 }
