@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/go-pg/pg"
-	"github.com/go-pg/pg/orm"
+	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg/v10/orm"
 	"github.com/toferc/rq_web/models"
 )
 
@@ -76,7 +76,7 @@ func createSchema(db *pg.DB) error {
 		(*models.Campaign)(nil),
 		(*models.Note)(nil),
 		(*models.User)(nil)} {
-		err := db.CreateTable(model, &orm.CreateTableOptions{
+		err := db.Model(model).CreateTable(&orm.CreateTableOptions{
 			Temp:        false,
 			IfNotExists: true,
 		})

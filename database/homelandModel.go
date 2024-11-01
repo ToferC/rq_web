@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
@@ -34,7 +34,7 @@ func UpdateHomelandModel(db *pg.DB, hl *models.HomelandModel) error {
 		hl.Slug = slug.Make(hl.Homeland.Name)
 	}
 
-	err := db.Update(hl)
+	_, err := db.Model(hl).Update()
 	if err != nil {
 		panic(err)
 	}
@@ -102,7 +102,7 @@ func LoadHomelandModel(db *pg.DB, slug string) (*models.HomelandModel, error) {
 func PKLoadHomelandModel(db *pg.DB, pk int64) (*models.HomelandModel, error) {
 	// Select user by Primary Key
 	homeland := &models.HomelandModel{ID: pk}
-	err := db.Select(homeland)
+	err := db.Model(homeland).WherePK().Select()
 
 	if err != nil {
 		return &models.HomelandModel{}, err
@@ -119,7 +119,7 @@ func DeleteHomelandModel(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting Homeland...")
 
-	err := db.Delete(&pow)
+	_, err := db.Model(&pow).WherePK().Delete()
 
 	return err
 }

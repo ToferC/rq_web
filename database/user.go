@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/toferc/rq_web/models"
 )
 
@@ -26,7 +26,7 @@ func SaveUser(db *pg.DB, u *models.User) error {
 //UpdateUser updates user info
 func UpdateUser(db *pg.DB, u *models.User) error {
 
-	err := db.Update(u)
+	_, err := db.Model(u).WherePK().Update()
 	if err != nil {
 		panic(err)
 	}
@@ -116,7 +116,7 @@ func PaginateUsers(db *pg.DB, limit, offset int) ([]*models.User, error) {
 func PKLoadUser(db *pg.DB, pk int64) (*models.User, error) {
 	// Select user by Primary Key
 	user := &models.User{ID: pk}
-	err := db.Select(user)
+	err := db.Model(user).WherePK().Select()
 
 	if err != nil {
 		return &models.User{UserName: "New"}, err
@@ -133,7 +133,7 @@ func DeleteUser(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting User...")
 
-	err := db.Delete(&user)
+	_, err := db.Model(&user).WherePK().Delete()
 
 	return err
 }

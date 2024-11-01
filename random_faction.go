@@ -167,7 +167,9 @@ func RandomFactionHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("HOMELAND: " + c.Homeland.Name)
 
 			// Name generation
-			name, description := generateBackground(c, scale)
+			name, description := generateBackground(c.Homeland.Name, scale)
+
+			name = fmt.Sprint(name + "_", i)
 
 			c.Name = name
 			c.Description = description

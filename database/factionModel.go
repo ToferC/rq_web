@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/toferc/rq_web/models"
 )
 
@@ -24,7 +24,7 @@ func SaveFaction(db *pg.DB, fac *models.Faction) error {
 // UpdateFaction updates a runequest faction
 func UpdateFaction(db *pg.DB, fac *models.Faction) error {
 
-	err := db.Update(fac)
+	_, err := db.Model(fac).WherePK().Update()
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func ListUserFactions(db *pg.DB, username string) ([]*models.Faction, error) {
 func PKLoadFaction(db *pg.DB, pk int64) (*models.Faction, error) {
 	// Select user by Primary Key
 	fac := &models.Faction{ID: pk}
-	err := db.Select(fac)
+	err := db.Model(fac).WherePK().Select()
 
 	if err != nil {
 		fmt.Println(err)
@@ -124,7 +124,7 @@ func DeleteFaction(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting faction...")
 
-	err := db.Delete(&fac)
+	_, err := db.Model(&fac).WherePK().Delete()
 
 	return err
 }

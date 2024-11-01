@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
@@ -34,7 +34,7 @@ func UpdateCultModel(db *pg.DB, cl *models.CultModel) error {
 		cl.Slug = slug.Make(cl.Cult.Name)
 	}
 
-	err := db.Update(cl)
+	_, err := db.Model(cl).WherePK().Update()
 	if err != nil {
 		panic(err)
 	}
@@ -100,7 +100,7 @@ func LoadCultModel(db *pg.DB, slug string) (*models.CultModel, error) {
 func PKLoadCultModel(db *pg.DB, pk int64) (*models.CultModel, error) {
 	// Select user by Primary Key
 	cult := &models.CultModel{ID: pk}
-	err := db.Select(cult)
+	err := db.Model(cult).WherePK().Select()
 
 	if err != nil {
 		return &models.CultModel{}, err
@@ -117,7 +117,7 @@ func DeleteCultModel(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting Cult...")
 
-	err := db.Delete(&pow)
+	_, err := db.Model(&pow).WherePK().Delete()
 
 	return err
 }

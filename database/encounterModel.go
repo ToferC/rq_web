@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/toferc/rq_web/models"
 )
 
@@ -24,7 +24,7 @@ func SaveEncounter(db *pg.DB, enc *models.Encounter) error {
 // UpdateEncounter updates a runequest encounter
 func UpdateEncounter(db *pg.DB, enc *models.Encounter) error {
 
-	err := db.Update(enc)
+	_, err := db.Model(enc).Update()
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func ListUserEncounters(db *pg.DB, username string) ([]*models.Encounter, error)
 func PKLoadEncounter(db *pg.DB, pk int64) (*models.Encounter, error) {
 	// Select user by Primary Key
 	enc := &models.Encounter{ID: pk}
-	err := db.Select(enc)
+	err := db.Model(enc).Select()
 
 	if err != nil {
 		fmt.Println(err)
@@ -96,7 +96,7 @@ func DeleteEncounter(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting encounter...")
 
-	err := db.Delete(&enc)
+	_, err := db.Model(&enc).Delete()
 
 	return err
 }

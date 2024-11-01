@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"

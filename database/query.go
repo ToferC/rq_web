@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/toferc/rq_web/models"
 )
 

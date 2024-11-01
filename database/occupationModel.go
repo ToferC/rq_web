@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
@@ -34,7 +34,7 @@ func UpdateOccupationModel(db *pg.DB, oc *models.OccupationModel) error {
 		oc.Slug = slug.Make(oc.Occupation.Name)
 	}
 
-	err := db.Update(oc)
+	_, err := db.Model(oc).WherePK().Update()
 	if err != nil {
 		panic(err)
 	}
@@ -102,7 +102,7 @@ func LoadOccupationModel(db *pg.DB, slug string) (*models.OccupationModel, error
 func PKLoadOccupationModel(db *pg.DB, pk int64) (*models.OccupationModel, error) {
 	// Select user by Primary Key
 	occupation := &models.OccupationModel{ID: pk}
-	err := db.Select(occupation)
+	err := db.Model(occupation).WherePK().Select()
 
 	if err != nil {
 		return &models.OccupationModel{}, err
@@ -119,7 +119,7 @@ func DeleteOccupationModel(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting Occupation...")
 
-	err := db.Delete(&pow)
+	_, err := db.Model(&pow).WherePK().Delete()
 
 	return err
 }

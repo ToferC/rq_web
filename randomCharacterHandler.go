@@ -136,11 +136,15 @@ func RandomCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c.Homeland = hl.Homeland
 		fmt.Println("HOMELAND: " + c.Homeland.Name)
 
-		name, description := generateBackground(c, scale)
+		name, description := generateBackground(c.Homeland.Name, scale)
+
+		fmt.Println("Background generation complete")
 
 		// Name generation
 		c.Name = name
 		c.Description = description
+
+		fmt.Println(c.Name + ": " + c.Description)
 
 		// Set Occupation
 		ocStr := req.FormValue("OCStr")

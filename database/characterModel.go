@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/gosimple/slug"
 	"github.com/toferc/rq_web/models"
 	"github.com/toferc/runequest"
@@ -98,7 +98,7 @@ func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 		cm.Slug = slug.Make(fmt.Sprintf("%s-%s", cm.Author.UserName, cm.Character.Name))
 	}
 
-	err := db.Update(cm)
+	_, err := db.Model(cm).WherePK().Update()
 	if err != nil {
 		log.Println(err)
 	}
@@ -320,7 +320,7 @@ func countUserCharacterModels(db *pg.DB, username string) int {
 func PKLoadCharacterModel(db *pg.DB, pk int64) (*models.CharacterModel, error) {
 	// Select user by Primary Key
 	cm := &models.CharacterModel{ID: pk}
-	err := db.Select(cm)
+	err := db.Model(cm).WherePK().Select()
 
 	if err != nil {
 		fmt.Println(err)
@@ -343,7 +343,7 @@ func DeleteCharacterModel(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting character...")
 
-	err := db.Delete(&cm)
+	_, err := db.Model(&cm).WherePK().Delete()
 
 	return err
 }

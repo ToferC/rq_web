@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
 	"github.com/toferc/rq_web/models"
 )
 
@@ -25,7 +25,7 @@ func SaveNote(db *pg.DB, nt *models.Note) error {
 // UpdateNote updates a runequest note
 func UpdateNote(db *pg.DB, nt *models.Note) error {
 
-	err := db.Update(nt)
+	_, err := db.Model(nt).WherePK().Update()
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +82,7 @@ func countNotes(db *pg.DB, id int64) int {
 func PKLoadNote(db *pg.DB, pk int64) (*models.Note, error) {
 	// Select user by Primary Key
 	nt := &models.Note{ID: pk}
-	err := db.Select(nt)
+	err := db.Model(nt).WherePK().Select()
 
 	if err != nil {
 		fmt.Println(err)
@@ -117,7 +117,7 @@ func DeleteNote(db *pg.DB, pk int64) error {
 
 	fmt.Println("Deleting note...")
 
-	err := db.Delete(&nt)
+	_, err := db.Model(&nt).WherePK().Delete()
 
 	return err
 }

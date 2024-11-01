@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 
@@ -69,13 +68,15 @@ func generateName(chain *gomarkov.Chain) string {
 	return strings.Join(tokens[order:len(tokens)-1], "")
 }
 
-func generateBackground(c *runequest.Character, scale string) (string, string) {
+func generateBackground(homeland_name string, scale string) (string, string) {
 
+	fmt.Println("Generating Background")
+	
 	// Select Gender
-	var gender, description, chainModel string
+	var gender, description string
 	rr := runequest.RollDice(100, 1, 0, 1)
 
-	homeland := runequest.ToSnakeCase(c.Homeland.Name)
+	homeland := runequest.ToSnakeCase(homeland_name)
 
 	switch homeland {
 	case "sartar":
@@ -90,32 +91,43 @@ func generateBackground(c *runequest.Character, scale string) (string, string) {
 		homeland = "sartar"
 	}
 
+	// WORKING BUT REMOVED FOR THE MOMENT
 	switch {
 	case rr < 45:
 		gender = "Male"
-		chainModel = homeland + "MaleModel.json"
+		//chainModel = homeland + "MaleModel.json"
 	case rr < 91:
 		gender = "Female"
-		chainModel = homeland + "FemaleModel.json"
+		//chainModel = homeland + "FemaleModel.json"
 	default:
 		gender = "Two Spirited"
+		/*
 		r2 := runequest.RollDice(10, 1, 0, 1)
 		if r2 < 6 {
 			chainModel = homeland + "FemaleModel.json"
 		} else {
 			chainModel = homeland + "MaleModel.json"
 		}
+		*/
 	}
 
+	// ERROR IN HERE
+	/*
 	// Load MarkovChains
+	fmt.Println("Generating Chain")
 	chain, err := loadModel(chainModel)
 	if err != nil {
 		log.Println(err)
 	}
 
 	name := generateName(chain)
+	fmt.Println("Name: " + name)
 
 	// Traits generation
+
+	*/
+
+	name := "NPC"
 
 	traits := readCSV("traits.csv")
 

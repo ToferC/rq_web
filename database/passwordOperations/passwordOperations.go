@@ -5,7 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg/v10/orm"
+
 	"github.com/toferc/rq_web/database"
 	"github.com/toferc/runequest"
 )
